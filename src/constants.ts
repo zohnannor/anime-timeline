@@ -1,9 +1,8 @@
-import { pad } from './util';
-import { range, path } from './util';
+import { pad, path, range, sum } from './util';
 
 export const SCALE = window.innerHeight / 4000;
 
-export const PAGES_PER_CHAPTER = [
+export const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],
     [19, 19, 19, 19, 19, 19, 19, 21, 19],
     [19, 19, 19, 19, 19, 19, 21, 19, 19],
@@ -24,15 +23,21 @@ export const PAGES_PER_CHAPTER = [
     [17, 16, 15, 15, 16, 16, 16, 16, 17, 17, 16],
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17, 15, 14, 16, 15, 17, 15],
-];
+] as const;
 
-export const TOTAL_PAGES = PAGES_PER_CHAPTER.reduce(
-    (a, x) => a + x.reduce((a, x) => a + x, 0),
+export const PAGES_PER_CHAPTER_FLAT = PAGES_PER_CHAPTER_PER_VOLUME.flat();
+
+export const TOTAL_PAGES = PAGES_PER_CHAPTER_PER_VOLUME.reduce(
+    (a, x) => a + sum(x),
     0
 );
 
-export const CHAPTERS_PER_VOLUME = PAGES_PER_CHAPTER.map(
+export const CHAPTERS_PER_VOLUME = PAGES_PER_CHAPTER_PER_VOLUME.map(
     volume => volume.length
+);
+
+export const PAGES_PER_VOLUME = PAGES_PER_CHAPTER_PER_VOLUME.map(volume =>
+    sum(volume)
 );
 
 export const CHAPTER_PICTURES = [
@@ -249,6 +254,25 @@ export const CHAPTER_PICTURES = [
         null,
         path`Volume_19_Pochita_Sketch_4.png`,
     ],
+    [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+    ],
 ];
 
 export const CHAPTERS_PER_ARC = [
@@ -264,8 +288,7 @@ export const CHAPTERS_PER_ARC = [
     [112, 120],
     [121, 131],
     [132, 155],
-    [156, 190],
-    [191, 192],
+    [156, 192],
 ] as const;
 
 export const ARC_IMAGES = [
@@ -284,9 +307,25 @@ export const ARC_IMAGES = [
     path`Chainsaw_vs_Aging.png`,
 ];
 
+export const ARC_NAMES = [
+    'Introduction',
+    'Bat Devil',
+    'Eternity Devil',
+    'Katana Man',
+    'Bomb Girl',
+    'International Assassins',
+    'Gun Devil',
+    'Control Devil',
+    'Justice Devil',
+    'Dating Denji',
+    'Falling Devil',
+    'Chainsaw Man Church',
+    'Aging Devil',
+    'Current',
+];
+
 export const VOLUME_COVERS = [
     ...range(1, 19 + 1).map(n => path`Volume_${pad(n)}.png`),
-    null,
     null,
 ];
 
@@ -300,8 +339,49 @@ export const SEASON_COVERS = [
 export const CHAPTERS_PER_SEASON = [
     [1, 38],
     [39, 52],
-    [52, 97],
-    [98, 192],
+    [53, 97],
+    [98, 192], // latest chapter
 ] as const;
 
 export const EPISODE_THUMBNAILS = range(1, 12 + 1).map(n => path`${n}.jpg`);
+
+const CHAPTERS_WITH_PAGES = PAGES_PER_CHAPTER_FLAT.map((pages, chapterIdx) => [
+    chapterIdx + 1,
+    pages,
+]);
+
+const SPLIT_CHAPTERS: Record<number, number> = {
+    5: 10,
+    12: 1,
+    15: 10,
+    18: 12,
+    25: 14,
+    31: 18,
+};
+
+const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4];
+
+export const TEST = CHAPTERS_WITH_PAGES.slice(0, 38 + 1).reduce(
+    (a, [chapter = 0, pages = 0]) => [
+        ...a,
+        // make two of the same "chapter" if it needs to be split
+        ...(chapter in SPLIT_CHAPTERS
+            ? [
+                  [chapter, SPLIT_CHAPTERS[chapter]!],
+                  [chapter, pages - SPLIT_CHAPTERS[chapter]!],
+              ]
+            : // leave as is
+              [[chapter, pages]]),
+    ],
+    [] as number[][]
+);
+
+export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
+    [number[][][], number]
+>(
+    ([groups, cursor], chapterCount) => {
+        const episodeChapters = TEST.slice(cursor, cursor + chapterCount);
+        return [[...groups, episodeChapters], cursor + chapterCount];
+    },
+    [[], 0]
+)[0];

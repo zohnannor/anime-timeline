@@ -1,75 +1,86 @@
 import styled from 'styled-components';
 
-import {
-    ARC_IMAGES,
-    CHAPTERS_PER_ARC,
-    PAGES_PER_CHAPTER,
-    SCALE,
-} from '../constants';
+import { ARC_IMAGES, ARC_NAMES, SCALE } from '../constants';
+import { getArcWidth } from '../helpers';
 import { Container } from './Container';
+import { withShadow } from './ShadowWrapper';
 
 interface ArcProps {
-    $src: string;
-    $flexGrow?: number;
+    $width: number;
     $offsetX?: number;
     $offsetY?: number;
 }
 
-const Arc = styled.div<ArcProps>`
-    background-image: url(${({ $src }) => $src});
-    background-size: cover;
-    background-position: center;
-    box-shadow: inset 0px 0px 3px 2px rgba(0, 0, 0, 1);
-    background-position-x: ${({ $offsetX }) => ($offsetX ? -$offsetX : 0)}px;
-    background-position-y: ${({ $offsetY }) => ($offsetY ? -$offsetY : 0)}px;
+const Arc = withShadow(
+    styled.div<ArcProps>`
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
 
-    height: ${SCALE * 1579}px;
-    flex: ${({ $flexGrow }) => ($flexGrow ? `${$flexGrow} 1 0%` : '0 1 auto')};
+        height: ${SCALE * 1579}px;
+        width: ${({ $width }) => $width * SCALE}px;
 
-    /* Invisible image that maintains aspect ratio */
-    img {
-        opacity: 0;
-        width: 100%;
-    }
-`;
+        & > a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        & > a > img {
+            position: absolute;
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            transition: 0.1s ease-in-out;
+            pointer-events: none;
+
+            object-position: ${({ $offsetX, $offsetY }) =>
+                `${-($offsetX ?? 0)}px ${-($offsetY ?? 0)}px`};
+        }
+
+        &:hover > a > img {
+            transform: scale(1.05);
+        }
+    `
+);
 
 const OFFSETS = [
-    [90, 0],
-    [0, 0],
-    [40, 0],
-    [0, 0],
-    [0, 40],
-    [0, 350],
-    [0, 60],
-    [30, 0],
-    [0, 0],
-    [90, 0],
-    [80, 0],
-    [0, 170],
-    [0, 180],
+    { x: 40, y: 0 },
+    { x: 0, y: 0 },
+    { x: 30, y: 0 },
+    { x: 0, y: 60 },
+    { x: 0, y: 30 },
+    { x: 0, y: 230 },
+    { x: 0, y: 30 },
+    { x: 20, y: 0 },
+    { x: 0, y: 0 },
+    { x: 70, y: 0 },
+    { x: 60, y: 0 },
+    { x: 0, y: 120 },
+    { x: 0, y: 100 },
 ];
 
 export const Arcs: React.FC = () => (
-    // idk why this is 107% but it works
-    <Container $width={'107%'}>
+    <Container>
         {ARC_IMAGES.map((panel, idx) => {
-            const [chapterFrom, chapterTo] = CHAPTERS_PER_ARC[idx] ?? [0, 1];
-            const allChapters = PAGES_PER_CHAPTER.reduce(
-                (a, x) => [...a, ...x],
-                []
-            );
-            const chapters = allChapters.slice(chapterFrom - 1, chapterTo);
-            const pagesCount = chapters.reduce((a, x) => a + x, 0);
+            const arcWidth = getArcWidth(idx + 1);
+            const link = `https://chainsaw-man.fandom.com/wiki/${ARC_NAMES[idx]}_arc`;
 
             return (
                 <Arc
                     key={panel}
-                    $src={panel}
-                    $flexGrow={pagesCount}
-                    $offsetX={OFFSETS[idx]?.[0] ?? 0}
-                    $offsetY={OFFSETS[idx]?.[1] ?? 0}
+                    $width={arcWidth}
+                    $offsetX={OFFSETS[idx]?.x ?? 0}
+                    $offsetY={OFFSETS[idx]?.y ?? 0}
                 >
-                    <img src={panel} alt='' />
+                    <a href={link} target='_blank' rel='noopener noreferrer'>
+                        <img src={panel} alt='' />
+                    </a>
                 </Arc>
             );
         })}

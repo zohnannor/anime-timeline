@@ -1,5 +1,12 @@
 * {
     box-sizing: border-box;
+    font-family: Inter;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 html,
@@ -8,6 +15,9 @@ body,
     width: 100vw;
     margin: 0;
     padding: 0;
+
+    background: black;
+    color: white;
 
     display: flex;
     align-items: flex-start;
