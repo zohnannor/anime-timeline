@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: flex-start;
+    scrollbar-width: none;
+    overflow-y: hidden;
+}
