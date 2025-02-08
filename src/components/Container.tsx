@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import type { Property } from 'csstype';
-import { PropsWithChildren } from 'react';
 
+import type { Property } from 'csstype';
 interface ContainerProps {
     $wrap?: boolean;
     $dir?: 'row' | 'column';

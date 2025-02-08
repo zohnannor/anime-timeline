@@ -1,60 +1,139 @@
-import styled from 'styled-components';
-import { CHAPTER_PICTURES, PAGES_PER_CHAPTER, SCALE } from '../constants';
+import { useState } from 'react';
+import styled, { css } from 'styled-components';
+
+import { CHAPTER_PICTURES, SCALE } from '../constants';
+import { getChapterNumber, getChapterWidth } from '../helpers';
 import { Container } from './Container';
+import { withShadow } from './ShadowWrapper';
 
 interface ChapterProps {
-    $src?: string;
-    $flexGrow?: number;
+    $width: number;
 }
 
-const Chapter = styled.div<ChapterProps>`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url(${({ $src }) => $src});
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    box-shadow: inset 0px 0px 3px 2px rgba(0, 0, 0, 1);
-
+const ChapterWrapper = styled.div<ChapterProps>`
+    position: relative;
     height: ${SCALE * 100}px;
-    flex: ${({ $flexGrow }) => ($flexGrow ? `${$flexGrow} 1 0%` : '0 1 auto')};
-
-    /* Invisible image that maintains aspect ratio */
-    img {
-        opacity: 0;
-        max-width: 100%;
-    }
+    width: ${({ $width }) => $width * SCALE}px;
 `;
 
-interface ChaptersProps {
-    $volume: number;
+const Chapter = withShadow(
+    styled.div`
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.1s ease-in-out;
+        overflow: hidden;
+
+        font-size: ${SCALE * 32}px;
+        height: 100%;
+        width: 100%;
+        background-color: #fff;
+        color: black;
+
+        & > a {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        & > a > img {
+            position: absolute;
+            object-fit: contain;
+            height: 100%;
+            pointer-events: none;
+        }
+    `
+);
+
+interface PreviewProps {
+    $hovered: boolean;
+    $chapterNumber: number;
 }
 
-export const Chapters: React.FC<ChaptersProps> = ({ $volume: volume }) => (
-    <Container $width={'100%'} $flexGrow={1}>
-        {(CHAPTER_PICTURES[volume - 1] ?? []).map((picture, idx) => {
-            const pagesInChapter = PAGES_PER_CHAPTER[volume - 1]?.[idx] ?? 19;
-            const chapterNumber =
-                PAGES_PER_CHAPTER.slice(0, volume - 1)
-                    .map(v => v.length)
-                    .reduce((a, x) => a + x, 0) +
-                idx +
-                1;
+const Preview = styled.div<PreviewProps>`
+    position: absolute;
+    width: ${SCALE * 120}px;
+    height: ${SCALE * 100}px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.25s ease-in-out;
+    transform: ${({ $chapterNumber }) =>
+            $chapterNumber === 1 ? 'translateX(70px)' : ''}
+        translateY(-35px) scale(0);
+    font-size: ${SCALE * 12}px;
+    color: black;
+    background: white;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);
 
-            return picture ? (
-                <Chapter
-                    key={picture}
-                    $src={picture}
-                    $flexGrow={pagesInChapter}
-                >
-                    <img src={picture} alt='' />
-                </Chapter>
-            ) : (
-                <Chapter key={`empty-${idx}`} $flexGrow={pagesInChapter}>
-                    {chapterNumber}
-                </Chapter>
-            );
-        })}
-    </Container>
-);
+    & > img {
+        object-fit: contain;
+        width: 100%;
+        height: 80%;
+    }
+
+    ${({ $hovered: hovered, $chapterNumber: chapterNumber }) =>
+        hovered &&
+        css`
+            transform: ${chapterNumber === 1 ? 'translateX(70px)' : ''}
+                translateY(-90px) scale(5);
+        `}
+`;
+interface ChaptersProps {
+    volume: number;
+}
+
+export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
+    const [hoveredChapter, setHoveredChapter] = useState(0);
+
+    return (
+        <Container>
+            {(CHAPTER_PICTURES[volume - 1] ?? []).map((picture, idx) => {
+                const chapterNumber = getChapterNumber(volume, idx);
+                const chapterWidth = getChapterWidth(chapterNumber);
+                const link = `https://chainsaw-man.fandom.com/wiki/Chapter_${chapterNumber}`;
+
+                return (
+                    <ChapterWrapper
+                        $width={chapterWidth}
+                        key={picture || chapterNumber}
+                    >
+                        {picture && (
+                            <Preview
+                                $hovered={hoveredChapter === chapterNumber}
+                                $chapterNumber={chapterNumber}
+                            >
+                                <img src={picture} />
+                                Chapter {chapterNumber}.
+                            </Preview>
+                        )}
+                        <Chapter
+                            onMouseOver={() => setHoveredChapter(chapterNumber)}
+                            onMouseOut={() => setHoveredChapter(0)}
+                        >
+                            <a
+                                href={link}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
+                                {picture ? (
+                                    <img src={picture} alt='' />
+                                ) : (
+                                    chapterNumber
+                                )}
+                            </a>
+                        </Chapter>
+                    </ChapterWrapper>
+                );
+            })}
+        </Container>
+    );
+};

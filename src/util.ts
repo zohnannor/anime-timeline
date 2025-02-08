@@ -15,3 +15,6 @@ export const path = (parts: TemplateStringsArray, ...values: any[]) =>
     `./csm/${defaultTag(parts, ...values)}`;
 
 export const pad = (n: number) => String(n).padStart(2, '0');
+
+export const sum = <T extends readonly number[]>(arr: T) =>
+    arr.reduce((a, b) => a + b, 0);

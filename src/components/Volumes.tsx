@@ -1,38 +1,73 @@
 import styled from 'styled-components';
 
 import { SCALE, VOLUME_COVERS } from '../constants';
+import { getVolumeWidth } from '../helpers';
 import { Chapters } from './Chapters';
 import { Container } from './Container';
+import { withShadow } from './ShadowWrapper';
 
 interface VolumeProps {
-    $src: string;
+    $width: number;
 }
 
-export const Volume = styled.div<VolumeProps>`
-    background-image: url(${({ $src }) => $src});
-    background-size: cover;
-    background-position: center;
-    box-shadow: inset 0px 0px 3px 2px rgba(0, 0, 0, 1);
+export const Volume = withShadow(styled.div<VolumeProps>`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
-    /* Invisible image that maintains aspect ratio */
-    img {
-        opacity: 0;
-        height: ${SCALE * 1579}px;
-        display: block;
+    font-size: ${SCALE * 500}px;
+    height: ${SCALE * 1579}px;
+    width: ${({ $width }) => $width * SCALE}px;
+
+    & > a {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
     }
-`;
+
+    & > a > img {
+        position: absolute;
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        transition: 0.1s ease-in-out;
+        pointer-events: none;
+    }
+
+    &:hover > a > img {
+        transform: scale(1.05);
+    }
+`);
 
 export const Volumes: React.FC = () => (
     <Container>
-        {VOLUME_COVERS.map((cover, idx) => (
-            <Container $dir='column' key={cover} $flexGrow={1}>
-                <Chapters $volume={idx + 1} />
-                {cover && (
-                    <Volume $src={cover}>
-                        <img src={cover} alt='' />
+        {VOLUME_COVERS.map((cover, idx) => {
+            const volumeNumber = idx + 1;
+            const volumeWidth = getVolumeWidth(volumeNumber);
+            const link = `https://chainsaw-man.fandom.com/wiki/Volume_${volumeNumber}`;
+
+            return (
+                <Container $dir='column' key={cover || volumeNumber}>
+                    <Chapters volume={volumeNumber} />
+                    <Volume $invertBorder={!cover} $width={volumeWidth}>
+                        <a
+                            href={link}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            {cover ? <img src={cover} alt='' /> : volumeNumber}
+                        </a>
                     </Volume>
-                )}
-            </Container>
-        ))}
+                </Container>
+            );
+        })}
     </Container>
 );
