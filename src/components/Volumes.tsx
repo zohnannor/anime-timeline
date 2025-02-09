@@ -10,42 +10,44 @@ interface VolumeProps {
     $width: number;
 }
 
-export const Volume = withShadow(styled.div<VolumeProps>`
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
-    font-size: ${SCALE * 500}px;
-    height: ${SCALE * 1579}px;
-    width: ${({ $width }) => $width * SCALE}px;
-
-    & > a {
-        position: absolute;
+export const Volume = withShadow(
+    styled.div<VolumeProps>`
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-    }
+        overflow: hidden;
 
-    & > a > img {
-        position: absolute;
-        object-fit: cover;
-        height: 100%;
-        width: 100%;
-        transition: 0.1s ease-in-out;
-        pointer-events: none;
-    }
+        font-size: ${SCALE * 500}px;
+        height: ${SCALE * 1579}px;
+        width: ${({ $width }) => $width * SCALE}px;
 
-    &:hover > a > img {
-        transform: scale(1.05);
-    }
-`);
+        & > a {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        & > a > img {
+            position: absolute;
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            transition: 0.1s ease-in-out;
+            pointer-events: none;
+        }
+
+        &:hover > a > img {
+            transform: scale(1.05);
+        }
+    `
+);
 
 export const Volumes: React.FC = () => (
     <Container>

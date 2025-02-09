@@ -70,7 +70,7 @@ interface EpisodesProps {
 
 export const Episodes: React.FC<EpisodesProps> = ({ season }) =>
     season === 1 && (
-        <Container $width={'100%'}>
+        <Container>
             {EPISODE_THUMBNAILS.map((thumbnail, idx) => {
                 const episodeWidth = getEpisodeWidthNew(idx + 1);
                 let link = `https://chainsaw-man.fandom.com/wiki/Episode_${

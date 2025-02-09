@@ -3,14 +3,12 @@ import { Container } from './components/Container';
 import { Seasons } from './components/Seasons';
 import { Volumes } from './components/Volumes';
 
-const App: React.FC = () => {
-    return (
-        <Container $wrap $dir='column'>
-            <Seasons />
-            <Arcs />
-            <Volumes />
-        </Container>
-    );
-};
+const App: React.FC = () => (
+    <Container $dir='column'>
+        <Seasons />
+        <Arcs />
+        <Volumes />
+    </Container>
+);
 
 export default App;
