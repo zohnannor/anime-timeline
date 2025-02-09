@@ -84,7 +84,7 @@ const Preview = styled.div<PreviewProps>`
         hovered &&
         css`
             transform: ${chapterNumber === 1 ? 'translateX(70px)' : ''}
-                translateY(-90px) scale(5);
+                translateY(-110px) scale(5);
         `}
 `;
 interface ChaptersProps {
