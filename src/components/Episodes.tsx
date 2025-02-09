@@ -44,7 +44,7 @@ const Episode = withShadow(
         }
 
         &:hover > a > img {
-            transform: scale(1.05);
+            transform: scale(1.2);
         }
     `
 );

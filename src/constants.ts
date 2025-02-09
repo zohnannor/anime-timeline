@@ -50,28 +50,8 @@ export const CHAPTER_PICTURES = [
         path`Volume_01_Pochita_Sketch_7.png`,
         path`Volume_01_Pochita_Sketch_8.png`,
     ],
-    [
-        path`Volume_02_Pochita_Sketch_1.png`,
-        path`Volume_02_Pochita_Sketch_2.png`,
-        path`Volume_02_Pochita_Sketch_3.png`,
-        path`Volume_02_Pochita_Sketch_4.png`,
-        path`Volume_02_Pochita_Sketch_5.png`,
-        path`Volume_02_Pochita_Sketch_6.png`,
-        path`Volume_02_Pochita_Sketch_7.png`,
-        path`Volume_02_Pochita_Sketch_8.png`,
-        path`Volume_02_Pochita_Sketch_9.png`,
-    ],
-    [
-        path`Volume_03_Pochita_Sketch_1.png`,
-        path`Volume_03_Pochita_Sketch_2.png`,
-        path`Volume_03_Pochita_Sketch_3.png`,
-        path`Volume_03_Pochita_Sketch_4.png`,
-        path`Volume_03_Pochita_Sketch_5.png`,
-        path`Volume_03_Pochita_Sketch_6.png`,
-        path`Volume_03_Pochita_Sketch_7.png`,
-        path`Volume_03_Pochita_Sketch_8.png`,
-        path`Volume_03_Pochita_Sketch_9.png`,
-    ],
+    range(1, 9 + 1).map(n => path`Volume_02_Pochita_Sketch_${n}.png`),
+    range(1, 9 + 1).map(n => path`Volume_03_Pochita_Sketch_${n}.png`),
     [
         path`Volume_04_Pochita_Sketch_1.png`,
         path`Volume_04_Pochita_Sketch_2.png`,
@@ -94,39 +74,9 @@ export const CHAPTER_PICTURES = [
         path`Volume_05_Pochita_Sketch_7.png`,
         path`Volume_05_Pochita_Sketch_8.png`,
     ],
-    [
-        path`Volume_06_Pochita_Sketch_1.png`,
-        path`Volume_06_Pochita_Sketch_2.png`,
-        path`Volume_06_Pochita_Sketch_3.png`,
-        path`Volume_06_Pochita_Sketch_4.png`,
-        path`Volume_06_Pochita_Sketch_5.png`,
-        path`Volume_06_Pochita_Sketch_6.png`,
-        path`Volume_06_Pochita_Sketch_7.png`,
-        path`Volume_06_Pochita_Sketch_8.png`,
-        path`Volume_06_Pochita_Sketch_9.png`,
-    ],
-    [
-        path`Volume_07_Pochita_Sketch_1.png`,
-        path`Volume_07_Pochita_Sketch_2.png`,
-        path`Volume_07_Pochita_Sketch_3.png`,
-        path`Volume_07_Pochita_Sketch_4.png`,
-        path`Volume_07_Pochita_Sketch_5.png`,
-        path`Volume_07_Pochita_Sketch_6.png`,
-        path`Volume_07_Pochita_Sketch_7.png`,
-        path`Volume_07_Pochita_Sketch_8.png`,
-        path`Volume_07_Pochita_Sketch_9.png`,
-    ],
-    [
-        path`Volume_08_Pochita_Sketch_1.png`,
-        path`Volume_08_Pochita_Sketch_2.png`,
-        path`Volume_08_Pochita_Sketch_3.png`,
-        path`Volume_08_Pochita_Sketch_4.png`,
-        path`Volume_08_Pochita_Sketch_5.png`,
-        path`Volume_08_Pochita_Sketch_6.png`,
-        path`Volume_08_Pochita_Sketch_7.png`,
-        path`Volume_08_Pochita_Sketch_8.png`,
-        path`Volume_08_Pochita_Sketch_9.png`,
-    ],
+    range(1, 9 + 1).map(n => path`Volume_06_Pochita_Sketch_${n}.png`),
+    range(1, 9 + 1).map(n => path`Volume_07_Pochita_Sketch_${n}.png`),
+    range(1, 9 + 1).map(n => path`Volume_08_Pochita_Sketch_${n}.png`),
     [
         path`Volume_09_Pochita_Sketch_1.png`,
         path`Volume_09_Pochita_Sketch_2.png`,
@@ -288,7 +238,8 @@ export const CHAPTERS_PER_ARC = [
     [112, 120],
     [121, 131],
     [132, 155],
-    [156, 192],
+    [156, 190],
+    [191, 192],
 ] as const;
 
 export const ARC_IMAGES = [
@@ -305,6 +256,7 @@ export const ARC_IMAGES = [
     path`Denji_tears_through_the_Falling_Devil.png`,
     path`Denji_and_Miri_impale_each_other.png`,
     path`Chainsaw_vs_Aging.png`,
+    null,
 ];
 
 export const ARC_NAMES = [
@@ -361,7 +313,7 @@ const SPLIT_CHAPTERS: Record<number, number> = {
 
 const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4];
 
-export const TEST = CHAPTERS_WITH_PAGES.slice(0, 38 + 1).reduce(
+const CHAPTERS_SPLIT_FOR_EPISODES = CHAPTERS_WITH_PAGES.slice(0, 38 + 1).reduce(
     (a, [chapter = 0, pages = 0]) => [
         ...a,
         // make two of the same "chapter" if it needs to be split
@@ -380,7 +332,10 @@ export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
     [number[][][], number]
 >(
     ([groups, cursor], chapterCount) => {
-        const episodeChapters = TEST.slice(cursor, cursor + chapterCount);
+        const episodeChapters = CHAPTERS_SPLIT_FOR_EPISODES.slice(
+            cursor,
+            cursor + chapterCount
+        );
         return [[...groups, episodeChapters], cursor + chapterCount];
     },
     [[], 0]

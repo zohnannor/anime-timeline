@@ -25,6 +25,8 @@ const Season = withShadow(
         font-size: ${SCALE * 250}px;
         height: ${SCALE * 742}px;
         width: ${({ $width }) => $width * SCALE}px;
+        cursor: default;
+        user-select: none;
 
         & > a {
             position: absolute;

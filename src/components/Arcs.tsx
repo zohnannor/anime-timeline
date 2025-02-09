@@ -23,7 +23,11 @@ const Arc = withShadow(
         width: ${({ $width }) => $width * SCALE}px;
 
         & > a {
-            position: absolute;
+            writing-mode: sideways-lr;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            font-size: ${SCALE * 100}px;
             top: 0;
             left: 0;
             width: 100%;
@@ -69,17 +73,19 @@ export const Arcs: React.FC = () => (
     <Container>
         {ARC_IMAGES.map((panel, idx) => {
             const arcWidth = getArcWidth(idx + 1);
-            const link = `https://chainsaw-man.fandom.com/wiki/${ARC_NAMES[idx]}_arc`;
+            const arcName = ARC_NAMES[idx];
+            const link = `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`;
 
             return (
                 <Arc
-                    key={panel}
+                    key={panel || idx}
+                    $invertBorder={!panel}
                     $width={arcWidth}
                     $offsetX={OFFSETS[idx]?.x ?? 0}
                     $offsetY={OFFSETS[idx]?.y ?? 0}
                 >
                     <a href={link} target='_blank' rel='noopener noreferrer'>
-                        <img src={panel} alt='' />
+                        {panel ? <img src={panel} alt='' /> : `${arcName} arc`}
                     </a>
                 </Arc>
             );
