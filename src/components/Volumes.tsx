@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { SCALE, VOLUME_COVERS } from '../constants';
+import { scale, VOLUME_COVERS } from '../constants';
 import { getVolumeWidth } from '../helpers';
 import { Chapters } from './Chapters';
 import { Container } from './Container';
@@ -18,9 +18,9 @@ export const Volume = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${SCALE * 500}px;
-        height: ${SCALE * 1579}px;
-        width: ${({ $width }) => $width * SCALE}px;
+        font-size: ${scale(500)}vh;
+        height: ${scale(1579)}vh;
+        width: ${({ $width }) => scale($width)}vh;
 
         & > a {
             position: absolute;

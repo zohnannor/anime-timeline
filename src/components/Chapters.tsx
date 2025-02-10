@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { CHAPTER_PICTURES, SCALE } from '../constants';
+import { CHAPTER_PICTURES, scale } from '../constants';
 import { getChapterNumber, getChapterWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -12,8 +12,8 @@ interface ChapterProps {
 
 const ChapterWrapper = styled.div<ChapterProps>`
     position: relative;
-    height: ${SCALE * 100}px;
-    width: ${({ $width }) => $width * SCALE}px;
+    height: ${scale(100)}vh;
+    width: ${({ $width }) => scale($width)}vh;
 `;
 
 const Chapter = withShadow(
@@ -25,7 +25,7 @@ const Chapter = withShadow(
         transition: 0.1s ease-in-out;
         overflow: hidden;
 
-        font-size: ${SCALE * 32}px;
+        font-size: ${scale(32)}vh;
         height: 100%;
         width: 100%;
         background-color: #fff;
@@ -59,8 +59,8 @@ interface PreviewProps {
 
 const Preview = styled.div<PreviewProps>`
     position: absolute;
-    width: ${SCALE * 120}px;
-    height: ${SCALE * 100}px;
+    width: ${scale(120)}vh;
+    height: ${scale(100)}vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -69,7 +69,7 @@ const Preview = styled.div<PreviewProps>`
     transform: ${({ $chapterNumber }) =>
             $chapterNumber === 1 ? 'translateX(70px)' : ''}
         translateY(-35px) scale(0);
-    font-size: ${SCALE * 12}px;
+    font-size: ${scale(12)}vh;
     color: black;
     background: white;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);

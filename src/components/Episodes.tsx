@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { SCALE, EPISODE_THUMBNAILS } from '../constants';
+import { scale, EPISODE_THUMBNAILS } from '../constants';
 import { getEpisodeWidthNew } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -19,8 +19,8 @@ const Episode = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${SCALE * 242}px;
-        width: ${({ $width }) => $width * SCALE}px;
+        height: ${scale(242)}vh;
+        width: ${({ $width }) => scale($width)}vh;
 
         & > a {
             position: absolute;
@@ -40,7 +40,7 @@ const Episode = withShadow(
             pointer-events: none;
 
             object-position: ${({ $offsetX, $offsetY }) =>
-                `${-($offsetX ?? 0)}px ${-($offsetY ?? 0)}px`};
+                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -53,7 +53,7 @@ const OFFSETS = [
     { x: 0, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
-    { x: 10, y: 0 },
+    { x: 20, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
