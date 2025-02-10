@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { SCALE, SEASON_COVERS } from '../constants';
+import { scale, SEASON_COVERS } from '../constants';
 import { getSeasonWidth } from '../helpers';
 import { Container } from './Container';
 import { Episodes } from './Episodes';
@@ -22,9 +22,9 @@ const Season = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${SCALE * 250}px;
-        height: ${SCALE * 742}px;
-        width: ${({ $width }) => $width * SCALE}px;
+        font-size: ${scale(250)}vh;
+        height: ${scale(742)}vh;
+        width: ${({ $width }) => scale($width)}vh;
         cursor: default;
         user-select: none;
 
@@ -46,7 +46,7 @@ const Season = withShadow(
             pointer-events: none;
 
             object-position: ${({ $offsetX, $offsetY }) =>
-                `${-($offsetX ?? 0)}px ${-($offsetY ?? 0)}px`};
+                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -56,8 +56,8 @@ const Season = withShadow(
 );
 
 const OFFSETS = [
-    { x: 0, y: 610 },
-    { x: 0, y: 260 },
+    { x: 0, y: 1900 },
+    { x: 0, y: 800 },
 ];
 
 export const Seasons: React.FC = () => (

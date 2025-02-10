@@ -1,6 +1,6 @@
 import { pad, path, range, sum } from './util';
 
-export const SCALE = window.innerHeight / 4000;
+export const scale = (n: number) => n / 40;
 
 export const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],

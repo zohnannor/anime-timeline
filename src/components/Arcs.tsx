@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ARC_IMAGES, ARC_NAMES, SCALE } from '../constants';
+import { ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -19,15 +19,15 @@ const Arc = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${SCALE * 1579}px;
-        width: ${({ $width }) => $width * SCALE}px;
+        height: ${scale(1579)}vh;
+        width: ${({ $width }) => scale($width)}vh;
 
         & > a {
             writing-mode: sideways-lr;
             align-items: center;
             display: flex;
             justify-content: center;
-            font-size: ${SCALE * 100}px;
+            font-size: ${scale(100)}vh;
             top: 0;
             left: 0;
             width: 100%;
@@ -44,7 +44,7 @@ const Arc = withShadow(
             pointer-events: none;
 
             object-position: ${({ $offsetX, $offsetY }) =>
-                `${-($offsetX ?? 0)}px ${-($offsetY ?? 0)}px`};
+                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -54,19 +54,19 @@ const Arc = withShadow(
 );
 
 const OFFSETS = [
-    { x: 40, y: 0 },
+    { x: 260, y: 0 },
     { x: 0, y: 0 },
-    { x: 30, y: 0 },
-    { x: 0, y: 60 },
-    { x: 0, y: 30 },
-    { x: 0, y: 230 },
-    { x: 0, y: 30 },
-    { x: 20, y: 0 },
-    { x: 0, y: 0 },
-    { x: 70, y: 0 },
-    { x: 60, y: 0 },
-    { x: 0, y: 120 },
+    { x: 130, y: 0 },
+    { x: 0, y: 150 },
+    { x: 0, y: 80 },
+    { x: 0, y: 700 },
     { x: 0, y: 100 },
+    { x: 50, y: 0 },
+    { x: 0, y: 0 },
+    { x: 200, y: 0 },
+    { x: 200, y: 0 },
+    { x: 0, y: 350 },
+    { x: 0, y: 300 },
 ];
 
 export const Arcs: React.FC = () => (
