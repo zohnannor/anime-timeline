@@ -2,12 +2,14 @@ import styled, { css } from 'styled-components'
 import { clamp, path } from '../util'
 import { MouseEvent as MouseEventReact, useEffect, useRef, useState } from 'react'
 import { SCROLLER_SIZE } from '../constants'
+import useMousePosition from '../hooks/useMousePosition'
 
 type ScrollHoverAreaProps = {
-  $forcedVisible: boolean
+  $visible: boolean
 }
 
 export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
+  pointer-events: none;
   position: fixed;
   bottom: 0;
   height: 80px;
@@ -15,11 +17,7 @@ export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
   display: flex;
   justify-content: center;
 
-  &:hover > div {
-    bottom: 50px
-  }
-
-  ${(p) => p.$forcedVisible && css`
+  ${(p) => p.$visible && css`
     & > div {
       bottom: 50px;
     }
@@ -32,6 +30,7 @@ type ScrollProps = {
 
 export const ScrollerWrapper = styled.div<ScrollProps>`
   transition: bottom 0.2s ease-in-out;
+  pointer-events: auto;
   position: absolute;
   bottom: -60px;
   height: 10px;
@@ -67,8 +66,11 @@ export const ScrollerWrapper = styled.div<ScrollProps>`
 export const Scroller = () => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef<boolean>(false)
+  const isPageScrolling = useRef<boolean>(false)
+  const wheelTimeout = useRef<number>(0)
   const [_, setT] = useState<number>(Date.now())
   const [offset, setOffset] = useState<number>(0)
+  const mousePosition = useMousePosition()
 
   const updatePageScroll = (offsetRaw: number) => {
     const offset = clamp(offsetRaw, 0, 1)
@@ -78,11 +80,18 @@ export const Scroller = () => {
   }
 
   const onPageScrollChange = () => {
+    isPageScrolling.current = true
     const el = document.body
     setOffset((el.scrollLeft) / (el.scrollWidth - el.clientWidth))
+      
+    clearTimeout(wheelTimeout.current)
+    wheelTimeout.current = window.setTimeout(() => {
+      isPageScrolling.current = false
+      setT(Date.now())
+    }, 400)
   }
 
-  const handleDrag = (e: MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current || !scrollerRef.current) return
     const offset = (e.pageX - scrollerRef.current.offsetLeft) / SCROLLER_SIZE;
     updatePageScroll(offset)
@@ -95,10 +104,10 @@ export const Scroller = () => {
 
   useEffect(() => {
     document.body.addEventListener("scroll", onPageScrollChange)
-    window.addEventListener("mousemove", handleDrag)
+    window.addEventListener("mousemove", handleMouseMove)
     window.addEventListener("mouseup", stopDragging)
     return () => {
-      window.removeEventListener("mousemove", handleDrag)
+      window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseup", stopDragging)
       document.body.removeEventListener("scroll", onPageScrollChange)
     }
@@ -109,8 +118,14 @@ export const Scroller = () => {
     updatePageScroll(offset)
   }
 
+  const scrollerVisible = (
+    isDragging.current || 
+    isPageScrolling.current || 
+    mousePosition.y > (window.innerHeight - 100)
+  )
+
   return (
-    <ScrollerHoverArea $forcedVisible={isDragging.current}>
+    <ScrollerHoverArea $visible={scrollerVisible}>
       <ScrollerWrapper ref={scrollerRef} $offset={offset} onClick={handleScrollerClick}>
         <img 
           src={path`pochita.png`} 
