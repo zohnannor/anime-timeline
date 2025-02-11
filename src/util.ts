@@ -18,3 +18,7 @@ export const pad = (n: number) => String(n).padStart(2, '0');
 
 export const sum = <T extends readonly number[]>(arr: T) =>
     arr.reduce((a, b) => a + b, 0);
+
+export const clamp = (val: number, min: number, max: number) => {
+    return Math.min(Math.max(val, min), max);
+}

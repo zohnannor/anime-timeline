@@ -121,6 +121,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                         >
                             <a
                                 href={link}
+                                draggable={false}
                                 target='_blank'
                                 rel='noopener noreferrer'
                             >

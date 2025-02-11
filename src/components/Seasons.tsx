@@ -83,6 +83,7 @@ export const Seasons: React.FC = () => (
                         <>
                             <a
                                 href={link}
+                                draggable={false}
                                 target='_blank'
                                 rel='noopener noreferrer'
                             >

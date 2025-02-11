@@ -87,6 +87,7 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) =>
                         >
                             <a
                                 href={link}
+                                draggable={false}
                                 target='_blank'
                                 rel='noopener noreferrer'
                             >
