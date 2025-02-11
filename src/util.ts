@@ -1,18 +1,20 @@
-export const range = (start: number, end = 0) =>
-    [...Array(end - start).keys()].map(i => i + start);
+import { Enumerate, Map, Sub } from './types';
 
-const defaultTag = <TValues extends unknown[]>(
-    parts: TemplateStringsArray,
-    ...values: TValues
+export const range = <Start extends number, End extends number>(
+    start: Start,
+    end: End
 ) =>
-    parts
-        .flatMap((part, i) =>
-            i < values.length ? [part, String(values[i])] : [part]
-        )
-        .join('');
+    Array.from({ length: end - start }, (_, k) => k + start) as Enumerate<
+        Sub<End, Start>
+    >;
 
-export const path = (parts: TemplateStringsArray, ...values: any[]) =>
-    `./csm/${defaultTag(parts, ...values)}`;
+export const map = <T extends readonly unknown[], U>(
+    arr: T,
+    fn: (item: T[number], index: number) => U
+) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
+
+export const path = <T extends string>(path: T): `./csm/${T}` =>
+    `./csm/${path}`;
 
 export const pad = (n: number) => String(n).padStart(2, '0');
 
