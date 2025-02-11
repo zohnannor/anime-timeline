@@ -84,7 +84,12 @@ export const Arcs: React.FC = () => (
                     $offsetX={OFFSETS[idx]?.x ?? 0}
                     $offsetY={OFFSETS[idx]?.y ?? 0}
                 >
-                    <a href={link} draggable={false} target='_blank' rel='noopener noreferrer'>
+                    <a
+                        href={link}
+                        draggable={false}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
                         {panel ? <img src={panel} alt='' /> : `${arcName} arc`}
                     </a>
                 </Arc>
