@@ -62,6 +62,7 @@ export const Volumes: React.FC = () => (
                     <Volume $invertBorder={!cover} $width={volumeWidth}>
                         <a
                             href={link}
+                            draggable={false}
                             target='_blank'
                             rel='noopener noreferrer'
                         >
