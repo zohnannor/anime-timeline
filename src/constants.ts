@@ -1,7 +1,11 @@
-import { pad, path, range, sum } from './util';
+import { Flatten, Length } from './types';
+import { map, pad, path, range, sum } from './util';
 
 export const scale = (n: number) => n / 40;
 export const SCROLLER_SIZE = 400;
+
+const CHAPTERS_TOTAL = 193;
+const VOLUMES_TOTAL = 20; // last = unreleased
 
 export const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],
@@ -23,192 +27,216 @@ export const PAGES_PER_CHAPTER_PER_VOLUME = [
     [15, 16, 17, 15, 17, 20, 17, 16, 19, 19],
     [17, 16, 15, 15, 16, 16, 16, 16, 17, 17, 16],
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
-    [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17, 15, 14, 16, 15, 17, 15],
+    [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17, 15, 14, 16, 15, 17, 15, 13],
 ] as const;
 
-export const PAGES_PER_CHAPTER_FLAT = PAGES_PER_CHAPTER_PER_VOLUME.flat();
+const _ASSERT_LEGNTHS: [
+    Length<typeof PAGES_PER_CHAPTER_PER_VOLUME>,
+    Length<typeof PAGES_PER_CHAPTER_FLAT>,
+    Length<Flatten<typeof CHAPTER_PICTURES>>,
+    Length<typeof ARC_IMAGES>,
+    Length<typeof ARC_NAMES>,
+    Length<typeof VOLUME_COVERS>,
+    Length<typeof SEASON_COVERS>,
+    Length<typeof EPISODE_THUMBNAILS>,
+    Length<typeof CHAPTERS_PER_EPISODE>
+] = [
+    VOLUMES_TOTAL,
+    CHAPTERS_TOTAL,
+    CHAPTERS_TOTAL,
+    14,
+    14,
+    VOLUMES_TOTAL,
+    4,
+    12,
+    12,
+] as const;
 
-export const TOTAL_PAGES = PAGES_PER_CHAPTER_PER_VOLUME.reduce(
-    (a, x) => a + sum(x),
-    0
-);
+void _ASSERT_LEGNTHS; // to ignore error
 
-export const CHAPTERS_PER_VOLUME = PAGES_PER_CHAPTER_PER_VOLUME.map(
+export const PAGES_PER_CHAPTER_FLAT =
+    PAGES_PER_CHAPTER_PER_VOLUME.flat() as Flatten<
+        typeof PAGES_PER_CHAPTER_PER_VOLUME
+    >;
+
+export const CHAPTERS_PER_VOLUME = map(
+    PAGES_PER_CHAPTER_PER_VOLUME,
     volume => volume.length
 );
 
-export const PAGES_PER_VOLUME = PAGES_PER_CHAPTER_PER_VOLUME.map(volume =>
+export const PAGES_PER_VOLUME = map(PAGES_PER_CHAPTER_PER_VOLUME, volume =>
     sum(volume)
 );
 
 export const CHAPTER_PICTURES = [
     [
-        path`Volume_01_Pochita_Sketch_1.png`,
-        path`Volume_01_Pochita_Sketch_3.png`,
-        path`Volume_01_Pochita_Sketch_4.png`,
-        path`Volume_01_Pochita_Sketch_5.png`,
-        path`Volume_01_Pochita_Sketch_6.png`,
-        path`Volume_01_Pochita_Sketch_7.png`,
-        path`Volume_01_Pochita_Sketch_8.png`,
+        path(`Volume_01_Pochita_Sketch_1.png`),
+        path(`Volume_01_Pochita_Sketch_3.png`),
+        path(`Volume_01_Pochita_Sketch_4.png`),
+        path(`Volume_01_Pochita_Sketch_5.png`),
+        path(`Volume_01_Pochita_Sketch_6.png`),
+        path(`Volume_01_Pochita_Sketch_7.png`),
+        path(`Volume_01_Pochita_Sketch_8.png`),
     ],
-    range(1, 9 + 1).map(n => path`Volume_02_Pochita_Sketch_${n}.png`),
-    range(1, 9 + 1).map(n => path`Volume_03_Pochita_Sketch_${n}.png`),
+    map(range(1, 10), n => path(`Volume_02_Pochita_Sketch_${n}.png`)),
+    map(range(1, 10), n => path(`Volume_03_Pochita_Sketch_${n}.png`)),
     [
-        path`Volume_04_Pochita_Sketch_1.png`,
-        path`Volume_04_Pochita_Sketch_2.png`,
-        path`Volume_04_Pochita_Sketch_3.png`,
-        path`Volume_04_Pochita_Sketch_4.png`,
-        path`Volume_04_Pochita_Sketch_5.png`,
-        path`Volume_04_Pochita_Sketch_6.png`,
-        path`Volume_04_Pochita_Sketch_7.png`,
-        path`Volume_04_Pochita_Sketch_8.png`,
-        path`Volume_04_Pochita_Sketch_10.png`,
-    ],
-    [
-        path`Volume_05_Pochita_Sketch_1.png`,
-        path`Volume_05_Pochita_Sketch_2.png`,
-        path`Volume_05_Pochita_Sketch_3.png`,
-        null,
-        path`Volume_05_Pochita_Sketch_4.png`,
-        path`Volume_05_Pochita_Sketch_5.png`,
-        path`Volume_05_Pochita_Sketch_6.png`,
-        path`Volume_05_Pochita_Sketch_7.png`,
-        path`Volume_05_Pochita_Sketch_8.png`,
-    ],
-    range(1, 9 + 1).map(n => path`Volume_06_Pochita_Sketch_${n}.png`),
-    range(1, 9 + 1).map(n => path`Volume_07_Pochita_Sketch_${n}.png`),
-    range(1, 9 + 1).map(n => path`Volume_08_Pochita_Sketch_${n}.png`),
-    [
-        path`Volume_09_Pochita_Sketch_1.png`,
-        path`Volume_09_Pochita_Sketch_2.png`,
-        path`Volume_09_Pochita_Sketch_3.png`,
-        path`Volume_09_Pochita_Sketch_4.png`,
-        path`Volume_09_Pochita_Sketch_5.png`,
-        path`Volume_09_Pochita_Sketch_6.png`,
-        path`Volume_09_Pochita_Sketch_7.png`,
-        path`Volume_09_Pochita_Sketch_8.png`,
-        null,
+        path(`Volume_04_Pochita_Sketch_1.png`),
+        path(`Volume_04_Pochita_Sketch_2.png`),
+        path(`Volume_04_Pochita_Sketch_3.png`),
+        path(`Volume_04_Pochita_Sketch_4.png`),
+        path(`Volume_04_Pochita_Sketch_5.png`),
+        path(`Volume_04_Pochita_Sketch_6.png`),
+        path(`Volume_04_Pochita_Sketch_7.png`),
+        path(`Volume_04_Pochita_Sketch_8.png`),
+        path(`Volume_04_Pochita_Sketch_10.png`),
     ],
     [
-        path`Volume_10_Pochita_Sketch.png`,
+        path(`Volume_05_Pochita_Sketch_1.png`),
+        path(`Volume_05_Pochita_Sketch_2.png`),
+        path(`Volume_05_Pochita_Sketch_3.png`),
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        path`Volume_10_Denji_Sketch.png`,
+        path(`Volume_05_Pochita_Sketch_4.png`),
+        path(`Volume_05_Pochita_Sketch_5.png`),
+        path(`Volume_05_Pochita_Sketch_6.png`),
+        path(`Volume_05_Pochita_Sketch_7.png`),
+        path(`Volume_05_Pochita_Sketch_8.png`),
     ],
+    map(range(1, 10), n => path(`Volume_06_Pochita_Sketch_${n}.png`)),
+    map(range(1, 10), n => path(`Volume_07_Pochita_Sketch_${n}.png`)),
+    map(range(1, 10), n => path(`Volume_08_Pochita_Sketch_${n}.png`)),
     [
-        null,
-        null,
-        path`Volume_11_Pochita_Sketch_1.png`,
-        path`Volume_11_Pochita_Sketch_2.png`,
-        path`Volume_11_Pochita_Sketch_3.png`,
-        path`Volume_11_Pochita_Sketch_4.png`,
-        path`Volume_11_Pochita_Sketch_5.png`,
-        path`Volume_11_Pochita_Sketch_6.png`,
+        path(`Volume_09_Pochita_Sketch_1.png`),
+        path(`Volume_09_Pochita_Sketch_2.png`),
+        path(`Volume_09_Pochita_Sketch_3.png`),
+        path(`Volume_09_Pochita_Sketch_4.png`),
+        path(`Volume_09_Pochita_Sketch_5.png`),
+        path(`Volume_09_Pochita_Sketch_6.png`),
+        path(`Volume_09_Pochita_Sketch_7.png`),
+        path(`Volume_09_Pochita_Sketch_8.png`),
         null,
     ],
     [
-        path`Volume_12_Pochita_Sketch_1.png`,
-        path`Volume_12_Pochita_Sketch_2.png`,
-        path`Volume_12_Pochita_Sketch_3.png`,
-        path`Volume_12_Pochita_Sketch_4.png`,
+        path(`Volume_10_Pochita_Sketch.png`),
         null,
-        path`Volume_12_Pochita_Sketch_5.png`,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        path(`Volume_10_Denji_Sketch.png`),
     ],
     [
         null,
         null,
-        path`Volume_13_Pochita_Sketch_1.png`,
-        null,
-        null,
-        null,
-        null,
-        path`Volume_13_Pochita_Sketch_2.png`,
-        path`Volume_13_Pochita_Sketch_3.png`,
-    ],
-    [
-        path`Volume_14_Pochita_Sketch_1.png`,
-        path`Volume_14_Pochita_Sketch_2.png`,
-        path`Volume_14_Pochita_Sketch_3.png`,
-        null,
-        null,
-        path`Volume_14_Pochita_Sketch_4.png`,
-        null,
-        path`Volume_14_Pochita_Sketch_5.png`,
-        path`Volume_14_Pochita_Sketch_6.png`,
+        path(`Volume_11_Pochita_Sketch_1.png`),
+        path(`Volume_11_Pochita_Sketch_2.png`),
+        path(`Volume_11_Pochita_Sketch_3.png`),
+        path(`Volume_11_Pochita_Sketch_4.png`),
+        path(`Volume_11_Pochita_Sketch_5.png`),
+        path(`Volume_11_Pochita_Sketch_6.png`),
         null,
     ],
     [
+        path(`Volume_12_Pochita_Sketch_1.png`),
+        path(`Volume_12_Pochita_Sketch_2.png`),
+        path(`Volume_12_Pochita_Sketch_3.png`),
+        path(`Volume_12_Pochita_Sketch_4.png`),
         null,
-        path`Volume_15_Pochita_Sketch_1.png`,
-        null,
-        null,
-        null,
-        path`Volume_15_Pochita_Sketch_2.png`,
-        null,
-        null,
-        path`Volume_15_Pochita_Sketch_3.png`,
-        path`Volume_15_Pochita_Sketch_4.png`,
-        path`Volume_15_Pochita_Sketch_5.png`,
-    ],
-    [
-        path`Volume_16_Pochita_Sketch_1.png`,
-        path`Volume_16_Pochita_Sketch_2.png`,
-        null,
-        null,
-        path`Volume_16_Pochita_Sketch_3.png`,
-        path`Volume_16_Pochita_Sketch_4.png`,
-        path`Volume_16_Pochita_Sketch_5.png`,
-        null,
-        null,
-        path`Volume_16_Pochita_Sketch_6.png`,
-    ],
-    [
-        path`Volume_17_Pochita_Sketch_1.png`,
-        null,
-        null,
-        null,
-        null,
-        path`Volume_17_Pochita_Sketch_2.png`,
-        null,
-        null,
-        null,
-        path`Volume_17_Pochita_Sketch_3.png`,
-    ],
-    [
-        null,
-        path`Volume_18_Pochita_Sketch_1.png`,
-        null,
-        null,
-        null,
-        null,
-        path`Volume_18_Pochita_Sketch_2.png`,
-        null,
-        path`Volume_18_Pochita_Sketch_3.png`,
-        null,
-        null,
+        path(`Volume_12_Pochita_Sketch_5.png`),
     ],
     [
         null,
         null,
-        null,
-        path`Volume_19_Pochita_Sketch_1.png`,
-        null,
-        path`Volume_19_Pochita_Sketch_2.png`,
+        path(`Volume_13_Pochita_Sketch_1.png`),
         null,
         null,
-        path`Volume_19_Pochita_Sketch_3.png`,
         null,
-        path`Volume_19_Pochita_Sketch_4.png`,
+        null,
+        path(`Volume_13_Pochita_Sketch_2.png`),
+        path(`Volume_13_Pochita_Sketch_3.png`),
+    ],
+    [
+        path(`Volume_14_Pochita_Sketch_1.png`),
+        path(`Volume_14_Pochita_Sketch_2.png`),
+        path(`Volume_14_Pochita_Sketch_3.png`),
+        null,
+        null,
+        path(`Volume_14_Pochita_Sketch_4.png`),
+        null,
+        path(`Volume_14_Pochita_Sketch_5.png`),
+        path(`Volume_14_Pochita_Sketch_6.png`),
+        null,
+    ],
+    [
+        null,
+        path(`Volume_15_Pochita_Sketch_1.png`),
+        null,
+        null,
+        null,
+        path(`Volume_15_Pochita_Sketch_2.png`),
+        null,
+        null,
+        path(`Volume_15_Pochita_Sketch_3.png`),
+        path(`Volume_15_Pochita_Sketch_4.png`),
+        path(`Volume_15_Pochita_Sketch_5.png`),
+    ],
+    [
+        path(`Volume_16_Pochita_Sketch_1.png`),
+        path(`Volume_16_Pochita_Sketch_2.png`),
+        null,
+        null,
+        path(`Volume_16_Pochita_Sketch_3.png`),
+        path(`Volume_16_Pochita_Sketch_4.png`),
+        path(`Volume_16_Pochita_Sketch_5.png`),
+        null,
+        null,
+        path(`Volume_16_Pochita_Sketch_6.png`),
+    ],
+    [
+        path(`Volume_17_Pochita_Sketch_1.png`),
+        null,
+        null,
+        null,
+        null,
+        path(`Volume_17_Pochita_Sketch_2.png`),
+        null,
+        null,
+        null,
+        path(`Volume_17_Pochita_Sketch_3.png`),
+    ],
+    [
+        null,
+        path(`Volume_18_Pochita_Sketch_1.png`),
+        null,
+        null,
+        null,
+        null,
+        path(`Volume_18_Pochita_Sketch_2.png`),
+        null,
+        path(`Volume_18_Pochita_Sketch_3.png`),
+        null,
+        null,
     ],
     [
         null,
         null,
         null,
+        path(`Volume_19_Pochita_Sketch_1.png`),
+        null,
+        path(`Volume_19_Pochita_Sketch_2.png`),
+        null,
+        null,
+        path(`Volume_19_Pochita_Sketch_3.png`),
+        null,
+        path(`Volume_19_Pochita_Sketch_4.png`),
+    ],
+    [
+        null,
+        null,
+        null,
+        null,
         null,
         null,
         null,
@@ -224,9 +252,9 @@ export const CHAPTER_PICTURES = [
         null,
         null,
     ],
-];
+] as const;
 
-export const CHAPTERS_PER_ARC = [
+export const CHAPTERS_PER_ARC: [number, number][] = [
     [1, 4],
     [5, 13],
     [14, 22],
@@ -240,25 +268,25 @@ export const CHAPTERS_PER_ARC = [
     [121, 131],
     [132, 155],
     [156, 190],
-    [191, 192],
-] as const;
+    [191, CHAPTERS_TOTAL],
+];
 
 export const ARC_IMAGES = [
-    path`Denji_fighting_zombies.png`,
-    path`Denji_attacking_the_Bat_Devil.png`,
-    path`Denji_fighting_the_Eternity_Devil.png`,
-    path`Denji_engaging_the_Katana_Man.png`,
-    path`Denji_engaging_Reze.png`,
-    path`Denji_engaging_Santa_Claus.png`,
-    path`Chainsaw_vs_Gun_Fiend.png`,
-    path`Hybrids_attacking_Chainsaw.png`,
-    path`Asa_vs_Yuko_as_Justice_Devil.png`,
-    path`Dating_Denji_arc_infobox_picture.png`,
-    path`Denji_tears_through_the_Falling_Devil.png`,
-    path`Denji_and_Miri_impale_each_other.png`,
-    path`Chainsaw_vs_Aging.png`,
+    path(`Denji_fighting_zombies.png`),
+    path(`Denji_attacking_the_Bat_Devil.png`),
+    path(`Denji_fighting_the_Eternity_Devil.png`),
+    path(`Denji_engaging_the_Katana_Man.png`),
+    path(`Denji_engaging_Reze.png`),
+    path(`Denji_engaging_Santa_Claus.png`),
+    path(`Chainsaw_vs_Gun_Fiend.png`),
+    path(`Hybrids_attacking_Chainsaw.png`),
+    path(`Asa_vs_Yuko_as_Justice_Devil.png`),
+    path(`Dating_Denji_arc_infobox_picture.png`),
+    path(`Denji_tears_through_the_Falling_Devil.png`),
+    path(`Denji_and_Miri_impale_each_other.png`),
+    path(`Chainsaw_vs_Aging.png`),
     null,
-];
+] as const;
 
 export const ARC_NAMES = [
     'Introduction',
@@ -275,33 +303,33 @@ export const ARC_NAMES = [
     'Chainsaw Man Church',
     'Aging Devil',
     'Current',
-];
+] as const;
 
 export const VOLUME_COVERS = [
-    ...range(1, 19 + 1).map(n => path`Volume_${pad(n)}.png`),
+    ...map(range(1, VOLUMES_TOTAL), n => path(`Volume_${pad(n)}.png`)),
     null,
-];
+] as const;
 
 export const SEASON_COVERS = [
-    path`Chainsaw_Man_Anime_Key_Visual_1.png`,
-    path`Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1.png`,
+    path(`Chainsaw_Man_Anime_Key_Visual_1.png`),
+    path(`Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1.png`),
     null,
     null,
-];
+] as const;
 
-export const CHAPTERS_PER_SEASON = [
+export const CHAPTERS_PER_SEASON: [number, number][] = [
     [1, 38],
     [39, 52],
     [53, 97],
-    [98, 192], // latest chapter
-] as const;
+    [98, CHAPTERS_TOTAL],
+];
 
-export const EPISODE_THUMBNAILS = range(1, 12 + 1).map(n => path`${n}.jpg`);
+export const EPISODE_THUMBNAILS = map(range(1, 13), n => path(`${n}.jpg`));
 
-const CHAPTERS_WITH_PAGES = PAGES_PER_CHAPTER_FLAT.map((pages, chapterIdx) => [
-    chapterIdx + 1,
-    pages,
-]);
+const CHAPTERS_WITH_PAGES = map(
+    PAGES_PER_CHAPTER_FLAT,
+    (pages, chapterIdx) => [chapterIdx + 1, pages] as const
+);
 
 const SPLIT_CHAPTERS: Record<number, number> = {
     5: 10,
@@ -310,9 +338,9 @@ const SPLIT_CHAPTERS: Record<number, number> = {
     18: 12,
     25: 14,
     31: 18,
-};
+} as const;
 
-const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4];
+const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4] as const;
 
 const CHAPTERS_SPLIT_FOR_EPISODES = CHAPTERS_WITH_PAGES.slice(0, 38 + 1).reduce(
     (a, [chapter = 0, pages = 0]) => [

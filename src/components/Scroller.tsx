@@ -139,7 +139,7 @@ export const Scroller = () => {
                 onClick={handleScrollerClick}
             >
                 <img
-                    src={path`pochita.png`}
+                    src={path(`pochita.png`)}
                     draggable={false}
                     onMouseDown={() => (isDragging.current = true)}
                 />
