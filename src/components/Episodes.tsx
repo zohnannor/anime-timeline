@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { scale, EPISODE_THUMBNAILS } from '../constants';
+import { EPISODE_THUMBNAILS, scale } from '../constants';
 import { getEpisodeWidthNew } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
