@@ -1,8 +1,25 @@
 import { Flatten, Length } from './types';
 import { map, pad, path, range, sum } from './util';
 
-export const scale = (n: number) => n / 40;
+export const SEASON_HEIGHT = 742;
+export const EPISODE_HEIGHT = SEASON_HEIGHT - 500;
+export const VOLUME_HEIGHT = 1579;
+export const CHAPTER_HEIGHT = 100;
+export const ARC_HEIGHT = VOLUME_HEIGHT;
+export const TIMELINE_HEIGHT = 200;
+const MAX_HEIGHT =
+    SEASON_HEIGHT +
+    ARC_HEIGHT +
+    CHAPTER_HEIGHT +
+    VOLUME_HEIGHT +
+    TIMELINE_HEIGHT;
+
+const COEFFICIENT = MAX_HEIGHT / 100;
+export const scale = (n: number) => n / COEFFICIENT;
+
 export const SCROLLER_SIZE = 400;
+
+export const SMALL_FONT_SIZE = 45;
 
 const CHAPTERS_TOTAL = 193;
 const VOLUMES_TOTAL = 20; // last = unreleased
@@ -39,7 +56,8 @@ const _ASSERT_LEGNTHS: [
     Length<typeof VOLUME_COVERS>,
     Length<typeof SEASON_COVERS>,
     Length<typeof EPISODE_THUMBNAILS>,
-    Length<typeof CHAPTERS_PER_EPISODE>
+    Length<typeof CHAPTERS_PER_EPISODE>,
+    Length<typeof CHAPTER_DATES>
 ] = [
     VOLUMES_TOTAL,
     CHAPTERS_TOTAL,
@@ -50,6 +68,7 @@ const _ASSERT_LEGNTHS: [
     4,
     12,
     12,
+    CHAPTERS_TOTAL,
 ] as const;
 
 void _ASSERT_LEGNTHS; // to ignore error
@@ -369,3 +388,226 @@ export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
     },
     [[], 0]
 )[0];
+
+export const CHAPTER_DATES = map(
+    [
+        'December 3, 2018',
+        'December 10, 2018',
+        'December 17, 2018',
+        'December 22, 2018',
+        'January 7, 2019',
+        'January 21, 2019',
+        'January 28, 2019',
+        'February 4, 2019',
+        'February 11, 2019',
+        'February 18, 2019',
+        'February 25, 2019',
+        'March 4, 2019',
+        'March 11, 2019',
+        'March 18, 2019',
+        'March 25, 2019',
+        'April 1, 2019',
+        'April 8, 2019',
+        'April 15, 2019',
+        'April 22, 2019',
+        'April 27, 2019',
+        'May 13, 2019',
+        'May 20, 2019',
+        'May 27, 2019',
+        'June 3, 2019',
+        'June 10, 2019',
+        'June 17, 2019',
+        'June 24, 2019',
+        'July 1, 2019',
+        'July 8, 2019',
+        'July 13, 2019',
+        'July 22, 2019',
+        'July 29, 2019',
+        'August 5, 2019',
+        'August 18, 2019',
+        'August 26, 2019',
+        'September 2, 2019',
+        'September 9, 2019',
+        'September 14, 2019',
+        'September 21, 2019',
+        'September 30, 2019',
+        'October 7, 2019',
+        'October 12, 2019',
+        'October 21, 2019',
+        'October 28, 2019',
+        'November 2, 2019',
+        'November 11, 2019',
+        'November 18, 2019',
+        'November 25, 2019',
+        'December 2, 2019',
+        'December 9, 2019',
+        'December 15, 2019',
+        'December 23, 2019',
+        'January 3, 2020',
+        'January 20, 2020',
+        'January 27, 2020',
+        'February 3, 2020',
+        'February 10, 2020',
+        'February 17, 2020',
+        'February 22, 2020',
+        'March 2, 2020',
+        'March 9, 2020',
+        'March 16, 2020',
+        'March 23, 2020',
+        'March 30, 2020',
+        'April 6, 2020',
+        'April 13, 2020',
+        'April 27, 2020',
+        'May 11, 2020',
+        'May 18, 2020',
+        'May 25, 2020',
+        'June 1, 2020',
+        'June 7, 2020',
+        'June 15, 2020',
+        'June 22, 2020',
+        'June 26, 2020',
+        'July 5, 2020',
+        'July 12, 2020',
+        'July 19, 2020',
+        'August 2, 2020',
+        'August 10, 2020',
+        'August 23, 2020',
+        'August 30, 2020',
+        'September 6, 2020',
+        'September 13, 2020',
+        'September 20, 2020',
+        'September 27, 2020',
+        'October 4, 2020',
+        'October 11, 2020',
+        'October 16, 2020',
+        'October 26, 2020',
+        'November 2, 2020',
+        'November 9, 2020',
+        'November 16, 2020',
+        'November 21, 2020',
+        'November 30, 2020',
+        'December 7, 2020',
+        'December 14, 2020',
+        'July 13, 2022',
+        'July 20, 2022',
+        'July 27, 2022',
+        'August 3, 2022',
+        'August 17, 2022',
+        'August 31, 2022',
+        'September 14, 2022',
+        'September 28, 2022',
+        'October 12, 2022',
+        'October 19, 2022',
+        'October 26, 2022',
+        'November 2, 2022',
+        'November 9, 2022',
+        'November 16, 2022',
+        'November 23, 2022',
+        'December 7, 2022',
+        'December 21, 2022',
+        'December 28, 2022',
+        'January 4, 2023',
+        'January 11, 2023',
+        'January 18, 2023',
+        'February 1, 2023',
+        'February 15, 2023',
+        'February 22, 2023',
+        'March 8, 2023',
+        'March 15, 2023',
+        'March 29, 2023',
+        'April 5, 2023',
+        'April 12, 2023',
+        'April 19, 2023',
+        'April 26, 2023',
+        'May 10, 2023',
+        'May 24, 2023',
+        'May 31, 2023',
+        'June 14, 2023',
+        'June 21, 2023',
+        'June 28, 2023',
+        'July 12, 2023',
+        'July 19, 2023',
+        'July 26, 2023',
+        'August 9, 2023',
+        'August 16, 2023',
+        'August 23, 2023',
+        'August 30, 2023',
+        'September 13, 2023',
+        'September 20, 2023',
+        'September 27, 2023',
+        'October 11, 2023',
+        'October 18, 2023',
+        'November 1, 2023',
+        'November 15, 2023',
+        'November 22, 2023',
+        'December 6, 2023',
+        'December 20, 2023',
+        'January 10, 2024',
+        'January 24, 2024',
+        'January 31, 2024',
+        'February 14, 2024',
+        'February 28, 2024',
+        'March 6, 2024',
+        'March 13, 2024',
+        'March 20, 2024',
+        'March 27, 2024',
+        'April 3, 2024',
+        'April 10, 2024',
+        'April 24, 2024',
+        'May 1, 2024',
+        'May 15, 2024',
+        'May 22, 2024',
+        'June 5, 2024',
+        'June 12, 2024',
+        'June 26, 2024',
+        'July 3, 2024',
+        'July 17, 2024',
+        'July 24, 2024',
+        'August 7, 2024',
+        'August 14, 2024',
+        'August 21, 2024',
+        'September 4, 2024',
+        'September 18, 2024',
+        'September 25, 2024',
+        'October 2, 2024',
+        'October 16, 2024',
+        'October 23, 2024',
+        'November 6, 2024',
+        'November 13, 2024',
+        'November 20, 2024',
+        'November 27, 2024',
+        'December 11, 2024',
+        'December 18, 2024',
+        'January 1, 2025',
+        'January 8, 2025',
+        'January 15, 2025',
+        'January 29, 2025',
+        'February 5, 2025',
+        'February 12, 2025',
+    ] as const,
+    d => new Date(`${d} GMT+9`) // Tokyo timezone
+);
+
+const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
+    array.reduce<[[number, T][][], number | null]>(
+        ([groups, previous], date, idx) => {
+            const key = getKey(date);
+            if (key === previous) {
+                groups[groups.length - 1]!.push([idx, date]);
+            } else {
+                groups.push([[idx, date]]);
+            }
+            return [groups, key];
+        },
+        [[], null]
+    )[0];
+
+export const CHAPTER_DATES_BY_MONTH = groupBy(
+    CHAPTER_DATES,
+    date => date.getMonth() + 1
+);
+
+export const CHAPTER_DATES_BY_YEAR = groupBy(
+    CHAPTER_DATES,
+    date => date.getFullYear() + 1
+);

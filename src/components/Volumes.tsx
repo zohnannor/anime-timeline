@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { scale, VOLUME_COVERS } from '../constants';
+import { scale, VOLUME_COVERS, VOLUME_HEIGHT } from '../constants';
 import { getVolumeWidth } from '../helpers';
 import { Chapters } from './Chapters';
 import { Container } from './Container';
@@ -19,7 +19,7 @@ export const Volume = withShadow(
         overflow: hidden;
 
         font-size: ${scale(500)}vh;
-        height: ${scale(1579)}vh;
+        height: ${scale(VOLUME_HEIGHT)}vh;
         width: ${({ $width }) => scale($width)}vh;
 
         & > a {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { EPISODE_THUMBNAILS, scale } from '../constants';
+import { EPISODE_HEIGHT, EPISODE_THUMBNAILS, scale } from '../constants';
 import { getEpisodeWidthNew } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -19,7 +19,7 @@ const Episode = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${scale(242)}vh;
+        height: ${scale(EPISODE_HEIGHT)}vh;
         width: ${({ $width }) => scale($width)}vh;
 
         & > a {
