@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ARC_IMAGES, ARC_NAMES, scale } from '../constants';
+import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -19,7 +19,7 @@ const Arc = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${scale(1579)}vh;
+        height: ${scale(ARC_HEIGHT)}vh;
         width: ${({ $width }) => scale($width)}vh;
 
         & > a {

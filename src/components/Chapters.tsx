@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { CHAPTER_PICTURES, scale } from '../constants';
+import {
+    CHAPTER_HEIGHT,
+    CHAPTER_PICTURES,
+    scale,
+    SMALL_FONT_SIZE,
+} from '../constants';
 import { getChapterNumber, getChapterWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
@@ -12,7 +17,7 @@ interface ChapterProps {
 
 const ChapterWrapper = styled.div<ChapterProps>`
     position: relative;
-    height: ${scale(100)}vh;
+    height: ${scale(CHAPTER_HEIGHT)}vh;
     width: ${({ $width }) => scale($width)}vh;
 `;
 
@@ -25,7 +30,7 @@ const Chapter = withShadow(
         transition: 0.1s ease-in-out;
         overflow: hidden;
 
-        font-size: ${scale(32)}vh;
+        font-size: ${scale(SMALL_FONT_SIZE)}vh;
         height: 100%;
         width: 100%;
         background-color: #fff;
