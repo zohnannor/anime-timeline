@@ -18,6 +18,7 @@ interface ScrollHoverAreaProps {
 export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
     position: fixed;
+    z-index: 10;
     bottom: 0;
     height: 80px;
     width: 100vw;

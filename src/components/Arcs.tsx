@@ -2,24 +2,39 @@ import styled from 'styled-components';
 
 import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
-import { Container } from './Container';
+import { TimelineContainer } from './Container';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
+import { withCrossLines } from './CrossLines';
+import { useHover } from '../hooks/useHover';
 
 interface ArcProps {
     $width: number;
 }
 
-const Arc = withShadow(
+interface ArcCoverProps {
+    $offsetX?: number;
+    $offsetY?: number;
+}
+
+const Arc = withCrossLines(
     styled.div<ArcProps>`
+        position: relative;
+        height: ${scale(ARC_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
+    `
+);
+
+const ArcCover = withShadow(
+    styled.div<ArcCoverProps>`
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
 
-        height: ${scale(ARC_HEIGHT)}svh;
-        width: ${({ $width }) => scale($width)}svh;
+        height: 100%;
+        width: 100%;
 
         & > a {
             writing-mode: sideways-lr;
@@ -65,38 +80,49 @@ const OFFSETS = [
     { x: 0, y: 300 },
 ];
 
-export const Arcs: React.FC = () => (
-    <Container>
-        {ARC_IMAGES.map((panel, idx) => {
-            const arcWidth = getArcWidth(idx + 1);
-            const arcName = ARC_NAMES[idx];
-            const link = `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`;
+export const Arcs: React.FC = () => {
+    const [hoveredArc, hoverHandlers] = useHover();
 
-            return (
-                <Arc
-                    key={panel || idx}
-                    $invertBorder={!panel}
-                    $width={arcWidth}
-                >
-                    <a
-                        href={link}
-                        draggable={false}
-                        target='_blank'
-                        rel='noopener noreferrer'
+    return (
+        <TimelineContainer>
+            {ARC_IMAGES.map((panel, idx) => {
+                const arcWidth = getArcWidth(idx + 1);
+                const arcName = ARC_NAMES[idx];
+                const link = `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`;
+
+                return (
+                    <Arc
+                        $width={arcWidth}
+                        key={panel || idx}
+                        $visible={hoveredArc === idx + 1}
+                        {...hoverHandlers(idx + 1)}
                     >
-                        {panel ? (
-                            <ThumbnailImage
-                                src={panel}
-                                alt=''
-                                $offsetX={OFFSETS[idx]?.x ?? 0}
-                                $offsetY={OFFSETS[idx]?.y ?? 0}
-                            />
-                        ) : (
-                            `${arcName} arc`
-                        )}
-                    </a>
-                </Arc>
-            );
-        })}
-    </Container>
-);
+                        <ArcCover
+                            $invertBorder={!panel}
+                            $offsetX={OFFSETS[idx]?.x ?? 0}
+                            $offsetY={OFFSETS[idx]?.y ?? 0}
+                        >
+                            <a
+                                href={link}
+                                draggable={false}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
+                                {panel ? (
+                                    <ThumbnailImage
+                                        src={panel}
+                                        alt=''
+                                        $offsetX={OFFSETS[idx]?.x ?? 0}
+                                        $offsetY={OFFSETS[idx]?.y ?? 0}
+                                    />
+                                ) : (
+                                    `${arcName} arc`
+                                )}
+                            </a>
+                        </ArcCover>
+                    </Arc>
+                );
+            })}
+        </TimelineContainer>
+    );
+};

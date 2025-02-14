@@ -21,7 +21,7 @@ export const withShadow = <T extends PropsWithChildren<ShadowProps>>(
     return (props: T) => (
         <StyledComponent {...props}>
             {props.children}
-            <Shadow $invertBorder={props?.$invertBorder} />
+            <Shadow className='shadow' $invertBorder={props?.$invertBorder} />
         </StyledComponent>
     );
 };
