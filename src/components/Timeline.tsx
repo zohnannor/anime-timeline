@@ -27,6 +27,7 @@ const Timeframe = withShadow(
         background: ${({ $background }) => $background ?? 'white'};
         color: black;
         font-size: ${scale(SMALL_FONT_SIZE)}svh;
+        overflow: hidden;
     `
 );
 
