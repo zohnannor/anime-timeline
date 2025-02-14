@@ -1,3 +1,4 @@
+import { getVolumeWidth } from './helpers';
 import { Flatten, Length } from './types';
 import { map, pad, range, sum } from './util';
 
@@ -23,6 +24,14 @@ export const SMALL_FONT_SIZE = 45;
 
 const CHAPTERS_TOTAL = 193;
 const VOLUMES_TOTAL = 20; // last = unreleased
+
+export const APP_MAX_WIDTH = [...Array(VOLUMES_TOTAL)].reduce(
+    (totalWidth, _, idx) => {
+        const volumeWidth = getVolumeWidth(idx + 1);
+        return totalWidth + volumeWidth;
+    },
+    0
+);
 
 export const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],

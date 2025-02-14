@@ -1,13 +1,25 @@
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 import { Arcs } from './components/Arcs';
-import { Container } from './components/Container';
 import { Scroller } from './components/Scroller';
 import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
 import { Volumes } from './components/Volumes';
 import useWindowSize from './hooks/useWindowSize';
 import { SettingsProvider } from './providers/SettingsProvider';
+import { APP_MAX_WIDTH, scale } from './constants';
+
+interface AppContainerProps {
+    $maxWidth: number;
+}
+
+const AppContainer = styled.div<AppContainerProps>`
+    display: flex;
+    flex-direction: column;
+    max-width: ${({ $maxWidth }) => scale($maxWidth)}svh;
+    overflow: hidden;
+`;
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
@@ -25,13 +37,13 @@ const App: React.FC = () => {
 
     return (
         <SettingsProvider>
-            <Container $dir='column'>
+            <AppContainer $maxWidth={APP_MAX_WIDTH}>
                 <Seasons />
                 <Arcs />
                 <Timeline />
                 <Volumes />
                 {width > 768 && <Scroller />}
-            </Container>
+            </AppContainer>
         </SettingsProvider>
     );
 };

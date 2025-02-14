@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { useSettings } from '../providers/SettingsProvider';
 
@@ -19,11 +19,36 @@ const CrossLinesWrapper = styled.div<CrossLinesProps>`
     justify-content: space-between;
 `;
 
-const CrossLine = styled.div`
+interface CrossLineProps {
+    $side: 'left' | 'right';
+}
+
+const CrossLine = styled.div<CrossLineProps>`
     height: 200vh;
     position: relative;
     top: -100vh;
     box-shadow: 0 0 2px 2px rgba(255, 0, 0, 0.8);
+
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        pointer-events: none;
+
+        ${({ $side }) =>
+            $side === 'right'
+                ? css`
+                      left: 0;
+                  `
+                : css`
+                      right: 0;
+                  `}
+
+        top: 0;
+        height: 200vh;
+        width: 100vw;
+        background: rgba(0, 0, 0, 0.5);
+    }
 `;
 
 export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
@@ -35,8 +60,8 @@ export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
         <CrossLinesWrapper className='crosslines' $visible={crosslinesVisible}>
             {crosslinesVisible ? (
                 <>
-                    <CrossLine />
-                    <CrossLine />
+                    <CrossLine $side='left' />
+                    <CrossLine $side='right' />
                 </>
             ) : (
                 <></>
