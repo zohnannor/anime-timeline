@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import {
@@ -8,21 +7,25 @@ import {
     SMALL_FONT_SIZE,
 } from '../constants';
 import { getChapterNumber, getChapterWidth } from '../helpers';
-import { Container } from './Container';
+import { TimelineContainer } from './Container';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
+import { withCrossLines } from './CrossLines';
+import { useHover } from '../hooks/useHover';
 
 interface ChapterProps {
     $width: number;
 }
 
-const ChapterWrapper = styled.div<ChapterProps>`
-    position: relative;
-    height: ${scale(CHAPTER_HEIGHT)}svh;
-    width: ${({ $width }) => scale($width)}svh;
-`;
+const Chapter = withCrossLines(
+    styled.div<ChapterProps>`
+        position: relative;
+        height: ${scale(CHAPTER_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
+    `
+);
 
-const Chapter = withShadow(
+const ChapterCover = withShadow(
     styled.div`
         position: relative;
         display: flex;
@@ -79,6 +82,7 @@ const Preview = styled.div<PreviewProps>`
     color: black;
     background: white;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);
+    z-index: 10;
 
     & > img {
         object-fit: contain;
@@ -97,19 +101,21 @@ interface ChaptersProps {
 }
 
 export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
-    const [hoveredChapter, setHoveredChapter] = useState(0);
+    const [hoveredChapter, hoverHandlers] = useHover();
 
     return (
-        <Container>
+        <TimelineContainer>
             {(CHAPTER_PICTURES[volume - 1] ?? []).map((picture, idx) => {
                 const chapterNumber = getChapterNumber(volume, idx);
                 const chapterWidth = getChapterWidth(chapterNumber);
                 const link = `https://chainsaw-man.fandom.com/wiki/Chapter_${chapterNumber}`;
 
                 return (
-                    <ChapterWrapper
+                    <Chapter
                         $width={chapterWidth}
                         key={picture || chapterNumber}
+                        $visible={hoveredChapter === chapterNumber}
+                        {...hoverHandlers(chapterNumber)}
                     >
                         {picture && (
                             <Preview
@@ -120,10 +126,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                 Chapter {chapterNumber}.
                             </Preview>
                         )}
-                        <Chapter
-                            onMouseOver={() => setHoveredChapter(chapterNumber)}
-                            onMouseOut={() => setHoveredChapter(0)}
-                        >
+                        <ChapterCover>
                             <a
                                 href={link}
                                 draggable={false}
@@ -136,10 +139,10 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                     chapterNumber
                                 )}
                             </a>
-                        </Chapter>
-                    </ChapterWrapper>
+                        </ChapterCover>
+                    </Chapter>
                 );
             })}
-        </Container>
+        </TimelineContainer>
     );
 };

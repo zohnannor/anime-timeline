@@ -1,18 +1,36 @@
 import styled from 'styled-components';
 
-import { scale, VOLUME_COVERS, VOLUME_HEIGHT } from '../constants';
+import {
+    CHAPTER_HEIGHT,
+    scale,
+    VOLUME_COVERS,
+    VOLUME_HEIGHT,
+} from '../constants';
 import { getVolumeWidth } from '../helpers';
 import { Chapters } from './Chapters';
-import { Container } from './Container';
+import { TimelineContainer } from './Container';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
+import { withCrossLines } from './CrossLines';
+import { useHover } from '../hooks/useHover';
 
 interface VolumeProps {
     $width: number;
 }
 
-export const Volume = withShadow(
+export const Volume = withCrossLines(
     styled.div<VolumeProps>`
+        position: relative;
+        height: ${scale(VOLUME_HEIGHT + CHAPTER_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
+
+        display: flex;
+        flex-direction: column;
+    `
+);
+
+export const VolumeCover = withShadow(
+    styled.div`
         position: relative;
         display: flex;
         align-items: center;
@@ -20,8 +38,8 @@ export const Volume = withShadow(
         overflow: hidden;
 
         font-size: ${scale(500)}svh;
-        height: ${scale(VOLUME_HEIGHT)}svh;
-        width: ${({ $width }) => scale($width)}svh;
+        height: 100%;
+        width: 100%;
 
         & > a {
             position: absolute;
@@ -50,32 +68,41 @@ export const Volume = withShadow(
     `
 );
 
-export const Volumes: React.FC = () => (
-    <Container>
-        {VOLUME_COVERS.map((cover, idx) => {
-            const volumeNumber = idx + 1;
-            const volumeWidth = getVolumeWidth(volumeNumber);
-            const link = `https://chainsaw-man.fandom.com/wiki/Volume_${volumeNumber}`;
+export const Volumes: React.FC = () => {
+    const [hoveredVolume, hoverHandlers] = useHover();
 
-            return (
-                <Container $dir='column' key={cover || volumeNumber}>
-                    <Chapters volume={volumeNumber} />
-                    <Volume $invertBorder={!cover} $width={volumeWidth}>
-                        <a
-                            href={link}
-                            draggable={false}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >
-                            {cover ? (
-                                <ThumbnailImage src={cover} alt='' />
-                            ) : (
-                                volumeNumber
-                            )}
-                        </a>
+    return (
+        <TimelineContainer>
+            {VOLUME_COVERS.map((cover, idx) => {
+                const volumeNumber = idx + 1;
+                const volumeWidth = getVolumeWidth(volumeNumber);
+                const link = `https://chainsaw-man.fandom.com/wiki/Volume_${volumeNumber}`;
+
+                return (
+                    <Volume
+                        $width={volumeWidth}
+                        key={cover || volumeNumber}
+                        $visible={hoveredVolume === volumeNumber}
+                        {...hoverHandlers(volumeNumber)}
+                    >
+                        <Chapters volume={volumeNumber} />
+                        <VolumeCover $invertBorder={!cover}>
+                            <a
+                                href={link}
+                                draggable={false}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                            >
+                                {cover ? (
+                                    <ThumbnailImage src={cover} alt='' />
+                                ) : (
+                                    volumeNumber
+                                )}
+                            </a>
+                        </VolumeCover>
                     </Volume>
-                </Container>
-            );
-        })}
-    </Container>
-);
+                );
+            })}
+        </TimelineContainer>
+    );
+};

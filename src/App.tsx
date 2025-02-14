@@ -7,6 +7,7 @@ import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
 import { Volumes } from './components/Volumes';
 import useWindowSize from './hooks/useWindowSize';
+import { SettingsProvider } from './providers/SettingsProvider';
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
@@ -23,13 +24,15 @@ const App: React.FC = () => {
     }, []);
 
     return (
-        <Container $dir='column'>
-            <Seasons />
-            <Arcs />
-            <Timeline />
-            <Volumes />
-            {width > 768 && <Scroller />}
-        </Container>
+        <SettingsProvider>
+            <Container $dir='column'>
+                <Seasons />
+                <Arcs />
+                <Timeline />
+                <Volumes />
+                {width > 768 && <Scroller />}
+            </Container>
+        </SettingsProvider>
     );
 };
 

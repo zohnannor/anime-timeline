@@ -2,18 +2,39 @@ import styled from 'styled-components';
 
 import { scale, SEASON_COVERS } from '../constants';
 import { getSeasonWidth } from '../helpers';
-import { Container } from './Container';
+import { TimelineContainer } from './Container';
 import { Episodes } from './Episodes';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
+import { withCrossLines } from './CrossLines';
+import { useHover } from '../hooks/useHover';
 
 interface SeasonProps {
     $width: number;
-    $emptyCover?: boolean;
 }
 
-const Season = withShadow(
+interface SeasonCoverProps {
+    $emptyCover?: boolean;
+    $offsetX?: number;
+    $offsetY?: number;
+}
+
+const Season = withCrossLines(
     styled.div<SeasonProps>`
+        display: flex;
+        position: relative;
+        height: ${scale(742)}svh;
+        width: ${({ $width }) => scale($width)}svh;
+        align-items: flex-end;
+
+        & > div {
+            position: absolute;
+        }
+    `
+);
+
+const SeasonCover = withShadow(
+    styled.div<SeasonCoverProps>`
         position: relative;
         display: flex;
         align-items: ${({ $emptyCover }) =>
@@ -21,9 +42,9 @@ const Season = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${scale(250)}svh;
-        height: ${scale(742)}svh;
-        width: ${({ $width }) => scale($width)}svh;
+        font-size: ${scale(250)}vh;
+        height: 100%;
+        width: 100%;
         cursor: default;
         user-select: none;
 
@@ -56,45 +77,56 @@ const OFFSETS = [
     { x: 0, y: 800 },
 ];
 
-export const Seasons: React.FC = () => (
-    <Container>
-        {SEASON_COVERS.map((cover, idx) => {
-            const seasonNumber = idx + 1;
-            const seasonWidth = getSeasonWidth(seasonNumber);
-            let link = [
-                'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)',
-                'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_%E2%80%93_The_Movie:_Reze_Arc',
-            ][idx];
+export const Seasons: React.FC = () => {
+    const [hoveredSeason, hoverHandlers] = useHover();
 
-            return (
-                <Season
-                    key={cover || seasonNumber}
-                    $invertBorder={!cover}
-                    $emptyCover={!cover}
-                    $width={seasonWidth}
-                >
-                    {cover ? (
-                        <>
-                            <a
-                                href={link}
-                                draggable={false}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                <ThumbnailImage
-                                    src={cover}
-                                    alt=''
-                                    $offsetX={OFFSETS[idx]?.x ?? 0}
-                                    $offsetY={OFFSETS[idx]?.y ?? 0}
-                                />
-                            </a>
-                            <Episodes season={seasonNumber} />
-                        </>
-                    ) : (
-                        `SEASON ${idx}`
-                    )}
-                </Season>
-            );
-        })}
-    </Container>
-);
+    return (
+        <TimelineContainer>
+            {SEASON_COVERS.map((cover, idx) => {
+                const seasonNumber = idx + 1;
+                const seasonWidth = getSeasonWidth(seasonNumber);
+                let link = [
+                    'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)',
+                    'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_%E2%80%93_The_Movie:_Reze_Arc',
+                ][idx];
+
+                return (
+                    <Season
+                        $width={seasonWidth}
+                        key={cover || seasonNumber}
+                        $visible={hoveredSeason === seasonNumber}
+                        {...hoverHandlers(seasonNumber)}
+                    >
+                        <SeasonCover
+                            $invertBorder={!cover}
+                            $emptyCover={!cover}
+                            $offsetX={OFFSETS[idx]?.x ?? 0}
+                            $offsetY={OFFSETS[idx]?.y ?? 0}
+                        >
+                            {cover ? (
+                                <>
+                                    <a
+                                        href={link}
+                                        draggable={false}
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                    >
+                                        <ThumbnailImage
+                                            src={cover}
+                                            alt=''
+                                            $offsetX={OFFSETS[idx]?.x ?? 0}
+                                            $offsetY={OFFSETS[idx]?.y ?? 0}
+                                        />
+                                    </a>
+                                </>
+                            ) : (
+                                `SEASON ${idx}`
+                            )}
+                        </SeasonCover>
+                        <Episodes season={seasonNumber} />
+                    </Season>
+                );
+            })}
+        </TimelineContainer>
+    );
+};
