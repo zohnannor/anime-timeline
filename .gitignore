@@ -35,3 +35,5 @@ dist-ssr
 *.tst
 *.psd
 *.psb
+*.webp
+[0-9]*.png

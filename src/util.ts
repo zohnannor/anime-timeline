@@ -13,9 +13,6 @@ export const map = <T extends readonly unknown[], U>(
     fn: (item: T[number], index: number) => U
 ) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
 
-export const path = <T extends string>(path: T): `./csm/${T}` =>
-    `./csm/${path}`;
-
 export const pad = (n: number) => String(n).padStart(2, '0');
 
 export const sum = <T extends readonly number[]>(arr: T) =>

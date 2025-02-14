@@ -4,11 +4,10 @@ import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface ArcProps {
     $width: number;
-    $offsetX?: number;
-    $offsetY?: number;
 }
 
 const Arc = withShadow(
@@ -19,15 +18,15 @@ const Arc = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${scale(ARC_HEIGHT)}vh;
-        width: ${({ $width }) => scale($width)}vh;
+        height: ${scale(ARC_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
 
         & > a {
             writing-mode: sideways-lr;
             align-items: center;
             display: flex;
             justify-content: center;
-            font-size: ${scale(100)}vh;
+            font-size: ${scale(100)}svh;
             top: 0;
             left: 0;
             width: 100%;
@@ -42,9 +41,6 @@ const Arc = withShadow(
             width: 100%;
             transition: 0.1s ease-in-out;
             pointer-events: none;
-
-            object-position: ${({ $offsetX, $offsetY }) =>
-                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -81,8 +77,6 @@ export const Arcs: React.FC = () => (
                     key={panel || idx}
                     $invertBorder={!panel}
                     $width={arcWidth}
-                    $offsetX={OFFSETS[idx]?.x ?? 0}
-                    $offsetY={OFFSETS[idx]?.y ?? 0}
                 >
                     <a
                         href={link}
@@ -90,7 +84,16 @@ export const Arcs: React.FC = () => (
                         target='_blank'
                         rel='noopener noreferrer'
                     >
-                        {panel ? <img src={panel} alt='' /> : `${arcName} arc`}
+                        {panel ? (
+                            <ThumbnailImage
+                                src={panel}
+                                alt=''
+                                $offsetX={OFFSETS[idx]?.x ?? 0}
+                                $offsetY={OFFSETS[idx]?.y ?? 0}
+                            />
+                        ) : (
+                            `${arcName} arc`
+                        )}
                     </a>
                 </Arc>
             );
