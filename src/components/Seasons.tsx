@@ -5,12 +5,11 @@ import { getSeasonWidth } from '../helpers';
 import { Container } from './Container';
 import { Episodes } from './Episodes';
 import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface SeasonProps {
     $width: number;
     $emptyCover?: boolean;
-    $offsetX?: number;
-    $offsetY?: number;
 }
 
 const Season = withShadow(
@@ -22,9 +21,9 @@ const Season = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${scale(250)}vh;
-        height: ${scale(742)}vh;
-        width: ${({ $width }) => scale($width)}vh;
+        font-size: ${scale(250)}svh;
+        height: ${scale(742)}svh;
+        width: ${({ $width }) => scale($width)}svh;
         cursor: default;
         user-select: none;
 
@@ -44,9 +43,6 @@ const Season = withShadow(
             width: 100%;
             transition: 0.1s ease-in-out;
             pointer-events: none;
-
-            object-position: ${({ $offsetX, $offsetY }) =>
-                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -76,8 +72,6 @@ export const Seasons: React.FC = () => (
                     $invertBorder={!cover}
                     $emptyCover={!cover}
                     $width={seasonWidth}
-                    $offsetX={OFFSETS[idx]?.x ?? 0}
-                    $offsetY={OFFSETS[idx]?.y ?? 0}
                 >
                     {cover ? (
                         <>
@@ -87,7 +81,12 @@ export const Seasons: React.FC = () => (
                                 target='_blank'
                                 rel='noopener noreferrer'
                             >
-                                <img src={cover} alt='' />
+                                <ThumbnailImage
+                                    src={cover}
+                                    alt=''
+                                    $offsetX={OFFSETS[idx]?.x ?? 0}
+                                    $offsetY={OFFSETS[idx]?.y ?? 0}
+                                />
                             </a>
                             <Episodes season={seasonNumber} />
                         </>

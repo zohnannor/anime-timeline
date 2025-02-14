@@ -23,6 +23,19 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v4
 
+            - name: Install dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y webp
+
+            - name: Install ImageMagick
+              uses: mfinelli/setup-imagemagick@v6
+
+            - name: Run image optimization
+              run: bash optimize-images.sh
+              env:
+                  CPU: 2 # GitHub runners have 2 cores
+
             - name: Enable Corepack
               run: corepack enable
 

@@ -5,6 +5,7 @@ import { getVolumeWidth } from '../helpers';
 import { Chapters } from './Chapters';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface VolumeProps {
     $width: number;
@@ -18,9 +19,9 @@ export const Volume = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${scale(500)}vh;
-        height: ${scale(VOLUME_HEIGHT)}vh;
-        width: ${({ $width }) => scale($width)}vh;
+        font-size: ${scale(500)}svh;
+        height: ${scale(VOLUME_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
 
         & > a {
             position: absolute;
@@ -66,7 +67,11 @@ export const Volumes: React.FC = () => (
                             target='_blank'
                             rel='noopener noreferrer'
                         >
-                            {cover ? <img src={cover} alt='' /> : volumeNumber}
+                            {cover ? (
+                                <ThumbnailImage src={cover} alt='' />
+                            ) : (
+                                volumeNumber
+                            )}
                         </a>
                     </Volume>
                 </Container>

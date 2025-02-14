@@ -4,11 +4,10 @@ import { EPISODE_HEIGHT, EPISODE_THUMBNAILS, scale } from '../constants';
 import { getEpisodeWidthNew } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface EpisodeProps {
     $width: number;
-    $offsetX?: number;
-    $offsetY?: number;
 }
 
 const Episode = withShadow(
@@ -19,8 +18,8 @@ const Episode = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        height: ${scale(EPISODE_HEIGHT)}vh;
-        width: ${({ $width }) => scale($width)}vh;
+        height: ${scale(EPISODE_HEIGHT)}svh;
+        width: ${({ $width }) => scale($width)}svh;
 
         & > a {
             position: absolute;
@@ -38,9 +37,6 @@ const Episode = withShadow(
             width: 100%;
             transition: 0.1s ease-in-out;
             pointer-events: none;
-
-            object-position: ${({ $offsetX, $offsetY }) =>
-                `${-scale($offsetX ?? 0)}vh ${-scale($offsetY ?? 0)}vh`};
         }
 
         &:hover > a > img {
@@ -79,19 +75,19 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) =>
 
                 return (
                     thumbnail && (
-                        <Episode
-                            key={thumbnail}
-                            $width={episodeWidth}
-                            $offsetX={OFFSETS[idx]?.x ?? 0}
-                            $offsetY={OFFSETS[idx]?.y ?? 0}
-                        >
+                        <Episode key={thumbnail} $width={episodeWidth}>
                             <a
                                 href={link}
                                 draggable={false}
                                 target='_blank'
                                 rel='noopener noreferrer'
                             >
-                                <img src={thumbnail} alt='' />
+                                <ThumbnailImage
+                                    src={thumbnail}
+                                    alt=''
+                                    $offsetX={OFFSETS[idx]?.x ?? 0}
+                                    $offsetY={OFFSETS[idx]?.y ?? 0}
+                                />
                             </a>
                         </Episode>
                     )

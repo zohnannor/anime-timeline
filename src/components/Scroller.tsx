@@ -8,7 +8,8 @@ import styled, { css } from 'styled-components';
 
 import { SCROLLER_SIZE } from '../constants';
 import useMousePosition from '../hooks/useMousePosition';
-import { clamp, path } from '../util';
+import { clamp } from '../util';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface ScrollHoverAreaProps {
     $visible: boolean;
@@ -138,8 +139,8 @@ export const Scroller = () => {
                 $offset={offset}
                 onClick={handleScrollerClick}
             >
-                <img
-                    src={path(`pochita.png`)}
+                <ThumbnailImage
+                    src='pochita'
                     draggable={false}
                     onMouseDown={() => (isDragging.current = true)}
                 />

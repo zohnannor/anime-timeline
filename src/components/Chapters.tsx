@@ -10,6 +10,7 @@ import {
 import { getChapterNumber, getChapterWidth } from '../helpers';
 import { Container } from './Container';
 import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
 
 interface ChapterProps {
     $width: number;
@@ -17,8 +18,8 @@ interface ChapterProps {
 
 const ChapterWrapper = styled.div<ChapterProps>`
     position: relative;
-    height: ${scale(CHAPTER_HEIGHT)}vh;
-    width: ${({ $width }) => scale($width)}vh;
+    height: ${scale(CHAPTER_HEIGHT)}svh;
+    width: ${({ $width }) => scale($width)}svh;
 `;
 
 const Chapter = withShadow(
@@ -30,7 +31,7 @@ const Chapter = withShadow(
         transition: 0.1s ease-in-out;
         overflow: hidden;
 
-        font-size: ${scale(SMALL_FONT_SIZE)}vh;
+        font-size: ${scale(SMALL_FONT_SIZE)}svh;
         height: 100%;
         width: 100%;
         background-color: #fff;
@@ -64,8 +65,8 @@ interface PreviewProps {
 
 const Preview = styled.div<PreviewProps>`
     position: absolute;
-    width: ${scale(120)}vh;
-    height: ${scale(100)}vh;
+    width: ${scale(120)}svh;
+    height: ${scale(100)}svh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -74,14 +75,13 @@ const Preview = styled.div<PreviewProps>`
     transform: ${({ $chapterNumber }) =>
             $chapterNumber === 1 ? 'translateX(70px)' : ''}
         translateY(-35px) scale(0);
-    font-size: ${scale(12)}vh;
+    font-size: ${scale(12)}svh;
     color: black;
     background: white;
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);
 
     & > img {
         object-fit: contain;
-        width: 100%;
         height: 80%;
     }
 
@@ -116,7 +116,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                 $hovered={hoveredChapter === chapterNumber}
                                 $chapterNumber={chapterNumber}
                             >
-                                <img src={picture} />
+                                <ThumbnailImage src={picture} />
                                 Chapter {chapterNumber}.
                             </Preview>
                         )}
@@ -131,7 +131,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                 rel='noopener noreferrer'
                             >
                                 {picture ? (
-                                    <img src={picture} alt='' />
+                                    <ThumbnailImage src={picture} alt='' />
                                 ) : (
                                     chapterNumber
                                 )}

@@ -22,18 +22,18 @@ const Timeframe = withShadow(
         display: flex;
         align-items: center;
         justify-content: center;
-        height: ${scale(TIMELINE_HEIGHT / 3)}vh;
-        width: ${({ $width }) => scale($width)}vh;
+        height: ${scale(TIMELINE_HEIGHT / 3)}svh;
+        width: ${({ $width }) => scale($width)}svh;
         background: ${({ $background }) => $background ?? 'white'};
         color: black;
-        font-size: ${scale(SMALL_FONT_SIZE)}vh;
+        font-size: ${scale(SMALL_FONT_SIZE)}svh;
     `
 );
 
 const TimelineWrapper = styled.div`
     position: relative;
     display: flex;
-    height: ${scale(TIMELINE_HEIGHT / 3)}vh;
+    height: ${scale(TIMELINE_HEIGHT / 3)}svh;
     width: 100%;
 `;
 
