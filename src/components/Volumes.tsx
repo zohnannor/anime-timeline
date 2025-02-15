@@ -7,12 +7,12 @@ import {
     VOLUME_HEIGHT,
 } from '../constants';
 import { getVolumeWidth } from '../helpers';
+import { useHover } from '../hooks/useHover';
 import { Chapters } from './Chapters';
 import { TimelineContainer } from './Container';
+import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
-import { withCrossLines } from './CrossLines';
-import { useHover } from '../hooks/useHover';
 
 interface VolumeProps {
     $width: number;
@@ -80,13 +80,17 @@ export const Volumes: React.FC = () => {
 
                 return (
                     <Volume
+                        className='volume'
                         $width={volumeWidth}
                         key={cover || volumeNumber}
                         $visible={hoveredVolume === volumeNumber}
                         {...hoverHandlers(volumeNumber)}
                     >
                         <Chapters volume={volumeNumber} />
-                        <VolumeCover $invertBorder={!cover}>
+                        <VolumeCover
+                            className='volumeCover'
+                            $invertBorder={!cover}
+                        >
                             <a
                                 href={link}
                                 draggable={false}

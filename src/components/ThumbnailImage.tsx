@@ -50,12 +50,14 @@ export const ThumbnailImage: React.FC<
         <>
             {loading && (
                 <Thumbnail
+                    className='thumbnail'
                     $thumbnail={thumbnailSrc}
                     $offsetX={$offsetX}
                     $offsetY={$offsetY}
                 />
             )}
             <Image
+                className='thumbnailImage'
                 src={realSrc}
                 loading='lazy'
                 $loading={loading}

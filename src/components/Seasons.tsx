@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-import { scale, SEASON_COVERS } from '../constants';
+import { scale, SEASON_COVERS, SEASON_HEIGHT } from '../constants';
 import { getSeasonWidth } from '../helpers';
+import { useHover } from '../hooks/useHover';
 import { TimelineContainer } from './Container';
+import { withCrossLines } from './CrossLines';
 import { Episodes } from './Episodes';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
-import { withCrossLines } from './CrossLines';
-import { useHover } from '../hooks/useHover';
 
 interface SeasonProps {
     $width: number;
@@ -15,15 +15,13 @@ interface SeasonProps {
 
 interface SeasonCoverProps {
     $emptyCover?: boolean;
-    $offsetX?: number;
-    $offsetY?: number;
 }
 
 const Season = withCrossLines(
     styled.div<SeasonProps>`
         display: flex;
         position: relative;
-        height: ${scale(742)}svh;
+        height: ${scale(SEASON_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
         align-items: flex-end;
 
@@ -92,33 +90,31 @@ export const Seasons: React.FC = () => {
 
                 return (
                     <Season
+                        className='season'
                         $width={seasonWidth}
                         key={cover || seasonNumber}
                         $visible={hoveredSeason === seasonNumber}
                         {...hoverHandlers(seasonNumber)}
                     >
                         <SeasonCover
+                            className='seasonCover'
                             $invertBorder={!cover}
                             $emptyCover={!cover}
-                            $offsetX={OFFSETS[idx]?.x ?? 0}
-                            $offsetY={OFFSETS[idx]?.y ?? 0}
                         >
                             {cover ? (
-                                <>
-                                    <a
-                                        href={link}
-                                        draggable={false}
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                    >
-                                        <ThumbnailImage
-                                            src={cover}
-                                            alt=''
-                                            $offsetX={OFFSETS[idx]?.x ?? 0}
-                                            $offsetY={OFFSETS[idx]?.y ?? 0}
-                                        />
-                                    </a>
-                                </>
+                                <a
+                                    href={link}
+                                    draggable={false}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    <ThumbnailImage
+                                        src={cover}
+                                        alt=''
+                                        $offsetX={OFFSETS[idx]?.x ?? 0}
+                                        $offsetY={OFFSETS[idx]?.y ?? 0}
+                                    />
+                                </a>
                             ) : (
                                 `SEASON ${idx}`
                             )}

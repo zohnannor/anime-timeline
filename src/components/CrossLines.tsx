@@ -1,7 +1,8 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC } from 'react';
 import styled, { css } from 'styled-components';
 
 import { useSettings } from '../providers/SettingsProvider';
+import { scale } from '../constants';
 
 interface CrossLinesProps {
     $visible?: boolean | undefined;
@@ -13,7 +14,7 @@ const CrossLinesWrapper = styled.div<CrossLinesProps>`
     left: 0;
     z-index: ${({ $visible }) => ($visible ? 5 : 1)};
     width: 100%;
-    height: 0px;
+    height: 0;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -27,7 +28,7 @@ const CrossLine = styled.div<CrossLineProps>`
     height: 200vh;
     position: relative;
     top: -100vh;
-    box-shadow: 0 0 2px 2px rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 ${scale(6)}vh ${scale(6)}vh rgba(255, 0, 0, 0.8);
 
     &::after {
         content: '';
@@ -60,8 +61,8 @@ export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
         <CrossLinesWrapper className='crosslines' $visible={crosslinesVisible}>
             {crosslinesVisible ? (
                 <>
-                    <CrossLine $side='left' />
-                    <CrossLine $side='right' />
+                    <CrossLine className='crossline' $side='left' />
+                    <CrossLine className='crossline' $side='right' />
                 </>
             ) : (
                 <></>
@@ -70,13 +71,17 @@ export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
     );
 };
 
-export const withCrossLines = <T extends PropsWithChildren<CrossLinesProps>>(
-    StyledComponent: React.ComponentType<T>
-): React.FC<T & CrossLinesProps> => {
-    return (props: T) => (
-        <StyledComponent {...props}>
-            {props.children}
-            <CrossLines $visible={props?.$visible} />
+export const withCrossLines = <P,>(
+    StyledComponent: React.ComponentType<P>
+): React.FC<P & CrossLinesProps> => {
+    return ({
+        children,
+        $visible,
+        ...rest
+    }: React.PropsWithChildren<P & CrossLinesProps>) => (
+        <StyledComponent {...(rest as P)}>
+            {children}
+            <CrossLines $visible={$visible} />
         </StyledComponent>
     );
 };

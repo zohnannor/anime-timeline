@@ -3,7 +3,7 @@ import { Flatten, Length } from './types';
 import { map, pad, range, sum } from './util';
 
 export const SEASON_HEIGHT = 742;
-export const EPISODE_HEIGHT = SEASON_HEIGHT - 500;
+export const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 export const VOLUME_HEIGHT = 1579;
 export const CHAPTER_HEIGHT = 100;
 export const ARC_HEIGHT = VOLUME_HEIGHT;
@@ -11,9 +11,9 @@ export const TIMELINE_HEIGHT = 200;
 const MAX_HEIGHT =
     SEASON_HEIGHT +
     ARC_HEIGHT +
+    TIMELINE_HEIGHT +
     CHAPTER_HEIGHT +
-    VOLUME_HEIGHT +
-    TIMELINE_HEIGHT;
+    VOLUME_HEIGHT;
 
 const COEFFICIENT = MAX_HEIGHT / 100;
 export const scale = (n: number) => n / COEFFICIENT;
