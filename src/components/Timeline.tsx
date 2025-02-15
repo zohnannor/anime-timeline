@@ -9,9 +9,9 @@ import {
     TIMELINE_HEIGHT,
 } from '../constants';
 import { getChapterWidth, interpolateColor } from '../helpers';
-import { withShadow } from './ShadowWrapper';
 import { useHover } from '../hooks/useHover';
 import { withCrossLines } from './CrossLines';
+import { withShadow } from './ShadowWrapper';
 
 interface DayProps {
     $width: number;
@@ -30,6 +30,7 @@ const Timeframe = withCrossLines(
             background: ${({ $background }) => $background ?? 'white'};
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)}svh;
+            line-height: ${scale(TIMELINE_HEIGHT / 3)}svh;
         `
     )
 );
@@ -58,7 +59,7 @@ export const Timeline: React.FC = () => {
         const [hoveredDay, hoverHandlers] = useHover();
 
         return (
-            <TimelineWrapper>
+            <TimelineWrapper className='days'>
                 {CHAPTER_DATES.map((date, idx) => {
                     const chapterNumber = idx + 1;
                     const chapterWidth = getChapterWidth(chapterNumber);
@@ -66,6 +67,7 @@ export const Timeline: React.FC = () => {
 
                     return (
                         <Timeframe
+                            className='day'
                             $width={chapterWidth}
                             $visible={hoveredDay === idx + 1}
                             {...hoverHandlers(idx + 1)}
@@ -78,7 +80,7 @@ export const Timeline: React.FC = () => {
                                 .padStart(6, '0')}`}
                             key={chapterNumber}
                         >
-                            <TimeFrameDate>{day}</TimeFrameDate>
+                            <TimeFrameDate className='day'>{day}</TimeFrameDate>
                         </Timeframe>
                     );
                 })}
@@ -90,7 +92,7 @@ export const Timeline: React.FC = () => {
         const [hoveredMonth, hoverHandlers] = useHover();
 
         return (
-            <TimelineWrapper>
+            <TimelineWrapper className='months'>
                 {CHAPTER_DATES_BY_MONTH.map((dates, idx) => {
                     const monthWidth = dates.reduce(
                         (totalWidth, [dateIdx, _]) => {
@@ -103,6 +105,7 @@ export const Timeline: React.FC = () => {
 
                     return (
                         <Timeframe
+                            className='month'
                             $width={monthWidth}
                             $visible={hoveredMonth === idx + 1}
                             {...hoverHandlers(idx + 1)}
@@ -113,7 +116,9 @@ export const Timeline: React.FC = () => {
                             ).toString(16)}`}
                             key={idx}
                         >
-                            <TimeFrameDate>{MONTHS[month]}</TimeFrameDate>
+                            <TimeFrameDate className='month'>
+                                {MONTHS[month]}
+                            </TimeFrameDate>
                         </Timeframe>
                     );
                 })}
@@ -125,7 +130,7 @@ export const Timeline: React.FC = () => {
         const [hoveredYear, hoverHandlers] = useHover();
 
         return (
-            <TimelineWrapper>
+            <TimelineWrapper className='years'>
                 {CHAPTER_DATES_BY_YEAR.map((dates, idx) => {
                     const yearWidth = dates.reduce(
                         (totalWidth, [dateIdx, _]) => {
@@ -138,6 +143,7 @@ export const Timeline: React.FC = () => {
 
                     return (
                         <Timeframe
+                            className='year'
                             $width={yearWidth}
                             $visible={hoveredYear === idx + 1}
                             {...hoverHandlers(idx + 1)}
@@ -148,7 +154,9 @@ export const Timeline: React.FC = () => {
                             ).toString(16)}`}
                             key={idx}
                         >
-                            <TimeFrameDate>{year}</TimeFrameDate>
+                            <TimeFrameDate className='year'>
+                                {year}
+                            </TimeFrameDate>
                         </Timeframe>
                     );
                 })}

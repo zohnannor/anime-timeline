@@ -2,19 +2,14 @@ import styled from 'styled-components';
 
 import { EPISODE_HEIGHT, EPISODE_THUMBNAILS, scale } from '../constants';
 import { getEpisodeWidthNew } from '../helpers';
+import { useHover } from '../hooks/useHover';
 import { TimelineContainer } from './Container';
+import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
-import { withCrossLines } from './CrossLines';
-import { useHover } from '../hooks/useHover';
 
 interface EpisodeProps {
     $width: number;
-}
-
-interface EpisodeCoverProps {
-    $offsetX: number;
-    $offsetY?: number;
 }
 
 const Episode = withCrossLines(
@@ -26,7 +21,7 @@ const Episode = withCrossLines(
 );
 
 const EpisodeCover = withShadow(
-    styled.div<EpisodeCoverProps>`
+    styled.div`
         position: relative;
         display: flex;
         align-items: center;
@@ -95,15 +90,13 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) => {
                 return (
                     thumbnail && (
                         <Episode
+                            className='episode'
                             $width={episodeWidth}
                             key={thumbnail}
                             $visible={hoveredEpisode === idx + 1}
                             {...handlers(idx + 1)}
                         >
-                            <EpisodeCover
-                                $offsetX={OFFSETS[idx]?.x ?? 0}
-                                $offsetY={OFFSETS[idx]?.y ?? 0}
-                            >
+                            <EpisodeCover className='episodeCover'>
                                 <a
                                     href={link}
                                     draggable={false}

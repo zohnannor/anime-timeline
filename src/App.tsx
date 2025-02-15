@@ -2,13 +2,14 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Arcs } from './components/Arcs';
+import { InfoBox, InfoBoxButton } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
 import { Volumes } from './components/Volumes';
+import { APP_MAX_WIDTH, scale } from './constants';
 import useWindowSize from './hooks/useWindowSize';
 import { SettingsProvider } from './providers/SettingsProvider';
-import { APP_MAX_WIDTH, scale } from './constants';
 
 interface AppContainerProps {
     $maxWidth: number;
@@ -30,14 +31,14 @@ const App: React.FC = () => {
 
     useEffect(() => {
         window.addEventListener('wheel', handleScroll);
-        return () => {
-            window.removeEventListener('wheel', handleScroll);
-        };
+        return () => window.removeEventListener('wheel', handleScroll);
     }, []);
 
     return (
         <SettingsProvider>
-            <AppContainer $maxWidth={APP_MAX_WIDTH}>
+            <AppContainer className='appContainer' $maxWidth={APP_MAX_WIDTH}>
+                <InfoBoxButton />
+                <InfoBox />
                 <Seasons />
                 <Arcs />
                 <Timeline />

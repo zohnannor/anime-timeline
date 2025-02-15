@@ -7,11 +7,11 @@ import {
     SMALL_FONT_SIZE,
 } from '../constants';
 import { getChapterNumber, getChapterWidth } from '../helpers';
+import { useHover } from '../hooks/useHover';
 import { TimelineContainer } from './Container';
+import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
-import { withCrossLines } from './CrossLines';
-import { useHover } from '../hooks/useHover';
 
 interface ChapterProps {
     $width: number;
@@ -112,6 +112,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
 
                 return (
                     <Chapter
+                        className='chapter'
                         $width={chapterWidth}
                         key={picture || chapterNumber}
                         $visible={hoveredChapter === chapterNumber}
@@ -119,6 +120,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                     >
                         {picture && (
                             <Preview
+                                className='preview'
                                 $hovered={hoveredChapter === chapterNumber}
                                 $chapterNumber={chapterNumber}
                             >
@@ -126,7 +128,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                 Chapter {chapterNumber}.
                             </Preview>
                         )}
-                        <ChapterCover>
+                        <ChapterCover className='chapterCover'>
                             <a
                                 href={link}
                                 draggable={false}

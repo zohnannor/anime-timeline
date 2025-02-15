@@ -134,8 +134,12 @@ export const Scroller = () => {
         mousePosition.y > window.innerHeight - 100;
 
     return (
-        <ScrollerHoverArea $visible={scrollerVisible}>
+        <ScrollerHoverArea
+            className='scrollerHoverArea'
+            $visible={scrollerVisible}
+        >
             <ScrollerWrapper
+                className='scroller'
                 ref={scrollerRef}
                 $offset={offset}
                 onClick={handleScrollerClick}

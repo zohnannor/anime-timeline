@@ -2,19 +2,14 @@ import styled from 'styled-components';
 
 import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
+import { useHover } from '../hooks/useHover';
 import { TimelineContainer } from './Container';
+import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
-import { withCrossLines } from './CrossLines';
-import { useHover } from '../hooks/useHover';
 
 interface ArcProps {
     $width: number;
-}
-
-interface ArcCoverProps {
-    $offsetX?: number;
-    $offsetY?: number;
 }
 
 const Arc = withCrossLines(
@@ -26,7 +21,7 @@ const Arc = withCrossLines(
 );
 
 const ArcCover = withShadow(
-    styled.div<ArcCoverProps>`
+    styled.div`
         position: relative;
         display: flex;
         align-items: center;
@@ -92,16 +87,13 @@ export const Arcs: React.FC = () => {
 
                 return (
                     <Arc
+                        className='arc'
                         $width={arcWidth}
                         key={panel || idx}
                         $visible={hoveredArc === idx + 1}
                         {...hoverHandlers(idx + 1)}
                     >
-                        <ArcCover
-                            $invertBorder={!panel}
-                            $offsetX={OFFSETS[idx]?.x ?? 0}
-                            $offsetY={OFFSETS[idx]?.y ?? 0}
-                        >
+                        <ArcCover className='arcCover' $invertBorder={!panel}>
                             <a
                                 href={link}
                                 draggable={false}
