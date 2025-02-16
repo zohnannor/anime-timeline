@@ -18,7 +18,8 @@ const MAX_HEIGHT =
 const COEFFICIENT = MAX_HEIGHT / 100;
 export const scale = (n: number) => n / COEFFICIENT;
 
-export const SCROLLER_SIZE = 400;
+export const SCROLLER_WIDTH = 1300;
+export const HEADERS_WIDTH = 150;
 
 export const SMALL_FONT_SIZE = 45;
 

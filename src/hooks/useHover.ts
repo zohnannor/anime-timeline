@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export function useHover(): [number, (item: number) => any] {
-    const [hoveredItem, setHoveredItem] = useState<number>(0);
+    const [hoveredItem, setHoveredItem] = useState(0);
 
     const handlers = (item: number) => ({
         onMouseOver: (e: React.MouseEvent) => {

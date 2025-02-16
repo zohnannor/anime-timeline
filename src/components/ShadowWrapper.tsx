@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import { styled } from 'styled-components';
 
 import { scale } from '../constants';
@@ -10,7 +11,7 @@ const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: inset 0 0 ${scale(6)}vh ${scale(6)}vh
+    box-shadow: inset 0 0 ${scale(6)}svh ${scale(6)}svh
         ${({ $invertBorder }) => ($invertBorder ? '#ffffff' : '#000000')};
     pointer-events: none;
 `;
@@ -22,7 +23,7 @@ export const withShadow = <P,>(
         children,
         $invertBorder,
         ...rest
-    }: React.PropsWithChildren<P & ShadowProps>) => (
+    }: PropsWithChildren<P & ShadowProps>) => (
         <StyledComponent {...(rest as P)}>
             {children}
             <Shadow className='shadow' $invertBorder={$invertBorder} />
