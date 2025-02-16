@@ -25,7 +25,7 @@ const Header = withShadow(
         justify-content: center;
         align-items: center;
         writing-mode: sideways-lr;
-        font-size: ${scale(100)}svh;
+        font-size: ${scale(70)}svh;
 
         & > a {
             display: flex;
@@ -70,10 +70,7 @@ export const TimeLineHeaders: React.FC = () => {
                     Story Arcs
                 </a>
             </Header>
-            <Header $height={TIMELINE_HEIGHT} $invertBorder>
-                Releases
-            </Header>
-            <Header $height={CHAPTER_HEIGHT} $invertBorder>
+            <Header $height={TIMELINE_HEIGHT + CHAPTER_HEIGHT} $invertBorder>
                 <a
                     href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'
                     draggable={false}
