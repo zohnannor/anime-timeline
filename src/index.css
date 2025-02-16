@@ -1,7 +1,8 @@
 * {
     box-sizing: border-box;
     user-select: none;
-    font-family: Inter;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+        'Lucida Sans', Arial, sans-serif;
 }
 
 a {

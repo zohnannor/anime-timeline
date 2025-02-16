@@ -6,7 +6,7 @@ export const SEASON_HEIGHT = 742;
 export const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 export const VOLUME_HEIGHT = 1579;
 export const CHAPTER_HEIGHT = 100;
-export const ARC_HEIGHT = VOLUME_HEIGHT;
+export const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 export const TIMELINE_HEIGHT = 200;
 const MAX_HEIGHT =
     SEASON_HEIGHT +
@@ -335,7 +335,7 @@ export const ARC_NAMES = [
 ] as const;
 
 export const VOLUME_COVERS = [
-    ...map(range(1, VOLUMES_TOTAL), n => `Volume_${pad(n)}`),
+    ...map(range(1, VOLUMES_TOTAL), n => `Volume_${pad(n)}` as const),
     null,
 ] as const;
 

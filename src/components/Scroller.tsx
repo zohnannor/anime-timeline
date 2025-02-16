@@ -1,9 +1,9 @@
 import {
     MouseEvent as MouseEventReact,
+    useCallback,
     useEffect,
     useRef,
     useState,
-    useCallback,
 } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -39,7 +39,11 @@ interface ScrollProps {
     $offset: number;
 }
 
-export const ScrollerWrapper = styled.div<ScrollProps>`
+export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => ({
+    style: {
+        '--left': `${$offset * 100}%`,
+    } as React.CSSProperties,
+}))`
     transition: bottom 0.2s ease-in-out;
     pointer-events: auto;
     position: absolute;
@@ -58,7 +62,7 @@ export const ScrollerWrapper = styled.div<ScrollProps>`
         width: ${scale(160)}svh;
         height: ${scale(160)}svh;
         filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 0.5));
-        left: ${({ $offset }) => $offset * 100}%;
+        left: var(--left);
         transform: translateX(-50%) scale(1);
         transition: transform 0.2s ease-in-out;
     }
