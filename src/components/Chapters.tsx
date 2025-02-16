@@ -76,12 +76,12 @@ const Preview = styled.div<PreviewProps>`
     justify-content: center;
     transition: 0.25s ease-in-out;
     transform: ${({ $chapterNumber }) =>
-            $chapterNumber === 1 ? 'translateX(70px)' : ''}
-        translateY(-35px) scale(0);
+            $chapterNumber === 1 ? `translateX(${scale(220)}svh)` : ''}
+        translateY(${scale(11)}svh) scale(0);
     font-size: ${scale(12)}svh;
     color: black;
     background: white;
-    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 ${scale(15)}svh ${scale(6)}svh rgba(0, 0, 0, 0.4);
     z-index: 10;
 
     & > img {
@@ -89,11 +89,13 @@ const Preview = styled.div<PreviewProps>`
         height: 80%;
     }
 
-    ${({ $hovered: hovered, $chapterNumber: chapterNumber }) =>
-        hovered &&
+    ${({ $hovered, $chapterNumber }) =>
+        $hovered &&
         css`
-            transform: ${chapterNumber === 1 ? 'translateX(70px)' : ''}
-                translateY(-110px) scale(5);
+            transform: ${$chapterNumber === 1
+                    ? `translateX(${scale(220)}svh)`
+                    : ''}
+                translateY(-${scale(350)}svh) scale(5);
         `}
 `;
 interface ChaptersProps {

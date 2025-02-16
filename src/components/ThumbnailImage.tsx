@@ -20,7 +20,7 @@ const Thumbnail = styled.div<ThumbnailProps & Offset>`
     height: 100%;
     background-size: cover;
     background-position: center;
-    filter: blur(3px);
+    filter: blur(${scale(10)}svh);
     background-image: url(${({ $thumbnail }) => $thumbnail});
     background-position: ${({ $offsetX, $offsetY }) =>
         `${-scale($offsetX ?? 0)}svh ${-scale($offsetY ?? 0)}svh`};
@@ -31,7 +31,7 @@ interface ImageProps {
 }
 
 const Image = styled.img<ImageProps & Offset>`
-    filter: blur(${({ $loading }) => ($loading ? 3 : 0)}px);
+    filter: blur(${({ $loading }) => scale($loading ? 10 : 0)}svh);
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY }) =>
         `${-scale($offsetX ?? 0)}svh ${-scale($offsetY ?? 0)}svh`};

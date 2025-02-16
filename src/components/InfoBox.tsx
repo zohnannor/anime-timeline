@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
+import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -35,8 +36,8 @@ const Box = styled.span<BoxProps>`
     width: 90vw;
     max-width: 90vw;
     background: rgba(0, 0, 0, 0.85);
-    font-size: 24px;
-    padding: 12px 60px;
+    font-size: ${scale(75)}svh;
+    padding: ${scale(40)}svh ${scale(190)}svh;
     justify-content: center;
     align-content: center;
     align-items: center;
@@ -45,17 +46,17 @@ const Box = styled.span<BoxProps>`
     & a {
         text-decoration: underline;
         text-decoration-style: dotted;
-        text-decoration-thickness: 1px;
+        text-decoration-thickness: ${scale(3)}svh;
         text-decoration-skip-ink: auto;
-        text-underline-offset: 3px;
+        text-underline-offset: ${scale(10)}svh;
     }
 
     & kbd:not(:has(kbd)) {
         background-color: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 3px;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-        padding: 2px 4px;
+        border: ${scale(3)}svh solid rgba(255, 255, 255, 0.5);
+        border-radius: ${scale(10)}svh;
+        box-shadow: 0 ${scale(3)}svh 0 rgba(255, 255, 255, 0.5);
+        padding: ${scale(2)}svh ${scale(12)}svh;
         font-size: 0.8em;
         line-height: 1;
     }
@@ -63,15 +64,15 @@ const Box = styled.span<BoxProps>`
 
 export const Button = styled.div`
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: ${scale(63)}svh;
+    right: ${scale(63)}svh;
     z-index: 100;
     cursor: help;
 
     & > img {
-        width: 48px;
-        height: 48px;
-        filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1));
+        width: ${scale(160)}svh;
+        height: ${scale(160)}svh;
+        filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 1));
     }
 
     & > img:hover {

@@ -40,7 +40,7 @@ const SeasonCover = withShadow(
         justify-content: center;
         overflow: hidden;
 
-        font-size: ${scale(250)}vh;
+        font-size: ${scale(250)}svh;
         height: 100%;
         width: 100%;
         cursor: default;

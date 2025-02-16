@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { useSettings } from '../providers/SettingsProvider';
 import { scale } from '../constants';
+import { useSettings } from '../providers/SettingsProvider';
 
 interface CrossLinesProps {
     $visible?: boolean | undefined;
@@ -25,10 +25,10 @@ interface CrossLineProps {
 }
 
 const CrossLine = styled.div<CrossLineProps>`
-    height: 200vh;
     position: relative;
-    top: -100vh;
-    box-shadow: 0 0 ${scale(6)}vh ${scale(6)}vh rgba(255, 0, 0, 0.8);
+    height: 200svh;
+    top: -100svh;
+    box-shadow: 0 0 ${scale(6)}svh ${scale(6)}svh rgba(255, 0, 0, 0.8);
 
     &::after {
         content: '';
@@ -46,8 +46,8 @@ const CrossLine = styled.div<CrossLineProps>`
                   `}
 
         top: 0;
-        height: 200vh;
-        width: 100vw;
+        height: 200svh;
+        width: 100svw;
         background: rgba(0, 0, 0, 0.5);
     }
 `;
@@ -78,7 +78,7 @@ export const withCrossLines = <P,>(
         children,
         $visible,
         ...rest
-    }: React.PropsWithChildren<P & CrossLinesProps>) => (
+    }: PropsWithChildren<P & CrossLinesProps>) => (
         <StyledComponent {...(rest as P)}>
             {children}
             <CrossLines $visible={$visible} />
