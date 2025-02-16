@@ -9,8 +9,14 @@ const InfoBoxRoot = styled.div`
     position: fixed;
     left: 50%;
     top: 40%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
     z-index: 100;
+    background: rgba(0, 0, 0, 0.85);
+
+    @media (max-width: 768px) {
+        height: 80%;
+        overflow-y: scroll;
+    }
 `;
 
 const ShadowOverlay = styled.div`
@@ -35,7 +41,6 @@ const Box = styled.span<BoxProps>`
     white-space: pre-line;
     width: 90vw;
     max-width: 90vw;
-    background: rgba(0, 0, 0, 0.85);
     font-size: ${scale(75)}svh;
     padding: ${scale(40)}svh ${scale(190)}svh;
     justify-content: center;
@@ -84,7 +89,7 @@ export const InfoBoxButton: React.FC = () => {
     const { openInfoBox } = useSettings();
 
     return (
-        <Button onClick={() => openInfoBox(true)}>
+        <Button className='button' onClick={() => openInfoBox(true)}>
             <ThumbnailImage src='pochita2' draggable={false} />
         </Button>
     );
@@ -122,16 +127,24 @@ const CONTENT = (
             Site info and features:
             <ul>
                 <li>
-                    Click on any image (season, episode, arc, chapter, volume)
-                    to go to the corresponding
-                    <a
-                        href='https://chainsaw-man.fandom.com/wiki/'
-                        target='_blank'
-                        rel='noopener'
+                    <span
+                        style={{
+                            display: 'inline-flex',
+                            flexWrap: 'wrap',
+                            gap: '0 1ch',
+                        }}
                     >
-                        wiki
-                    </a>
-                    page
+                        Click on any image (season, episode, arc, chapter,
+                        volume) to go to the corresponding
+                        <a
+                            href='https://chainsaw-man.fandom.com/wiki/'
+                            target='_blank'
+                            rel='noopener'
+                        >
+                            wiki
+                        </a>
+                        page
+                    </span>
                 </li>
                 <li>
                     Widths of episodes of the show are accurate down to the
@@ -224,8 +237,11 @@ export const InfoBox: React.FC = () => {
 
     return ReactDOM.createPortal(
         <>
-            <ShadowOverlay onClick={() => openInfoBox(false)} />
-            <InfoBoxRoot>{CONTENT}</InfoBoxRoot>
+            <ShadowOverlay
+                className='shadowOverlay'
+                onClick={() => openInfoBox(false)}
+            />
+            <InfoBoxRoot className='infoBoxRoot'>{CONTENT}</InfoBoxRoot>
         </>,
         document.querySelector('#infoBox')!
     );
