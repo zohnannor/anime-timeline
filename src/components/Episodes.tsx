@@ -80,7 +80,7 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) => {
     const [hoveredEpisode, handlers] = useHover();
     const { unboundedChapterWidth } = useSettings();
 
-    if (season !== 1) return <></>;
+    if (season !== 1) return null;
 
     return (
         <TimelineContainer>

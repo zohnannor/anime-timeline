@@ -8,7 +8,12 @@ import {
     SMALL_FONT_SIZE,
     TIMELINE_HEIGHT,
 } from '../constants';
-import { getChapterWidth, interpolateColor } from '../helpers';
+import {
+    DAYS_GRADIENT,
+    getChapterWidth,
+    interpolateColor,
+    MONTHS_GRADIENT,
+} from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { withCrossLines } from './CrossLines';
@@ -46,14 +51,9 @@ const TimeFrameDate = styled.div`
 
 const TimelineWrapper = styled.div`
     position: relative;
-    z-index: 1;
     display: flex;
     height: ${scale(TIMELINE_HEIGHT / 3)}svh;
     width: 100%;
-
-    &:hover {
-        z-index: 2;
-    }
 `;
 
 export const Timeline: React.FC = () => {
@@ -80,7 +80,7 @@ export const Timeline: React.FC = () => {
                             $background={`#${interpolateColor(
                                 day,
                                 [1, 31],
-                                [0xed8581, 0x9df697]
+                                DAYS_GRADIENT
                             )
                                 .toString(16)
                                 .padStart(6, '0')}`}
@@ -111,7 +111,7 @@ export const Timeline: React.FC = () => {
                         },
                         0
                     );
-                    const month = dates[0]![1].getMonth();
+                    const month = dates[0]![1];
 
                     return (
                         <Timeframe
@@ -120,14 +120,16 @@ export const Timeline: React.FC = () => {
                             $visible={hoveredMonth === idx + 1}
                             {...hoverHandlers(idx + 1)}
                             $background={`#${interpolateColor(
-                                (month + 1) % 12,
+                                (month.getMonth() + 1) % 12,
                                 [0, 11],
-                                [0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a]
+                                MONTHS_GRADIENT
                             ).toString(16)}`}
                             key={idx}
                         >
                             <TimeFrameDate className='month'>
-                                {MONTHS[month]}
+                                {month.toLocaleString('default', {
+                                    month: 'long',
+                                })}
                             </TimeFrameDate>
                         </Timeframe>
                     );
@@ -186,18 +188,3 @@ export const Timeline: React.FC = () => {
         </>
     );
 };
-
-const MONTHS = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-];
