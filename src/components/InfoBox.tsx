@@ -67,31 +67,17 @@ const Box = styled.span<BoxProps>`
     }
 `;
 
-export const Button = styled.div`
-    position: fixed;
-    top: ${scale(63)}svh;
-    right: ${scale(63)}svh;
-    z-index: 100;
-    cursor: help;
-
-    & > img {
-        width: ${scale(160)}svh;
-        height: ${scale(160)}svh;
-        filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 1));
-    }
-
-    & > img:hover {
-        transform: scale(1.05);
-    }
-`;
-
 export const InfoBoxButton: React.FC = () => {
     const { openInfoBox } = useSettings();
 
     return (
-        <Button className='button' onClick={() => openInfoBox(true)}>
-            <ThumbnailImage src='pochita2' draggable={false} />
-        </Button>
+        <ThumbnailImage
+            src='pochita2'
+            draggable={false}
+            onClick={() => openInfoBox(true)}
+            title='Read info'
+            style={{ cursor: 'help' }}
+        />
     );
 };
 
@@ -173,6 +159,11 @@ const CONTENT = (
                         <kbd>Ctrl</kbd> + <kbd>Space</kbd>
                     </kbd>{' '}
                     to toggle cross-lines
+                </li>
+                <li>
+                    The button below the info button toggles unbounded chapter
+                    width (volume width would not be constant but instead depend
+                    on the number of pages in the chapters)
                 </li>
                 <li>
                     I will personally update this site whenever new chapter

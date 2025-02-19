@@ -59,13 +59,11 @@ export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
 
     return (
         <CrossLinesWrapper className='crosslines' $visible={crosslinesVisible}>
-            {crosslinesVisible ? (
+            {crosslinesVisible && (
                 <>
-                    <CrossLine className='crossline' $side='left' />
-                    <CrossLine className='crossline' $side='right' />
+                    <CrossLine className='crosslineLeft' $side='left' />
+                    <CrossLine className='crosslineRight' $side='right' />
                 </>
-            ) : (
-                <></>
             )}
         </CrossLinesWrapper>
     );

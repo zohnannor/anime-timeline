@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 import { EPISODE_HEIGHT, EPISODE_THUMBNAILS, scale } from '../constants';
-import { getEpisodeWidthNew } from '../helpers';
+import { getEpisodeWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
@@ -17,6 +18,7 @@ const Episode = withCrossLines(
         position: relative;
         height: ${scale(EPISODE_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
+        transition: width 0.2s ease-in-out;
     `
 );
 
@@ -76,13 +78,17 @@ interface EpisodesProps {
 
 export const Episodes: React.FC<EpisodesProps> = ({ season }) => {
     const [hoveredEpisode, handlers] = useHover();
+    const { unboundedChapterWidth } = useSettings();
 
     if (season !== 1) return <></>;
 
     return (
         <TimelineContainer>
             {EPISODE_THUMBNAILS.map((thumbnail, idx) => {
-                const episodeWidth = getEpisodeWidthNew(idx + 1);
+                const episodeWidth = getEpisodeWidth(
+                    idx + 1,
+                    unboundedChapterWidth
+                );
                 let link = `https://chainsaw-man.fandom.com/wiki/Episode_${
                     idx + 1
                 }`;

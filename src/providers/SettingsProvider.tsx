@@ -12,12 +12,16 @@ interface Settings {
     showCrosslines: boolean;
     infoBoxOpen: boolean;
     openInfoBox: (open: boolean) => void;
+    unboundedChapterWidth: boolean;
+    setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const SettingsContext = createContext<Settings>({
+const SettingsContext = createContext<Settings>({
     showCrosslines: false,
     infoBoxOpen: false,
     openInfoBox: () => {},
+    unboundedChapterWidth: false,
+    setUnboundedChapterWidth: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -25,6 +29,7 @@ export const useSettings = () => useContext(SettingsContext);
 export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(false);
+    const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
 
     const openInfoBox = (open: boolean) => {
         if (open) {
@@ -68,6 +73,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 showCrosslines,
                 infoBoxOpen,
                 openInfoBox,
+                unboundedChapterWidth,
+                setUnboundedChapterWidth,
             }}
         >
             {children}

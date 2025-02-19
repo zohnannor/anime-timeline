@@ -2,24 +2,20 @@ import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Arcs } from './components/Arcs';
+import { ChapterWidthButton } from './components/ChapterWidthButton';
+import { FloatingButtons } from './components/FloatingButtons';
 import { InfoBox, InfoBoxButton } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { Volumes } from './components/Volumes';
-import { APP_MAX_WIDTH, scale } from './constants';
 import useWindowSize from './hooks/useWindowSize';
 import { SettingsProvider } from './providers/SettingsProvider';
 
-interface AppContainerProps {
-    $maxWidth: number;
-}
-
-const AppContainer = styled.div<AppContainerProps>`
+const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
-    max-width: ${({ $maxWidth }) => scale($maxWidth)}svh;
     overflow: hidden;
 `;
 
@@ -38,8 +34,11 @@ const App: React.FC = () => {
     return (
         <SettingsProvider>
             <TimeLineHeaders />
-            <AppContainer className='appContainer' $maxWidth={APP_MAX_WIDTH}>
-                <InfoBoxButton />
+            <AppContainer className='appContainer'>
+                <FloatingButtons>
+                    <InfoBoxButton />
+                    <ChapterWidthButton />
+                </FloatingButtons>
                 <InfoBox />
                 <Seasons />
                 <Arcs />

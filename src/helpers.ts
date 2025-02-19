@@ -6,14 +6,31 @@ import {
     PAGES_PER_EPISODE_WITH_CHAPTERS,
     PAGES_PER_VOLUME,
 } from './constants';
-import { range, sum } from './util';
+import { map, range, sum } from './util';
 
 export const getChapterNumber = (volume: number, volumeChapter: number) =>
     sum(CHAPTERS_PER_VOLUME.slice(0, volume - 1)) + volumeChapter + 1;
 
-export const getVolumeWidth = (volume: number) => (volume > 11 ? 1005 : 1000);
+export const getVolumeWidth = (
+    volume: number,
+    unboundedChapterWidth: boolean
+): number => {
+    const volumeWidth = volume > 11 ? 1005 : 1000;
+    return unboundedChapterWidth
+        ? sum(
+              map(
+                  range(0, CHAPTERS_PER_VOLUME[volume - 1] ?? 0),
+                  volumeChapters =>
+                      getChapterWidth(
+                          getChapterNumber(volume, volumeChapters),
+                          unboundedChapterWidth
+                      )
+              )
+          )
+        : volumeWidth;
+};
 
-export const getVolumeByChapter = (chapter: number) =>
+const getVolumeByChapter = (chapter: number) =>
     CHAPTERS_PER_VOLUME.reduce<number[]>(
         (chapters, pages) => [
             ...chapters,
@@ -22,39 +39,55 @@ export const getVolumeByChapter = (chapter: number) =>
         []
     ).findIndex(volume => volume >= chapter) + 1;
 
-export const getChapterWidth = (chapter: number) => {
+export const getChapterWidth = (
+    chapter: number,
+    unboundedChapterWidth: boolean
+): number => {
     const volume = getVolumeByChapter(chapter);
     const pagesInChapter = PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
+    return unboundedChapterWidth
+        ? pagesInChapter * (1000 / PAGES_PER_VOLUME[0])
+        : (pagesInChapter / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
+              getVolumeWidth(volume, false);
+};
+
+const getChapterPageWidth = (
+    chapter: number,
+    unboundedChapterWidth: boolean
+) => {
+    const volume = getVolumeByChapter(chapter);
     return (
-        (pagesInChapter / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
-        getVolumeWidth(volume)
+        (1 / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
+        getVolumeWidth(volume, unboundedChapterWidth)
     );
 };
 
-export const getChapterPageWidth = (chapter: number) => {
-    const volume = getVolumeByChapter(chapter);
-    return (1 / (PAGES_PER_VOLUME[volume - 1] ?? 0)) * getVolumeWidth(volume);
-};
-
-export const getArcWidth = (arc: number) => {
+export const getArcWidth = (arc: number, unboundedChapterWidth: boolean) => {
     const [start, end] = CHAPTERS_PER_ARC[arc - 1] ?? [1, 1];
     return range(start, end + 1).reduce((acc, chapter) => {
-        return acc + getChapterWidth(chapter);
+        return acc + getChapterWidth(chapter, unboundedChapterWidth);
     }, 0);
 };
 
-export const getSeasonWidth = (season: number) => {
+export const getSeasonWidth = (
+    season: number,
+    unboundedChapterWidth: boolean
+) => {
     const [start, end] = CHAPTERS_PER_SEASON[season - 1] ?? [1, 1];
     return range(start, end + 1).reduce((acc, chapter) => {
-        return acc + getChapterWidth(chapter);
+        return acc + getChapterWidth(chapter, unboundedChapterWidth);
     }, 0);
 };
 
-export const getEpisodeWidthNew = (episodeNumber: number) => {
+export const getEpisodeWidth = (
+    episodeNumber: number,
+    unboundedChapterWidth: boolean
+) => {
     return (PAGES_PER_EPISODE_WITH_CHAPTERS[episodeNumber - 1] ?? []).reduce(
         (episodeWidth, [chapterNumber = 1, chapterPages = 0]) => {
             const chapterWidth =
-                getChapterPageWidth(chapterNumber) * chapterPages;
+                getChapterPageWidth(chapterNumber, unboundedChapterWidth) *
+                chapterPages;
             return episodeWidth + chapterWidth;
         },
         0

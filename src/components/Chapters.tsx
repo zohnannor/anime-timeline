@@ -8,6 +8,7 @@ import {
 } from '../constants';
 import { getChapterNumber, getChapterWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
@@ -22,6 +23,7 @@ const Chapter = withCrossLines(
         position: relative;
         height: ${scale(CHAPTER_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
+        transition: width 0.2s ease-in-out;
     `
 );
 
@@ -104,12 +106,16 @@ interface ChaptersProps {
 
 export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
     const [hoveredChapter, hoverHandlers] = useHover();
+    const { unboundedChapterWidth } = useSettings();
 
     return (
         <TimelineContainer>
             {(CHAPTER_PICTURES[volume - 1] ?? []).map((picture, idx) => {
                 const chapterNumber = getChapterNumber(volume, idx);
-                const chapterWidth = getChapterWidth(chapterNumber);
+                const chapterWidth = getChapterWidth(
+                    chapterNumber,
+                    unboundedChapterWidth
+                );
                 const link = `https://chainsaw-man.fandom.com/wiki/Chapter_${chapterNumber}`;
 
                 return (
