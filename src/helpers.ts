@@ -145,3 +145,6 @@ export const interpolateColor = (
     // Combine back into hex color
     return (r << 16) | (g << 8) | b;
 };
+
+export const MONTHS_GRADIENT = [0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a];
+export const DAYS_GRADIENT = [0xed8581, 0x9df697];

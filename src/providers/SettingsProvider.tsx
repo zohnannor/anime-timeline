@@ -14,6 +14,8 @@ interface Settings {
     openInfoBox: (open: boolean) => void;
     unboundedChapterWidth: boolean;
     setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
+    calendarOpen: boolean;
+    openCalendar: (open: boolean) => void;
 }
 
 const SettingsContext = createContext<Settings>({
@@ -22,6 +24,8 @@ const SettingsContext = createContext<Settings>({
     openInfoBox: () => {},
     unboundedChapterWidth: false,
     setUnboundedChapterWidth: () => {},
+    calendarOpen: false,
+    openCalendar: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -30,6 +34,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(false);
     const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
+    const [calendarOpen, setCalendarOpen] = useState(false);
 
     const openInfoBox = (open: boolean) => {
         if (open) {
@@ -42,6 +47,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setInfoBoxOpen(open);
     };
 
+    const openCalendar = (open: boolean) => {
+        if (open) {
+            window.history.pushState({ calendarOpen: true }, '');
+        } else {
+            if (window.history.state?.calendarOpen) {
+                window.history.back();
+            }
+        }
+        setCalendarOpen(open);
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.ctrlKey && e.code === 'Space') {
             setShowCrosslines(p => !p);
@@ -52,10 +68,10 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     };
 
-    const handlePopState = useCallback(
-        (e: PopStateEvent) => setInfoBoxOpen(!!e.state?.infoBoxOpen),
-        []
-    );
+    const handlePopState = useCallback((e: PopStateEvent) => {
+        setInfoBoxOpen(!!e.state?.infoBoxOpen);
+        setCalendarOpen(!!e.state?.calendarOpen);
+    }, []);
 
     useEffect(() => {
         window.addEventListener('popstate', handlePopState);
@@ -65,7 +81,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [infoBoxOpen]);
+    }, [infoBoxOpen, calendarOpen]);
 
     return (
         <SettingsContext.Provider
@@ -75,6 +91,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 openInfoBox,
                 unboundedChapterWidth,
                 setUnboundedChapterWidth,
+                calendarOpen,
+                openCalendar,
             }}
         >
             {children}

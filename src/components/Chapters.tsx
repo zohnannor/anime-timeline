@@ -23,7 +23,12 @@ const Chapter = withCrossLines(
         position: relative;
         height: ${scale(CHAPTER_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
-        transition: width 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
+
+        &:focus {
+            outline: ${scale(20)}svh solid red;
+            z-index: 1;
+        }
     `
 );
 
@@ -120,11 +125,13 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
 
                 return (
                     <Chapter
+                        id={`chapter-${chapterNumber}`}
                         className='chapter'
                         $width={chapterWidth}
                         key={picture || chapterNumber}
                         $visible={hoveredChapter === chapterNumber}
                         {...hoverHandlers(chapterNumber)}
+                        tabIndex={-1}
                     >
                         {picture && (
                             <Preview
