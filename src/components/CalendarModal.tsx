@@ -242,7 +242,7 @@ export const CalendarModalButton: React.FC = () => {
             src='pochita4'
             draggable={false}
             onClick={() => openCalendar(true)}
-            title='Open chapters calendar'
+            title='Open chapter calendar'
             style={{ cursor: 'pointer' }}
         />
     );

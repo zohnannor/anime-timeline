@@ -163,6 +163,10 @@ const CONTENT = (
                     on the number of pages in the chapters)
                 </li>
                 <li>
+                    Use chapter calendar to quickly navigate to a chapter if you
+                    know the date of its release
+                </li>
+                <li>
                     I will personally update this site whenever new chapter
                     releases. There can be a slight delay if i'm busy, but also
                     your browser might use cached version of the page. On
