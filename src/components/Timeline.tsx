@@ -10,6 +10,7 @@ import {
 } from '../constants';
 import { getChapterWidth, interpolateColor } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 
@@ -31,6 +32,7 @@ const Timeframe = withCrossLines(
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)}svh;
             line-height: ${scale(TIMELINE_HEIGHT / 3)}svh;
+            transition: width 0.2s ease-in-out;
         `
     )
 );
@@ -57,12 +59,16 @@ const TimelineWrapper = styled.div`
 export const Timeline: React.FC = () => {
     const Days = () => {
         const [hoveredDay, hoverHandlers] = useHover();
+        const { unboundedChapterWidth } = useSettings();
 
         return (
             <TimelineWrapper className='days'>
                 {CHAPTER_DATES.map((date, idx) => {
                     const chapterNumber = idx + 1;
-                    const chapterWidth = getChapterWidth(chapterNumber);
+                    const chapterWidth = getChapterWidth(
+                        chapterNumber,
+                        unboundedChapterWidth
+                    );
                     const day = date.getDate();
 
                     return (
@@ -90,13 +96,17 @@ export const Timeline: React.FC = () => {
 
     const Months = () => {
         const [hoveredMonth, hoverHandlers] = useHover();
+        const { unboundedChapterWidth } = useSettings();
 
         return (
             <TimelineWrapper className='months'>
                 {CHAPTER_DATES_BY_MONTH.map((dates, idx) => {
                     const monthWidth = dates.reduce(
                         (totalWidth, [dateIdx, _]) => {
-                            const chapterWidth = getChapterWidth(dateIdx + 1);
+                            const chapterWidth = getChapterWidth(
+                                dateIdx + 1,
+                                unboundedChapterWidth
+                            );
                             return totalWidth + chapterWidth;
                         },
                         0
@@ -128,13 +138,17 @@ export const Timeline: React.FC = () => {
 
     const Years = () => {
         const [hoveredYear, hoverHandlers] = useHover();
+        const { unboundedChapterWidth } = useSettings();
 
         return (
             <TimelineWrapper className='years'>
                 {CHAPTER_DATES_BY_YEAR.map((dates, idx) => {
                     const yearWidth = dates.reduce(
                         (totalWidth, [dateIdx, _]) => {
-                            const chapterWidth = getChapterWidth(dateIdx + 1);
+                            const chapterWidth = getChapterWidth(
+                                dateIdx + 1,
+                                unboundedChapterWidth
+                            );
                             return totalWidth + chapterWidth;
                         },
                         0

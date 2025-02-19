@@ -4,12 +4,16 @@ interface ContainerProps {
     $dir?: 'row' | 'column';
 }
 
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div.attrs({
+    className: 'container',
+})<ContainerProps>`
     display: flex;
     flex-direction: ${({ $dir: dir }) => dir ?? 'row'};
 `;
 
-export const TimelineContainer = styled(Container)`
+export const TimelineContainer = styled(Container).attrs({
+    className: 'timelineContainer',
+})`
     position: relative;
     z-index: 1;
     &:hover {

@@ -8,6 +8,7 @@ import {
 } from '../constants';
 import { getVolumeWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { Chapters } from './Chapters';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
@@ -20,12 +21,12 @@ interface VolumeProps {
 
 export const Volume = withCrossLines(
     styled.div<VolumeProps>`
+        display: flex;
+        flex-direction: column;
         position: relative;
         height: ${scale(VOLUME_HEIGHT + CHAPTER_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
-
-        display: flex;
-        flex-direction: column;
+        transition: width 0.2s ease-in-out;
     `
 );
 
@@ -70,12 +71,16 @@ export const VolumeCover = withShadow(
 
 export const Volumes: React.FC = () => {
     const [hoveredVolume, hoverHandlers] = useHover();
+    const { unboundedChapterWidth } = useSettings();
 
     return (
         <TimelineContainer>
             {VOLUME_COVERS.map((cover, idx) => {
                 const volumeNumber = idx + 1;
-                const volumeWidth = getVolumeWidth(volumeNumber);
+                const volumeWidth = getVolumeWidth(
+                    volumeNumber,
+                    unboundedChapterWidth
+                );
                 const link = `https://chainsaw-man.fandom.com/wiki/Volume_${volumeNumber}`;
 
                 return (

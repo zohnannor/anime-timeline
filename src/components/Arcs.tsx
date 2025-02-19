@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
 import { getArcWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
@@ -17,6 +18,7 @@ const Arc = withCrossLines(
         position: relative;
         height: ${scale(ARC_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
+        transition: width 0.2s ease-in-out;
     `
 );
 
@@ -70,18 +72,19 @@ const OFFSETS = [
     { x: 0, y: 120 },
     { x: 0, y: 0 },
     { x: 150, y: 0 },
-    { x: 100, y: 0 },
+    { x: 70, y: 0 },
     { x: 0, y: 430 },
     { x: 0, y: 250 },
 ];
 
 export const Arcs: React.FC = () => {
     const [hoveredArc, hoverHandlers] = useHover();
+    const { unboundedChapterWidth } = useSettings();
 
     return (
         <TimelineContainer>
             {ARC_IMAGES.map((panel, idx) => {
-                const arcWidth = getArcWidth(idx + 1);
+                const arcWidth = getArcWidth(idx + 1, unboundedChapterWidth);
                 const arcName = ARC_NAMES[idx];
                 const link = `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`;
 

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { scale, SEASON_COVERS, SEASON_HEIGHT } from '../constants';
 import { getSeasonWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
+import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { Episodes } from './Episodes';
@@ -13,23 +14,24 @@ interface SeasonProps {
     $width: number;
 }
 
-interface SeasonCoverProps {
-    $emptyCover?: boolean;
-}
-
 const Season = withCrossLines(
     styled.div<SeasonProps>`
         display: flex;
         position: relative;
+        align-items: flex-end;
         height: ${scale(SEASON_HEIGHT)}svh;
         width: ${({ $width }) => scale($width)}svh;
-        align-items: flex-end;
+        transition: width 0.2s ease-in-out;
 
         & > div {
             position: absolute;
         }
     `
 );
+
+interface SeasonCoverProps {
+    $emptyCover?: boolean;
+}
 
 const SeasonCover = withShadow(
     styled.div<SeasonCoverProps>`
@@ -77,12 +79,16 @@ const OFFSETS = [
 
 export const Seasons: React.FC = () => {
     const [hoveredSeason, hoverHandlers] = useHover();
+    const { unboundedChapterWidth } = useSettings();
 
     return (
         <TimelineContainer>
             {SEASON_COVERS.map((cover, idx) => {
                 const seasonNumber = idx + 1;
-                const seasonWidth = getSeasonWidth(seasonNumber);
+                const seasonWidth = getSeasonWidth(
+                    seasonNumber,
+                    unboundedChapterWidth
+                );
                 let link = [
                     'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)',
                     'https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_%E2%80%93_The_Movie:_Reze_Arc',
