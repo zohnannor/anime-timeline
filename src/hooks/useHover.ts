@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export function useHover(): [number, (item: number) => any] {
     const [hoveredItem, setHoveredItem] = useState(0);
