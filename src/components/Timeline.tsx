@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -21,7 +22,8 @@ import { withShadow } from './ShadowWrapper';
 
 interface DayProps {
     $width: number;
-    $background?: string;
+    $background: string;
+    $variant: string;
 }
 
 const Timeframe = withCrossLines(
@@ -33,11 +35,13 @@ const Timeframe = withCrossLines(
             justify-content: center;
             height: ${scale(TIMELINE_HEIGHT / 3)}svh;
             width: ${({ $width }) => scale($width)}svh;
-            background: ${({ $background }) => $background ?? 'white'};
+            background: ${({ $background }) => $background};
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)}svh;
             line-height: ${scale(TIMELINE_HEIGHT / 3)}svh;
             transition: width 0.2s ease-in-out;
+            cursor: ${({ $variant }) =>
+                $variant === 'days' ? 'pointer' : 'default'};
         `
     )
 );
@@ -65,19 +69,51 @@ interface TimelineSegmentProps {
         inputRange: [number, number];
         outputGradient: number[];
     };
-    className: string;
+    variant: string;
 }
 
 const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     segments,
     colorInterpolation,
-    className,
+    variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth } = useSettings();
+    const { unboundedChapterWidth, openCalendar } = useSettings();
+    const lastClickedChapter = useRef<number | null>(null);
+
+    const handleDayClick = useCallback(
+        (e: React.MouseEvent, chapterNumber: number | null) => {
+            e.preventDefault();
+            if (!chapterNumber) return;
+
+            openCalendar(true);
+            lastClickedChapter.current = chapterNumber;
+        },
+        [openCalendar]
+    );
+
+    useEffect(() => {
+        if (lastClickedChapter.current === null) return;
+
+        const element = document.querySelector(
+            `#day-${lastClickedChapter.current}`
+        );
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'center',
+            });
+            (element as HTMLElement).focus({
+                preventScroll: false,
+            });
+        }
+
+        lastClickedChapter.current = null;
+    }, [openCalendar]);
 
     return (
-        <TimelineWrapper className={className}>
+        <TimelineWrapper className={variant}>
             {segments.map((segment, idx) => {
                 const { chapterNumbers, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
@@ -97,13 +133,19 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                 return (
                     <Timeframe
                         key={idx}
-                        className={className}
+                        className={variant}
                         $width={totalWidth}
-                        $visible={hoveredSegment === idx + 1}
+                        $crossLinesVisible={hoveredSegment === idx + 1}
                         {...hoverHandlers(idx + 1)}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
+                        onClick={
+                            variant === 'days'
+                                ? e => handleDayClick(e, idx + 1)
+                                : null
+                        }
+                        $variant={variant}
                     >
-                        <TimeframeDate className={className}>
+                        <TimeframeDate className={variant}>
                             {label}
                         </TimeframeDate>
                     </Timeframe>
@@ -146,7 +188,7 @@ export const Timeline: React.FC = () => {
                     inputRange: [2018, 2025],
                     outputGradient: [0xaaaaaa, 0xffffff],
                 }}
-                className='years'
+                variant='years'
             />
             <TimelineSegment
                 segments={monthsSegments}
@@ -154,7 +196,7 @@ export const Timeline: React.FC = () => {
                     inputRange: [0, 11],
                     outputGradient: MONTHS_GRADIENT,
                 }}
-                className='months'
+                variant='months'
             />
             <TimelineSegment
                 segments={daysSegments}
@@ -162,7 +204,7 @@ export const Timeline: React.FC = () => {
                     inputRange: [1, 31],
                     outputGradient: DAYS_GRADIENT,
                 }}
-                className='days'
+                variant='days'
             />
         </>
     );

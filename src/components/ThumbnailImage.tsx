@@ -14,10 +14,7 @@ interface ThumbnailProps {
 
 const Thumbnail = styled.div<ThumbnailProps & Offset>`
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-size: cover;
     background-position: center;
     filter: blur(${scale(10)}svh);
@@ -54,16 +51,19 @@ export const ThumbnailImage: React.FC<
                     $thumbnail={thumbnailSrc}
                     $offsetX={$offsetX}
                     $offsetY={$offsetY}
+                    draggable={false}
                 />
             )}
             <Image
                 className='thumbnailImage'
                 src={realSrc}
+                alt=''
                 loading='lazy'
                 $loading={loading}
                 onLoad={() => setLoading(false)}
                 $offsetX={$offsetX}
                 $offsetY={$offsetY}
+                draggable={false}
                 {...rest}
             />
         </>

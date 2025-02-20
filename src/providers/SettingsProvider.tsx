@@ -1,4 +1,4 @@
-import {
+import React, {
     createContext,
     FC,
     PropsWithChildren,
@@ -16,6 +16,8 @@ interface Settings {
     setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
     calendarOpen: boolean;
     openCalendar: (open: boolean) => void;
+    showTitles: boolean;
+    setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SettingsContext = createContext<Settings>({
@@ -26,6 +28,8 @@ const SettingsContext = createContext<Settings>({
     setUnboundedChapterWidth: () => {},
     calendarOpen: false,
     openCalendar: () => {},
+    showTitles: true,
+    setShowTitles: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -41,6 +45,18 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     });
     const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
+    const [showTitles, setShowTitlesRaw] = useState(() => {
+        // default to true if not set (first visit), otherwise get from storage
+        return window.localStorage.getItem('showTitles') !== 'false';
+    });
+
+    const setShowTitles = (show: React.SetStateAction<boolean>) => {
+        if (typeof show === 'function') {
+            show = show(showTitles);
+        }
+        window.localStorage.setItem('showTitles', show.toString());
+        setShowTitlesRaw(show);
+    };
 
     const openInfoBox = (open: boolean) => {
         if (open) {
@@ -99,6 +115,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 setUnboundedChapterWidth,
                 calendarOpen,
                 openCalendar,
+                showTitles,
+                setShowTitles,
             }}
         >
             {children}

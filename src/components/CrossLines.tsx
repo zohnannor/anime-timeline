@@ -5,14 +5,14 @@ import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
 
 interface CrossLinesProps {
-    $visible?: boolean | undefined;
+    $crossLinesVisible?: boolean | undefined;
 }
 
 const CrossLinesWrapper = styled.div<CrossLinesProps>`
     position: absolute;
     top: 0;
     left: 0;
-    z-index: ${({ $visible }) => ($visible ? 5 : 1)};
+    z-index: ${({ $crossLinesVisible }) => ($crossLinesVisible ? 5 : 1)};
     width: 100%;
     height: 0;
     display: flex;
@@ -52,14 +52,17 @@ const CrossLine = styled.div<CrossLineProps>`
     }
 `;
 
-export const CrossLines: FC<CrossLinesProps> = ({ $visible }) => {
-    const settings = useSettings();
+export const CrossLines: FC<CrossLinesProps> = ({ $crossLinesVisible }) => {
+    const { showCrosslines } = useSettings();
 
-    const crosslinesVisible = settings?.showCrosslines && $visible;
+    const crossLinesVisible = showCrosslines && $crossLinesVisible;
 
     return (
-        <CrossLinesWrapper className='crosslines' $visible={crosslinesVisible}>
-            {crosslinesVisible && (
+        <CrossLinesWrapper
+            className='crosslines'
+            $crossLinesVisible={crossLinesVisible}
+        >
+            {crossLinesVisible && (
                 <>
                     <CrossLine className='crosslineLeft' $side='left' />
                     <CrossLine className='crosslineRight' $side='right' />
@@ -74,12 +77,12 @@ export const withCrossLines = <P,>(
 ): React.FC<P & CrossLinesProps> => {
     return ({
         children,
-        $visible,
+        $crossLinesVisible,
         ...rest
     }: PropsWithChildren<P & CrossLinesProps>) => (
         <StyledComponent {...(rest as P)}>
             {children}
-            <CrossLines $visible={$visible} />
+            <CrossLines $crossLinesVisible={$crossLinesVisible} />
         </StyledComponent>
     );
 };

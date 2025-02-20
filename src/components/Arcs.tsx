@@ -1,11 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { ARC_HEIGHT, ARC_IMAGES, ARC_NAMES, scale } from '../constants';
+import {
+    ARC_HEIGHT,
+    ARC_IMAGES,
+    ARC_NAMES,
+    ARC_OFFSETS,
+    scale,
+} from '../constants';
 import { getArcWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
+import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -34,15 +41,13 @@ const ArcCover = withShadow(
         width: 100%;
 
         & > a {
+            position: absolute;
             writing-mode: sideways-lr;
             align-items: center;
             display: flex;
             justify-content: center;
             font-size: ${scale(100)}svh;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             cursor: pointer;
         }
 
@@ -61,25 +66,41 @@ const ArcCover = withShadow(
     `
 );
 
-const OFFSETS = [
-    { x: 130, y: 0 },
-    { x: 220, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 150 },
-    { x: 0, y: 90 },
-    { x: 0, y: 750 },
-    { x: 0, y: 250 },
-    { x: 0, y: 120 },
-    { x: 0, y: 0 },
-    { x: 150, y: 0 },
-    { x: 70, y: 0 },
-    { x: 0, y: 430 },
-    { x: 0, y: 250 },
-];
+interface ArcTitleProps {
+    $visible: boolean;
+}
+
+const ArcTitle = withShadow(
+    styled.div<ArcTitleProps>`
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: ${scale(100)}svh;
+        color: white;
+        background: transparent;
+        pointer-events: none;
+        opacity: 0;
+        ${({ $visible }) =>
+            $visible &&
+            css`
+                opacity: 1;
+                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                    -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
+                    0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
+                    0 0 ${scale(30)}svh rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(${scale(10)}svh);
+            `}
+
+        transition: all 0.2s ease-in-out;
+    `
+);
 
 export const Arcs: React.FC = () => {
     const [hoveredArc, hoverHandlers] = useHover();
-    const { unboundedChapterWidth } = useSettings();
+    const { unboundedChapterWidth, showTitles } = useSettings();
 
     return (
         <TimelineContainer>
@@ -93,28 +114,30 @@ export const Arcs: React.FC = () => {
                         className='arc'
                         $width={arcWidth}
                         key={panel || idx}
-                        $visible={hoveredArc === idx + 1}
+                        $crossLinesVisible={hoveredArc === idx + 1}
                         {...hoverHandlers(idx + 1)}
                     >
                         <ArcCover className='arcCover' $invertBorder={!panel}>
-                            <a
-                                href={link}
-                                draggable={false}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
+                            <Link href={link}>
                                 {panel ? (
                                     <ThumbnailImage
                                         src={panel}
-                                        alt=''
-                                        $offsetX={OFFSETS[idx]?.x ?? 0}
-                                        $offsetY={OFFSETS[idx]?.y ?? 0}
+                                        $offsetX={ARC_OFFSETS[idx]?.x ?? 0}
+                                        $offsetY={ARC_OFFSETS[idx]?.y ?? 0}
                                     />
                                 ) : (
                                     `${arcName} arc`
                                 )}
-                            </a>
+                            </Link>
                         </ArcCover>
+                        {panel && (
+                            <ArcTitle
+                                className='arcTitle'
+                                $visible={showTitles || hoveredArc === idx + 1}
+                            >
+                                {arcName} arc
+                            </ArcTitle>
+                        )}
                     </Arc>
                 );
             })}

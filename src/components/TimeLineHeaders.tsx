@@ -9,6 +9,7 @@ import {
     TIMELINE_HEIGHT,
     VOLUME_HEIGHT,
 } from '../constants';
+import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 
 interface HeaderProps {
@@ -45,54 +46,35 @@ const Headers = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    user-select: none;
 `;
 
 export const TimeLineHeaders: React.FC = () => {
     return (
         <Headers className='headers'>
             <Header className='header' $height={SEASON_HEIGHT} $invertBorder>
-                <a
-                    href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'
-                    draggable={false}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
+                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'>
                     Anime Seasons
-                </a>
+                </Link>
             </Header>
             <Header className='header' $height={ARC_HEIGHT} $invertBorder>
-                <a
-                    href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'
-                    draggable={false}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
+                <Link href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'>
                     Story Arcs
-                </a>
+                </Link>
             </Header>
             <Header
                 className='header'
                 $height={TIMELINE_HEIGHT + CHAPTER_HEIGHT}
                 $invertBorder
             >
-                <a
-                    href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'
-                    draggable={false}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
+                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
                     Chapters
-                </a>
+                </Link>
             </Header>
             <Header className='header' $height={VOLUME_HEIGHT} $invertBorder>
-                <a
-                    href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'
-                    draggable={false}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
+                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
                     Volumes
-                </a>
+                </Link>
             </Header>
         </Headers>
     );

@@ -58,7 +58,13 @@ const _ASSERT_LEGNTHS: [
     Length<typeof SEASON_COVERS>,
     Length<typeof EPISODE_THUMBNAILS>,
     Length<typeof CHAPTERS_PER_EPISODE>,
-    Length<typeof CHAPTER_DATES>
+    Length<typeof CHAPTER_DATES>,
+    Length<typeof ARC_OFFSETS>,
+    Length<typeof EPISODE_OFFSETS>,
+    Length<typeof SEASON_OFFSETS>,
+    Length<typeof EPISODE_TITLES>,
+    Length<typeof SEASON_TITLES>,
+    Length<typeof VOLUME_TITLES>
 ] = [
     VOLUMES_TOTAL,
     CHAPTERS_TOTAL,
@@ -70,6 +76,12 @@ const _ASSERT_LEGNTHS: [
     12,
     12,
     CHAPTERS_TOTAL,
+    13,
+    12,
+    2,
+    12,
+    2,
+    VOLUMES_TOTAL,
 ] as const;
 
 void _ASSERT_LEGNTHS; // to ignore error
@@ -612,3 +624,82 @@ export const CHAPTER_DATES_BY_YEAR = groupBy(
     CHAPTER_DATES,
     date => date.getFullYear() + 1
 );
+
+export const ARC_OFFSETS = [
+    { x: 130, y: 0 },
+    { x: 220, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 150 },
+    { x: 0, y: 90 },
+    { x: 0, y: 750 },
+    { x: 0, y: 250 },
+    { x: 0, y: 120 },
+    { x: 0, y: 0 },
+    { x: 150, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 430 },
+    { x: 0, y: 250 },
+] as const;
+
+export const EPISODE_OFFSETS = [
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 20, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+] as const;
+
+export const SEASON_OFFSETS = [
+    { x: 0, y: 1900 },
+    { x: 0, y: 800 },
+] as const;
+
+export const EPISODE_TITLES = [
+    'Dog & Chainsaw',
+    'Arrival in Tokyo',
+    "Meowy's Whereabouts",
+    'Rescue',
+    'Gun Devil',
+    'Kill Denji',
+    'The Taste of a Kiss',
+    'Gunfire',
+    'From Kyoto',
+    'Bruised & Battered',
+    'Mission Start',
+    'Katana vs. Chainsaw',
+] as const;
+
+export const SEASON_TITLES = [
+    'Chainsaw Man (Anime)',
+    'Chainsaw Man – The Movie: Reze Arc',
+] as const;
+
+export const VOLUME_TITLES = [
+    'Dog & Chainsaw',
+    'Chainsaw vs. Bat',
+    'Kill Denji',
+    'The Gun is Mightier',
+    'Minor',
+    'Boom Boom Boom',
+    'In a Dream',
+    'Super Mess',
+    'Bath',
+    "A Dog's Feeling",
+    "Go Get 'Em, Chainsaw Man",
+    'Bird and War',
+    'Spoiler',
+    'I Wanna See Penguins!',
+    "Hors D'oeuvre",
+    'Ordinary Happiness',
+    'Guns, Nails, Katana',
+    'All Pets',
+    'Everyday Scenery',
+    'Two Children',
+] as const;
