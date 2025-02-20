@@ -46,7 +46,7 @@ export const getChapterWidth = (
     const volume = getVolumeByChapter(chapter);
     const pagesInChapter = PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
     return unboundedChapterWidth
-        ? pagesInChapter * (1000 / PAGES_PER_VOLUME[0])
+        ? pagesInChapter * (1000 / PAGES_PER_VOLUME[0]) * 1.05
         : (pagesInChapter / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
               getVolumeWidth(volume, false);
 };

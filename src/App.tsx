@@ -5,11 +5,12 @@ import { Arcs } from './components/Arcs';
 import { CalendarModal, CalendarModalButton } from './components/CalendarModal';
 import { ChapterWidthButton } from './components/ChapterWidthButton';
 import { FloatingButtons } from './components/FloatingButtons';
-import { InfoBox, InfoBoxButton, InfoBoxContent } from './components/InfoBox';
+import { InfoBox, InfoBoxButton } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
+import { ToggleTitlesButton } from './components/ToggleTitlesButton';
 import { Volumes } from './components/Volumes';
 import useWindowSize from './hooks/useWindowSize';
 import { useSettings } from './providers/SettingsProvider';
@@ -18,6 +19,7 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    user-select: none;
 `;
 
 const App: React.FC = () => {
@@ -41,13 +43,14 @@ const App: React.FC = () => {
         <>
             <TimeLineHeaders />
             <CalendarModal />
+            <InfoBox />
             <AppContainer className='appContainer'>
                 <FloatingButtons>
                     <InfoBoxButton />
                     <ChapterWidthButton />
                     <CalendarModalButton />
+                    <ToggleTitlesButton />
                 </FloatingButtons>
-                <InfoBox containerSelector='#infoBox'>{InfoBoxContent}</InfoBox>
                 <Seasons />
                 <Arcs />
                 <Timeline />

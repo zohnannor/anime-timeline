@@ -1,9 +1,10 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
+import { Link } from './Link';
 import { ThumbnailImage } from './ThumbnailImage';
 
 const InfoBoxRoot = styled.div`
@@ -83,15 +84,6 @@ const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     flex-wrap: wrap;
 `;
 
-const Link: React.FC<React.ComponentPropsWithoutRef<'a'>> = ({
-    href,
-    children,
-}) => (
-    <a href={href} target='_blank' rel='noopener noreferrer'>
-        {children}
-    </a>
-);
-
 type Keys = {
     keys: string[];
 };
@@ -113,7 +105,6 @@ export const InfoBoxButton: React.FC = () => {
     return (
         <ThumbnailImage
             src='pochita2'
-            draggable={false}
             onClick={() => openInfoBox(true)}
             title='Read info'
             style={{ cursor: 'help' }}
@@ -157,7 +148,7 @@ export const InfoBoxContent = (
                         page
                     </InlineLinkGroup>
                 </li>
-                <li>Episode widths are accurate down to the chapter page</li>
+                <li>Show/hide season/episode/arc/volume titles</li>
                 <li>Hover over chapter images for previews (desktop only)</li>
                 <li>
                     Use the scrollbar at the bottom of the page for faster
@@ -175,7 +166,7 @@ export const InfoBoxContent = (
                 <li>
                     Press
                     <KeyboardShortcut keys={['Ctrl', 'Space']} />
-                    to toggle cross-lines
+                    to toggle cross-lines (desktop only)
                 </li>
                 <li>
                     The button below the info button toggles unbounded chapter
@@ -184,8 +175,11 @@ export const InfoBoxContent = (
                 </li>
                 <li>
                     Use chapter calendar to quickly navigate to a chapter if you
-                    know the date of its release
+                    know the date of its release, by clicking on a day. Or,
+                    click on a day in the timeline to open a calendar and
+                    navigate to the chapter date
                 </li>
+                <li>Episode widths are accurate down to the chapter page</li>
                 <li>
                     I will personally update this site whenever new chapter
                     releases. There can be a slight delay if i'm busy, but also
@@ -221,14 +215,7 @@ export const InfoBoxContent = (
     </Box>
 );
 
-interface InfoBoxProps {
-    containerSelector: string;
-}
-
-export const InfoBox: React.FC<PropsWithChildren<InfoBoxProps>> = ({
-    children,
-    containerSelector,
-}) => {
+export const InfoBox: React.FC = () => {
     const { infoBoxOpen, openInfoBox } = useSettings();
 
     if (!infoBoxOpen) return null;
@@ -239,8 +226,8 @@ export const InfoBox: React.FC<PropsWithChildren<InfoBoxProps>> = ({
                 className='shadowOverlay'
                 onClick={() => openInfoBox(false)}
             />
-            <InfoBoxRoot className='infoBoxRoot'>{children}</InfoBoxRoot>
+            <InfoBoxRoot className='infoBoxRoot'>{InfoBoxContent}</InfoBoxRoot>
         </>,
-        document.querySelector(containerSelector)!
+        document.querySelector('#infoBox')!
     );
 };

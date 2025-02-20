@@ -1,12 +1,19 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { scale, SEASON_COVERS, SEASON_HEIGHT } from '../constants';
+import {
+    scale,
+    SEASON_COVERS,
+    SEASON_HEIGHT,
+    SEASON_OFFSETS,
+    SEASON_TITLES,
+} from '../constants';
 import { getSeasonWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { Episodes } from './Episodes';
+import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -46,14 +53,10 @@ const SeasonCover = withShadow(
         height: 100%;
         width: 100%;
         cursor: default;
-        user-select: none;
 
         & > a {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             cursor: pointer;
         }
 
@@ -72,14 +75,41 @@ const SeasonCover = withShadow(
     `
 );
 
-const OFFSETS = [
-    { x: 0, y: 1900 },
-    { x: 0, y: 800 },
-];
+interface SeasonTitleProps {
+    $visible: boolean;
+}
+
+const SeasonTitle = withShadow(
+    styled.div<SeasonTitleProps>`
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: ${scale(100)}svh;
+        color: white;
+        background: transparent;
+        pointer-events: none;
+        opacity: 0;
+        ${({ $visible }) =>
+            $visible &&
+            css`
+                opacity: 1;
+                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                    -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
+                    0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
+                    0 0 ${scale(30)}svh rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(${scale(10)}svh);
+            `}
+
+        transition: all 0.2s ease-in-out;
+    `
+);
 
 export const Seasons: React.FC = () => {
     const [hoveredSeason, hoverHandlers] = useHover();
-    const { unboundedChapterWidth } = useSettings();
+    const { unboundedChapterWidth, showTitles } = useSettings();
 
     return (
         <TimelineContainer>
@@ -99,7 +129,7 @@ export const Seasons: React.FC = () => {
                         className='season'
                         $width={seasonWidth}
                         key={cover || seasonNumber}
-                        $visible={hoveredSeason === seasonNumber}
+                        $crossLinesVisible={hoveredSeason === seasonNumber}
                         {...hoverHandlers(seasonNumber)}
                     >
                         <SeasonCover
@@ -108,23 +138,27 @@ export const Seasons: React.FC = () => {
                             $emptyCover={!cover}
                         >
                             {cover ? (
-                                <a
-                                    href={link}
-                                    draggable={false}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                >
+                                <Link href={link}>
                                     <ThumbnailImage
                                         src={cover}
-                                        alt=''
-                                        $offsetX={OFFSETS[idx]?.x ?? 0}
-                                        $offsetY={OFFSETS[idx]?.y ?? 0}
+                                        $offsetX={SEASON_OFFSETS[idx]?.x ?? 0}
+                                        $offsetY={SEASON_OFFSETS[idx]?.y ?? 0}
                                     />
-                                </a>
+                                </Link>
                             ) : (
                                 `SEASON ${idx}`
                             )}
                         </SeasonCover>
+                        {cover && (
+                            <SeasonTitle
+                                className='seasonTitle'
+                                $visible={
+                                    showTitles || hoveredSeason === seasonNumber
+                                }
+                            >
+                                {SEASON_TITLES[seasonNumber - 1]}
+                            </SeasonTitle>
+                        )}
                         <Episodes season={seasonNumber} />
                     </Season>
                 );

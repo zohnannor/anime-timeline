@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import {
     CHAPTER_HEIGHT,
     scale,
     VOLUME_COVERS,
     VOLUME_HEIGHT,
+    VOLUME_TITLES,
 } from '../constants';
 import { getVolumeWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
@@ -12,6 +13,7 @@ import { useSettings } from '../providers/SettingsProvider';
 import { Chapters } from './Chapters';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
+import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -47,10 +49,7 @@ export const VolumeCover = withShadow(
             display: flex;
             align-items: center;
             justify-content: center;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             cursor: pointer;
         }
 
@@ -69,9 +68,41 @@ export const VolumeCover = withShadow(
     `
 );
 
+interface VolumeTitleProps {
+    $visible: boolean;
+}
+
+const VolumeTitle = withShadow(
+    styled.div<VolumeTitleProps>`
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: ${scale(100)}svh;
+        color: white;
+        background: transparent;
+        pointer-events: none;
+        opacity: 0;
+        ${({ $visible }) =>
+            $visible &&
+            css`
+                opacity: 1;
+                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                    -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
+                    0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
+                    0 0 ${scale(30)}svh rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(${scale(10)}svh);
+            `}
+
+        transition: all 0.2s ease-in-out;
+    `
+);
+
 export const Volumes: React.FC = () => {
     const [hoveredVolume, hoverHandlers] = useHover();
-    const { unboundedChapterWidth } = useSettings();
+    const { unboundedChapterWidth, showTitles } = useSettings();
 
     return (
         <TimelineContainer>
@@ -88,7 +119,7 @@ export const Volumes: React.FC = () => {
                         className='volume'
                         $width={volumeWidth}
                         key={cover || volumeNumber}
-                        $visible={hoveredVolume === volumeNumber}
+                        $crossLinesVisible={hoveredVolume === volumeNumber}
                         {...hoverHandlers(volumeNumber)}
                     >
                         <Chapters volume={volumeNumber} />
@@ -96,19 +127,26 @@ export const Volumes: React.FC = () => {
                             className='volumeCover'
                             $invertBorder={!cover}
                         >
-                            <a
-                                href={link}
-                                draggable={false}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
+                            <Link href={link}>
                                 {cover ? (
-                                    <ThumbnailImage src={cover} alt='' />
+                                    <ThumbnailImage src={cover} />
                                 ) : (
                                     volumeNumber
                                 )}
-                            </a>
+                            </Link>
                         </VolumeCover>
+                        {cover && (
+                            <VolumeTitle
+                                className='volumeTitle'
+                                $visible={
+                                    showTitles || hoveredVolume === volumeNumber
+                                }
+                            >
+                                {VOLUME_TITLES[volumeNumber - 1]}
+                                <br />
+                                (Volume {volumeNumber})
+                            </VolumeTitle>
+                        )}
                     </Volume>
                 );
             })}

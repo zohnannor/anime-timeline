@@ -7,7 +7,6 @@ export const ChapterWidthButton: React.FC = () => {
     return (
         <ThumbnailImage
             src='pochita3'
-            draggable={false}
             onClick={() => setUnboundedChapterWidth(p => !p)}
             title='Toggle unbounded chapter width'
             style={{ cursor: 'pointer' }}

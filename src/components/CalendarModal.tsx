@@ -25,6 +25,7 @@ const ModalContainer = styled.div`
     height: 90svh;
     overflow-y: auto;
     transform: translate(-50%, -40%);
+    user-select: none;
 
     @media (max-width: 480px) {
         height: 100svh;
@@ -127,6 +128,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     $isToday={isToday}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
                     onClick={e => onDayClick(e, chapterNumber)}
+                    id={`day-${chapterNumber}`}
                 >
                     {day}
                 </Day>
@@ -240,7 +242,6 @@ export const CalendarModalButton: React.FC = () => {
     return (
         <ThumbnailImage
             src='pochita4'
-            draggable={false}
             onClick={() => openCalendar(true)}
             title='Open chapter calendar'
             style={{ cursor: 'pointer' }}

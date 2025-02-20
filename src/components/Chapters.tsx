@@ -11,6 +11,7 @@ import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
+import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -52,10 +53,7 @@ const ChapterCover = withShadow(
             display: flex;
             align-items: center;
             justify-content: center;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             cursor: pointer;
         }
 
@@ -65,6 +63,38 @@ const ChapterCover = withShadow(
             height: 100%;
             pointer-events: none;
         }
+    `
+);
+
+interface ChapterTitleProps {
+    $visible: boolean;
+}
+
+const ChapterTitle = withShadow(
+    styled.div<ChapterTitleProps>`
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: ${scale(SMALL_FONT_SIZE)}svh;
+        color: white;
+        background: transparent;
+        pointer-events: none;
+        opacity: 0;
+        ${({ $visible }) =>
+            $visible &&
+            css`
+                opacity: 1;
+                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                    -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
+                    0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
+                    0 0 ${scale(30)}svh rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(${scale(10)}svh);
+            `}
+
+        transition: all 0.2s ease-in-out;
     `
 );
 
@@ -111,7 +141,7 @@ interface ChaptersProps {
 
 export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
     const [hoveredChapter, hoverHandlers] = useHover();
-    const { unboundedChapterWidth } = useSettings();
+    const { unboundedChapterWidth, showTitles } = useSettings();
 
     return (
         <TimelineContainer>
@@ -129,7 +159,7 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                         className='chapter'
                         $width={chapterWidth}
                         key={picture || chapterNumber}
-                        $visible={hoveredChapter === chapterNumber}
+                        $crossLinesVisible={hoveredChapter === chapterNumber}
                         {...hoverHandlers(chapterNumber)}
                         tabIndex={-1}
                     >
@@ -140,23 +170,29 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                                 $chapterNumber={chapterNumber}
                             >
                                 <ThumbnailImage src={picture} />
-                                Chapter {chapterNumber}.
+                                Chapter {chapterNumber}
                             </Preview>
                         )}
                         <ChapterCover className='chapterCover'>
-                            <a
-                                href={link}
-                                draggable={false}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
+                            <Link href={link}>
                                 {picture ? (
-                                    <ThumbnailImage src={picture} alt='' />
+                                    <ThumbnailImage src={picture} />
                                 ) : (
                                     chapterNumber
                                 )}
-                            </a>
+                            </Link>
                         </ChapterCover>
+                        {
+                            <ChapterTitle
+                                className='chapterTitle'
+                                $visible={
+                                    showTitles ||
+                                    hoveredChapter === chapterNumber
+                                }
+                            >
+                                {chapterNumber}
+                            </ChapterTitle>
+                        }
                     </Chapter>
                 );
             })}

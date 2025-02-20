@@ -39,11 +39,13 @@ interface ScrollProps {
     $offset: number;
 }
 
-export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => ({
-    style: {
-        '--left': `${$offset * 100}%`,
-    } as React.CSSProperties,
-}))`
+export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
+    return {
+        style: {
+            '--left': `${$offset * 100}%`,
+        } as React.CSSProperties,
+    };
+})`
     transition: bottom 0.2s ease-in-out;
     pointer-events: auto;
     position: absolute;
@@ -159,7 +161,6 @@ export const Scroller = () => {
             >
                 <ThumbnailImage
                     src='pochita'
-                    draggable={false}
                     onMouseDown={() => (isDragging.current = true)}
                 />
             </ScrollerWrapper>
