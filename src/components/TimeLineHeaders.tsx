@@ -26,7 +26,7 @@ const Header = withShadow(
         justify-content: center;
         align-items: center;
         writing-mode: sideways-lr;
-        font-size: ${scale(70)}svh;
+        font-size: ${scale(60)}svh;
 
         & > a {
             display: flex;
