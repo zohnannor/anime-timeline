@@ -32,7 +32,13 @@ export const useSettings = () => useContext(SettingsContext);
 
 export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
-    const [infoBoxOpen, setInfoBoxOpen] = useState(false);
+    const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
+        const firstVisit = window.localStorage.getItem('firstVisit') === null;
+        if (firstVisit) {
+            window.localStorage.setItem('firstVisit', 'false');
+        }
+        return firstVisit;
+    });
     const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
 

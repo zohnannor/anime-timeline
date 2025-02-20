@@ -1,3 +1,4 @@
+import React, { PropsWithChildren } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -12,10 +13,11 @@ const InfoBoxRoot = styled.div`
     transform: translate(-50%, -40%);
     z-index: 100;
     background: rgba(0, 0, 0, 0.85);
+    height: 90svh;
+    overflow-y: scroll;
 
     @media (max-width: 768px) {
-        height: 80%;
-        overflow-y: scroll;
+        height: 80svh;
     }
 `;
 
@@ -29,28 +31,30 @@ const ShadowOverlay = styled.div`
 
 interface BoxProps {
     $dir?: 'row' | 'column';
+    $wrap?: boolean;
 }
 
-const Box = styled.span<BoxProps>`
-    display: inline-flex;
-    flex-wrap: wrap;
+const Box = styled.div<BoxProps>`
+    display: flex;
     flex-direction: ${({ $dir }) => $dir || 'row'};
-    white-space: pre-line;
+    flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
+    gap: 1ch;
+    align-items: center;
+    justify-content: center;
     width: 90vw;
     max-width: 90vw;
-    font-size: ${scale(75)}svh;
     padding: ${scale(40)}svh ${scale(190)}svh;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    column-gap: 1ch;
+    white-space: pre-line;
+    font-size: ${scale(75)}svh;
 
     & a {
-        text-decoration: underline;
-        text-decoration-style: dotted;
-        text-decoration-thickness: ${scale(3)}svh;
-        text-decoration-skip-ink: auto;
+        text-decoration: underline dotted;
         text-underline-offset: ${scale(10)}svh;
+        text-decoration-thickness: ${scale(3)}svh;
+    }
+
+    & kbd:has(kbd) {
+        margin: ${scale(20)}svh;
     }
 
     & kbd:not(:has(kbd)) {
@@ -63,6 +67,45 @@ const Box = styled.span<BoxProps>`
         line-height: 1;
     }
 `;
+
+const ListContainer = styled.ul`
+    margin: 0;
+    padding-left: 1.5em;
+`;
+
+interface InlineLinkGroupProps {
+    $gap?: boolean;
+}
+
+const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
+    display: flex;
+    gap: ${({ $gap }) => ($gap ? '0 1ch' : '0')};
+    flex-wrap: wrap;
+`;
+
+const Link: React.FC<React.ComponentPropsWithoutRef<'a'>> = ({
+    href,
+    children,
+}) => (
+    <a href={href} target='_blank' rel='noopener noreferrer'>
+        {children}
+    </a>
+);
+
+type Keys = {
+    keys: string[];
+};
+
+const KeyboardShortcut: React.FC<Keys> = ({ keys }) => (
+    <kbd>
+        {keys.map((key, idx) => (
+            <React.Fragment key={key}>
+                <kbd>{key}</kbd>
+                {idx < keys.length - 1 && ' + '}
+            </React.Fragment>
+        ))}
+    </kbd>
+);
 
 export const InfoBoxButton: React.FC = () => {
     const { openInfoBox } = useSettings();
@@ -78,65 +121,44 @@ export const InfoBoxButton: React.FC = () => {
     );
 };
 
-const CONTENT = (
+const SpoilerWarning = styled.div`
+    text-align: center;
+    color: red;
+`;
+
+export const InfoBoxContent = (
     <Box $dir='column'>
-        <Box>
+        <Box $wrap>
             Made with ❤️ by
-            <a
-                href='https://github.com/zohnannor'
-                target='_blank'
-                rel='noopener'
-            >
-                zohnannor
-            </a>
-            <span style={{ display: 'inline-flex' }}>
-                (
-                <a
-                    href='https://reddit.com/u/zohnannor'
-                    target='_blank'
-                    rel='noopener'
-                >
-                    u/zohnannor
-                </a>
-                )
-            </span>
+            <Link href='https://github.com/zohnannor'>zohnannor</Link>
+            <InlineLinkGroup>
+                (<Link href='https://reddit.com/u/zohnannor'>u/zohnannor</Link>)
+            </InlineLinkGroup>
             and
-            <a href='https://github.com/swbuwk' target='_blank' rel='noopener'>
-                swbuwk
-            </a>
+            <Link href='https://github.com/swbuwk'>swbuwk</Link>
         </Box>
 
+        <SpoilerWarning>
+            <h1>SPOILER WARNING</h1>
+            This site contains spoilers for the Chainsaw Man manga and anime. I
+            would suggest leaving the page if you are interested in the story.
+        </SpoilerWarning>
+
         <Box $dir='column'>
-            Site info and features:
-            <ul>
+            <h2>Site info and features:</h2>
+            <ListContainer>
                 <li>
-                    <span
-                        style={{
-                            display: 'inline-flex',
-                            flexWrap: 'wrap',
-                            gap: '0 1ch',
-                        }}
-                    >
-                        Click on any image (season, episode, arc, chapter,
-                        volume) to go to the corresponding
-                        <a
-                            href='https://chainsaw-man.fandom.com/wiki/'
-                            target='_blank'
-                            rel='noopener'
-                        >
+                    <InlineLinkGroup $gap>
+                        Click any image (season, episode, arc, chapter, volume)
+                        to go to the corresponding
+                        <Link href='https://chainsaw-man.fandom.com/wiki/'>
                             wiki
-                        </a>
+                        </Link>
                         page
-                    </span>
+                    </InlineLinkGroup>
                 </li>
-                <li>
-                    Widths of episodes of the show are accurate down to the
-                    chapter page
-                </li>
-                <li>
-                    Hover over the chapter images to display a preview (desktop
-                    only)
-                </li>
+                <li>Episode widths are accurate down to the chapter page</li>
+                <li>Hover over chapter images for previews (desktop only)</li>
                 <li>
                     Use the scrollbar at the bottom of the page for faster
                     navigation (desktop only)
@@ -147,14 +169,12 @@ const CONTENT = (
                     Pochita sketch, so some are just numbers
                 </li>
                 <li>
-                    Dates of chapter releases in the timeline are displayed in
-                    your local timezone
+                    Chapter release dates in the timeline are displayed in your
+                    local timezone
                 </li>
                 <li>
-                    Press{' '}
-                    <kbd>
-                        <kbd>Ctrl</kbd> + <kbd>Space</kbd>
-                    </kbd>{' '}
+                    Press
+                    <KeyboardShortcut keys={['Ctrl', 'Space']} />
                     to toggle cross-lines
                 </li>
                 <li>
@@ -170,13 +190,11 @@ const CONTENT = (
                     I will personally update this site whenever new chapter
                     releases. There can be a slight delay if i'm busy, but also
                     your browser might use cached version of the page. On
-                    desktop browsers, you can press{' '}
-                    <kbd>
-                        <kbd>Ctrl</kbd> + <kbd>R</kbd>
-                    </kbd>{' '}
+                    desktop browsers, you can press
+                    <KeyboardShortcut keys={['Ctrl', 'R']} />
                     to refresh.
                 </li>
-            </ul>
+            </ListContainer>
         </Box>
 
         <Box>
@@ -189,40 +207,28 @@ const CONTENT = (
 
         <Box $dir='column'>
             <h3>Official Links:</h3>
-
-            <a
-                href='https://mangaplus.shueisha.co.jp/titles/100037'
-                target='_blank'
-                rel='noopener'
-            >
+            <Link href='https://mangaplus.shueisha.co.jp/titles/100037'>
                 Manga Plus
-            </a>
-            <a
-                href='https://www.viz.com/shonenjump/chapters/chainsaw-man'
-                target='_blank'
-                rel='noopener'
-            >
+            </Link>
+            <Link href='https://www.viz.com/shonenjump/chapters/chainsaw-man'>
                 VIZ Media
-            </a>
-            <a
-                href='https://x.com/nagayama_koharu'
-                target='_blank'
-                rel='noopener'
-            >
-                Author's Twitter
-            </a>
-            <a
-                href='https://www.shonenjump.com/j/rensai/chainsaw.html'
-                target='_blank'
-                rel='noopener'
-            >
+            </Link>
+            <Link href='https://x.com/nagayama_koharu'>Author's Twitter</Link>
+            <Link href='https://www.shonenjump.com/j/rensai/chainsaw.html'>
                 Official Site
-            </a>
+            </Link>
         </Box>
     </Box>
 );
 
-export const InfoBox: React.FC = () => {
+interface InfoBoxProps {
+    containerSelector: string;
+}
+
+export const InfoBox: React.FC<PropsWithChildren<InfoBoxProps>> = ({
+    children,
+    containerSelector,
+}) => {
     const { infoBoxOpen, openInfoBox } = useSettings();
 
     if (!infoBoxOpen) return null;
@@ -233,8 +239,8 @@ export const InfoBox: React.FC = () => {
                 className='shadowOverlay'
                 onClick={() => openInfoBox(false)}
             />
-            <InfoBoxRoot className='infoBoxRoot'>{CONTENT}</InfoBoxRoot>
+            <InfoBoxRoot className='infoBoxRoot'>{children}</InfoBoxRoot>
         </>,
-        document.querySelector('#infoBox')!
+        document.querySelector(containerSelector)!
     );
 };
