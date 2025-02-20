@@ -158,6 +158,28 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     }
 );
 
+const Box = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const CloseButton: React.FC = () => {
+    const { openCalendar } = useSettings();
+
+    return (
+        <span
+            onClick={() => openCalendar(false)}
+            style={{
+                cursor: 'pointer',
+                fontSize: '1.5em',
+            }}
+        >
+            &times;
+        </span>
+    );
+};
+
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, openCalendar } = useSettings();
 
@@ -220,7 +242,10 @@ export const CalendarModal: React.FC = () => {
                 onClick={() => openCalendar(false)}
             />
             <ModalContainer className='calendarModal'>
-                <Title className='title'>Chapter Calendar</Title>
+                <Box>
+                    <Title className='title'>Chapter Calendar</Title>
+                    <CloseButton />
+                </Box>
                 {months.map((month, monthIdx) => (
                     <MonthComponent
                         key={`month-${monthIdx}`}

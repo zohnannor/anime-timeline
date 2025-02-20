@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import { CSS } from 'styled-components/dist/types';
 
 import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
@@ -33,6 +34,7 @@ const ShadowOverlay = styled.div`
 interface BoxProps {
     $dir?: 'row' | 'column';
     $wrap?: boolean;
+    $align?: CSS.Property.JustifyContent;
 }
 
 const Box = styled.div<BoxProps>`
@@ -40,7 +42,7 @@ const Box = styled.div<BoxProps>`
     flex-direction: ${({ $dir }) => $dir || 'row'};
     flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
     gap: 1ch;
-    align-items: center;
+    align-items: ${({ $align }) => $align || 'center'};
     justify-content: center;
     width: 90vw;
     max-width: 90vw;
@@ -117,16 +119,40 @@ const SpoilerWarning = styled.div`
     color: red;
 `;
 
+const CloseButton: React.FC = () => {
+    const { openInfoBox } = useSettings();
+
+    return (
+        <span
+            onClick={() => openInfoBox(false)}
+            style={{
+                cursor: 'pointer',
+                fontSize: '1.5em',
+            }}
+        >
+            &times;
+        </span>
+    );
+};
+
 export const InfoBoxContent = (
     <Box $dir='column'>
-        <Box $wrap>
-            Made with ❤️ by
-            <Link href='https://github.com/zohnannor'>zohnannor</Link>
-            <InlineLinkGroup>
-                (<Link href='https://reddit.com/u/zohnannor'>u/zohnannor</Link>)
-            </InlineLinkGroup>
-            and
-            <Link href='https://github.com/swbuwk'>swbuwk</Link>
+        <Box $align='flex-start'>
+            <Box $wrap>
+                Made with ❤️ by
+                <Link href='https://github.com/zohnannor'>zohnannor</Link>
+                <InlineLinkGroup>
+                    (
+                    <Link href='https://reddit.com/u/zohnannor'>
+                        u/zohnannor
+                    </Link>
+                    )
+                </InlineLinkGroup>
+                and
+                <Link href='https://github.com/swbuwk'>swbuwk</Link>
+            </Box>
+
+            <CloseButton />
         </Box>
 
         <SpoilerWarning>
