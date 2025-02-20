@@ -5,7 +5,7 @@ import { Arcs } from './components/Arcs';
 import { CalendarModal, CalendarModalButton } from './components/CalendarModal';
 import { ChapterWidthButton } from './components/ChapterWidthButton';
 import { FloatingButtons } from './components/FloatingButtons';
-import { InfoBox, InfoBoxButton } from './components/InfoBox';
+import { InfoBox, InfoBoxButton, InfoBoxContent } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { Seasons } from './components/Seasons';
 import { Timeline } from './components/Timeline';
@@ -47,7 +47,7 @@ const App: React.FC = () => {
                     <ChapterWidthButton />
                     <CalendarModalButton />
                 </FloatingButtons>
-                <InfoBox />
+                <InfoBox containerSelector='#infoBox'>{InfoBoxContent}</InfoBox>
                 <Seasons />
                 <Arcs />
                 <Timeline />
