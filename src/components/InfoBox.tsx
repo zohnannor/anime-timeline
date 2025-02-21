@@ -37,6 +37,7 @@ interface BoxProps {
 }
 
 const Box = styled.div<BoxProps>`
+    position: relative;
     display: flex;
     flex-direction: ${({ $dir }) => $dir || 'row'};
     flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
@@ -106,21 +107,16 @@ const SpoilerWarning = styled.div`
     line-height: 1;
 `;
 
-const CloseButton: React.FC = () => {
-    const { setInfoBoxOpen } = useSettings();
-
-    return (
-        <span
-            onClick={() => setInfoBoxOpen(false)}
-            style={{
-                cursor: 'pointer',
-                fontSize: '1.5em',
-            }}
-        >
-            &times;
-        </span>
-    );
-};
+const CloseButton = styled.span`
+    position: sticky;
+    inset: 0;
+    cursor: pointer;
+    font-size: 1.5em;
+    top: ${scale(100)}svh;
+    right: ${scale(100)}svh;
+    z-index: 101;
+    float: right;
+`;
 
 export const InfoBoxContent = (
     <Box $dir='column'>
@@ -138,10 +134,7 @@ export const InfoBoxContent = (
                 and
                 <Link href='https://github.com/swbuwk'>swbuwk</Link>
             </Box>
-
-            <CloseButton />
         </Box>
-
         <SpoilerWarning>
             <h1>SPOILER WARNING</h1>
             This site contains spoilers for the Chainsaw Man manga and anime. I
@@ -239,7 +232,12 @@ export const InfoBox: React.FC = () => {
                 className='shadowOverlay'
                 onClick={() => setInfoBoxOpen(false)}
             />
-            <InfoBoxRoot className='infoBoxRoot'>{InfoBoxContent}</InfoBoxRoot>
+            <InfoBoxRoot className='infoBoxRoot'>
+                <CloseButton onClick={() => setInfoBoxOpen(false)}>
+                    &times;
+                </CloseButton>
+                {InfoBoxContent}
+            </InfoBoxRoot>
         </>,
         document.querySelector('#infoBox')!
     );

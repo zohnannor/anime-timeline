@@ -3,7 +3,12 @@ import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
 import { CHAPTER_DATES, scale } from '../constants';
-import { DAYS_GRADIENT, interpolateColor, MONTHS_GRADIENT } from '../helpers';
+import {
+    DAYS_GRADIENT,
+    interpolateColor,
+    MONTHS,
+    MONTHS_GRADIENT,
+} from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 
 const ShadowOverlay = styled.div`
@@ -20,7 +25,6 @@ const ModalContainer = styled.div`
     left: 50%;
     top: 40%;
     background: black;
-    padding: ${scale(100)}svh;
     height: 90svh;
     overflow-y: auto;
     transform: translate(-50%, -40%);
@@ -53,7 +57,6 @@ interface MonthProps {
 
 const Month = styled.div<MonthProps>`
     color: ${({ $color: $background }) => $background};
-    padding: ${scale(66)}svh;
 `;
 
 interface DayProps {
@@ -67,6 +70,7 @@ const Day = styled.a<DayProps>`
     flex-direction: column;
     padding: ${scale(66)}svh;
     text-align: center;
+    align-items: center;
     justify-content: center;
     color: ${({ $isChapter, $background }) =>
         $isChapter ? 'black' : $background};
@@ -88,6 +92,21 @@ const Day = styled.a<DayProps>`
     }
 `;
 
+const Header = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    inset: 0;
+    background: black;
+    padding: ${scale(100)}svh;
+    border-bottom: ${scale(5)}svh solid #333;
+`;
+
+const CalendarContainer = styled.div`
+    padding: ${scale(100)}svh;
+`;
+
 interface MonthComponentProps {
     month: Date;
     currentDate: Date;
@@ -105,8 +124,11 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         const startDay = monthStart.getDay();
         const lastDay = startDay === 0 ? 6 : startDay - 1;
 
+        const monthNumber = month.getMonth();
+        const year = month.getFullYear();
+
         const monthColor = interpolateColor(
-            (month.getMonth() + 1) % 12,
+            (monthNumber + 1) % 12,
             [0, 11],
             MONTHS_GRADIENT
         ).toString(16);
@@ -149,10 +171,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         return (
             <Month className='month' $color={`#${monthColor}`}>
                 <h3>
-                    {month.toLocaleString('default', {
-                        month: 'long',
-                        year: 'numeric',
-                    })}
+                    {MONTHS[monthNumber]} {year}
                 </h3>
                 <CalendarGrid className='calendarGrid'>
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
@@ -169,27 +188,14 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     }
 );
 
-const Box = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+const CloseButton = styled.span`
+    inset: 0;
+    cursor: pointer;
+    font-size: 1.5em;
+    top: ${scale(100)}svh;
+    right: ${scale(100)}svh;
+    float: right;
 `;
-
-const CloseButton: React.FC = () => {
-    const { setCalendarOpen } = useSettings();
-
-    return (
-        <span
-            onClick={() => setCalendarOpen(false)}
-            style={{
-                cursor: 'pointer',
-                fontSize: '1.5em',
-            }}
-        >
-            &times;
-        </span>
-    );
-};
 
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen } = useSettings();
@@ -253,19 +259,23 @@ export const CalendarModal: React.FC = () => {
                 onClick={() => setCalendarOpen(false)}
             />
             <ModalContainer className='calendarModal'>
-                <Box>
+                <Header>
                     <Title className='title'>Chapter Calendar</Title>
-                    <CloseButton />
-                </Box>
-                {months.map((month, monthIdx) => (
-                    <MonthComponent
-                        key={`month-${monthIdx}`}
-                        month={month}
-                        currentDate={currentDate}
-                        chapterDateMap={chapterDateMap}
-                        onDayClick={handleDayClick}
-                    />
-                ))}
+                    <CloseButton onClick={() => setCalendarOpen(false)}>
+                        &times;
+                    </CloseButton>
+                </Header>
+                <CalendarContainer>
+                    {months.map((month, monthIdx) => (
+                        <MonthComponent
+                            key={`month-${monthIdx}`}
+                            month={month}
+                            currentDate={currentDate}
+                            chapterDateMap={chapterDateMap}
+                            onDayClick={handleDayClick}
+                        />
+                    ))}
+                </CalendarContainer>
             </ModalContainer>
         </>,
         document.querySelector('#calendarModal')!
