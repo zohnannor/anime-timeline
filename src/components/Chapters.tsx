@@ -2,11 +2,12 @@ import styled, { css } from 'styled-components';
 
 import {
     CHAPTER_HEIGHT,
-    CHAPTER_PICTURES,
+    CHAPTER_NAMES,
+    CHAPTER_PICTURES_FLAT,
     scale,
     SMALL_FONT_SIZE,
 } from '../constants';
-import { getChapterNumber, getChapterWidth } from '../helpers';
+import { getChapterWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { TimelineContainer } from './Container';
@@ -14,6 +15,7 @@ import { withCrossLines } from './CrossLines';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
+import { Tooltip } from './Tooltip';
 
 interface ChapterProps {
     $width: number;
@@ -99,59 +101,64 @@ const ChapterTitle = withShadow(
 );
 
 interface PreviewProps {
-    $hovered: boolean;
-    $chapterNumber: number;
+    $firstChapter: boolean;
+    $hasPicture: boolean;
 }
 
 const Preview = styled.div<PreviewProps>`
-    position: absolute;
-    width: ${scale(120)}svh;
-    height: ${scale(100)}svh;
     display: flex;
+    height: ${({ $hasPicture }) => scale($hasPicture ? 600 : 250)}svh;
+    width: ${scale(600)}svh;
+    padding: ${scale(30)}svh;
+    gap: ${scale(20)}svh;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: 0.25s ease-in-out;
-    transform: ${({ $chapterNumber }) =>
-            $chapterNumber === 1 ? `translateX(${scale(220)}svh)` : ''}
-        translateY(${scale(11)}svh) scale(0);
-    font-size: ${scale(12)}svh;
-    color: black;
-    background: white;
+    text-align: center;
+    font-size: ${scale(50)}svh;
     box-shadow: 0 0 ${scale(15)}svh ${scale(6)}svh rgba(0, 0, 0, 0.4);
-    z-index: 10;
+    background: white;
+    color: black;
+    border-radius: ${scale(40)}svh;
+
+    ${({ $firstChapter }) =>
+        $firstChapter &&
+        css`
+            transform: translateX(${scale(200)}svh);
+        `}
 
     & > img {
         object-fit: contain;
-        height: 80%;
+        max-height: 75%;
+        max-width: 75%;
     }
-
-    ${({ $hovered, $chapterNumber }) =>
-        $hovered &&
-        css`
-            transform: ${$chapterNumber === 1
-                    ? `translateX(${scale(220)}svh)`
-                    : ''}
-                translateY(-${scale(350)}svh) scale(5);
-        `}
 `;
-interface ChaptersProps {
-    volume: number;
-}
 
-export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
+export const Chapters: React.FC = () => {
     const [hoveredChapter, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, showTitles } = useSettings();
+    const { unboundedChapterWidth, showTitles, showCrosslines } = useSettings();
 
     return (
         <TimelineContainer>
-            {(CHAPTER_PICTURES[volume - 1] ?? []).map((picture, idx) => {
-                const chapterNumber = getChapterNumber(volume, idx);
+            {CHAPTER_PICTURES_FLAT.map((picture, idx) => {
+                const chapterNumber = idx + 1;
                 const chapterWidth = getChapterWidth(
                     chapterNumber,
                     unboundedChapterWidth
                 );
                 const link = `https://chainsaw-man.fandom.com/wiki/Chapter_${chapterNumber}`;
+                const chapterName = CHAPTER_NAMES[chapterNumber - 1];
+
+                const chapterPreview = (
+                    <Preview
+                        className='preview'
+                        $firstChapter={idx === 0}
+                        $hasPicture={!!picture}
+                    >
+                        {picture && <ThumbnailImage src={picture} />}
+                        {chapterName}
+                    </Preview>
+                );
 
                 return (
                     <Chapter
@@ -159,35 +166,33 @@ export const Chapters: React.FC<ChaptersProps> = ({ volume: volume }) => {
                         className='chapter'
                         $width={chapterWidth}
                         key={picture || chapterNumber}
-                        $crossLinesVisible={hoveredChapter === chapterNumber}
-                        {...hoverHandlers(chapterNumber)}
+                        $crossLinesVisible={hoveredChapter(chapterNumber)}
                         tabIndex={-1}
+                        {...hoverHandlers(chapterNumber)}
                     >
-                        {picture && (
-                            <Preview
-                                className='preview'
-                                $hovered={hoveredChapter === chapterNumber}
-                                $chapterNumber={chapterNumber}
-                            >
-                                <ThumbnailImage src={picture} />
-                                Chapter {chapterNumber}
-                            </Preview>
-                        )}
-                        <ChapterCover className='chapterCover'>
-                            <Link href={link}>
-                                {picture ? (
-                                    <ThumbnailImage src={picture} />
-                                ) : (
-                                    chapterNumber
-                                )}
-                            </Link>
-                        </ChapterCover>
+                        <Tooltip
+                            placement='top'
+                            animation='grow'
+                            content={chapterPreview}
+                            visible={
+                                !showCrosslines && hoveredChapter(chapterNumber)
+                            }
+                        >
+                            <ChapterCover className='chapterCover'>
+                                <Link href={link}>
+                                    {picture ? (
+                                        <ThumbnailImage src={picture} />
+                                    ) : (
+                                        chapterNumber
+                                    )}
+                                </Link>
+                            </ChapterCover>
+                        </Tooltip>
                         {
                             <ChapterTitle
                                 className='chapterTitle'
                                 $visible={
-                                    showTitles ||
-                                    hoveredChapter === chapterNumber
+                                    showTitles || hoveredChapter(chapterNumber)
                                 }
                             >
                                 {chapterNumber}

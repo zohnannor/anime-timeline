@@ -11,14 +11,21 @@ import React, {
 interface Settings {
     showCrosslines: boolean;
     infoBoxOpen: boolean;
-    openInfoBox: (open: boolean) => void;
+    openInfoBox: React.Dispatch<React.SetStateAction<boolean>>;
     unboundedChapterWidth: boolean;
     setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
     calendarOpen: boolean;
-    openCalendar: (open: boolean) => void;
+    openCalendar: React.Dispatch<React.SetStateAction<boolean>>;
     showTitles: boolean;
     setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+// ☝🤓
+export type FunctionSettings = {
+    [Key in keyof Settings as Settings[Key] extends Function
+        ? Key
+        : never]: Settings[Key];
+};
 
 const SettingsContext = createContext<Settings>({
     showCrosslines: false,
@@ -58,7 +65,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setShowTitlesRaw(show);
     };
 
-    const openInfoBox = (open: boolean) => {
+    const openInfoBox = (open: React.SetStateAction<boolean>) => {
         if (open) {
             window.history.pushState({ infoBoxOpen: true }, '');
         } else {
@@ -69,7 +76,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setInfoBoxOpen(open);
     };
 
-    const openCalendar = (open: boolean) => {
+    const openCalendar = (open: React.SetStateAction<boolean>) => {
         if (open) {
             window.history.pushState({ calendarOpen: true }, '');
         } else {

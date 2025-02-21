@@ -96,6 +96,7 @@ const SeasonTitle = withShadow(
             $visible &&
             css`
                 opacity: 1;
+                background-color: rgba(0, 0, 0, 0.2);
                 text-shadow: -1px -1px 0 black, 1px -1px 0 black,
                     -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
                     0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
@@ -129,7 +130,7 @@ export const Seasons: React.FC = () => {
                         className='season'
                         $width={seasonWidth}
                         key={cover || seasonNumber}
-                        $crossLinesVisible={hoveredSeason === seasonNumber}
+                        $crossLinesVisible={hoveredSeason(seasonNumber)}
                         {...hoverHandlers(seasonNumber)}
                     >
                         <SeasonCover
@@ -153,7 +154,7 @@ export const Seasons: React.FC = () => {
                             <SeasonTitle
                                 className='seasonTitle'
                                 $visible={
-                                    showTitles || hoveredSeason === seasonNumber
+                                    showTitles || hoveredSeason(seasonNumber)
                                 }
                             >
                                 {SEASON_TITLES[seasonNumber - 1]}
