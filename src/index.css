@@ -4,6 +4,16 @@
         sans-serif;
 }
 
+::-webkit-scrollbar {
+    width: 15px;
+    height: 100%;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+}
+
 a {
     text-decoration: none;
     color: inherit;

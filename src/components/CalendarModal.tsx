@@ -64,13 +64,18 @@ interface DayProps {
 }
 
 const Day = styled.a<DayProps>`
+    display: flex;
+    flex-direction: column;
     padding: ${scale(66)}svh;
     text-align: center;
+    justify-content: center;
     color: ${({ $isChapter, $background }) =>
         $isChapter ? 'black' : $background};
     background-color: ${({ $isChapter, $background }) =>
         $isChapter ? $background : 'black'};
     cursor: ${({ $isChapter }) => ($isChapter ? 'pointer' : 'default')};
+    width: ${scale(200)}svh;
+    height: ${scale(200)}svh;
 
     ${({ $isToday, $background }) =>
         $isToday &&
@@ -130,7 +135,8 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     onClick={e => onDayClick(e, chapterNumber)}
                     id={`day-${chapterNumber}`}
                 >
-                    {day}
+                    <span>{day}</span>
+                    {chapterNumber && <span>#{chapterNumber}</span>}
                 </Day>
             );
         }
