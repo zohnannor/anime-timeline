@@ -73,7 +73,7 @@ const EpisodeTitle = withShadow(
         align-items: center;
         justify-content: center;
         text-align: center;
-        font-size: ${scale(55)}svh;
+        font-size: ${scale(42)}svh;
         color: white;
         background: transparent;
         pointer-events: none;

@@ -11,7 +11,9 @@ export const ToggleTitlesButton: React.FC = () => {
             title='Toggle always show titles'
             style={{
                 cursor: 'pointer',
-                boxShadow: showTitles ? 'white 0px 0px 11px' : undefined,
+                filter: showTitles
+                    ? 'drop-shadow(0px 0px 3px white) drop-shadow(0px 0px 4px white)'
+                    : undefined,
             }}
         />
     );

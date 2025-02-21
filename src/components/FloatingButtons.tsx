@@ -6,7 +6,10 @@ import { scale } from '../constants';
 const ButtonSection = styled.div`
     display: flex;
     position: fixed;
+    background: rgba(0, 0, 0, 0.25);
     flex-direction: column;
+    padding: ${scale(25)}svh;
+    border-radius: ${scale(40)}svh;
     gap: ${scale(40)}svh;
     top: ${scale(63)}svh;
     right: ${scale(63)}svh;
