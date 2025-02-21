@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
 import { scale } from '../constants';
-import { FunctionSettings, useSettings } from '../providers/SettingsProvider';
+import {
+    SETTINGS_FUNCTIONS,
+    SettingsValues,
+    useSettings,
+} from '../providers/SettingsProvider';
 import { ThumbnailImage } from './ThumbnailImage';
 import { Tooltip } from './Tooltip';
 
@@ -50,7 +54,7 @@ export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => {
 interface ButtonProps {
     filename: string;
     title: string;
-    option: keyof FunctionSettings;
+    option: keyof SettingsValues;
     cursor?: CSS.Property.Cursor;
 }
 
@@ -61,7 +65,12 @@ export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
     cursor = 'pointer',
 }) => {
     const settings = useSettings();
-    const selectedOption = settings[option];
+    const value = settings[option];
+    const setter = settings[SETTINGS_FUNCTIONS[option]];
+
+    const filter = value
+        ? 'drop-shadow(0 0 3px white) drop-shadow(0 0 5px white)'
+        : undefined;
 
     return (
         <Tooltip
@@ -74,9 +83,9 @@ export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
         >
             <ThumbnailImage
                 src={filename}
-                onClick={() => selectedOption(p => !p)}
+                onClick={() => setter(p => !p)}
                 title={title}
-                style={{ cursor }}
+                style={{ cursor, filter }}
             />
         </Tooltip>
     );

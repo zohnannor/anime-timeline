@@ -8,33 +8,55 @@ import React, {
     useState,
 } from 'react';
 
-interface Settings {
+export interface Settings {
     showCrosslines: boolean;
     infoBoxOpen: boolean;
-    openInfoBox: React.Dispatch<React.SetStateAction<boolean>>;
+    setInfoBoxOpen: React.Dispatch<React.SetStateAction<boolean>>;
     unboundedChapterWidth: boolean;
     setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
     calendarOpen: boolean;
-    openCalendar: React.Dispatch<React.SetStateAction<boolean>>;
+    setCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     showTitles: boolean;
     setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // ☝🤓
-export type FunctionSettings = {
-    [Key in keyof Settings as Settings[Key] extends Function
-        ? Key
+
+type Setter<T extends string> = T extends `${infer First}${infer Rest}`
+    ? `set${Uppercase<First>}${Rest}`
+    : never;
+
+export type SettingsValues = {
+    [Key in keyof Settings as Settings[Key] extends boolean
+        ? Setter<Key> extends keyof Settings
+            ? Key
+            : never
         : never]: Settings[Key];
+};
+
+type SettingsValuesSetters = {
+    [Key in keyof Settings as Settings[Key] extends boolean
+        ? Setter<Key> extends keyof Settings
+            ? Key
+            : never
+        : never]: Setter<Key>;
+};
+
+export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
+    infoBoxOpen: 'setInfoBoxOpen',
+    unboundedChapterWidth: 'setUnboundedChapterWidth',
+    calendarOpen: 'setCalendarOpen',
+    showTitles: 'setShowTitles',
 };
 
 const SettingsContext = createContext<Settings>({
     showCrosslines: false,
     infoBoxOpen: false,
-    openInfoBox: () => {},
+    setInfoBoxOpen: () => {},
     unboundedChapterWidth: false,
     setUnboundedChapterWidth: () => {},
     calendarOpen: false,
-    openCalendar: () => {},
+    setCalendarOpen: () => {},
     showTitles: true,
     setShowTitles: () => {},
 });
@@ -117,11 +139,11 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
             value={{
                 showCrosslines,
                 infoBoxOpen,
-                openInfoBox,
+                setInfoBoxOpen: openInfoBox,
                 unboundedChapterWidth,
                 setUnboundedChapterWidth,
                 calendarOpen,
-                openCalendar,
+                setCalendarOpen: openCalendar,
                 showTitles,
                 setShowTitles,
             }}

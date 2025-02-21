@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Arcs } from './components/Arcs';
 import { CalendarModal } from './components/CalendarModal';
+import { Chapters } from './components/Chapters';
 import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
 import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
@@ -11,29 +12,28 @@ import { Timeline } from './components/Timeline';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { Volumes } from './components/Volumes';
 import useWindowSize from './hooks/useWindowSize';
-import { FunctionSettings, useSettings } from './providers/SettingsProvider';
-import { Chapters } from './components/Chapters';
+import { SettingsValues, useSettings } from './providers/SettingsProvider';
 
 const BUTTONS: {
     filename: string;
     title: string;
-    option: keyof FunctionSettings;
+    option: keyof SettingsValues;
 }[] = [
-    { filename: 'pochita2', title: 'Read info', option: 'openInfoBox' },
+    { filename: 'pochita2', title: 'Read info', option: 'infoBoxOpen' },
     {
         filename: 'pochita3',
         title: 'Toggle unbounded chapter width',
-        option: 'setUnboundedChapterWidth',
+        option: 'unboundedChapterWidth',
     },
     {
         filename: 'pochita4',
         title: 'Open chapter calendar',
-        option: 'openCalendar',
+        option: 'calendarOpen',
     },
     {
         filename: 'pochita5',
         title: 'Toggle always show titles',
-        option: 'setShowTitles',
+        option: 'showTitles',
     },
 ];
 

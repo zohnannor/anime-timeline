@@ -176,11 +176,11 @@ const Box = styled.div`
 `;
 
 const CloseButton: React.FC = () => {
-    const { openCalendar } = useSettings();
+    const { setCalendarOpen } = useSettings();
 
     return (
         <span
-            onClick={() => openCalendar(false)}
+            onClick={() => setCalendarOpen(false)}
             style={{
                 cursor: 'pointer',
                 fontSize: '1.5em',
@@ -192,7 +192,7 @@ const CloseButton: React.FC = () => {
 };
 
 export const CalendarModal: React.FC = () => {
-    const { calendarOpen, openCalendar } = useSettings();
+    const { calendarOpen, setCalendarOpen } = useSettings();
 
     const currentDate = new Date();
     const startDate = CHAPTER_DATES[0];
@@ -229,7 +229,7 @@ export const CalendarModal: React.FC = () => {
             e.preventDefault();
             if (!chapterNumber) return;
 
-            openCalendar(false);
+            setCalendarOpen(false);
 
             const element = document.querySelector(`#chapter-${chapterNumber}`);
             if (element) {
@@ -241,7 +241,7 @@ export const CalendarModal: React.FC = () => {
                 (element as HTMLElement).focus({ preventScroll: false });
             }
         },
-        [openCalendar]
+        [setCalendarOpen]
     );
 
     if (!calendarOpen) return null;
@@ -250,7 +250,7 @@ export const CalendarModal: React.FC = () => {
         <>
             <ShadowOverlay
                 className='shadow'
-                onClick={() => openCalendar(false)}
+                onClick={() => setCalendarOpen(false)}
             />
             <ModalContainer className='calendarModal'>
                 <Box>

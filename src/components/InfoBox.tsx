@@ -103,14 +103,15 @@ const KeyboardShortcut: React.FC<Keys> = ({ keys }) => (
 const SpoilerWarning = styled.div`
     text-align: center;
     color: red;
+    line-height: 1;
 `;
 
 const CloseButton: React.FC = () => {
-    const { openInfoBox } = useSettings();
+    const { setInfoBoxOpen } = useSettings();
 
     return (
         <span
-            onClick={() => openInfoBox(false)}
+            onClick={() => setInfoBoxOpen(false)}
             style={{
                 cursor: 'pointer',
                 fontSize: '1.5em',
@@ -198,7 +199,7 @@ export const InfoBoxContent = (
                     your browser might use cached version of the page. On
                     desktop browsers, you can press
                     <KeyboardShortcut keys={['Ctrl', 'R']} />
-                    to refresh.
+                    to refresh
                 </li>
             </ListContainer>
         </Box>
@@ -228,7 +229,7 @@ export const InfoBoxContent = (
 );
 
 export const InfoBox: React.FC = () => {
-    const { infoBoxOpen, openInfoBox } = useSettings();
+    const { infoBoxOpen, setInfoBoxOpen } = useSettings();
 
     if (!infoBoxOpen) return null;
 
@@ -236,7 +237,7 @@ export const InfoBox: React.FC = () => {
         <>
             <ShadowOverlay
                 className='shadowOverlay'
-                onClick={() => openInfoBox(false)}
+                onClick={() => setInfoBoxOpen(false)}
             />
             <InfoBoxRoot className='infoBoxRoot'>{InfoBoxContent}</InfoBoxRoot>
         </>,

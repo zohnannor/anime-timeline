@@ -78,7 +78,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, openCalendar } = useSettings();
+    const { unboundedChapterWidth, setCalendarOpen } = useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -86,10 +86,10 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             e.preventDefault();
             if (!chapterNumber) return;
 
-            openCalendar(true);
+            setCalendarOpen(true);
             lastClickedChapter.current = chapterNumber;
         },
-        [openCalendar]
+        [setCalendarOpen]
     );
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
         }
 
         lastClickedChapter.current = null;
-    }, [openCalendar]);
+    }, [setCalendarOpen]);
 
     return (
         <TimelineWrapper className={variant}>
