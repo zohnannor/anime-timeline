@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
-import { useHover } from '../hooks/useHover';
+
 import { scale } from '../constants';
+import { useHover } from '../hooks/useHover';
 
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 type TooltipAnimation = 'fade' | 'grow';
@@ -72,12 +73,6 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
               `
             : css`
                   transform: scale(${$visible ? 1 : 0});
-                  /* ${['top', 'bottom'].includes($placement)
-                      ? 'translateY(-10px)'
-                      : ''}
-                      ${['left', 'right'].includes($placement)
-                      ? 'translateX(-10px)'
-                      : ''} */
                   transform-origin: ${OPPOSITE[$placement]};
                   transition: all 0.2s ease-in-out;
               `}

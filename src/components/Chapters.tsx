@@ -30,7 +30,7 @@ const Chapter = withCrossLines(
 
         &:focus {
             outline: ${scale(20)}svh solid red;
-            z-index: 1;
+            z-index: 10; // TODO: fix focus layering
         }
     `
 );
@@ -167,8 +167,8 @@ export const Chapters: React.FC = () => {
                         $width={chapterWidth}
                         key={picture || chapterNumber}
                         $crossLinesVisible={hoveredChapter(chapterNumber)}
-                        tabIndex={-1}
                         {...hoverHandlers(chapterNumber)}
+                        tabIndex={-1}
                     >
                         <Tooltip
                             placement='top'

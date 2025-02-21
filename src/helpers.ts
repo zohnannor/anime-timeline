@@ -8,7 +8,7 @@ import {
 } from './constants';
 import { map, range, sum } from './util';
 
-export const getChapterNumber = (volume: number, volumeChapter: number) =>
+const getChapterNumber = (volume: number, volumeChapter: number) =>
     sum(CHAPTERS_PER_VOLUME.slice(0, volume - 1)) + volumeChapter + 1;
 
 export const getVolumeWidth = (
