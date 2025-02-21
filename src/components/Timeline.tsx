@@ -13,6 +13,7 @@ import {
     DAYS_GRADIENT,
     getChapterWidth,
     interpolateColor,
+    MONTHS,
     MONTHS_GRADIENT,
 } from '../helpers';
 import { useHover } from '../hooks/useHover';
@@ -163,11 +164,11 @@ export const Timeline: React.FC = () => {
     }));
 
     const monthsSegments = CHAPTER_DATES_BY_MONTH.map(dates => {
-        const monthDate = dates[0]![1];
+        const month = dates[0]![1].getMonth();
         return {
             chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
-            colorValue: (monthDate.getMonth() + 1) % 12,
-            label: monthDate.toLocaleString('default', { month: 'long' }),
+            colorValue: (month + 1) % 12,
+            label: MONTHS[month]!,
         };
     });
 
