@@ -1,17 +1,28 @@
 import { useState } from 'react';
 
-export function useHover(): [number, (item: number) => any] {
-    const [hoveredItem, setHoveredItem] = useState(0);
+type Comparator = (item?: number) => boolean;
 
-    const handlers = (item: number) => ({
+type Handlers = (item?: number) => {
+    onMouseOver: (e: React.MouseEvent) => void;
+    onMouseOut: () => void;
+};
+
+type UseHover = [Comparator, Handlers];
+
+export function useHover(): UseHover {
+    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+
+    const hovered = (item?: number) => hoveredItem === (item ?? 1);
+
+    const handlers = (item?: number) => ({
         onMouseOver: (e: React.MouseEvent) => {
-            setHoveredItem(item);
+            setHoveredItem(item ?? 1);
             e.stopPropagation();
         },
         onMouseOut: () => {
-            setHoveredItem(0);
+            setHoveredItem(null);
         },
     });
 
-    return [hoveredItem, handlers];
+    return [hovered, handlers];
 }

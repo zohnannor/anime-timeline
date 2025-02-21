@@ -82,6 +82,7 @@ const EpisodeTitle = withShadow(
             $visible &&
             css`
                 opacity: 1;
+                background-color: rgba(0, 0, 0, 0.2);
                 text-shadow: -1px -1px 0 black, 1px -1px 0 black,
                     -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
                     0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
@@ -120,7 +121,7 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) => {
                             className='episode'
                             $width={episodeWidth}
                             key={thumbnail}
-                            $crossLinesVisible={hoveredEpisode === idx + 1}
+                            $crossLinesVisible={hoveredEpisode(idx + 1)}
                             {...handlers(idx + 1)}
                         >
                             <EpisodeCover className='episodeCover'>
@@ -136,7 +137,7 @@ export const Episodes: React.FC<EpisodesProps> = ({ season }) => {
                                 <EpisodeTitle
                                     className='episodeTitle'
                                     $visible={
-                                        showTitles || hoveredEpisode === idx + 1
+                                        showTitles || hoveredEpisode(idx + 1)
                                     }
                                 >
                                     {EPISODE_TITLES[idx]}

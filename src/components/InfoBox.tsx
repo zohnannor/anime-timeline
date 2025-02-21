@@ -6,7 +6,6 @@ import { CSS } from 'styled-components/dist/types';
 import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
 import { Link } from './Link';
-import { ThumbnailImage } from './ThumbnailImage';
 
 const InfoBoxRoot = styled.div`
     position: fixed;
@@ -100,19 +99,6 @@ const KeyboardShortcut: React.FC<Keys> = ({ keys }) => (
         ))}
     </kbd>
 );
-
-export const InfoBoxButton: React.FC = () => {
-    const { openInfoBox } = useSettings();
-
-    return (
-        <ThumbnailImage
-            src='pochita2'
-            onClick={() => openInfoBox(true)}
-            title='Read info'
-            style={{ cursor: 'help' }}
-        />
-    );
-};
 
 const SpoilerWarning = styled.div`
     text-align: center;

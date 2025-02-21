@@ -10,7 +10,6 @@ import {
 import { getVolumeWidth } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
-import { Chapters } from './Chapters';
 import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { Link } from './Link';
@@ -89,6 +88,7 @@ const VolumeTitle = withShadow(
             $visible &&
             css`
                 opacity: 1;
+                background-color: rgba(0, 0, 0, 0.2);
                 text-shadow: -1px -1px 0 black, 1px -1px 0 black,
                     -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
                     0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
@@ -96,7 +96,7 @@ const VolumeTitle = withShadow(
                 backdrop-filter: blur(${scale(10)}svh);
             `}
 
-        transition: all 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
     `
 );
 
@@ -119,10 +119,9 @@ export const Volumes: React.FC = () => {
                         className='volume'
                         $width={volumeWidth}
                         key={cover || volumeNumber}
-                        $crossLinesVisible={hoveredVolume === volumeNumber}
+                        $crossLinesVisible={hoveredVolume(volumeNumber)}
                         {...hoverHandlers(volumeNumber)}
                     >
-                        <Chapters volume={volumeNumber} />
                         <VolumeCover
                             className='volumeCover'
                             $invertBorder={!cover}
@@ -139,7 +138,7 @@ export const Volumes: React.FC = () => {
                             <VolumeTitle
                                 className='volumeTitle'
                                 $visible={
-                                    showTitles || hoveredVolume === volumeNumber
+                                    showTitles || hoveredVolume(volumeNumber)
                                 }
                             >
                                 {VOLUME_TITLES[volumeNumber - 1]}

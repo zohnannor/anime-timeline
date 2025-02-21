@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components';
 import { CHAPTER_DATES, scale } from '../constants';
 import { DAYS_GRADIENT, interpolateColor, MONTHS_GRADIENT } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { ThumbnailImage } from './ThumbnailImage';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -82,6 +81,11 @@ const Day = styled.a<DayProps>`
         css`
             border: ${scale(10)}svh solid ${$background};
         `}
+
+    &:focus {
+        outline: ${scale(20)}svh solid red;
+        z-index: 1;
+    }
 `;
 
 interface MonthComponentProps {
@@ -127,13 +131,14 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
 
             days.push(
                 <Day
-                    className='day'
+                    id={`day-${chapterNumber}`}
                     key={`day-${month.getTime()}-${day}`}
+                    className='day'
                     $isChapter={isChapter}
                     $isToday={isToday}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
                     onClick={e => onDayClick(e, chapterNumber)}
-                    id={`day-${chapterNumber}`}
+                    tabIndex={-1}
                 >
                     <span>{day}</span>
                     {chapterNumber && <span>#{chapterNumber}</span>}
@@ -264,18 +269,5 @@ export const CalendarModal: React.FC = () => {
             </ModalContainer>
         </>,
         document.querySelector('#calendarModal')!
-    );
-};
-
-export const CalendarModalButton: React.FC = () => {
-    const { openCalendar } = useSettings();
-
-    return (
-        <ThumbnailImage
-            src='pochita4'
-            onClick={() => openCalendar(true)}
-            title='Open chapter calendar'
-            style={{ cursor: 'pointer' }}
-        />
     );
 };

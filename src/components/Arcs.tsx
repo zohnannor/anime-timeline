@@ -87,6 +87,7 @@ const ArcTitle = withShadow(
             $visible &&
             css`
                 opacity: 1;
+                background-color: rgba(0, 0, 0, 0.2);
                 text-shadow: -1px -1px 0 black, 1px -1px 0 black,
                     -1px 1px 0 black, 1px 1px 0 black, 0 0 ${scale(10)}svh black,
                     0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
@@ -114,7 +115,7 @@ export const Arcs: React.FC = () => {
                         className='arc'
                         $width={arcWidth}
                         key={panel || idx}
-                        $crossLinesVisible={hoveredArc === idx + 1}
+                        $crossLinesVisible={hoveredArc(idx + 1)}
                         {...hoverHandlers(idx + 1)}
                     >
                         <ArcCover className='arcCover' $invertBorder={!panel}>
@@ -133,7 +134,7 @@ export const Arcs: React.FC = () => {
                         {panel && (
                             <ArcTitle
                                 className='arcTitle'
-                                $visible={showTitles || hoveredArc === idx + 1}
+                                $visible={showTitles || hoveredArc(idx + 1)}
                             >
                                 {arcName} arc
                             </ArcTitle>

@@ -288,6 +288,10 @@ export const CHAPTER_PICTURES = [
     ],
 ] as const;
 
+export const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
+    typeof CHAPTER_PICTURES
+>;
+
 export const CHAPTERS_PER_ARC: [number, number][] = [
     [1, 4],
     [5, 13],
