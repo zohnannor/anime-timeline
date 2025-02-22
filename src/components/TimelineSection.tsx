@@ -69,7 +69,7 @@ export const SectionItemCover = withShadow(
         & > a {
             position: absolute;
             writing-mode: ${({ $sidewaysText }) =>
-                $sidewaysText ? 'sideways-lr' : 'auto'};
+                $sidewaysText ? 'sideways-lr' : 'unset'};
             display: flex;
             align-items: center;
             justify-content: center;
@@ -84,6 +84,8 @@ export const SectionItemCover = withShadow(
             width: ${({ $fit }) => ($fit === 'cover' ? '100%' : 'auto')};
             transition: 0.1s ease-in-out;
             pointer-events: none;
+
+            will-change: transform, filter;
         }
 
         &:hover > a > img {
@@ -103,8 +105,34 @@ export const SectionItemCover = withShadow(
                 css`
                     opacity: 1;
                     background-color: rgba(0, 0, 0, 0.2);
-                    backdrop-filter: blur(${scale(10)}svh);
                 `}
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            & > a > img {
+                ${({ $titleVisible }) =>
+                    $titleVisible &&
+                    css`
+                        filter: blur(${scale(10)}svh);
+                    `}
+            }
+        }
+
+        @media not ((hover: hover) and (pointer: fine)) {
+            &::after {
+                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
+                    -1px 1px 0 black, 1px 1px 0 black;
+            }
+
+            & > a > img {
+                ${({ $titleVisible }) =>
+                    $titleVisible &&
+                    css`
+                        filter: blur(${scale(5)}svh);
+                    `}
+                transform: none !important;
+                transition: none !important;
+            }
         }
 
         &::after {

@@ -75,7 +75,7 @@ const App: React.FC = () => {
                     ))}
                 </FloatingButtons>
                 {TIMELINE_INFO.map(item => (
-                    <TimelineSection {...item} />
+                    <TimelineSection key={item.type} {...item} />
                 ))}
                 {width > 768 && <Scroller />}
             </AppContainer>
