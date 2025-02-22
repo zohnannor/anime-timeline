@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components';
 import { CHAPTER_DATES, scale } from '../constants';
 import {
     DAYS_GRADIENT,
+    hueGlow,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
@@ -87,8 +88,9 @@ const Day = styled.a<DayProps>`
         `}
 
     &:focus {
-        outline: ${scale(20)}svh solid red;
         z-index: 1;
+        outline: ${scale(20)}svh solid red;
+        animation: ${hueGlow} 2s linear infinite;
     }
 `;
 
@@ -160,7 +162,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     $isToday={isToday}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
                     onClick={e => onDayClick(e, chapterNumber)}
-                    tabIndex={-1}
+                    tabIndex={isChapter ? -1 : undefined}
                 >
                     <span>{day}</span>
                     {chapterNumber && <span>#{chapterNumber}</span>}

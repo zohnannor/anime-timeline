@@ -28,3 +28,5 @@ export type Sub<A extends number, B extends number> = Enumerate<A> extends [
         ? Rest['length']
         : never
     : never;
+
+export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;

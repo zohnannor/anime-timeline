@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { isMobileDevice } from '../util';
 
 type Comparator = (item?: number) => boolean;
 
@@ -14,14 +15,21 @@ export function useHover(): UseHover {
 
     const hovered = (item?: number) => hoveredItem === (item ?? 1);
 
+    if (isMobileDevice())
+        return [
+            () => false,
+            () => ({
+                onMouseOver: () => {},
+                onMouseOut: () => {},
+            }),
+        ];
+
     const handlers = (item?: number) => ({
         onMouseOver: (e: React.MouseEvent) => {
             setHoveredItem(item ?? 1);
             e.stopPropagation();
         },
-        onMouseOut: () => {
-            setHoveredItem(null);
-        },
+        onMouseOut: () => setHoveredItem(null),
     });
 
     return [hovered, handlers];

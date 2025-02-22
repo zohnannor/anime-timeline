@@ -1,3 +1,5 @@
+import { keyframes } from 'styled-components';
+
 import {
     CHAPTERS_PER_ARC,
     CHAPTERS_PER_SEASON,
@@ -163,3 +165,12 @@ export const MONTHS = [
     'November',
     'December',
 ] as const;
+
+export const hueGlow = keyframes`
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+`;
