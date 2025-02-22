@@ -1,16 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { Arcs } from './components/Arcs';
 import { CalendarModal } from './components/CalendarModal';
-import { Chapters } from './components/Chapters';
 import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
 import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
-import { Seasons } from './components/Seasons';
-import { Timeline } from './components/Timeline';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
-import { Volumes } from './components/Volumes';
+import { TimelineSection } from './components/TimelineSection';
+import { TIMELINE_INFO } from './constants';
 import useWindowSize from './hooks/useWindowSize';
 import { SettingsValues, useSettings } from './providers/SettingsProvider';
 
@@ -77,11 +74,9 @@ const App: React.FC = () => {
                         />
                     ))}
                 </FloatingButtons>
-                <Seasons />
-                <Arcs />
-                <Timeline />
-                <Chapters />
-                <Volumes />
+                {TIMELINE_INFO.map(item => (
+                    <TimelineSection {...item} />
+                ))}
                 {width > 768 && <Scroller />}
             </AppContainer>
         </>

@@ -9,7 +9,7 @@ export type Flatten<T, Acc extends unknown[] = []> = T extends readonly [
 
 export type Enumerate<
     N extends number,
-    Acc extends number[] = []
+    Acc extends readonly number[] = []
 > = Acc['length'] extends N ? Acc : Enumerate<N, [...Acc, number]>;
 
 export type Map<

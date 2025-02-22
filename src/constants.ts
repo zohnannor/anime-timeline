@@ -1,3 +1,10 @@
+import {
+    getArcWidth,
+    getChapterWidth,
+    getEpisodeWidth,
+    getSeasonWidth,
+    getVolumeWidth,
+} from './helpers';
 import { Flatten, Length } from './types';
 import { map, pad, range, sum } from './util';
 
@@ -20,9 +27,12 @@ export const scale = (n: number) => n / COEFFICIENT;
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
 
+export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
 const CHAPTERS_TOTAL = 193;
+const EPISODES_TOTAL = 12;
+const ARCS_TOTAL = 14;
 const VOLUMES_TOTAL = 20; // last = unreleased
 
 export const PAGES_PER_CHAPTER_PER_VOLUME = [
@@ -70,18 +80,18 @@ const _ASSERT_LEGNTHS: [
     VOLUMES_TOTAL,
     CHAPTERS_TOTAL,
     CHAPTERS_TOTAL,
-    14,
-    14,
+    ARCS_TOTAL,
+    ARCS_TOTAL,
     VOLUMES_TOTAL,
     4,
-    12,
-    12,
+    EPISODES_TOTAL,
+    EPISODES_TOTAL,
     CHAPTERS_TOTAL,
     CHAPTERS_TOTAL,
     13,
-    12,
+    EPISODES_TOTAL,
     2,
-    12,
+    EPISODES_TOTAL,
     2,
     VOLUMES_TOTAL,
 ] as const;
@@ -905,3 +915,118 @@ export const VOLUME_TITLES = [
     'Everyday Scenery',
     'Two Children',
 ] as const;
+
+type Covers = {
+    season: typeof SEASON_COVERS;
+    episode: typeof EPISODE_THUMBNAILS;
+    arc: typeof ARC_IMAGES;
+    chapter: typeof CHAPTER_PICTURES_FLAT;
+    volume: typeof VOLUME_COVERS;
+};
+
+type Titles = {
+    season: typeof SEASON_TITLES;
+    episode: typeof EPISODE_TITLES;
+    arc: typeof ARC_NAMES;
+    chapter: typeof CHAPTER_NAMES;
+    volume: typeof VOLUME_TITLES;
+};
+
+type Offsets = {
+    season: typeof SEASON_OFFSETS;
+    episode: typeof EPISODE_OFFSETS;
+    arc: typeof ARC_OFFSETS;
+};
+
+export type TimelineInfoType =
+    | 'season'
+    | 'episode'
+    | 'arc'
+    | 'chapter'
+    | 'volume';
+
+export type TimelineInfoMap = {
+    [K in TimelineInfoType]: {
+        type: K;
+        covers: Covers[K];
+        titles: Titles[K];
+        blankfontSize: number;
+        titleFontSize: number;
+        titleProcessor?: (title: string, n: number) => string;
+        height: number;
+        widthHandler: (
+            itemNumber: number,
+            unboundedChapterWidth: boolean
+        ) => number;
+        wikiLink: (name: string, n: number) => string;
+        offsets?: K extends keyof Offsets ? Offsets[K] : undefined;
+        timeline?: TimelineInfoItem;
+    };
+}[TimelineInfoType];
+
+export type TimelineInfoItem = { type: 'timeline' } | TimelineInfoMap;
+
+export const TIMELINE_INFO: TimelineInfoItem[] = [
+    {
+        type: 'season',
+        height: SEASON_HEIGHT,
+        covers: SEASON_COVERS,
+        titles: SEASON_TITLES,
+        blankfontSize: 250,
+        titleFontSize: 100,
+        widthHandler: getSeasonWidth,
+        wikiLink: season => `https://chainsaw-man.fandom.com/wiki/${season}`,
+        offsets: SEASON_OFFSETS,
+        timeline: {
+            type: 'episode',
+            height: EPISODE_HEIGHT,
+            covers: EPISODE_THUMBNAILS,
+            titles: EPISODE_TITLES,
+            titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+            blankfontSize: 42,
+            titleFontSize: 42,
+            widthHandler: getEpisodeWidth,
+            wikiLink: (_, n) =>
+                `https://chainsaw-man.fandom.com/wiki/Episode_${n}`,
+            offsets: EPISODE_OFFSETS,
+        },
+    },
+    {
+        type: 'arc',
+        height: ARC_HEIGHT,
+        covers: ARC_IMAGES,
+        titles: ARC_NAMES,
+        titleProcessor: title => `${title} arc`,
+        blankfontSize: 100,
+        titleFontSize: 100,
+        widthHandler: getArcWidth,
+        wikiLink: arcName =>
+            `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`,
+        offsets: ARC_OFFSETS,
+    },
+    {
+        type: 'timeline',
+    },
+    {
+        type: 'chapter',
+        height: CHAPTER_HEIGHT,
+        covers: CHAPTER_PICTURES_FLAT,
+        titles: CHAPTER_NAMES,
+        titleProcessor: title => title,
+        blankfontSize: 45,
+        titleFontSize: 45,
+        widthHandler: getChapterWidth,
+        wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Chapter_${n}`,
+    },
+    {
+        type: 'volume',
+        height: VOLUME_HEIGHT,
+        covers: VOLUME_COVERS,
+        titles: VOLUME_TITLES,
+        titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
+        blankfontSize: 500,
+        titleFontSize: 100,
+        widthHandler: getVolumeWidth,
+        wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Volume_${n}`,
+    },
+];
