@@ -91,12 +91,12 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
         <TooltipWrapper
             className='tooltipWrapper'
             $placement={placement}
-            {...(visible !== undefined ? {} : { ...handlers() })}
+            {...(visible !== undefined ? {} : handlers())}
         >
             <TooltipContent
                 className='tooltipContent'
                 $animation={animation}
-                $visible={visible !== undefined ? visible : hovered()}
+                $visible={visible ?? hovered()}
                 $placement={placement}
             >
                 {content}
