@@ -171,7 +171,7 @@ export const InfoBoxContent = (
                 </li>
                 <li>
                     Press
-                    <KeyboardShortcut keys={['Ctrl', 'Space']} />
+                    <KeyboardShortcut keys={['Ctrl', 'C']} />
                     to toggle cross-lines (desktop only)
                 </li>
                 <li>

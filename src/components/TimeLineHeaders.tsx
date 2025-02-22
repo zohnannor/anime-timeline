@@ -25,8 +25,12 @@ const Header = withShadow(
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        writing-mode: sideways-lr;
         font-size: ${scale(60)}svh;
+
+        writing-mode: vertical-lr;
+        @supports (writing-mode: sideways-lr) {
+            writing-mode: sideways-lr;
+        }
 
         & > a {
             display: flex;

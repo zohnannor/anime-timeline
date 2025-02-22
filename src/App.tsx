@@ -7,32 +7,9 @@ import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { TimelineSection } from './components/TimelineSection';
-import { TIMELINE_INFO } from './constants';
+import { FLOATING_BUTTONS, TIMELINE_INFO } from './constants';
 import useWindowSize from './hooks/useWindowSize';
-import { SettingsValues, useSettings } from './providers/SettingsProvider';
-
-const BUTTONS: {
-    filename: string;
-    title: string;
-    option: keyof SettingsValues;
-}[] = [
-    { filename: 'pochita2', title: 'Read info', option: 'infoBoxOpen' },
-    {
-        filename: 'pochita3',
-        title: 'Toggle unbounded chapter width',
-        option: 'unboundedChapterWidth',
-    },
-    {
-        filename: 'pochita4',
-        title: 'Open chapter calendar',
-        option: 'calendarOpen',
-    },
-    {
-        filename: 'pochita5',
-        title: 'Toggle always show titles',
-        option: 'showTitles',
-    },
-];
+import { useSettings } from './providers/SettingsProvider';
 
 const AppContainer = styled.div`
     display: flex;
@@ -65,7 +42,7 @@ const App: React.FC = () => {
             <InfoBox />
             <AppContainer className='appContainer'>
                 <FloatingButtons>
-                    {BUTTONS.map(({ filename, title, option }) => (
+                    {FLOATING_BUTTONS.map(({ filename, title, option }) => (
                         <FloatingButton
                             key={filename}
                             filename={filename}

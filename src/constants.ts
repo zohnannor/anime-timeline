@@ -5,8 +5,9 @@ import {
     getSeasonWidth,
     getVolumeWidth,
 } from './helpers';
-import { Flatten, Length } from './types';
-import { map, pad, range, sum } from './util';
+import { SettingsValues } from './providers/SettingsProvider';
+import { Flatten, Length, Tuple } from './types';
+import { isMobileDevice, map, pad, range, sum } from './util';
 
 export const SEASON_HEIGHT = 742;
 export const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -70,9 +71,6 @@ const _ASSERT_LEGNTHS: [
     Length<typeof CHAPTERS_PER_EPISODE>,
     Length<typeof CHAPTER_DATES>,
     Length<typeof CHAPTER_NAMES>,
-    Length<typeof ARC_OFFSETS>,
-    Length<typeof EPISODE_OFFSETS>,
-    Length<typeof SEASON_OFFSETS>,
     Length<typeof EPISODE_TITLES>,
     Length<typeof SEASON_TITLES>,
     Length<typeof VOLUME_TITLES>
@@ -88,9 +86,6 @@ const _ASSERT_LEGNTHS: [
     EPISODES_TOTAL,
     CHAPTERS_TOTAL,
     CHAPTERS_TOTAL,
-    13,
-    EPISODES_TOTAL,
-    2,
     EPISODES_TOTAL,
     2,
     VOLUMES_TOTAL,
@@ -837,7 +832,9 @@ export const CHAPTER_DATES_BY_YEAR = groupBy(
     date => date.getFullYear() + 1
 );
 
-export const ARC_OFFSETS = [
+type Offset = { x: number; y: number };
+
+export const ARC_OFFSETS: Tuple<Offset, typeof ARCS_TOTAL> = [
     { x: 130, y: 0 },
     { x: 220, y: 0 },
     { x: 0, y: 0 },
@@ -851,9 +848,10 @@ export const ARC_OFFSETS = [
     { x: 0, y: 0 },
     { x: 0, y: 430 },
     { x: 0, y: 250 },
-] as const;
+    { x: 0, y: 0 },
+];
 
-export const EPISODE_OFFSETS = [
+export const EPISODE_OFFSETS: Tuple<Offset, typeof EPISODES_TOTAL> = [
     { x: 0, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
@@ -866,12 +864,12 @@ export const EPISODE_OFFSETS = [
     { x: 0, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
-] as const;
+];
 
-export const SEASON_OFFSETS = [
+export const SEASON_OFFSETS: Tuple<Offset, 2> = [
     { x: 0, y: 1900 },
     { x: 0, y: 800 },
-] as const;
+];
 
 export const EPISODE_TITLES = [
     'Dog & Chainsaw',
@@ -1028,5 +1026,38 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         titleFontSize: 100,
         widthHandler: getVolumeWidth,
         wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Volume_${n}`,
+    },
+];
+
+export const FLOATING_BUTTONS: {
+    filename: string;
+    title: string;
+    option: keyof SettingsValues;
+}[] = [
+    { filename: 'pochita2', title: 'Read info', option: 'infoBoxOpen' },
+
+    {
+        filename: 'pochita3',
+        title: 'Toggle unbounded chapter width',
+        option: 'unboundedChapterWidth',
+    },
+    ...(!isMobileDevice() // include cross-lines button only on desktop
+        ? [
+              {
+                  filename: 'pochita6',
+                  title: 'Toggle cross-lines',
+                  option: 'showCrosslines',
+              } as const,
+          ]
+        : []),
+    {
+        filename: 'pochita4',
+        title: 'Open chapter calendar',
+        option: 'calendarOpen',
+    },
+    {
+        filename: 'pochita5',
+        title: 'Toggle always show titles',
+        option: 'showTitles',
     },
 ];

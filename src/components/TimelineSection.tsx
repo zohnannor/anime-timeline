@@ -3,15 +3,16 @@ import styled, { css } from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
 import { scale, TimelineInfoItem } from '../constants';
+import { hueGlow } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { Preview } from './Chapters';
-import { TimelineContainer } from './Container';
 import { withCrossLines } from './CrossLines';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 import { ThumbnailImage } from './ThumbnailImage';
 import { Timeline } from './Timeline';
+import { TimelineContainer } from './TimelineContainer';
 import { Tooltip } from './Tooltip';
 
 interface SectionItemProps {
@@ -33,8 +34,9 @@ const SectionItem = withCrossLines(
             $focusable &&
             css`
                 &:focus {
+                    z-index: 1;
                     outline: ${scale(20)}svh solid red;
-                    z-index: 10; // TODO: fix focus layering
+                    animation: ${hueGlow} 2s linear infinite;
                 }
             `}
     `
@@ -68,13 +70,21 @@ export const SectionItemCover = withShadow(
 
         & > a {
             position: absolute;
-            writing-mode: ${({ $sidewaysText }) =>
-                $sidewaysText ? 'sideways-lr' : 'unset'};
             display: flex;
             align-items: center;
             justify-content: center;
             inset: 0;
             cursor: pointer;
+
+            writing-mode: ${({ $sidewaysText }) =>
+                $sidewaysText ? 'vertical-lr' : 'unset'};
+        }
+
+        @supports (writing-mode: sideways-lr) {
+            & > a {
+                writing-mode: ${({ $sidewaysText }) =>
+                    $sidewaysText ? 'sideways-lr' : 'unset'};
+            }
         }
 
         & > a > img {

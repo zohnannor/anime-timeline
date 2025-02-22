@@ -10,6 +10,7 @@ import React, {
 
 export interface Settings {
     showCrosslines: boolean;
+    setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
     infoBoxOpen: boolean;
     setInfoBoxOpen: React.Dispatch<React.SetStateAction<boolean>>;
     unboundedChapterWidth: boolean;
@@ -43,6 +44,7 @@ type SettingsValuesSetters = {
 };
 
 export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
+    showCrosslines: 'setShowCrosslines',
     infoBoxOpen: 'setInfoBoxOpen',
     unboundedChapterWidth: 'setUnboundedChapterWidth',
     calendarOpen: 'setCalendarOpen',
@@ -51,6 +53,7 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
 
 const SettingsContext = createContext<Settings>({
     showCrosslines: false,
+    setShowCrosslines: () => {},
     infoBoxOpen: false,
     setInfoBoxOpen: () => {},
     unboundedChapterWidth: false,
@@ -110,7 +113,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.ctrlKey && e.code === 'Space') {
+        if (e.ctrlKey && e.key === 'c') {
             setShowCrosslines(p => !p);
         }
 
@@ -138,6 +141,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         <SettingsContext.Provider
             value={{
                 showCrosslines,
+                setShowCrosslines,
                 infoBoxOpen,
                 setInfoBoxOpen: openInfoBox,
                 unboundedChapterWidth,
