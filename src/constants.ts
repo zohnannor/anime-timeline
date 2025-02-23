@@ -947,7 +947,11 @@ export type TimelineInfoMap = {
     [K in TimelineInfoType]: {
         type: K;
         covers: Covers[K];
+        fit?: 'contain' | 'cover';
+        backgroundColor?: 'black' | 'white';
+        scale?: number;
         titles: Titles[K];
+        sidewaysText?: boolean;
         blankfontSize: number;
         titleFontSize: number;
         titleProcessor?: (title: string, n: number) => string;
@@ -958,6 +962,7 @@ export type TimelineInfoMap = {
         ) => number;
         wikiLink: (name: string, n: number) => string;
         offsets?: K extends keyof Offsets ? Offsets[K] : undefined;
+        focusable?: boolean;
         timeline?: TimelineInfoItem;
     };
 }[TimelineInfoType];
@@ -979,6 +984,7 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
             type: 'episode',
             height: EPISODE_HEIGHT,
             covers: EPISODE_THUMBNAILS,
+            scale: 1.2,
             titles: EPISODE_TITLES,
             titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
             blankfontSize: 42,
@@ -994,6 +1000,7 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         height: ARC_HEIGHT,
         covers: ARC_IMAGES,
         titles: ARC_NAMES,
+        sidewaysText: true,
         titleProcessor: title => `${title} arc`,
         blankfontSize: 100,
         titleFontSize: 100,
@@ -1009,12 +1016,15 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         type: 'chapter',
         height: CHAPTER_HEIGHT,
         covers: CHAPTER_PICTURES_FLAT,
+        fit: 'contain',
+        backgroundColor: 'white',
         titles: CHAPTER_NAMES,
         titleProcessor: title => title,
         blankfontSize: 45,
         titleFontSize: 45,
         widthHandler: getChapterWidth,
         wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Chapter_${n}`,
+        focusable: true,
     },
     {
         type: 'volume',

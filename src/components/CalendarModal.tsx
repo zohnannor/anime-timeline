@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
@@ -11,6 +17,7 @@ import {
     MONTHS_GRADIENT,
 } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
+import { Tooltip } from './Tooltip';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -190,17 +197,30 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     }
 );
 
-const CloseButton = styled.span`
+const Button = styled.span`
     inset: 0;
     cursor: pointer;
     font-size: 1.5em;
     top: ${scale(100)}svh;
     right: ${scale(100)}svh;
     float: right;
+    margin-left: ${scale(100)}svh;
 `;
 
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen } = useSettings();
+    const [scrolledToBottom, setScrolledToBottom] = useState(false);
+    const modalRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (calendarOpen && modalRef.current) {
+            if (!scrolledToBottom) {
+                modalRef.current.scrollTop = modalRef.current.scrollHeight;
+            } else {
+                modalRef.current.scrollTop = 0;
+            }
+        }
+    }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
     const startDate = CHAPTER_DATES[0];
@@ -260,12 +280,28 @@ export const CalendarModal: React.FC = () => {
                 className='shadow'
                 onClick={() => setCalendarOpen(false)}
             />
-            <ModalContainer className='calendarModal'>
+            <ModalContainer className='calendarModal' ref={modalRef}>
                 <Header>
                     <Title className='title'>Chapter Calendar</Title>
-                    <CloseButton onClick={() => setCalendarOpen(false)}>
-                        &times;
-                    </CloseButton>
+                    <div>
+                        <Button onClick={() => setCalendarOpen(false)}>
+                            &times;
+                        </Button>
+                        <Button onClick={() => setScrolledToBottom(p => !p)}>
+                            <Tooltip
+                                placement='bottom'
+                                content={
+                                    <div style={{ textWrap: 'nowrap' }}>
+                                        {`Scroll to ${
+                                            scrolledToBottom ? 'bottom' : 'top'
+                                        }`}
+                                    </div>
+                                }
+                            >
+                                {scrolledToBottom ? '⇈' : '⇊'}
+                            </Tooltip>
+                        </Button>
+                    </div>
                 </Header>
                 <CalendarContainer>
                     {months.map((month, monthIdx) => (

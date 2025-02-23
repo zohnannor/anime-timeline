@@ -183,7 +183,11 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
 
     const {
         covers,
+        fit = 'cover',
+        backgroundColor = 'black',
+        scale = 1.05,
         titles,
+        sidewaysText = false,
         offsets,
         widthHandler,
         wikiLink,
@@ -191,6 +195,7 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
         titleProcessor,
         blankfontSize,
         titleFontSize,
+        focusable = false,
         timeline: nestedTimeline,
     } = timelineItem;
 
@@ -209,6 +214,8 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                         : titleProcessor?.(titles[idx] ?? '', itemNumber) ??
                           titles[idx];
                 const titleVisible = showTitles || hoveredItem(itemNumber);
+                const textColor =
+                    backgroundColor === 'black' ? 'white' : 'black';
 
                 const linkImage =
                     timelineItem.type !== 'season' || !!cover ? (
@@ -233,28 +240,17 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                     <SectionItemCover
                         className={`${timelineItem.type}Cover`}
                         data-title={title}
-                        $invertBorder={
-                            !cover && timelineItem.type !== 'chapter'
-                        }
+                        $invertBorder={!cover && backgroundColor === 'black'}
                         $titleVisible={
-                            (!!cover || timelineItem.type === 'chapter') &&
-                            titleVisible
+                            (!!cover || textColor === 'black') && titleVisible
                         }
                         $blankFontSize={blankfontSize}
                         $titleFontSize={titleFontSize}
-                        $fit={
-                            timelineItem.type === 'chapter'
-                                ? 'contain'
-                                : 'cover'
-                        }
-                        $backgroundColor={
-                            timelineItem.type === 'chapter' ? 'white' : 'black'
-                        }
-                        $color={
-                            timelineItem.type === 'chapter' ? 'black' : 'white'
-                        }
-                        $scale={timelineItem.type === 'episode' ? 1.2 : 1.05}
-                        $sidewaysText={timelineItem.type === 'arc'}
+                        $fit={fit}
+                        $backgroundColor={backgroundColor}
+                        $color={textColor}
+                        $scale={scale}
+                        $sidewaysText={sidewaysText}
                     >
                         {linkImage}
                     </SectionItemCover>
@@ -294,8 +290,8 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                         key={cover || itemNumber}
                         $crossLinesVisible={hoveredItem(itemNumber)}
                         {...hoverHandlers(itemNumber)}
-                        $focusable={timelineItem.type === 'chapter'}
-                        tabIndex={-1}
+                        $focusable={focusable}
+                        tabIndex={focusable ? -1 : undefined}
                     >
                         {sectionCoverTooltip}
                         {nestedTimeline &&
