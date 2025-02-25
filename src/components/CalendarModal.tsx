@@ -88,10 +88,10 @@ const Day = styled.a<DayProps>`
     width: ${scale(200)}svh;
     height: ${scale(200)}svh;
 
-    ${({ $isToday, $background }) =>
+    ${({ $isToday, $background, $isChapter }) =>
         $isToday &&
         css`
-            border: ${scale(10)}svh solid ${$background};
+            border: ${scale(15)}svh solid ${$isChapter ? `red` : $background};
         `}
 
     &:focus {
