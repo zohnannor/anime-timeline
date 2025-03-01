@@ -260,6 +260,7 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                     <Preview
                         className='preview'
                         $firstChapter={idx === 0}
+                        $lastChapter={idx === covers.length - 1}
                         $hasPicture={!!cover}
                     >
                         {cover && <ThumbnailImage src={cover} />}
