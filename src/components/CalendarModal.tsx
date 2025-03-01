@@ -239,7 +239,10 @@ export const CalendarModal: React.FC = () => {
         const current = new Date(start);
         current.setDate(1);
 
-        while (current <= end) {
+        const endDate = new Date(end);
+        endDate.setHours(23, 59, 59, 999);
+
+        while (current <= endDate) {
             months.push(new Date(current));
             current.setMonth(current.getMonth() + 1);
         }

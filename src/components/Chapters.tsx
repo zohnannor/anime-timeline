@@ -4,6 +4,7 @@ import { scale } from '../constants';
 
 interface PreviewProps {
     $firstChapter: boolean;
+    $lastChapter: boolean;
     $hasPicture: boolean;
 }
 
@@ -27,6 +28,11 @@ export const Preview = styled.div<PreviewProps>`
         $firstChapter &&
         css`
             transform: translateX(${scale(200)}svh);
+        `}
+    ${({ $lastChapter }) =>
+        $lastChapter &&
+        css`
+            transform: translateX(${-scale(300)}svh);
         `}
 
     & > img {
