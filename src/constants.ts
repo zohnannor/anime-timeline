@@ -111,17 +111,9 @@ export const PAGES_PER_VOLUME = map(PAGES_PER_CHAPTER_PER_VOLUME, volume =>
 );
 
 export const CHAPTER_PICTURES = [
-    [
-        'Volume_01_Pochita_Sketch_1',
-        'Volume_01_Pochita_Sketch_3',
-        'Volume_01_Pochita_Sketch_4',
-        'Volume_01_Pochita_Sketch_5',
-        'Volume_01_Pochita_Sketch_6',
-        'Volume_01_Pochita_Sketch_7',
-        'Volume_01_Pochita_Sketch_8',
-    ],
-    map(range(1, 10), n => `Volume_02_Pochita_Sketch_${n}`),
-    map(range(1, 10), n => `Volume_03_Pochita_Sketch_${n}`),
+    map(range(2, 9), n => `Volume_01_Pochita_Sketch_${n}` as const),
+    map(range(1, 10), n => `Volume_02_Pochita_Sketch_${n}` as const),
+    map(range(1, 10), n => `Volume_03_Pochita_Sketch_${n}` as const),
     [
         'Volume_04_Pochita_Sketch_1',
         'Volume_04_Pochita_Sketch_2',
@@ -130,7 +122,7 @@ export const CHAPTER_PICTURES = [
         'Volume_04_Pochita_Sketch_5',
         'Volume_04_Pochita_Sketch_6',
         'Volume_04_Pochita_Sketch_7',
-        'Volume_04_Pochita_Sketch_8',
+        'Volume_04_Pochita_Sketch_9',
         'Volume_04_Pochita_Sketch_10',
     ],
     [
@@ -144,9 +136,9 @@ export const CHAPTER_PICTURES = [
         'Volume_05_Pochita_Sketch_7',
         'Volume_05_Pochita_Sketch_8',
     ],
-    map(range(1, 10), n => `Volume_06_Pochita_Sketch_${n}`),
-    map(range(1, 10), n => `Volume_07_Pochita_Sketch_${n}`),
-    map(range(1, 10), n => `Volume_08_Pochita_Sketch_${n}`),
+    map(range(1, 10), n => `Volume_06_Pochita_Sketch_${n}` as const),
+    map(range(1, 10), n => `Volume_07_Pochita_Sketch_${n}` as const),
+    map(range(1, 10), n => `Volume_08_Pochita_Sketch_${n}` as const),
     [
         'Volume_09_Pochita_Sketch_1',
         'Volume_09_Pochita_Sketch_2',
