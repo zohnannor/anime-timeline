@@ -6,7 +6,7 @@ import { scale, TimelineInfoItem } from '../constants';
 import { hueGlow } from '../helpers';
 import { useHover } from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
-import { Preview } from './Chapters';
+import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
@@ -257,15 +257,10 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                 );
 
                 const chapterPreview = (
-                    <Preview
-                        className='preview'
-                        $firstChapter={idx === 0}
-                        $lastChapter={idx === covers.length - 1}
-                        $hasPicture={!!cover}
-                    >
+                    <ChapterPreview className='preview' $hasPicture={!!cover}>
                         {cover && <ThumbnailImage src={cover} />}
                         {titleProcessor?.(titles[idx] ?? '', itemNumber)}
-                    </Preview>
+                    </ChapterPreview>
                 );
 
                 const sectionCoverTooltip =

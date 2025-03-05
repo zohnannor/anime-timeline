@@ -24,6 +24,8 @@ const MAX_HEIGHT =
 
 const COEFFICIENT = MAX_HEIGHT / 100;
 export const scale = (n: number) => n / COEFFICIENT;
+export const scaleToPx = (n: number) => n * (window.innerHeight / MAX_HEIGHT);
+export const pxToScale = (n: number) => n * (MAX_HEIGHT / window.innerHeight);
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
