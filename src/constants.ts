@@ -38,7 +38,7 @@ const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_TOTAL = 20; // last = unreleased
 
-export const PAGES_PER_CHAPTER_PER_VOLUME = [
+const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],
     [19, 19, 19, 19, 19, 19, 19, 21, 19],
     [19, 19, 19, 19, 19, 19, 21, 19, 19],
@@ -112,7 +112,7 @@ export const PAGES_PER_VOLUME = map(PAGES_PER_CHAPTER_PER_VOLUME, volume =>
     sum(volume)
 );
 
-export const CHAPTER_PICTURES = [
+const CHAPTER_PICTURES = [
     map(range(2, 9), n => `Volume_01_Pochita_Sketch_${n}` as const),
     map(range(1, 10), n => `Volume_02_Pochita_Sketch_${n}` as const),
     map(range(1, 10), n => `Volume_03_Pochita_Sketch_${n}` as const),
@@ -292,7 +292,7 @@ export const CHAPTER_PICTURES = [
     ],
 ] as const;
 
-export const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
+const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
     typeof CHAPTER_PICTURES
 >;
 
@@ -313,7 +313,7 @@ export const CHAPTERS_PER_ARC: [number, number][] = [
     [191, CHAPTERS_TOTAL],
 ];
 
-export const ARC_IMAGES = [
+const ARC_IMAGES = [
     'Denji_fighting_zombies',
     'Denji_attacking_the_Bat_Devil',
     'Denji_fighting_the_Eternity_Devil',
@@ -330,7 +330,7 @@ export const ARC_IMAGES = [
     null,
 ] as const;
 
-export const CHAPTER_NAMES = [
+const CHAPTER_NAMES = [
     'Dog & Chainsaw',
     'The Place Where Pochita Is',
     'Arrival in Tokyo',
@@ -528,7 +528,7 @@ export const CHAPTER_NAMES = [
     'Kill Me Tears',
 ] as const;
 
-export const ARC_NAMES = [
+const ARC_NAMES = [
     'Introduction',
     'Bat Devil',
     'Eternity Devil',
@@ -545,12 +545,12 @@ export const ARC_NAMES = [
     'Current',
 ] as const;
 
-export const VOLUME_COVERS = [
+const VOLUME_COVERS = [
     ...map(range(1, VOLUMES_TOTAL), n => `Volume_${pad(n)}` as const),
     null,
 ] as const;
 
-export const SEASON_COVERS = [
+const SEASON_COVERS = [
     'Chainsaw_Man_Anime_Key_Visual_1',
     'Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1',
     null,
@@ -564,20 +564,21 @@ export const CHAPTERS_PER_SEASON: [number, number][] = [
     [98, CHAPTERS_TOTAL],
 ];
 
-export const EPISODE_THUMBNAILS = map(range(1, 13), n => n.toString());
+const EPISODE_THUMBNAILS = map(range(1, 13), n => n.toString());
 
 const CHAPTERS_WITH_PAGES = map(
     PAGES_PER_CHAPTER_FLAT,
     (pages, chapterIdx) => [chapterIdx + 1, pages] as const
 );
 
-const SPLIT_CHAPTERS: Record<number, number> = {
+export const SPLIT_CHAPTERS: Record<number, number> = {
     5: 10,
     12: 1,
     15: 10,
     18: 12,
     25: 14,
     31: 18,
+    38: 22,
 } as const;
 
 const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4] as const;
@@ -609,6 +610,8 @@ export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
     },
     [[], 0]
 )[0];
+
+console.log({ CHAPTERS_SPLIT_FOR_EPISODES, PAGES_PER_EPISODE_WITH_CHAPTERS });
 
 export const CHAPTER_DATES = map(
     [
@@ -837,7 +840,7 @@ export const CHAPTER_DATES_BY_YEAR = groupBy(
 
 type Offset = { x: number; y: number };
 
-export const ARC_OFFSETS: Tuple<Offset, typeof ARCS_TOTAL> = [
+const ARC_OFFSETS: Tuple<Offset, typeof ARCS_TOTAL> = [
     { x: 130, y: 0 },
     { x: 220, y: 0 },
     { x: 0, y: 0 },
@@ -854,7 +857,7 @@ export const ARC_OFFSETS: Tuple<Offset, typeof ARCS_TOTAL> = [
     { x: 0, y: 0 },
 ];
 
-export const EPISODE_OFFSETS: Tuple<Offset, typeof EPISODES_TOTAL> = [
+const EPISODE_OFFSETS: Tuple<Offset, typeof EPISODES_TOTAL> = [
     { x: 0, y: 0 },
     { x: 0, y: 0 },
     { x: 0, y: 0 },
@@ -869,12 +872,12 @@ export const EPISODE_OFFSETS: Tuple<Offset, typeof EPISODES_TOTAL> = [
     { x: 0, y: 0 },
 ];
 
-export const SEASON_OFFSETS: Tuple<Offset, 2> = [
+const SEASON_OFFSETS: Tuple<Offset, 2> = [
     { x: 0, y: 1900 },
     { x: 0, y: 800 },
 ];
 
-export const EPISODE_TITLES = [
+const EPISODE_TITLES = [
     'Dog & Chainsaw',
     'Arrival in Tokyo',
     "Meowy's Whereabouts",
@@ -889,12 +892,12 @@ export const EPISODE_TITLES = [
     'Katana vs. Chainsaw',
 ] as const;
 
-export const SEASON_TITLES = [
+const SEASON_TITLES = [
     'Chainsaw Man (Anime)',
     'Chainsaw Man – The Movie: Reze Arc',
 ] as const;
 
-export const VOLUME_TITLES = [
+const VOLUME_TITLES = [
     'Dog & Chainsaw',
     'Chainsaw vs. Bat',
     'Kill Denji',
@@ -939,14 +942,9 @@ type Offsets = {
     arc: typeof ARC_OFFSETS;
 };
 
-export type TimelineInfoType =
-    | 'season'
-    | 'episode'
-    | 'arc'
-    | 'chapter'
-    | 'volume';
+type TimelineInfoType = 'season' | 'episode' | 'arc' | 'chapter' | 'volume';
 
-export type TimelineInfoMap = {
+type TimelineInfoMap = {
     [K in TimelineInfoType]: {
         type: K;
         covers: Covers[K];

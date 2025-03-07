@@ -7,8 +7,12 @@ import {
     PAGES_PER_CHAPTER_FLAT,
     PAGES_PER_EPISODE_WITH_CHAPTERS,
     PAGES_PER_VOLUME,
+    SPLIT_CHAPTERS,
 } from './constants';
 import { map, range, sum } from './util';
+
+const getPagesInChapter = (chapter: number) =>
+    PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
 
 const getChapterNumber = (volume: number, volumeChapter: number) =>
     sum(CHAPTERS_PER_VOLUME.slice(0, volume - 1)) + volumeChapter + 1;
@@ -46,7 +50,7 @@ export const getChapterWidth = (
     unboundedChapterWidth: boolean
 ): number => {
     const volume = getVolumeByChapter(chapter);
-    const pagesInChapter = PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
+    const pagesInChapter = getPagesInChapter(chapter);
     return unboundedChapterWidth
         ? pagesInChapter * (1000 / PAGES_PER_VOLUME[0]) * 1.05
         : (pagesInChapter / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
@@ -76,8 +80,19 @@ export const getSeasonWidth = (
     unboundedChapterWidth: boolean
 ) => {
     const [start, end] = CHAPTERS_PER_SEASON[season - 1] ?? [1, 1];
+    const splitFirst = SPLIT_CHAPTERS[start - 1];
+    const splitLast = SPLIT_CHAPTERS[end];
+    // shorten/lengthen the season if it doesn't cover the whole chapter
     return range(start, end + 1).reduce((acc, chapter) => {
-        return acc + getChapterWidth(chapter, unboundedChapterWidth);
+        return (
+            acc +
+            (splitLast && chapter === end
+                ? splitLast * getChapterPageWidth(end, unboundedChapterWidth)
+                : splitFirst && chapter === start
+                ? splitFirst *
+                  getChapterPageWidth(start - 1, unboundedChapterWidth)
+                : getChapterWidth(chapter, unboundedChapterWidth))
+        );
     }, 0);
 };
 
