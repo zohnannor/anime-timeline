@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-const CHAPTERS_TOTAL = 195;
+const CHAPTERS_TOTAL = 196;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_TOTAL = 20; // last = unreleased
@@ -60,7 +60,7 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
     [
         18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17, 15, 14, 16, 15, 17, 15, 13,
-        15, 15,
+        15, 15, 19,
     ],
 ] as const;
 
@@ -269,6 +269,7 @@ const CHAPTER_PICTURES = [
         'Volume_19_Pochita_Sketch_4',
     ],
     [
+        null,
         null,
         null,
         null,
@@ -526,6 +527,7 @@ const CHAPTER_NAMES = [
     'Burning Kiss',
     'Fun School Festival',
     'Kill Me Tears',
+    'Chainsaw Man to the Rescue!',
 ] as const;
 
 const ARC_NAMES = [
@@ -810,6 +812,7 @@ export const CHAPTER_DATES = map(
         'February 12, 2025',
         'February 26, 2025',
         'March 5, 2025',
+        'March 12, 2025',
     ] as const,
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
