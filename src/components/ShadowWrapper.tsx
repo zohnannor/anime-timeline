@@ -11,7 +11,7 @@ const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: inset 0 0 ${scale(6)}svh ${scale(6)}svh
+    box-shadow: inset 0 0 0 ${scale(5)}svh
         ${({ $invertBorder }) => ($invertBorder ? '#ffffff' : '#000000')};
     pointer-events: none;
 `;
