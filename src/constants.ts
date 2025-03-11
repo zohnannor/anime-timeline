@@ -36,7 +36,8 @@ export const SMALL_FONT_SIZE = 45;
 const CHAPTERS_TOTAL = 196;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
-const VOLUMES_TOTAL = 20; // last = unreleased
+const VOLUMES_RELEASED_TOTAL = 19;
+const VOLUMES_TOTAL = 21;
 
 const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],
@@ -58,10 +59,8 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [15, 16, 17, 15, 17, 20, 17, 16, 19, 19],
     [17, 16, 15, 15, 16, 16, 16, 16, 17, 17, 16],
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
-    [
-        18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17, 15, 14, 16, 15, 17, 15, 13,
-        15, 15, 19,
-    ],
+    [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
+    [15, 14, 16, 15, 17, 15, 13, 15, 15, 19],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
@@ -268,29 +267,8 @@ const CHAPTER_PICTURES = [
         null,
         'Volume_19_Pochita_Sketch_4',
     ],
-    [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-    ],
+    [null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
 ] as const;
 
 const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
@@ -548,7 +526,11 @@ const ARC_NAMES = [
 ] as const;
 
 const VOLUME_COVERS = [
-    ...map(range(1, VOLUMES_TOTAL), n => `Volume_${pad(n)}` as const),
+    ...map(
+        range(0, VOLUMES_RELEASED_TOTAL),
+        n => `Volume_${pad(n + 1)}` as const
+    ),
+    null,
     null,
 ] as const;
 
@@ -879,18 +861,18 @@ const SEASON_OFFSETS: Tuple<Offset, 2> = [
 ];
 
 const EPISODE_TITLES = [
-    'Dog & Chainsaw',
-    'Arrival in Tokyo',
-    "Meowy's Whereabouts",
-    'Rescue',
-    'Gun Devil',
-    'Kill Denji',
-    'The Taste of a Kiss',
-    'Gunfire',
-    'From Kyoto',
-    'Bruised & Battered',
-    'Mission Start',
-    'Katana vs. Chainsaw',
+    CHAPTER_NAMES[0],
+    CHAPTER_NAMES[2],
+    CHAPTER_NAMES[6],
+    CHAPTER_NAMES[8],
+    CHAPTER_NAMES[12],
+    CHAPTER_NAMES[16],
+    CHAPTER_NAMES[20],
+    CHAPTER_NAMES[22],
+    CHAPTER_NAMES[26],
+    CHAPTER_NAMES[29],
+    CHAPTER_NAMES[32],
+    CHAPTER_NAMES[35],
 ] as const;
 
 const SEASON_TITLES = [
@@ -899,26 +881,27 @@ const SEASON_TITLES = [
 ] as const;
 
 const VOLUME_TITLES = [
-    'Dog & Chainsaw',
-    'Chainsaw vs. Bat',
-    'Kill Denji',
-    'The Gun is Mightier',
-    'Minor',
-    'Boom Boom Boom',
-    'In a Dream',
-    'Super Mess',
-    'Bath',
-    "A Dog's Feeling",
-    "Go Get 'Em, Chainsaw Man",
-    'Bird and War',
-    'Spoiler',
-    'I Wanna See Penguins!',
-    "Hors D'oeuvre",
-    'Ordinary Happiness',
-    'Guns, Nails, Katana',
-    'All Pets',
-    'Everyday Scenery',
-    'Two Children',
+    CHAPTER_NAMES[0],
+    CHAPTER_NAMES[7],
+    CHAPTER_NAMES[16],
+    CHAPTER_NAMES[25],
+    CHAPTER_NAMES[34],
+    CHAPTER_NAMES[43],
+    CHAPTER_NAMES[52],
+    CHAPTER_NAMES[61],
+    CHAPTER_NAMES[70],
+    CHAPTER_NAMES[79],
+    CHAPTER_NAMES[88],
+    CHAPTER_NAMES[97],
+    CHAPTER_NAMES[103],
+    CHAPTER_NAMES[112],
+    CHAPTER_NAMES[122],
+    CHAPTER_NAMES[133],
+    CHAPTER_NAMES[143],
+    CHAPTER_NAMES[153],
+    CHAPTER_NAMES[164],
+    CHAPTER_NAMES[175],
+    CHAPTER_NAMES[186],
 ] as const;
 
 type Covers = {
