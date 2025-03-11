@@ -613,8 +613,6 @@ export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
     [[], 0]
 )[0];
 
-console.log({ CHAPTERS_SPLIT_FOR_EPISODES, PAGES_PER_EPISODE_WITH_CHAPTERS });
-
 export const CHAPTER_DATES = map(
     [
         'December 3, 2018',
