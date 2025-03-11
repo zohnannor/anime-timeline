@@ -11,6 +11,7 @@ import styled, { css } from 'styled-components';
 import { CHAPTER_DATES, scale } from '../constants';
 import {
     DAYS_GRADIENT,
+    fetchNextChapterDate,
     hueGlow,
     interpolateColor,
     MONTHS,
@@ -70,6 +71,7 @@ const Month = styled.div<MonthProps>`
 interface DayProps {
     $isChapter: boolean;
     $isToday: boolean;
+    $isNextChapter: boolean;
     $background: string;
 }
 
@@ -88,11 +90,19 @@ const Day = styled.a<DayProps>`
     width: ${scale(200)}svh;
     height: ${scale(200)}svh;
 
-    ${({ $isToday, $background, $isChapter }) =>
-        $isToday &&
-        css`
-            border: ${scale(15)}svh solid ${$isChapter ? `red` : $background};
-        `}
+    ${({ $isToday, $background, $isChapter, $isNextChapter }) =>
+        $isNextChapter
+            ? css`
+                  border: ${scale(15)}svh solid
+                      ${$isChapter ? `red` : $background};
+                  animation: ${hueGlow} 2s linear infinite;
+              `
+            : $isToday
+            ? css`
+                  border: ${scale(15)}svh solid
+                      ${$isChapter ? `red` : $background};
+              `
+            : null}
 
     &:focus {
         z-index: 1;
@@ -116,15 +126,27 @@ const CalendarContainer = styled.div`
     padding: ${scale(100)}svh;
 `;
 
+const TooltipContent = styled.div`
+    display: flex;
+    white-space: nowrap;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: ${scale(40)}svh;
+    padding: ${scale(25)}svh;
+    font-size: ${scale(60)}svh;
+    gap: ${scale(40)}svh;
+`;
+
 interface MonthComponentProps {
     month: Date;
     currentDate: Date;
     chapterDateMap: Map<string, number>;
+    nextChapterDate: Date | null;
     onDayClick: (e: React.MouseEvent, chapterNumber: number | null) => void;
 }
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
-    ({ month, currentDate, chapterDateMap, onDayClick }) => {
+    ({ month, currentDate, chapterDateMap, nextChapterDate, onDayClick }) => {
         const monthStart = new Date(month);
         monthStart.setDate(1);
         const monthEnd = new Date(month);
@@ -148,33 +170,49 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             days.push(<div key={`empty-${month.getTime()}-${i}`} />);
         }
 
-        for (let day = 1; day <= monthEnd.getDate(); day++) {
+        for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
-            date.setDate(day);
+            date.setDate(dayN);
             const dateStr = date.toISOString();
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
             const isChapter = chapterNumber !== null;
             const isToday = date.toDateString() === currentDate.toDateString();
+            const isNextChapter =
+                date.toDateString() === nextChapterDate?.toDateString();
 
-            const dayColor = interpolateColor(day, [1, 31], DAYS_GRADIENT)
+            const dayColor = interpolateColor(dayN, [1, 31], DAYS_GRADIENT)
                 .toString(16)
                 .padStart(6, '0');
 
-            days.push(
+            let day = (
                 <Day
                     id={`day-${chapterNumber}`}
-                    key={`day-${month.getTime()}-${day}`}
+                    key={`day-${month.getTime()}-${dayN}`}
                     className='day'
                     $isChapter={isChapter}
                     $isToday={isToday}
+                    $isNextChapter={isNextChapter}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
                     onClick={e => onDayClick(e, chapterNumber)}
                     tabIndex={isChapter ? -1 : undefined}
                 >
-                    <span>{day}</span>
+                    <span>{dayN}</span>
                     {chapterNumber && <span>#{chapterNumber}</span>}
                 </Day>
             );
+
+            if (isNextChapter) {
+                day = (
+                    <Tooltip
+                        content={<TooltipContent>Next chapter!</TooltipContent>}
+                        placement='top'
+                    >
+                        {day}
+                    </Tooltip>
+                );
+            }
+
+            days.push(day);
         }
 
         return (
@@ -211,6 +249,14 @@ export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
+    const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            const date = await fetchNextChapterDate();
+            setNextChapterDate(date);
+        })();
+    }, []);
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
@@ -294,11 +340,11 @@ export const CalendarModal: React.FC = () => {
                             <Tooltip
                                 placement='bottom'
                                 content={
-                                    <div style={{ textWrap: 'nowrap' }}>
+                                    <TooltipContent>
                                         {`Scroll to ${
                                             scrolledToBottom ? 'bottom' : 'top'
                                         }`}
-                                    </div>
+                                    </TooltipContent>
                                 }
                             >
                                 {scrolledToBottom ? '⇈' : '⇊'}
@@ -312,6 +358,7 @@ export const CalendarModal: React.FC = () => {
                             key={`month-${monthIdx}`}
                             month={month}
                             currentDate={currentDate}
+                            nextChapterDate={nextChapterDate}
                             chapterDateMap={chapterDateMap}
                             onDayClick={handleDayClick}
                         />

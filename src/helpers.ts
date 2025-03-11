@@ -1,4 +1,5 @@
 import { keyframes } from 'styled-components';
+import * as varint from 'varint';
 
 import {
     CHAPTERS_PER_ARC,
@@ -189,3 +190,24 @@ export const hueGlow = keyframes`
         filter: hue-rotate(360deg);
     }
 `;
+
+export const fetchNextChapterDate = async () => {
+    const proxyUrl = 'https://api.allorigins.win/raw?url=';
+    const mangaplusApiUrl =
+        'https://jumpg-webapi.tokyo-cdn.com/api/title_detailV3?title_id=100037&clang=eng';
+    /// 423 is the offset of the next chapter date in the protobuf repsonse
+    const dateOffset = 423;
+
+    try {
+        const response = await fetch(
+            proxyUrl + encodeURIComponent(mangaplusApiUrl)
+        );
+        const buffer = new Uint8Array(await response.arrayBuffer());
+
+        const result = varint.decode(buffer, dateOffset);
+        return new Date(result * 1000);
+    } catch (error) {
+        console.error('Error fetching next chapter date:', error);
+        return null;
+    }
+};

@@ -2943,6 +2943,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/varint@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@types/varint@npm:6.0.3"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/d05bc5ea56542513b603877a9c22a1b7b0d5cb45874a89ea2658ac5762613078491015363a7a532b5f3b3d35d92abc01c63d12aafa401c1ac7e5155ee612827f
+  languageName: node
+  linkType: hard
+
 "@types/ws@npm:^8.5.5":
   version: 8.5.14
   resolution: "@types/ws@npm:8.5.14"
@@ -11266,11 +11275,13 @@ __metadata:
     "@types/node": "npm:^22.13.1"
     "@types/react": "npm:^19.0.8"
     "@types/react-dom": "npm:^19.0.3"
+    "@types/varint": "npm:^6.0.3"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     react-scripts: "npm:^5.0.1"
     styled-components: "npm:^6.1.15"
     typescript: "npm:^5.7.3"
+    varint: "npm:^6.0.0"
   languageName: unknown
   linkType: soft
 
@@ -12907,6 +12918,13 @@ __metadata:
     convert-source-map: "npm:^1.6.0"
     source-map: "npm:^0.7.3"
   checksum: 10c0/c3c99c4aa1ffffb098cc85c0c13c21871e6cbb9a83537d4e0650aa61589c347b2add787ceac68b8ea7fa1b7f446e9059d8e374cd7e7ab13b170a6caf8ad29c30
+  languageName: node
+  linkType: hard
+
+"varint@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "varint@npm:6.0.0"
+  checksum: 10c0/737fc37088a62ed3bd21466e318d21ca7ac4991d0f25546f518f017703be4ed0f9df1c5559f1dd533dddba4435a1b758fd9230e4772c1a930ef72b42f5c750fd
   languageName: node
   linkType: hard
 
