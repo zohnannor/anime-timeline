@@ -71,7 +71,6 @@ const decodeMessage = <T>(
         const descriptor = descriptors.find(d => d.tag === tag);
         if (descriptor) {
             result[descriptor.property] = descriptor.decoder(reader);
-            console.log(result);
         } else {
             break;
         }
@@ -138,6 +137,8 @@ export const fetchNextChapterDate = async (): Promise<Date | null> => {
         if (!result.Ok?.titleDetailView?.nextTimeStamp) {
             throw new Error('Next chapter timestamp not found in response');
         }
+
+        console.log('protobuf result:', result);
 
         return new Date(result.Ok.titleDetailView.nextTimeStamp * 1000);
     } catch (error) {
