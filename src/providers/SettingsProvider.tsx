@@ -113,12 +113,13 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.ctrlKey && e.key === 'c') {
+        if (e.ctrlKey && e.code == 'KeyC') {
             setShowCrosslines(p => !p);
         }
 
         if (e.code === 'Escape' && infoBoxOpen) {
             openInfoBox(false);
+            openCalendar(false);
         }
     };
 
