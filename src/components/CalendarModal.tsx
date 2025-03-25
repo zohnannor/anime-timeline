@@ -296,9 +296,15 @@ export const CalendarModal: React.FC = () => {
         return months;
     };
 
+    const furthestDate = nextChapterDate
+        ? currentDate > nextChapterDate
+            ? currentDate
+            : nextChapterDate
+        : currentDate;
+
     const months = useMemo(
-        () => getMonthsBetween(startDate, currentDate),
-        [currentDate, startDate]
+        () => getMonthsBetween(startDate, furthestDate),
+        [furthestDate, startDate]
     );
 
     const handleDayClick = useCallback(

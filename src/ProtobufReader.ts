@@ -13,6 +13,7 @@ interface Title {
     name?: string;
     author?: string;
     portraitImageUrl?: string;
+    titleUpdateStatus?: number;
 }
 
 interface TitleDetailView {
@@ -66,12 +67,14 @@ const decodeMessage = <T>(
     descriptors: FieldDescriptor<T>[]
 ): T => {
     const result: Partial<T> = {};
+    end = end === 0 ? reader.len : reader.pos + end;
     while (reader.pos < end) {
         const tag = reader.u32() >>> 3;
         const descriptor = descriptors.find(d => d.tag === tag);
         if (descriptor) {
             result[descriptor.property] = descriptor.decoder(reader);
         } else {
+            console.warn(`tag: ${tag}, unknown descriptor`);
             break;
         }
     }
@@ -84,6 +87,7 @@ const decodeTitle = (reader: ProtobufReader, length: number): Title => {
         { tag: 2, property: 'name', decoder: r => r.string() },
         { tag: 3, property: 'author', decoder: r => r.string() },
         { tag: 4, property: 'portraitImageUrl', decoder: r => r.string() },
+        { tag: 8, property: 'titleUpdateStatus', decoder: r => r.u32() },
     ]);
 };
 
@@ -135,6 +139,7 @@ export const fetchNextChapterDate = async (): Promise<Date | null> => {
         const result = decodeApiResponse(reader, reader.len);
 
         if (!result.Ok?.titleDetailView?.nextTimeStamp) {
+            console.error(result);
             throw new Error('Next chapter timestamp not found in response');
         }
 
