@@ -161,6 +161,10 @@ export const InfoBoxContent = (
                     navigation (desktop only)
                 </li>
                 <li>
+                    Save the page as a huge PNG file (warning: it's about 50 MB
+                    in size)
+                </li>
+                <li>
                     Seasons and volumes without images are not officially
                     confirmed and may be incorrect. Not every chapter has a
                     Pochita sketch, so some are just numbers
