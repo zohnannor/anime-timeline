@@ -1059,7 +1059,7 @@ export const FLOATING_BUTTONS: {
     },
     {
         filename: 'pochita7',
-        title: 'Capture timeline (Save as a huge PNG file)',
-        option: 'captureTimeline',
+        title: 'Capture timeline (Save as a PNG)',
+        option: 'captureTimelineModalOpen',
     },
 ];

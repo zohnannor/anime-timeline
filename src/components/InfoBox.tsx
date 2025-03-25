@@ -7,7 +7,15 @@ import { scale } from '../constants';
 import { useSettings } from '../providers/SettingsProvider';
 import { Link } from './Link';
 
-const InfoBoxRoot = styled.div`
+const ShadowOverlay = styled.div`
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+`;
+
+const InfoBoxContainer = styled.div`
     position: fixed;
     left: 50%;
     top: 40%;
@@ -20,14 +28,6 @@ const InfoBoxRoot = styled.div`
     @media (max-width: 768px) {
         height: 80svh;
     }
-`;
-
-const ShadowOverlay = styled.div`
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
 `;
 
 interface BoxProps {
@@ -236,12 +236,12 @@ export const InfoBox: React.FC = () => {
                 className='shadowOverlay'
                 onClick={() => setInfoBoxOpen(false)}
             />
-            <InfoBoxRoot className='infoBoxRoot'>
+            <InfoBoxContainer className='infoBoxContainer'>
                 <CloseButton onClick={() => setInfoBoxOpen(false)}>
                     &times;
                 </CloseButton>
                 {InfoBoxContent}
-            </InfoBoxRoot>
+            </InfoBoxContainer>
         </>,
         document.querySelector('#infoBox')!
     );

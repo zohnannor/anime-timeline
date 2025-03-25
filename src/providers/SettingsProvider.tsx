@@ -8,12 +8,6 @@ import React, {
     useState,
 } from 'react';
 
-import { useToPng } from '@hugocxl/react-to-image';
-
-import { CHAPTERS_TOTAL, MAX_HEIGHT } from '../constants';
-import { getChapterWidth } from '../helpers';
-import { map, range, sum } from '../util';
-
 export interface Settings {
     showCrosslines: boolean;
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,9 +19,8 @@ export interface Settings {
     setCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     showTitles: boolean;
     setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
-    // TODO: refactor so that we don't need this dummy field
-    captureTimeline: boolean;
-    setCaptureTimeline: () => void;
+    captureTimelineModalOpen: boolean;
+    setCaptureTimelineModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // ☝🤓
@@ -58,7 +51,7 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     unboundedChapterWidth: 'setUnboundedChapterWidth',
     calendarOpen: 'setCalendarOpen',
     showTitles: 'setShowTitles',
-    captureTimeline: 'setCaptureTimeline',
+    captureTimelineModalOpen: 'setCaptureTimelineModalOpen',
 };
 
 const SettingsContext = createContext<Settings>({
@@ -72,8 +65,8 @@ const SettingsContext = createContext<Settings>({
     setCalendarOpen: () => {},
     showTitles: true,
     setShowTitles: () => {},
-    captureTimeline: false,
-    setCaptureTimeline: () => {},
+    captureTimelineModalOpen: false,
+    setCaptureTimelineModalOpen: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -89,6 +82,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     });
     const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
+    const [captureTimelineModalOpen, setCaptureTimelineModalOpen] =
+        useState(false);
     const [showTitles, setShowTitlesRaw] = useState(() => {
         // default to true if not set (first visit), otherwise get from storage
         return window.localStorage.getItem('showTitles') !== 'false';
@@ -124,6 +119,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setCalendarOpen(open);
     };
 
+    const openCaptureTimelineModal = (open: React.SetStateAction<boolean>) => {
+        if (open) {
+            window.history.pushState({ captureTimelineModal: true }, '');
+        } else {
+            if (window.history.state?.captureTimelineModal) {
+                window.history.back();
+            }
+        }
+        setCaptureTimelineModalOpen(open);
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.ctrlKey && e.code == 'KeyC') {
             setShowCrosslines(p => !p);
@@ -132,12 +138,14 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         if (e.code === 'Escape' && infoBoxOpen) {
             openInfoBox(false);
             openCalendar(false);
+            openCaptureTimelineModal(false);
         }
     };
 
     const handlePopState = useCallback((e: PopStateEvent) => {
         setInfoBoxOpen(!!e.state?.infoBoxOpen);
         setCalendarOpen(!!e.state?.calendarOpen);
+        setCaptureTimelineModalOpen(!!e.state?.captureTimelineModal);
     }, []);
 
     useEffect(() => {
@@ -149,24 +157,6 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [infoBoxOpen, calendarOpen]);
-
-    const [_, captureTimeline, __] = useToPng({
-        selector: '#root',
-        canvasHeight: MAX_HEIGHT,
-        canvasWidth: sum(
-            map(range(0, CHAPTERS_TOTAL), v =>
-                getChapterWidth(v + 1, unboundedChapterWidth)
-            )
-        ),
-        backgroundColor: '#000',
-        filter: el => !el.classList?.contains('floatingButtons'),
-        onSuccess: dataUrl => {
-            const link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = `CSM_Timeline_${new Date().toISOString()}.png`;
-            link.click();
-        },
-    });
 
     return (
         <SettingsContext.Provider
@@ -181,8 +171,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 setCalendarOpen: openCalendar,
                 showTitles,
                 setShowTitles,
-                captureTimeline: false,
-                setCaptureTimeline: captureTimeline,
+                captureTimelineModalOpen,
+                setCaptureTimelineModalOpen: openCaptureTimelineModal,
             }}
         >
             {children}
