@@ -15,7 +15,7 @@ export const VOLUME_HEIGHT = 1579;
 export const CHAPTER_HEIGHT = 100;
 export const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 export const TIMELINE_HEIGHT = 200;
-const MAX_HEIGHT =
+export const MAX_HEIGHT =
     SEASON_HEIGHT +
     ARC_HEIGHT +
     TIMELINE_HEIGHT +
@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-const CHAPTERS_TOTAL = 197;
+export const CHAPTERS_TOTAL = 197;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 19;
@@ -1056,5 +1056,10 @@ export const FLOATING_BUTTONS: {
         filename: 'pochita5',
         title: 'Toggle always show titles',
         option: 'showTitles',
+    },
+    {
+        filename: 'pochita7',
+        title: 'Capture timeline (Save as a huge PNG file)',
+        option: 'captureTimeline',
     },
 ];
