@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { CalendarModal } from './components/CalendarModal';
+import { CaptureTimelineModal } from './components/CaptureTimelineModal';
 import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
 import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
@@ -20,11 +21,12 @@ const AppContainer = styled.div`
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
-    const { infoBoxOpen, calendarOpen } = useSettings();
+    const { infoBoxOpen, calendarOpen, captureTimelineModalOpen } =
+        useSettings();
 
     const handleScroll = useCallback(
         (e: WheelEvent) => {
-            if (infoBoxOpen || calendarOpen) return;
+            if (infoBoxOpen || calendarOpen || captureTimelineModalOpen) return;
             document.body.scrollLeft += e.deltaY;
         },
         [infoBoxOpen, calendarOpen]
@@ -39,6 +41,7 @@ const App: React.FC = () => {
         <>
             <TimeLineHeaders />
             <CalendarModal />
+            <CaptureTimelineModal />
             <InfoBox />
             <AppContainer className='appContainer'>
                 <FloatingButtons>
