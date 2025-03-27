@@ -36,7 +36,7 @@ export const SMALL_FONT_SIZE = 45;
 export const CHAPTERS_TOTAL = 197;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
-const VOLUMES_RELEASED_TOTAL = 19;
+const VOLUMES_RELEASED_TOTAL = 20;
 const VOLUMES_TOTAL = 21;
 
 const PAGES_PER_CHAPTER_PER_VOLUME = [
@@ -531,7 +531,6 @@ const VOLUME_COVERS = [
         range(0, VOLUMES_RELEASED_TOTAL),
         n => `Volume_${pad(n + 1)}` as const
     ),
-    null,
     null,
 ] as const;
 
