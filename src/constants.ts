@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-export const CHAPTERS_TOTAL = 198;
+export const CHAPTERS_TOTAL = 199;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 20;
@@ -60,39 +60,39 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [17, 16, 15, 15, 16, 16, 16, 16, 17, 17, 16],
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
-    [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15, 15],
+    [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15, 15, 15],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
-    Length<typeof PAGES_PER_CHAPTER_PER_VOLUME>,
     Length<typeof PAGES_PER_CHAPTER_FLAT>,
     Length<Flatten<typeof CHAPTER_PICTURES>>,
+    Length<typeof CHAPTER_NAMES>,
+    Length<typeof CHAPTER_DATES>,
+    Length<typeof PAGES_PER_CHAPTER_PER_VOLUME>,
+    Length<typeof VOLUME_COVERS>,
+    Length<typeof VOLUME_TITLES>,
     Length<typeof ARC_IMAGES>,
     Length<typeof ARC_NAMES>,
-    Length<typeof VOLUME_COVERS>,
-    Length<typeof SEASON_COVERS>,
     Length<typeof EPISODE_THUMBNAILS>,
-    Length<typeof CHAPTERS_PER_EPISODE>,
-    Length<typeof CHAPTER_DATES>,
-    Length<typeof CHAPTER_NAMES>,
     Length<typeof EPISODE_TITLES>,
-    Length<typeof SEASON_TITLES>,
-    Length<typeof VOLUME_TITLES>
+    Length<typeof CHAPTERS_PER_EPISODE>,
+    Length<typeof SEASON_COVERS>,
+    Length<typeof SEASON_TITLES>
 ] = [
-    VOLUMES_TOTAL,
     CHAPTERS_TOTAL,
     CHAPTERS_TOTAL,
-    ARCS_TOTAL,
-    ARCS_TOTAL,
+    CHAPTERS_TOTAL,
+    CHAPTERS_TOTAL,
     VOLUMES_TOTAL,
+    VOLUMES_TOTAL,
+    VOLUMES_TOTAL,
+    ARCS_TOTAL,
+    ARCS_TOTAL,
+    EPISODES_TOTAL,
+    EPISODES_TOTAL,
+    EPISODES_TOTAL,
     4,
-    EPISODES_TOTAL,
-    EPISODES_TOTAL,
-    CHAPTERS_TOTAL,
-    CHAPTERS_TOTAL,
-    EPISODES_TOTAL,
     2,
-    VOLUMES_TOTAL,
 ] as const;
 
 void _ASSERT_LEGNTHS; // to ignore error
@@ -269,6 +269,7 @@ const CHAPTER_PICTURES = [
     ],
     [null, null, null, null, null, null, null, null, null, null],
     [
+        null,
         null,
         null,
         null,
@@ -522,6 +523,7 @@ const CHAPTER_NAMES = [
     'Chainsaw Man to the Rescue!',
     '3 Seconds',
     "It's Fami!",
+    'Enjoy Your Food',
 ] as const;
 
 const ARC_NAMES = [
@@ -810,6 +812,7 @@ export const CHAPTER_DATES = map(
         'March 12, 2025',
         'March 26, 2025',
         'April 2, 2025',
+        'April 9, 2025',
     ] as const,
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
