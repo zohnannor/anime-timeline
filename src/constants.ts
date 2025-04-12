@@ -37,7 +37,7 @@ export const CHAPTERS_TOTAL = 199;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 20;
-const VOLUMES_TOTAL = 21;
+const VOLUMES_TOTAL = 22;
 
 const PAGES_PER_CHAPTER_PER_VOLUME = [
     [54, 25, 23, 19, 19, 19, 19],
@@ -60,7 +60,8 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [17, 16, 15, 15, 16, 16, 16, 16, 17, 17, 16],
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
-    [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15, 15, 15],
+    [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15],
+    [15, 15],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
@@ -267,23 +268,21 @@ const CHAPTER_PICTURES = [
         null,
         'Volume_19_Pochita_Sketch_4',
     ],
-    [null, null, null, null, null, null, null, null, null, null],
     [
         null,
         null,
         null,
         null,
+        'Volume_20_Pochita_Sketch_1',
         null,
         null,
+        'Volume_20_Pochita_Sketch_2',
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+        'Volume_20_Pochita_Sketch_3',
     ],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null],
 ] as const;
 
 const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
@@ -548,6 +547,7 @@ const VOLUME_COVERS = [
         range(0, VOLUMES_RELEASED_TOTAL),
         n => `Volume_${pad(n + 1)}` as const
     ),
+    null,
     null,
 ] as const;
 
@@ -922,6 +922,7 @@ const VOLUME_TITLES = [
     CHAPTER_NAMES[164],
     CHAPTER_NAMES[175],
     CHAPTER_NAMES[186],
+    CHAPTER_NAMES[197],
 ] as const;
 
 type Covers = {
