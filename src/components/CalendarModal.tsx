@@ -253,10 +253,11 @@ export const CalendarModal: React.FC = () => {
 
     useEffect(() => {
         (async () => {
+            if (!calendarOpen) return;
             const date = await fetchNextChapterDate();
             setNextChapterDate(date);
         })();
-    }, []);
+    }, [calendarOpen]);
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
