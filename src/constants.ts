@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-export const CHAPTERS_TOTAL = 203;
+export const CHAPTERS_TOTAL = 204;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 20;
@@ -61,7 +61,7 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [14, 16, 16, 15, 16, 15, 15, 16, 15, 17, 16],
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
     [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15],
-    [15, 15, 15, 15, 15, 15],
+    [15, 15, 15, 15, 15, 15, 15],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
@@ -282,7 +282,7 @@ const CHAPTER_PICTURES = [
         'Volume_20_Pochita_Sketch_3',
     ],
     [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null],
+    [null, null, null, null, null, null, null],
 ] as const;
 
 const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
@@ -527,6 +527,7 @@ const CHAPTER_NAMES = [
     'Terror Looks Like This!',
     'Devil Combination',
     'Human Shield',
+    'With One Life',
 ] as const;
 
 const ARC_NAMES = [
@@ -821,6 +822,7 @@ export const CHAPTER_DATES = map(
         'April 30, 2025',
         'May 7, 2025',
         'May 21, 2025',
+        'May 28, 2025',
     ] as const,
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
