@@ -15,6 +15,18 @@ THUMB_WIDTH=100  # Thumbnail max width
 # Functions
 # ------------------------------------------------------------------------------
 
+# Convert orphan WebP images to PNG (if no PNG/JPG/JPEG exists)
+convert_orphan_webp() {
+  local webp="$1"
+  local base="${webp%.webp}"
+  # Check if any of the common image formats exist (case-insensitive)
+  if [[ ! -e "$base.png" && ! -e "$base.jpg" && ! -e "$base.jpeg" &&
+    ! -e "$base.PNG" && ! -e "$base.JPG" && ! -e "$base.JPEG" ]]; then
+    echo "Converting orphan WebP: $webp → ${base}.png"
+    magick "$webp" "${base}.png"
+  fi
+}
+
 # Process a single image (resize + convert to WebP without modifying originals)
 process_image() {
   local src="$1"
@@ -44,6 +56,12 @@ generate_thumbnail() {
 # Create directories if they don't exist
 mkdir -p "$THUMB_DIR"
 
+# Step 0: Convert orphan WebP images to PNG (if no PNG/JPG/JPEG exists)
+export -f convert_orphan_webp
+export MAIN_DIR
+find "$MAIN_DIR" -iname "*.webp" -print0 |
+  xargs -0 -P "$CPU" -I {} bash -c 'convert_orphan_webp "$@"' _ {}
+
 # Step 1: Create thumbnails from originals
 export -f generate_thumbnail
 export MAIN_DIR THUMB_DIR THUMB_WIDTH THUMB_QUALITY
@@ -64,5 +82,3 @@ echo -e "\nMain images size (WebP versions):"
 find "$MAIN_DIR" -name '*.webp' -exec du -ch {} + | grep total
 echo "Thumbnails size:"
 find "$THUMB_DIR" -name '*.webp' -exec du -ch {} + | grep total
-
-# script by deepseek-r1 my goat
