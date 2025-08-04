@@ -25,3 +25,17 @@ export const clamp = (val: number, min: number, max: number) => {
 export const isMobileDevice = () =>
     ('ontouchstart' in window || navigator.maxTouchPoints > 0) &&
     window.matchMedia('(pointer: coarse)').matches;
+
+export const getDocumentPosition = (element: HTMLElement) => {
+    let x = 0;
+    let y = 0;
+    let current = element;
+
+    while (current) {
+        x += current.offsetLeft + current.clientLeft;
+        y += current.offsetTop + current.clientTop;
+        current = current.offsetParent as HTMLElement;
+    }
+
+    return { x, y, width: element.offsetWidth };
+};

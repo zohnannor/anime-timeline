@@ -1,13 +1,24 @@
-import { PropsWithChildren, useEffect, useRef } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { HEADERS_WIDTH, pxToScale, scale } from '../constants';
+import { HEADERS_WIDTH, pxToScale, scale, scaleToPx } from '../constants';
+import useWindowScroll from '../hooks/useWindowScroll';
+import { getDocumentPosition as getElementPosition } from '../util';
 
 interface PreviewProps {
     $hasPicture: boolean;
+    $offsetX: number;
 }
 
-const Preview = styled.div<PreviewProps>`
+const PADDING = scaleToPx(50);
+
+const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
+    return {
+        style: {
+            '--left': `${scale($offsetX)}svh`,
+        } as React.CSSProperties,
+    };
+})`
     display: flex;
     height: ${({ $hasPicture }) => scale($hasPicture ? 600 : 250)}svh;
     width: ${scale(600)}svh;
@@ -23,6 +34,8 @@ const Preview = styled.div<PreviewProps>`
     color: black;
     border-radius: ${scale(40)}svh;
 
+    transform: translateX(var(--left));
+
     & > img {
         object-fit: contain;
         max-height: 75%;
@@ -30,38 +43,33 @@ const Preview = styled.div<PreviewProps>`
     }
 `;
 
-export const ChapterPreview: React.FC<
-    React.ComponentProps<'div'> & PropsWithChildren<PreviewProps>
-> = props => {
+type ChapterPreviewProps = React.ComponentProps<'div'> &
+    PropsWithChildren<Omit<PreviewProps, '$offsetX'>>;
+
+export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
     const previewRef = useRef<HTMLDivElement>(null);
+    const [offset, setOffset] = useState(0);
+    const { scrollX } = useWindowScroll();
 
     useEffect(() => {
         const element = previewRef.current;
         if (!element) return;
 
-        const adjustPosition = () => {
-            const { left: leftSrc } = element.getBoundingClientRect();
-            const left = pxToScale(leftSrc);
-            const padding = 50;
-            const width = 600 / 2;
-            const documentWidth = pxToScale(document.body.scrollWidth);
+        const { x: left, width } = getElementPosition(element);
+        const right = left + width;
 
-            const adjustX =
-                left + width > documentWidth
-                    ? documentWidth - (left + width)
-                    : left - width < HEADERS_WIDTH
-                    ? left
-                    : 0;
+        const visibleLeft = scrollX + scaleToPx(HEADERS_WIDTH);
+        const visibleRight = scrollX + document.body.clientWidth;
 
-            if (adjustX !== 0) {
-                element.style.transform = `translateX(${scale(
-                    adjustX - padding
-                )}svh)`;
-            }
-        };
+        const adjustX =
+            left <= visibleLeft
+                ? visibleLeft - left + PADDING
+                : right >= visibleRight
+                ? visibleRight - right - PADDING
+                : 0;
 
-        adjustPosition();
-    }, []);
+        setOffset(pxToScale(adjustX));
+    }, [scrollX]);
 
-    return <Preview ref={previewRef} {...props} />;
+    return <Preview ref={previewRef} $offsetX={offset} {...props} />;
 };

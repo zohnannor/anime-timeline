@@ -1,14 +1,8 @@
-import {
-    MouseEvent as MouseEventReact,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale, SCROLLER_WIDTH } from '../constants';
-import useMousePosition from '../hooks/useMousePosition';
+import useWindowScroll from '../hooks/useWindowScroll';
 import { clamp } from '../util';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -82,71 +76,39 @@ export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
 
 export const Scroller = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
-    const isDragging = useRef(false);
-    const isPageScrolling = useRef(false);
-    const wheelTimeout = useRef(0);
-    const [_, setT] = useState(Date.now());
-    const [offset, setOffset] = useState(0);
-    const mousePosition = useMousePosition();
+    const scrollerVisible = true;
+    const { scrollX, setScrollX } = useWindowScroll();
+    const [dragging, setDragging] = useState(false);
 
-    const updatePageScroll = useCallback((offsetRaw: number) => {
-        const offset = clamp(offsetRaw, 0, 1);
-        const el = document.body;
-        setOffset(offset);
-        el.scrollLeft = (el.scrollWidth - el.clientWidth) * offset;
-    }, []);
+    const body = document.body;
+    const totalX = body.scrollWidth - body.clientWidth;
+    const offset = scrollX / totalX;
 
-    const onPageScrollChange = useCallback(() => {
-        isPageScrolling.current = true;
-        const el = document.body;
-        const scrollWidth = el.scrollWidth - el.clientWidth;
-        setOffset(scrollWidth > 0 ? el.scrollLeft / scrollWidth : 0);
-
-        clearTimeout(wheelTimeout.current);
-        wheelTimeout.current = window.setTimeout(() => {
-            isPageScrolling.current = false;
-            setT(Date.now());
-        }, 400);
-    }, []);
-
-    const handleMouseMove = useCallback(
-        (e: MouseEvent) => {
-            if (!isDragging.current || !scrollerRef.current) return;
-            const rect = scrollerRef.current.getBoundingClientRect();
-            const offsetX = e.clientX - rect.left;
-            const normalizedOffset = clamp(offsetX / rect.width, 0, 1);
-            updatePageScroll(normalizedOffset);
-        },
-        [updatePageScroll]
-    );
-
-    const stopDragging = useCallback(() => {
-        isDragging.current = false;
-        setT(Date.now());
-    }, []);
-
-    useEffect(() => {
-        document.body.addEventListener('scroll', onPageScrollChange);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', stopDragging);
-        return () => {
-            document.body.removeEventListener('scroll', onPageScrollChange);
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', stopDragging);
-        };
-    }, [handleMouseMove, onPageScrollChange, stopDragging]);
-
-    const handleScrollerClick = (e: MouseEventReact<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const normalizedOffset = clamp(offsetX / rect.width, 0, 1);
-        updatePageScroll(normalizedOffset);
+    const updateScrollerHandle = (e: MouseEvent) => {
+        if (!scrollerRef.current) return;
+        const { left, width } = scrollerRef.current.getBoundingClientRect();
+        const percent = clamp((e.clientX - left) / width, 0, 1);
+        setScrollX(percent * totalX);
     };
 
-    const scrollerVisible =
-        isDragging.current ||
-        isPageScrolling.current ||
-        mousePosition.y > window.innerHeight - 100;
+    const handleDrag = useCallback(
+        (e: MouseEvent) => dragging && updateScrollerHandle(e),
+        [dragging]
+    );
+
+    const stopDrag = useCallback(() => setDragging(false), []);
+
+    useEffect(() => {
+        body.addEventListener('mousemove', handleDrag);
+        window.addEventListener('mouseup', stopDrag);
+        return () => {
+            body.removeEventListener('mousemove', handleDrag);
+            window.removeEventListener('mouseup', stopDrag);
+        };
+    }, [handleDrag, stopDrag]);
+
+    const handleScrollerClick = (e: React.MouseEvent) =>
+        updateScrollerHandle(e.nativeEvent);
 
     return (
         <ScrollerHoverArea
@@ -161,7 +123,7 @@ export const Scroller = () => {
             >
                 <ThumbnailImage
                     src='pochita'
-                    onMouseDown={() => (isDragging.current = true)}
+                    onMouseDown={() => setDragging(true)}
                 />
             </ScrollerWrapper>
         </ScrollerHoverArea>
