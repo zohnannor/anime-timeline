@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale, SCROLLER_WIDTH } from '../constants';
+import useMousePosition from '../hooks/useMousePosition';
 import useWindowScroll from '../hooks/useWindowScroll';
 import { clamp } from '../util';
 import { ThumbnailImage } from './ThumbnailImage';
@@ -76,9 +77,9 @@ export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
 
 export const Scroller = () => {
     const scrollerRef = useRef<HTMLDivElement>(null);
-    const scrollerVisible = true;
-    const { scrollX, setScrollX } = useWindowScroll();
+    const { scrollX, setScrollX, scrolling } = useWindowScroll();
     const [dragging, setDragging] = useState(false);
+    const { y: mouseY } = useMousePosition();
 
     const body = document.body;
     const totalX = body.scrollWidth - body.clientWidth;
@@ -109,6 +110,9 @@ export const Scroller = () => {
 
     const handleScrollerClick = (e: React.MouseEvent) =>
         updateScrollerHandle(e.nativeEvent);
+
+    const scrollerVisible =
+        dragging || scrolling || mouseY > window.innerHeight - 100;
 
     return (
         <ScrollerHoverArea
