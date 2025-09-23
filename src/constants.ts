@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-export const CHAPTERS_TOTAL = 214;
+export const CHAPTERS_TOTAL = 215;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 22;
@@ -62,7 +62,7 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
     [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15, 15],
     [15, 15, 15, 15, 15, 15, 15, 15, 15, 14, 15, 15],
-    [16, 15, 15, 14],
+    [16, 15, 15, 14, 15],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
@@ -297,7 +297,7 @@ const CHAPTER_PICTURES = [
         'Volume_21_Pochita_Sketch_4',
     ],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null],
+    [null, null, null, null, null],
 ] as const;
 
 const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
@@ -553,6 +553,7 @@ const CHAPTER_NAMES = [
     'Really Good Girl',
     'Role',
     'Bff, Creak, Door',
+    'Declaration of War',
 ] as const;
 
 const ARC_NAMES = [
@@ -857,6 +858,7 @@ export const CHAPTER_DATES = map(
         'August 20, 2025',
         'September 3, 2025',
         'September 17, 2025',
+        'September 24, 2025',
     ] as const,
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
