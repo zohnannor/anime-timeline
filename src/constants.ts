@@ -296,7 +296,20 @@ const CHAPTER_PICTURES = [
         null,
         'Volume_21_Pochita_Sketch_4',
     ],
-    [null, null, null, null, null, null, null, null, null, null, null, null],
+    [
+        'Volume_22_Pochita_Sketch_1',
+        null,
+        null,
+        null,
+        null,
+        'Volume_22_Pochita_Sketch_2',
+        null,
+        null,
+        null,
+        null,
+        'Volume_22_Pochita_Sketch_3',
+        'Volume_22_Pochita_Sketch_4',
+    ],
     [null, null, null, null, null, null],
 ] as const;
 
