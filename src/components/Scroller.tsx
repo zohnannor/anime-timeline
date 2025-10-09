@@ -16,7 +16,7 @@ export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     position: fixed;
     z-index: 10;
     bottom: 0;
-    height: ${scale(250)}svh;
+    height: ${scale(250)};
     width: 100svw;
     display: flex;
     justify-content: center;
@@ -25,7 +25,7 @@ export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
         ${({ $visible }) =>
             $visible &&
             css`
-                bottom: ${scale(160)}svh;
+                bottom: ${scale(160)};
             `}
     }
 `;
@@ -44,21 +44,21 @@ export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     transition: bottom 0.2s ease-in-out;
     pointer-events: auto;
     position: absolute;
-    bottom: -${scale(190)}svh;
-    height: ${scale(32)}svh;
-    width: ${scale(SCROLLER_WIDTH)}svh;
+    bottom: ${scale(-190)};
+    height: ${scale(32)};
+    width: ${scale(SCROLLER_WIDTH)};
     background-color: white;
-    border: ${scale(3)}svh solid black;
-    border-radius: ${scale(16)}svh;
+    border: ${scale(3)} solid black;
+    border-radius: ${scale(16)};
     display: flex;
     align-items: center;
-    filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
 
     & > img {
         position: absolute;
-        width: ${scale(160)}svh;
-        height: ${scale(160)}svh;
-        filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 0.5));
+        width: ${scale(160)};
+        height: ${scale(160)};
+        filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
         left: var(--left);
         transform: translateX(-50%) scale(1);
         transition: transform 0.2s ease-in-out;

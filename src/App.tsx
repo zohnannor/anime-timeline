@@ -8,7 +8,12 @@ import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { TimelineSection } from './components/TimelineSection';
-import { FLOATING_BUTTONS, TIMELINE_INFO } from './constants';
+import {
+    FLOATING_BUTTONS,
+    TIMELINE_HEIGHT,
+    TIMELINE_INFO,
+    TIMELINE_INFO_EXTRA,
+} from './constants';
 import useWindowSize from './hooks/useWindowSize';
 import { useSettings } from './providers/SettingsProvider';
 
@@ -21,8 +26,15 @@ const AppContainer = styled.div`
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
-    const { infoBoxOpen, calendarOpen, captureTimelineModalOpen } =
-        useSettings();
+    const {
+        infoBoxOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        animeTitle,
+        setAnimeTitle,
+    } = useSettings();
+
+    console.log({ animeTitle, setAnimeTitle });
 
     const handleScroll = useCallback(
         (e: WheelEvent) => {
@@ -37,9 +49,18 @@ const App: React.FC = () => {
         return () => window.removeEventListener('wheel', handleScroll);
     }, [handleScroll]);
 
+    useEffect(() => {
+        document.documentElement.style.setProperty(
+            '--max-height',
+            `${TIMELINE_INFO_EXTRA[animeTitle].MAX_HEIGHT + TIMELINE_HEIGHT}`
+        );
+        // set title
+        document.title = `${TIMELINE_INFO_EXTRA[animeTitle].title} Timeline`;
+    }, [animeTitle]);
+
     return (
         <>
-            <TimeLineHeaders />
+            <TimeLineHeaders $animeTitle={animeTitle} />
             <CalendarModal />
             <CaptureTimelineModal />
             <InfoBox />
@@ -54,7 +75,7 @@ const App: React.FC = () => {
                         />
                     ))}
                 </FloatingButtons>
-                {TIMELINE_INFO.map(item => (
+                {Object.values(TIMELINE_INFO[animeTitle]).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
                 {width > 768 && <Scroller />}

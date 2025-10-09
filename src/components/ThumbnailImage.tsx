@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { scale } from '../constants';
+import { useSettings } from '../providers/SettingsProvider';
 
 interface Offset {
     $offsetX?: number | undefined;
@@ -17,10 +18,10 @@ const Thumbnail = styled.div<ThumbnailProps & Offset>`
     inset: 0;
     background-size: cover;
     background-position: center;
-    filter: blur(${scale(10)}svh);
+    filter: blur(${scale(10)});
     background-image: url(${({ $thumbnail }) => $thumbnail});
     background-position: ${({ $offsetX, $offsetY }) =>
-        `${-scale($offsetX ?? 0)}svh ${-scale($offsetY ?? 0)}svh`};
+        `${-scale($offsetX ?? 0)} ${-scale($offsetY ?? 0)}`};
 `;
 
 interface ImageProps {
@@ -28,20 +29,21 @@ interface ImageProps {
 }
 
 const Image = styled.img<ImageProps & Offset>`
-    filter: blur(${({ $loading }) => scale($loading ? 10 : 0)}svh);
+    filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY }) =>
-        `${-scale($offsetX ?? 0)}svh ${-scale($offsetY ?? 0)}svh`};
+        `${-scale($offsetX ?? 0)} ${-scale($offsetY ?? 0)}`};
 `;
 
 export const ThumbnailImage: React.FC<
     React.ComponentProps<'img'> & Offset
 > = props => {
+    const { animeTitle } = useSettings();
     const [loading, setLoading] = useState(true);
     const { src, $offsetX, $offsetY, ...rest } = props;
 
-    const realSrc = `./csm/${src}.webp`;
-    const thumbnailSrc = `./thumbnails/${src}.webp`;
+    const realSrc = `./${animeTitle}/${src}.webp`;
+    const thumbnailSrc = `./${animeTitle}-thumbnails/${src}.webp`;
 
     return (
         <>

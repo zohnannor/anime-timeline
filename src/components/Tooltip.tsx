@@ -52,7 +52,7 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
     ({ $placement }) => {
         return {
             style: {
-                [OPPOSITE[$placement]]: `${scale(200)}svh`,
+                [OPPOSITE[$placement]]: `${scale(200)}`,
             },
         };
     }

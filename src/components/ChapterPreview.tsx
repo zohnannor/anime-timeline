@@ -1,38 +1,42 @@
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { HEADERS_WIDTH, pxToScale, scale, scaleToPx } from '../constants';
+import {
+    HEADERS_WIDTH,
+    MAX_HEIGHT,
+    scale,
+    TIMELINE_HEIGHT,
+} from '../constants';
 import useWindowScroll from '../hooks/useWindowScroll';
 import { getDocumentPosition as getElementPosition } from '../util';
+import { useSettings } from '../providers/SettingsProvider';
 
 interface PreviewProps {
     $hasPicture: boolean;
     $offsetX: number;
 }
 
-const PADDING = scaleToPx(50);
-
 const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
     return {
         style: {
-            '--left': `${scale($offsetX)}svh`,
+            '--left': `${scale($offsetX)}`,
         } as React.CSSProperties,
     };
 })`
     display: flex;
-    height: ${({ $hasPicture }) => scale($hasPicture ? 600 : 250)}svh;
-    width: ${scale(600)}svh;
-    padding: ${scale(30)}svh;
-    gap: ${scale(20)}svh;
+    height: ${({ $hasPicture }) => scale($hasPicture ? 600 : 250)};
+    width: ${scale(600)};
+    padding: ${scale(30)};
+    gap: ${scale(20)};
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-size: ${scale(50)}svh;
-    box-shadow: 0 0 ${scale(15)}svh ${scale(6)}svh rgba(0, 0, 0, 0.4);
+    font-size: ${scale(50)};
+    box-shadow: 0 0 ${scale(15)} ${scale(6)} rgba(0, 0, 0, 0.4);
     background: white;
     color: black;
-    border-radius: ${scale(40)}svh;
+    border-radius: ${scale(40)};
 
     transform: translateX(var(--left));
 
@@ -47,9 +51,15 @@ type ChapterPreviewProps = React.ComponentProps<'div'> &
     PropsWithChildren<Omit<PreviewProps, '$offsetX'>>;
 
 export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
+    const { animeTitle } = useSettings();
     const previewRef = useRef<HTMLDivElement>(null);
     const [offset, setOffset] = useState(0);
     const { scrollX } = useWindowScroll();
+
+    const scaleToPx = (n: number) =>
+        n * (window.innerHeight / (MAX_HEIGHT[animeTitle] + TIMELINE_HEIGHT));
+    const pxToScale = (n: number) =>
+        n * ((MAX_HEIGHT[animeTitle] + TIMELINE_HEIGHT) / window.innerHeight);
 
     useEffect(() => {
         const element = previewRef.current;
@@ -60,12 +70,13 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
 
         const visibleLeft = scrollX + scaleToPx(HEADERS_WIDTH);
         const visibleRight = scrollX + document.body.clientWidth;
+        const padding = scaleToPx(50);
 
         const adjustX =
             left <= visibleLeft
-                ? visibleLeft - left + PADDING
+                ? visibleLeft - left + padding
                 : right >= visibleRight
-                ? visibleRight - right - PADDING
+                ? visibleRight - right - padding
                 : 0;
 
         setOffset(pxToScale(adjustX));

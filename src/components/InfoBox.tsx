@@ -46,26 +46,26 @@ const Box = styled.div<BoxProps>`
     justify-content: center;
     width: 90vw;
     max-width: 90vw;
-    padding: ${scale(40)}svh ${scale(190)}svh;
+    padding: ${scale(40)} ${scale(190)};
     white-space: pre-line;
-    font-size: ${scale(75)}svh;
+    font-size: ${scale(75)};
 
     & a {
         text-decoration: underline dotted;
-        text-underline-offset: ${scale(10)}svh;
-        text-decoration-thickness: ${scale(3)}svh;
+        text-underline-offset: ${scale(10)};
+        text-decoration-thickness: ${scale(3)};
     }
 
     & kbd:has(kbd) {
-        margin: ${scale(20)}svh;
+        margin: ${scale(20)};
     }
 
     & kbd:not(:has(kbd)) {
         background-color: rgba(0, 0, 0, 0.5);
-        border: ${scale(3)}svh solid rgba(255, 255, 255, 0.5);
-        border-radius: ${scale(10)}svh;
-        box-shadow: 0 ${scale(3)}svh 0 rgba(255, 255, 255, 0.5);
-        padding: ${scale(2)}svh ${scale(12)}svh;
+        border: ${scale(3)} solid rgba(255, 255, 255, 0.5);
+        border-radius: ${scale(10)};
+        box-shadow: 0 ${scale(3)} 0 rgba(255, 255, 255, 0.5);
+        padding: ${scale(2)} ${scale(12)};
         font-size: 0.8em;
         line-height: 1;
     }
@@ -112,8 +112,8 @@ const CloseButton = styled.span`
     inset: 0;
     cursor: pointer;
     font-size: 1.5em;
-    top: ${scale(100)}svh;
-    right: ${scale(100)}svh;
+    top: ${scale(100)};
+    right: ${scale(100)};
     z-index: 101;
     float: right;
 `;

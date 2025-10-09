@@ -53,7 +53,7 @@ const Title = styled.h2`
 const CalendarGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: ${scale(16)}svh;
+    gap: ${scale(16)};
 `;
 
 const DayName = styled.div`
@@ -78,7 +78,7 @@ interface DayProps {
 const Day = styled.a<DayProps>`
     display: flex;
     flex-direction: column;
-    padding: ${scale(66)}svh;
+    padding: ${scale(66)};
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -87,26 +87,24 @@ const Day = styled.a<DayProps>`
     background-color: ${({ $isChapter, $background }) =>
         $isChapter ? $background : 'black'};
     cursor: ${({ $isChapter }) => ($isChapter ? 'pointer' : 'default')};
-    width: ${scale(200)}svh;
-    height: ${scale(200)}svh;
+    width: ${scale(200)};
+    height: ${scale(200)};
 
     ${({ $isToday, $background, $isChapter, $isNextChapter }) =>
         $isNextChapter
             ? css`
-                  border: ${scale(15)}svh solid
-                      ${$isChapter ? `red` : $background};
+                  border: ${scale(15)} solid ${$isChapter ? `red` : $background};
                   animation: ${hueGlow} 2s linear infinite;
               `
             : $isToday
             ? css`
-                  border: ${scale(15)}svh solid
-                      ${$isChapter ? `red` : $background};
+                  border: ${scale(15)} solid ${$isChapter ? `red` : $background};
               `
             : null}
 
     &:focus {
         z-index: 1;
-        outline: ${scale(20)}svh solid red;
+        outline: ${scale(20)} solid red;
         animation: ${hueGlow} 2s linear infinite;
     }
 `;
@@ -118,12 +116,12 @@ const Header = styled.div`
     position: sticky;
     inset: 0;
     background: black;
-    padding: ${scale(100)}svh;
-    border-bottom: ${scale(5)}svh solid #333;
+    padding: ${scale(100)};
+    border-bottom: ${scale(5)} solid #333;
 `;
 
 const CalendarContainer = styled.div`
-    padding: ${scale(100)}svh;
+    padding: ${scale(100)};
 `;
 
 const TooltipContent = styled.div`
@@ -131,10 +129,10 @@ const TooltipContent = styled.div`
     white-space: nowrap;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: ${scale(40)}svh;
-    padding: ${scale(25)}svh;
-    font-size: ${scale(60)}svh;
-    gap: ${scale(40)}svh;
+    border-radius: ${scale(40)};
+    padding: ${scale(25)};
+    font-size: ${scale(60)};
+    gap: ${scale(40)};
 `;
 
 interface MonthComponentProps {
@@ -239,14 +237,14 @@ const Button = styled.span`
     inset: 0;
     cursor: pointer;
     font-size: 1.5em;
-    top: ${scale(100)}svh;
-    right: ${scale(100)}svh;
+    top: ${scale(100)};
+    right: ${scale(100)};
     float: right;
-    margin-left: ${scale(100)}svh;
+    margin-left: ${scale(100)};
 `;
 
 export const CalendarModal: React.FC = () => {
-    const { calendarOpen, setCalendarOpen } = useSettings();
+    const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
     const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
@@ -270,11 +268,11 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
-    const startDate = CHAPTER_DATES[0];
+    const startDate = CHAPTER_DATES[animeTitle][0]!;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
-        CHAPTER_DATES.forEach((date, index) => {
+        CHAPTER_DATES[animeTitle].forEach((date, index) => {
             const dateStr = date.toISOString();
             map.set(dateStr, index + 1);
         });

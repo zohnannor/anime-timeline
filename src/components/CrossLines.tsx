@@ -28,7 +28,7 @@ const CrossLine = styled.div<CrossLineProps>`
     position: relative;
     height: 200svh;
     top: -100svh;
-    box-shadow: 0 0 ${scale(6)}svh ${scale(6)}svh rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 ${scale(6)} ${scale(6)} rgba(255, 0, 0, 0.8);
 
     &::after {
         content: '';

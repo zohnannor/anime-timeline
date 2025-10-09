@@ -16,17 +16,17 @@ const ButtonSection = styled.div`
     position: fixed;
     background: rgba(0, 0, 0, 0.25);
     flex-direction: column;
-    padding: ${scale(25)}svh;
-    border-radius: ${scale(40)}svh;
-    gap: ${scale(40)}svh;
-    top: ${scale(63)}svh;
-    right: ${scale(63)}svh;
+    padding: ${scale(25)};
+    border-radius: ${scale(40)};
+    gap: ${scale(40)};
+    top: ${scale(63)};
+    right: ${scale(63)};
     z-index: 100;
 
     & > div > img {
-        width: ${scale(160)}svh;
-        height: ${scale(160)}svh;
-        filter: drop-shadow(0 0 ${scale(16)}svh rgba(0, 0, 0, 1));
+        width: ${scale(160)};
+        height: ${scale(160)};
+        filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 1));
     }
 
     & > div > img:hover {
@@ -39,10 +39,10 @@ const FloatingButtonTooltip = styled.div`
     white-space: nowrap;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: ${scale(40)}svh;
-    padding: ${scale(25)}svh;
-    font-size: ${scale(60)}svh;
-    gap: ${scale(40)}svh;
+    border-radius: ${scale(40)};
+    padding: ${scale(25)};
+    font-size: ${scale(60)};
+    gap: ${scale(40)};
 `;
 
 export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => {

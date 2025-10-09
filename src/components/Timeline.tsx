@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import {
+    AnimeTitle,
     CHAPTER_DATES,
     CHAPTER_DATES_BY_MONTH,
     CHAPTER_DATES_BY_YEAR,
@@ -34,12 +35,12 @@ const Timeframe = withCrossLines(
             display: flex;
             align-items: center;
             justify-content: center;
-            height: ${scale(TIMELINE_HEIGHT / 3)}svh;
-            width: ${({ $width }) => scale($width)}svh;
+            height: ${scale(TIMELINE_HEIGHT / 3)};
+            width: ${({ $width }) => scale($width)};
             background: ${({ $background }) => $background};
             color: black;
-            font-size: ${scale(SMALL_FONT_SIZE)}svh;
-            line-height: ${scale(TIMELINE_HEIGHT / 3)}svh;
+            font-size: ${scale(SMALL_FONT_SIZE)};
+            line-height: ${scale(TIMELINE_HEIGHT / 3)};
             transition: width 0.2s ease-in-out;
             cursor: ${({ $variant }) =>
                 $variant === 'days' ? 'pointer' : 'default'};
@@ -55,7 +56,7 @@ const TimeframeDate = styled.div`
 const TimelineWrapper = styled.div`
     position: relative;
     display: flex;
-    height: ${scale(TIMELINE_HEIGHT / 3)}svh;
+    height: ${scale(TIMELINE_HEIGHT / 3)};
 `;
 
 type Segment = {
@@ -79,7 +80,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, setCalendarOpen } = useSettings();
+    const { unboundedChapterWidth, setCalendarOpen, animeTitle } =
+        useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -121,7 +123,11 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                 const totalWidth = chapterNumbers.reduce(
                     (total, chapterNumber) =>
                         total +
-                        getChapterWidth(chapterNumber, unboundedChapterWidth),
+                        getChapterWidth(
+                            animeTitle,
+                            chapterNumber,
+                            unboundedChapterWidth
+                        ),
                     0
                 );
 
@@ -156,14 +162,16 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 };
 
-export const Timeline: React.FC = () => {
-    const daysSegments = CHAPTER_DATES.map((date, idx) => ({
+export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
+    $animeTitle,
+}) => {
+    const daysSegments = CHAPTER_DATES[$animeTitle].map((date, idx) => ({
         chapterNumbers: [idx + 1],
         colorValue: date.getDate(),
         label: date.getDate().toString(),
     }));
 
-    const monthsSegments = CHAPTER_DATES_BY_MONTH.map(dates => {
+    const monthsSegments = CHAPTER_DATES_BY_MONTH($animeTitle).map(dates => {
         const month = dates[0]![1].getMonth();
         return {
             chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
@@ -172,7 +180,7 @@ export const Timeline: React.FC = () => {
         };
     });
 
-    const yearsSegments = CHAPTER_DATES_BY_YEAR.map(dates => {
+    const yearsSegments = CHAPTER_DATES_BY_YEAR($animeTitle).map(dates => {
         const yearDate = dates[0]![1];
         return {
             chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),

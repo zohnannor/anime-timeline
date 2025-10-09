@@ -26,8 +26,8 @@ const SectionItem = withCrossLines(
         position: relative;
         display: flex;
         flex-direction: column;
-        height: ${({ $height }) => scale($height)}svh;
-        width: ${({ $width }) => scale($width)}svh;
+        height: ${({ $height }) => scale($height)};
+        width: ${({ $width }) => scale($width)};
         transition: width 0.2s ease-in-out;
 
         ${({ $focusable }) =>
@@ -35,7 +35,7 @@ const SectionItem = withCrossLines(
             css`
                 &:focus {
                     z-index: 1;
-                    outline: ${scale(20)}svh solid red;
+                    outline: ${scale(20)} solid red;
                     animation: ${hueGlow} 2s linear infinite;
                 }
             `}
@@ -64,7 +64,7 @@ export const SectionItemCover = withShadow(
 
         background-color: ${({ $backgroundColor }) => $backgroundColor};
         color: ${({ $color }) => $color};
-        font-size: ${({ $blankFontSize }) => scale($blankFontSize)}svh;
+        font-size: ${({ $blankFontSize }) => scale($blankFontSize)};
         height: 100%;
         width: 100%;
 
@@ -123,7 +123,7 @@ export const SectionItemCover = withShadow(
                 ${({ $titleVisible }) =>
                     $titleVisible &&
                     css`
-                        filter: blur(${scale(10)}svh);
+                        filter: blur(${scale(10)});
                     `}
             }
         }
@@ -138,7 +138,7 @@ export const SectionItemCover = withShadow(
                 ${({ $titleVisible }) =>
                     $titleVisible &&
                     css`
-                        filter: blur(${scale(5)}svh);
+                        filter: blur(${scale(5)});
                     `}
                 transform: none !important;
                 transition: none !important;
@@ -153,7 +153,7 @@ export const SectionItemCover = withShadow(
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: ${({ $titleFontSize }) => scale($titleFontSize)}svh;
+            font-size: ${({ $titleFontSize }) => scale($titleFontSize)};
             color: white;
             z-index: 2;
             opacity: 0;
@@ -162,9 +162,9 @@ export const SectionItemCover = withShadow(
             transition: opacity 0.2s ease-in-out;
             text-wrap: auto;
             text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
-                1px 1px 0 black, 0 0 ${scale(10)}svh black,
-                0 0 ${scale(20)}svh rgba(0, 0, 0, 0.5),
-                0 0 ${scale(30)}svh rgba(0, 0, 0, 0.3);
+                1px 1px 0 black, 0 0 ${scale(10)} black,
+                0 0 ${scale(20)} rgba(0, 0, 0, 0.5),
+                0 0 ${scale(30)} rgba(0, 0, 0, 0.3);
 
             ${({ $titleVisible }) =>
                 $titleVisible &&
@@ -177,9 +177,11 @@ export const SectionItemCover = withShadow(
 
 export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
     const [hoveredItem, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, showTitles, showCrosslines } = useSettings();
+    const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
+        useSettings();
 
-    if (timelineItem.type === 'timeline') return <Timeline />;
+    if (timelineItem.type === 'timeline')
+        return <Timeline $animeTitle={animeTitle} />;
 
     const {
         covers,

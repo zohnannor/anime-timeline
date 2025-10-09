@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
-import { CHAPTERS_TOTAL, MAX_HEIGHT, scale } from '../constants';
+import { MAX_HEIGHT, CHAPTERS_TOTAL, scale } from '../constants';
 import { getChapterWidth } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { map, range, sum } from '../util';
@@ -25,13 +25,13 @@ const ModalContainer = styled.div`
     transform: translate(-50%, -40%);
     z-index: 100;
     background: rgba(0, 0, 0, 0.85);
-    padding: ${scale(40)}svh ${scale(190)}svh;
+    padding: ${scale(40)} ${scale(190)};
     max-width: 50svw;
 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: ${scale(75)}svh;
+    font-size: ${scale(75)};
     width: 80vw;
 `;
 
@@ -43,7 +43,7 @@ const Button = styled.button`
     cursor: pointer;
     background-color: black;
     color: white;
-    font-size: ${scale(60)}svh;
+    font-size: ${scale(60)};
     border-color: white;
 `;
 
@@ -52,14 +52,15 @@ export const CaptureTimelineModal: React.FC = () => {
         captureTimelineModalOpen,
         setCaptureTimelineModalOpen,
         unboundedChapterWidth,
+        animeTitle,
     } = useSettings();
 
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: MAX_HEIGHT,
+        canvasHeight: MAX_HEIGHT[animeTitle],
         canvasWidth: sum(
-            map(range(0, CHAPTERS_TOTAL), v =>
-                getChapterWidth(v + 1, unboundedChapterWidth)
+            map(range(0, CHAPTERS_TOTAL[animeTitle]), v =>
+                getChapterWidth(animeTitle, v + 1, unboundedChapterWidth)
             )
         ),
         backgroundColor: '#000',
@@ -67,7 +68,7 @@ export const CaptureTimelineModal: React.FC = () => {
         onSuccess: dataUrl => {
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `CSM_Timeline_${new Date().toISOString()}.png`;
+            link.download = `${animeTitle?.toUpperCase()}_Timeline_${new Date().toISOString()}.png`;
             link.click();
         },
     });

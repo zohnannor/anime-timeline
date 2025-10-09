@@ -4,36 +4,19 @@ import {
     getEpisodeWidth,
     getSeasonWidth,
     getVolumeWidth,
-} from './helpers';
-import { SettingsValues } from './providers/SettingsProvider';
-import { Flatten, Length, Tuple } from './types';
-import { isMobileDevice, map, pad, range, sum } from './util';
+} from '../helpers';
+import { Flatten, Length, Tuple } from '../types';
+import { map, pad, range, sum } from '../util';
+import { Offset, TimelineInfo, TimelineInfoExtra } from '.';
 
-export const SEASON_HEIGHT = 742;
-export const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
-export const VOLUME_HEIGHT = 1579;
-export const CHAPTER_HEIGHT = 100;
-export const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
-export const TIMELINE_HEIGHT = 200;
-export const MAX_HEIGHT =
-    SEASON_HEIGHT +
-    ARC_HEIGHT +
-    TIMELINE_HEIGHT +
-    CHAPTER_HEIGHT +
-    VOLUME_HEIGHT;
+const SEASON_HEIGHT = 742;
+const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+const VOLUME_HEIGHT = 1579;
+const CHAPTER_HEIGHT = 100;
+const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
+const MAX_HEIGHT = SEASON_HEIGHT + ARC_HEIGHT + CHAPTER_HEIGHT + VOLUME_HEIGHT;
 
-const COEFFICIENT = MAX_HEIGHT / 100;
-export const scale = (n: number) => n / COEFFICIENT;
-export const scaleToPx = (n: number) => n * (window.innerHeight / MAX_HEIGHT);
-export const pxToScale = (n: number) => n * (MAX_HEIGHT / window.innerHeight);
-
-export const SCROLLER_WIDTH = 1300;
-export const HEADERS_WIDTH = 150;
-
-export const LARGE_FONT_SIZE = 500;
-export const SMALL_FONT_SIZE = 45;
-
-export const CHAPTERS_TOTAL = 216;
+const CHAPTERS_TOTAL = 216;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 22;
@@ -99,17 +82,16 @@ const _ASSERT_LEGNTHS: [
 
 void _ASSERT_LEGNTHS; // to ignore error
 
-export const PAGES_PER_CHAPTER_FLAT =
-    PAGES_PER_CHAPTER_PER_VOLUME.flat() as Flatten<
-        typeof PAGES_PER_CHAPTER_PER_VOLUME
-    >;
+const PAGES_PER_CHAPTER_FLAT = PAGES_PER_CHAPTER_PER_VOLUME.flat() as Flatten<
+    typeof PAGES_PER_CHAPTER_PER_VOLUME
+>;
 
-export const CHAPTERS_PER_VOLUME = map(
+const CHAPTERS_PER_VOLUME = map(
     PAGES_PER_CHAPTER_PER_VOLUME,
     volume => volume.length
 );
 
-export const PAGES_PER_VOLUME = map(PAGES_PER_CHAPTER_PER_VOLUME, volume =>
+const PAGES_PER_VOLUME = map(PAGES_PER_CHAPTER_PER_VOLUME, volume =>
     sum(volume)
 );
 
@@ -317,7 +299,7 @@ const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
     typeof CHAPTER_PICTURES
 >;
 
-export const CHAPTERS_PER_ARC: [number, number][] = [
+const CHAPTERS_PER_ARC: [number, number][] = [
     [1, 4],
     [5, 13],
     [14, 22],
@@ -602,21 +584,16 @@ const SEASON_COVERS = [
     null,
 ] as const;
 
-export const CHAPTERS_PER_SEASON: [number, number][] = [
+const CHAPTERS_PER_SEASON: [number, number][] = [
     [1, 38],
     [39, 52],
     [53, 97],
     [98, CHAPTERS_TOTAL],
 ];
 
-const EPISODE_THUMBNAILS = map(range(1, 13), n => n.toString());
+const EPISODE_THUMBNAILS = map(range(0, EPISODES_TOTAL), n => n.toString());
 
-const CHAPTERS_WITH_PAGES = map(
-    PAGES_PER_CHAPTER_FLAT,
-    (pages, chapterIdx) => [chapterIdx + 1, pages] as const
-);
-
-export const SPLIT_CHAPTERS: Record<number, number> = {
+const SPLIT_CHAPTERS: Record<number, number> = {
     5: 10,
     12: 1,
     15: 10,
@@ -628,35 +605,7 @@ export const SPLIT_CHAPTERS: Record<number, number> = {
 
 const CHAPTERS_PER_EPISODE = [1, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4] as const;
 
-const CHAPTERS_SPLIT_FOR_EPISODES = CHAPTERS_WITH_PAGES.slice(0, 38 + 1).reduce(
-    (a, [chapter = 0, pages = 0]) => [
-        ...a,
-        // make two of the same "chapter" if it needs to be split
-        ...(chapter in SPLIT_CHAPTERS
-            ? [
-                  [chapter, SPLIT_CHAPTERS[chapter]!],
-                  [chapter, pages - SPLIT_CHAPTERS[chapter]!],
-              ]
-            : // leave as is
-              [[chapter, pages]]),
-    ],
-    [] as number[][]
-);
-
-export const PAGES_PER_EPISODE_WITH_CHAPTERS = CHAPTERS_PER_EPISODE.reduce<
-    [number[][][], number]
->(
-    ([groups, cursor], chapterCount) => {
-        const episodeChapters = CHAPTERS_SPLIT_FOR_EPISODES.slice(
-            cursor,
-            cursor + chapterCount
-        );
-        return [[...groups, episodeChapters], cursor + chapterCount];
-    },
-    [[], 0]
-)[0];
-
-export const CHAPTER_DATES = map(
+const CHAPTER_DATES = map(
     [
         'December 3, 2018',
         'December 10, 2018',
@@ -878,32 +827,6 @@ export const CHAPTER_DATES = map(
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
 
-const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
-    array.reduce<[[number, T][][], number | null]>(
-        ([groups, previous], date, idx) => {
-            const key = getKey(date);
-            if (key === previous) {
-                groups[groups.length - 1]!.push([idx, date]);
-            } else {
-                groups.push([[idx, date]]);
-            }
-            return [groups, key];
-        },
-        [[], null]
-    )[0];
-
-export const CHAPTER_DATES_BY_MONTH = groupBy(
-    CHAPTER_DATES,
-    date => date.getMonth() + 1
-);
-
-export const CHAPTER_DATES_BY_YEAR = groupBy(
-    CHAPTER_DATES,
-    date => date.getFullYear() + 1
-);
-
-type Offset = { x: number; y: number };
-
 const ARC_OFFSETS: Tuple<Offset, typeof ARCS_TOTAL> = [
     { x: 130, y: 0 },
     { x: 220, y: 0 },
@@ -987,65 +910,15 @@ const VOLUME_TITLES = [
     CHAPTER_NAMES[210],
 ] as const;
 
-type Covers = {
-    season: typeof SEASON_COVERS;
-    episode: typeof EPISODE_THUMBNAILS;
-    arc: typeof ARC_IMAGES;
-    chapter: typeof CHAPTER_PICTURES_FLAT;
-    volume: typeof VOLUME_COVERS;
-};
-
-type Titles = {
-    season: typeof SEASON_TITLES;
-    episode: typeof EPISODE_TITLES;
-    arc: typeof ARC_NAMES;
-    chapter: typeof CHAPTER_NAMES;
-    volume: typeof VOLUME_TITLES;
-};
-
-type Offsets = {
-    season: typeof SEASON_OFFSETS;
-    episode: typeof EPISODE_OFFSETS;
-    arc: typeof ARC_OFFSETS;
-};
-
-type TimelineInfoType = 'season' | 'episode' | 'arc' | 'chapter' | 'volume';
-
-type TimelineInfoMap = {
-    [K in TimelineInfoType]: {
-        type: K;
-        covers: Covers[K];
-        fit?: 'contain' | 'cover';
-        backgroundColor?: 'black' | 'white';
-        scale?: number;
-        titles: Titles[K];
-        sidewaysText?: boolean;
-        blankfontSize: number;
-        titleFontSize: number;
-        titleProcessor?: (title: string, n: number) => string;
-        height: number;
-        widthHandler: (
-            itemNumber: number,
-            unboundedChapterWidth: boolean
-        ) => number;
-        wikiLink: (name: string, n: number) => string;
-        offsets?: K extends keyof Offsets ? Offsets[K] : undefined;
-        focusable?: boolean;
-        timeline?: TimelineInfoItem;
-    };
-}[TimelineInfoType];
-
-export type TimelineInfoItem = { type: 'timeline' } | TimelineInfoMap;
-
-export const TIMELINE_INFO: TimelineInfoItem[] = [
-    {
+export const CSM_TIMELINE_INFO: TimelineInfo = {
+    season: {
         type: 'season',
         height: SEASON_HEIGHT,
         covers: SEASON_COVERS,
         titles: SEASON_TITLES,
         blankfontSize: 250,
         titleFontSize: 100,
-        widthHandler: getSeasonWidth,
+        widthHandler: (...args) => getSeasonWidth('csm', ...args),
         wikiLink: season => `https://chainsaw-man.fandom.com/wiki/${season}`,
         offsets: SEASON_OFFSETS,
         timeline: {
@@ -1057,13 +930,13 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
             titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
             blankfontSize: 42,
             titleFontSize: 42,
-            widthHandler: getEpisodeWidth,
+            widthHandler: (...args) => getEpisodeWidth('csm', ...args),
             wikiLink: (_, n) =>
                 `https://chainsaw-man.fandom.com/wiki/Episode_${n}`,
             offsets: EPISODE_OFFSETS,
         },
     },
-    {
+    arc: {
         type: 'arc',
         height: ARC_HEIGHT,
         covers: ARC_IMAGES,
@@ -1072,15 +945,15 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         titleProcessor: title => `${title} arc`,
         blankfontSize: 100,
         titleFontSize: 100,
-        widthHandler: getArcWidth,
+        widthHandler: (...args) => getArcWidth('csm', ...args),
         wikiLink: arcName =>
             `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`,
         offsets: ARC_OFFSETS,
     },
-    {
+    timeline: {
         type: 'timeline',
     },
-    {
+    chapter: {
         type: 'chapter',
         height: CHAPTER_HEIGHT,
         covers: CHAPTER_PICTURES_FLAT,
@@ -1090,11 +963,11 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         titleProcessor: title => title,
         blankfontSize: 45,
         titleFontSize: 45,
-        widthHandler: getChapterWidth,
+        widthHandler: (...args) => getChapterWidth('csm', ...args),
         wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Chapter_${n}`,
         focusable: true,
     },
-    {
+    volume: {
         type: 'volume',
         height: VOLUME_HEIGHT,
         covers: VOLUME_COVERS,
@@ -1102,45 +975,25 @@ export const TIMELINE_INFO: TimelineInfoItem[] = [
         titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
         blankfontSize: 500,
         titleFontSize: 100,
-        widthHandler: getVolumeWidth,
+        widthHandler: (...args) => getVolumeWidth('csm', ...args),
         wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Volume_${n}`,
     },
-];
+};
 
-export const FLOATING_BUTTONS: {
-    filename: string;
-    title: string;
-    option: keyof SettingsValues;
-}[] = [
-    { filename: 'pochita2', title: 'Read info', option: 'infoBoxOpen' },
-
-    {
-        filename: 'pochita3',
-        title: 'Toggle unbounded chapter width',
-        option: 'unboundedChapterWidth',
-    },
-    ...(!isMobileDevice() // include cross-lines button only on desktop
-        ? [
-              {
-                  filename: 'pochita6',
-                  title: 'Toggle cross-lines',
-                  option: 'showCrosslines',
-              } as const,
-          ]
-        : []),
-    {
-        filename: 'pochita4',
-        title: 'Open chapter calendar',
-        option: 'calendarOpen',
-    },
-    {
-        filename: 'pochita5',
-        title: 'Toggle always show titles',
-        option: 'showTitles',
-    },
-    {
-        filename: 'pochita7',
-        title: 'Capture timeline (Save as a PNG)',
-        option: 'captureTimelineModalOpen',
-    },
-];
+export const CSM_TIMELINE_INFO_EXTRA: TimelineInfoExtra = {
+    title: 'Chainsaw Man',
+    ARC_HEIGHT,
+    CHAPTER_DATES,
+    CHAPTER_HEIGHT,
+    CHAPTERS_PER_ARC,
+    CHAPTERS_PER_SEASON,
+    CHAPTERS_PER_VOLUME,
+    CHAPTERS_TOTAL,
+    MAX_HEIGHT,
+    PAGES_PER_CHAPTER_FLAT,
+    PAGES_PER_VOLUME,
+    SEASON_HEIGHT,
+    SPLIT_CHAPTERS,
+    VOLUME_HEIGHT,
+    CHAPTERS_PER_EPISODE,
+};

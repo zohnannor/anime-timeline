@@ -1,15 +1,27 @@
 #!/bin/bash
 
 # Configuration
-CPU="${CPU:-16}"                # Number of parallel processes
-MAIN_DIR="./public/csm"         # Original images directory
-THUMB_DIR="./public/thumbnails" # Thumbnails directory
+if [ $# -eq 0 ]; then
+    echo "Error: Title argument is required"
+    echo "Usage: $0 <title>"
+    exit 1
+fi
+
+TITLE="$1" # Manga/Anime title
+CPU="${CPU:-32}"                         # Number of parallel processes
+MAIN_DIR="./public/${TITLE}"             # Original images directory
+THUMB_DIR="./public/${TITLE}-thumbnails" # Thumbnails directory
 
 # Quality Settings
 MAIN_QUALITY=50  # WebP quality for main images
 THUMB_QUALITY=10 # WebP quality for thumbnails
 MAIN_WIDTH=800   # Main image max width
 THUMB_WIDTH=100  # Thumbnail max width
+
+if [ ! -d $MAIN_DIR ]; then
+    echo "Error: Directory for \"$TITLE\" does not exist"
+    exit 1
+fi
 
 # ------------------------------------------------------------------------------
 # Functions
@@ -53,6 +65,19 @@ generate_thumbnail() {
 # Main Script
 # ------------------------------------------------------------------------------
 
+# Show usage if help requested
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  echo "Usage: $0 <title>"
+  echo "  title: Manga/Anime title"
+  echo "         Sets main directory to ./public/<title>"
+  echo "         Sets thumbnails directory to ./public/<title>-thumbnails"
+  exit 0
+fi
+
+echo "Using title: $TITLE"
+echo "Main directory: $MAIN_DIR"
+echo "Thumbnails directory: $THUMB_DIR"
+
 # Create directories if they don't exist
 mkdir -p "$THUMB_DIR"
 
@@ -75,10 +100,19 @@ find "$MAIN_DIR" \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -prin
   xargs -0 -P "$CPU" -I {} bash -c 'process_image "$@" $MAIN_QUALITY $MAIN_WIDTH' _ {}
 
 # Step 2.1: Special handling for key visual (preserve original)
-magick "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.webp"
+case $TITLE in
+  csm)
+    magick "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.webp"
+    ;;
+  berserk)
+    magick "$MAIN_DIR/Berserk_Anime_Box_Art.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Berserk_Anime_Box_Art.webp"
+    ;;
+esac
 
 # Final size report
 echo -e "\nMain images size (WebP versions):"
 find "$MAIN_DIR" -name '*.webp' -exec du -ch {} + | grep total
 echo "Thumbnails size:"
 find "$THUMB_DIR" -name '*.webp' -exec du -ch {} + | grep total
+
+# script by deepseek-r1 my goat

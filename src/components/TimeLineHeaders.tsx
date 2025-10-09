@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import {
+    AnimeTitle,
     ARC_HEIGHT,
     CHAPTER_HEIGHT,
     HEADERS_WIDTH,
@@ -21,11 +22,11 @@ const Header = withShadow(
         position: relative;
         display: flex;
         width: 100%;
-        height: ${({ $height }) => scale($height)}svh;
+        height: ${({ $height }) => scale($height)};
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-size: ${scale(60)}svh;
+        font-size: ${scale(60)};
 
         writing-mode: vertical-lr;
         @supports (writing-mode: sideways-lr) {
@@ -44,7 +45,7 @@ const Header = withShadow(
 );
 
 const Headers = styled.div`
-    width: ${scale(HEADERS_WIDTH)}svh;
+    width: ${scale(HEADERS_WIDTH)};
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -53,29 +54,43 @@ const Headers = styled.div`
     user-select: none;
 `;
 
-export const TimeLineHeaders: React.FC = () => {
+export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
+    $animeTitle,
+}) => {
     return (
         <Headers className='headers'>
-            <Header className='header' $height={SEASON_HEIGHT} $invertBorder>
+            <Header
+                className='header'
+                $height={SEASON_HEIGHT[$animeTitle]}
+                $invertBorder
+            >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'>
                     Anime Seasons
                 </Link>
             </Header>
-            <Header className='header' $height={ARC_HEIGHT} $invertBorder>
+            <Header
+                className='header'
+                $height={ARC_HEIGHT[$animeTitle]}
+                $invertBorder
+            >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'>
                     Story Arcs
                 </Link>
             </Header>
             <Header
                 className='header'
-                $height={TIMELINE_HEIGHT + CHAPTER_HEIGHT}
+                $height={TIMELINE_HEIGHT + CHAPTER_HEIGHT[$animeTitle]}
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
                     Chapters
                 </Link>
             </Header>
-            <Header className='header' $height={VOLUME_HEIGHT} $invertBorder>
+            <Header
+                className='header'
+                $height={VOLUME_HEIGHT[$animeTitle]}
+                $invertBorder
+            >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
                     Volumes
                 </Link>
