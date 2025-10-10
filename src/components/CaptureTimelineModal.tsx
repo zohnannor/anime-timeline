@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
-import { MAX_HEIGHT, CHAPTERS_TOTAL, scale } from '../constants';
+import { scale, TIMELINE } from '../constants';
 import { getChapterWidth } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { map, range, sum } from '../util';
@@ -57,9 +57,9 @@ export const CaptureTimelineModal: React.FC = () => {
 
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: MAX_HEIGHT[animeTitle],
+        canvasHeight: TIMELINE[animeTitle].extra.MAX_HEIGHT,
         canvasWidth: sum(
-            map(range(0, CHAPTERS_TOTAL[animeTitle]), v =>
+            map(range(0, TIMELINE[animeTitle].extra.CHAPTERS_TOTAL), v =>
                 getChapterWidth(animeTitle, v + 1, unboundedChapterWidth)
             )
         ),

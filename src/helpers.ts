@@ -2,27 +2,27 @@ import { keyframes } from 'styled-components';
 
 import {
     AnimeTitle,
-    CHAPTERS_PER_ARC,
-    CHAPTERS_PER_SEASON,
-    CHAPTERS_PER_VOLUME,
-    PAGES_PER_CHAPTER_FLAT,
     PAGES_PER_EPISODE_WITH_CHAPTERS,
-    PAGES_PER_VOLUME,
-    SPLIT_CHAPTERS,
+    TIMELINE,
 } from './constants';
 import { map, range, sum } from './util';
 
 export { fetchNextChapterDate } from './ProtobufReader';
 
 const getPagesInChapter = (animeTitle: AnimeTitle, chapter: number) =>
-    PAGES_PER_CHAPTER_FLAT[animeTitle]?.[chapter - 1] ?? 19;
+    TIMELINE[animeTitle].extra.PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
 
 const getChapterNumber = (
     animeTitle: AnimeTitle,
     volume: number,
     volumeChapter: number
 ) =>
-    sum(CHAPTERS_PER_VOLUME[animeTitle].slice(0, volume - 1)) +
+    sum(
+        (TIMELINE[animeTitle].extra.CHAPTERS_PER_VOLUME ?? []).slice(
+            0,
+            volume - 1
+        )
+    ) +
     volumeChapter +
     1;
 
@@ -35,7 +35,12 @@ export const getVolumeWidth = (
     return unboundedChapterWidth
         ? sum(
               map(
-                  range(0, CHAPTERS_PER_VOLUME[animeTitle][volume - 1] ?? 0),
+                  range(
+                      0,
+                      (TIMELINE[animeTitle].extra.CHAPTERS_PER_VOLUME ?? [])[
+                          volume - 1
+                      ] ?? 0
+                  ),
                   volumeChapters =>
                       getChapterWidth(
                           animeTitle,
@@ -48,7 +53,7 @@ export const getVolumeWidth = (
 };
 
 const getVolumeByChapter = (animeTitle: AnimeTitle, chapter: number) =>
-    CHAPTERS_PER_VOLUME[animeTitle]
+    (TIMELINE[animeTitle].extra.CHAPTERS_PER_VOLUME ?? [])
         .reduce<number[]>(
             (chapters, pages) => [
                 ...chapters,
@@ -66,8 +71,11 @@ export const getChapterWidth = (
     const volume = getVolumeByChapter(animeTitle, chapter);
     const pagesInChapter = getPagesInChapter(animeTitle, chapter);
     return unboundedChapterWidth
-        ? pagesInChapter * (1000 / PAGES_PER_VOLUME[animeTitle][0]!) * 1.05
-        : (pagesInChapter / (PAGES_PER_VOLUME[animeTitle][volume - 1] ?? 0)) *
+        ? pagesInChapter *
+              (1000 / TIMELINE[animeTitle].extra.PAGES_PER_VOLUME[0]!) *
+              1.05
+        : (pagesInChapter /
+              (TIMELINE[animeTitle].extra.PAGES_PER_VOLUME[volume - 1] ?? 0)) *
               getVolumeWidth(animeTitle, volume, false);
 };
 
@@ -78,7 +86,7 @@ const getChapterPageWidth = (
 ) => {
     const volume = getVolumeByChapter(animeTitle, chapter);
     return (
-        (1 / (PAGES_PER_VOLUME[animeTitle][volume - 1] ?? 0)) *
+        (1 / (TIMELINE[animeTitle].extra.PAGES_PER_VOLUME[volume - 1] ?? 0)) *
         getVolumeWidth(animeTitle, volume, unboundedChapterWidth)
     );
 };
@@ -88,7 +96,9 @@ export const getArcWidth = (
     arc: number,
     unboundedChapterWidth: boolean
 ) => {
-    const [start, end] = CHAPTERS_PER_ARC[animeTitle][arc - 1] ?? [1, 1];
+    const [start, end] = TIMELINE[animeTitle].extra.CHAPTERS_PER_ARC[
+        arc - 1
+    ] ?? [1, 1];
     return range(start, end + 1).reduce((acc, chapter) => {
         return (
             acc + getChapterWidth(animeTitle, chapter, unboundedChapterWidth)
@@ -101,9 +111,13 @@ export const getSeasonWidth = (
     season: number,
     unboundedChapterWidth: boolean
 ) => {
-    const [start, end] = CHAPTERS_PER_SEASON[animeTitle][season - 1] ?? [1, 1];
-    const splitFirst = SPLIT_CHAPTERS[animeTitle][start - 1];
-    const splitLast = SPLIT_CHAPTERS[animeTitle][end];
+    const [start, end] = (TIMELINE[animeTitle].extra.CHAPTERS_PER_SEASON ?? [])[
+        season - 1
+    ] ?? [1, 1];
+    const splitFirst = (TIMELINE[animeTitle].extra.SPLIT_CHAPTERS ?? [])[
+        start - 1
+    ];
+    const splitLast = (TIMELINE[animeTitle].extra.SPLIT_CHAPTERS ?? [])[end];
     // shorten/lengthen the season if it doesn't cover the whole chapter
     return range(start, end + 1).reduce((acc, chapter) => {
         return (

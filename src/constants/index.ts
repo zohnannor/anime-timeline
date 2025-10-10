@@ -1,7 +1,7 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { isMobileDevice } from '../util';
-import { BERSERK_TIMELINE_INFO, BERSERK_TIMELINE_INFO_EXTRA } from './berserk';
-import { CSM_TIMELINE_INFO, CSM_TIMELINE_INFO_EXTRA } from './csm';
+import { BERSERK_TIMELINE } from './berserk';
+import { CSM_TIMELINE } from './csm';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
@@ -12,31 +12,30 @@ export const SMALL_FONT_SIZE = 45;
 export const TIMELINE_HEIGHT = 200;
 
 export type AnimeTitle = 'csm' | 'berserk';
-
 export const TITLES: AnimeTitle[] = ['csm', 'berserk'];
 
 export type Offset = { x: number; y: number };
 
 type Covers = {
-    season: readonly (string | null)[];
-    episode: readonly string[];
-    arc: readonly (string | null)[];
-    chapter: readonly (string | null)[];
-    volume: readonly (string | null)[];
+    season: (string | null)[];
+    episode: string[];
+    arc: (string | null)[];
+    chapter: (string | null)[];
+    volume: (string | null)[];
 };
 
 type Titles = {
-    season: readonly string[];
-    episode: readonly string[];
-    arc: readonly string[];
-    chapter: readonly string[];
-    volume: readonly (string | null)[];
+    season: string[];
+    episode: string[];
+    arc: string[];
+    chapter: string[];
+    volume: (string | null)[];
 };
 
 type Offsets = {
-    season: readonly Offset[];
-    episode: readonly Offset[];
-    arc: readonly Offset[];
+    season: Offset[];
+    episode: Offset[];
+    arc: Offset[];
 };
 
 type TimelineInfoType = 'season' | 'episode' | 'arc' | 'chapter' | 'volume';
@@ -67,83 +66,54 @@ type TimelineInfoMap = {
 
 export type TimelineInfoItem = { type: 'timeline' } | TimelineInfoMap;
 
-export type TimelineInfo = {
+type TimelineInfo = {
     [K in 'timeline' | TimelineInfoType]?: TimelineInfoItem;
 };
 
-export type TimelineInfoExtra = {
+type TimelineInfoExtra = {
     title: string;
-    MAX_HEIGHT: number;
-    CHAPTER_DATES: Date[];
-    CHAPTERS_TOTAL: number;
-    CHAPTERS_PER_ARC: [number, number][];
-    CHAPTERS_PER_SEASON: [number, number][];
-    CHAPTERS_PER_VOLUME: number[];
-    PAGES_PER_CHAPTER_FLAT: number[];
-    PAGES_PER_VOLUME: number[];
-    SPLIT_CHAPTERS: Record<number, number>;
+
+    SEASON_HEIGHT: number;
     ARC_HEIGHT: number;
     CHAPTER_HEIGHT: number;
-    SEASON_HEIGHT: number;
     VOLUME_HEIGHT: number;
-    CHAPTERS_PER_EPISODE: readonly number[];
+    MAX_HEIGHT: number;
+
+    CHAPTERS_TOTAL: number;
+    ARCS_TOTAL: number;
+    EPISODES_TOTAL: number;
+    VOLUMES_RELEASED_TOTAL: number;
+    VOLUMES_TOTAL: number;
+    SEASONS_TOTAL: number;
+
+    CHAPTER_DATES: Date[];
+    CHAPTERS_PER_ARC: [number, number][];
+    PAGES_PER_CHAPTER_FLAT: number[];
+    PAGES_PER_VOLUME: number[];
+    CHAPTERS_PER_VOLUME: number[];
+
+    CHAPTERS_PER_EPISODE: number[];
+    CHAPTERS_PER_SEASON: [number, number][];
+    SPLIT_CHAPTERS: Record<number, number>;
+    CHAPTER_PICTURES: (string | null)[][];
+    PAGES_PER_CHAPTER_PER_VOLUME: number[][];
+};
+
+export type TimelineTitle = {
+    info: TimelineInfo;
+    extra: TimelineInfoExtra;
+};
+
+export const TIMELINE: Record<AnimeTitle, TimelineTitle> = {
+    berserk: BERSERK_TIMELINE,
+    csm: CSM_TIMELINE,
 };
 
 export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
-export const TIMELINE_INFO: Record<AnimeTitle, TimelineInfo> = {
-    berserk: BERSERK_TIMELINE_INFO,
-    csm: CSM_TIMELINE_INFO,
-};
-
-export const TIMELINE_INFO_EXTRA: Record<AnimeTitle, TimelineInfoExtra> = {
-    berserk: BERSERK_TIMELINE_INFO_EXTRA,
-    csm: CSM_TIMELINE_INFO_EXTRA,
-};
-
-export const MAX_HEIGHT: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.MAX_HEIGHT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.MAX_HEIGHT,
-};
-
-export const CHAPTER_DATES: Record<AnimeTitle, Date[]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTER_DATES,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTER_DATES,
-};
-
-export const CHAPTERS_TOTAL: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTERS_TOTAL,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTERS_TOTAL,
-};
-
-export const CHAPTERS_PER_ARC: Record<AnimeTitle, [number, number][]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTERS_PER_ARC,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTERS_PER_ARC,
-};
-
-export const CHAPTERS_PER_SEASON: Record<AnimeTitle, [number, number][]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTERS_PER_SEASON,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTERS_PER_SEASON,
-};
-
-export const CHAPTERS_PER_VOLUME: Record<AnimeTitle, number[]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTERS_PER_VOLUME,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTERS_PER_VOLUME,
-};
-
-export const PAGES_PER_CHAPTER_FLAT: Record<AnimeTitle, number[]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.PAGES_PER_CHAPTER_FLAT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.PAGES_PER_CHAPTER_FLAT,
-};
-
-const CHAPTERS_PER_EPISODE: Record<AnimeTitle, readonly number[]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTERS_PER_EPISODE,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTERS_PER_EPISODE,
-};
-
 const CHAPTERS_WITH_PAGES = (animeTitle: AnimeTitle) =>
-    PAGES_PER_CHAPTER_FLAT[animeTitle].map(
+    TIMELINE[animeTitle].extra.PAGES_PER_CHAPTER_FLAT.map(
         (pages, chapterIdx) => [chapterIdx + 1, pages] as const
     );
 
@@ -162,13 +132,21 @@ const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
     )[0];
 
 export const CHAPTER_DATES_BY_MONTH = (animeTitle: AnimeTitle) =>
-    groupBy(CHAPTER_DATES[animeTitle], date => date.getMonth() + 1);
+    groupBy(
+        TIMELINE[animeTitle].extra.CHAPTER_DATES,
+        date => date.getMonth() + 1
+    );
 
 export const CHAPTER_DATES_BY_YEAR = (animeTitle: AnimeTitle) =>
-    groupBy(CHAPTER_DATES[animeTitle], date => date.getFullYear() + 1);
+    groupBy(
+        TIMELINE[animeTitle].extra.CHAPTER_DATES,
+        date => date.getFullYear() + 1
+    );
 
 export const PAGES_PER_EPISODE_WITH_CHAPTERS = (animeTitle: AnimeTitle) =>
-    CHAPTERS_PER_EPISODE[animeTitle].reduce<[number[][][], number]>(
+    TIMELINE[animeTitle].extra.CHAPTERS_PER_EPISODE.reduce<
+        [number[][][], number]
+    >(
         ([groups, cursor], chapterCount) => {
             const episodeChapters = CHAPTERS_SPLIT_FOR_EPISODES(
                 animeTitle
@@ -185,12 +163,20 @@ const CHAPTERS_SPLIT_FOR_EPISODES = (animeTitle: AnimeTitle) =>
             (a, [chapter = 0, pages = 0]) => [
                 ...a,
                 // make two of the same "chapter" if it needs to be split
-                ...(chapter in SPLIT_CHAPTERS[animeTitle]
+                ...(chapter in TIMELINE[animeTitle].extra.SPLIT_CHAPTERS
                     ? [
-                          [chapter, SPLIT_CHAPTERS[animeTitle][chapter]!],
                           [
                               chapter,
-                              pages - SPLIT_CHAPTERS[animeTitle][chapter]!,
+                              TIMELINE[animeTitle].extra.SPLIT_CHAPTERS[
+                                  chapter
+                              ]!,
+                          ],
+                          [
+                              chapter,
+                              pages -
+                                  TIMELINE[animeTitle].extra.SPLIT_CHAPTERS[
+                                      chapter
+                                  ]!,
                           ],
                       ]
                     : // leave as is
@@ -198,36 +184,6 @@ const CHAPTERS_SPLIT_FOR_EPISODES = (animeTitle: AnimeTitle) =>
             ],
             [] as number[][]
         );
-
-export const PAGES_PER_VOLUME: Record<AnimeTitle, number[]> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.PAGES_PER_VOLUME,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.PAGES_PER_VOLUME,
-};
-
-export const SPLIT_CHAPTERS: Record<AnimeTitle, Record<number, number>> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.SPLIT_CHAPTERS,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.SPLIT_CHAPTERS,
-};
-
-export const ARC_HEIGHT: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.ARC_HEIGHT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.ARC_HEIGHT,
-};
-
-export const CHAPTER_HEIGHT: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.CHAPTER_HEIGHT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.CHAPTER_HEIGHT,
-};
-
-export const SEASON_HEIGHT: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.SEASON_HEIGHT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.SEASON_HEIGHT,
-};
-
-export const VOLUME_HEIGHT: Record<AnimeTitle, number> = {
-    csm: CSM_TIMELINE_INFO_EXTRA.VOLUME_HEIGHT,
-    berserk: BERSERK_TIMELINE_INFO_EXTRA.VOLUME_HEIGHT,
-};
 
 export const FLOATING_BUTTONS: {
     filename: string;

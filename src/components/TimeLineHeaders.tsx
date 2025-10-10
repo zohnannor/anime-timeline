@@ -2,13 +2,10 @@ import styled from 'styled-components';
 
 import {
     AnimeTitle,
-    ARC_HEIGHT,
-    CHAPTER_HEIGHT,
     HEADERS_WIDTH,
     scale,
-    SEASON_HEIGHT,
+    TIMELINE,
     TIMELINE_HEIGHT,
-    VOLUME_HEIGHT,
 } from '../constants';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
@@ -57,20 +54,19 @@ const Headers = styled.div`
 export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
+    const seasonHeight = TIMELINE[$animeTitle].extra.SEASON_HEIGHT;
     return (
         <Headers className='headers'>
+            {seasonHeight && (
+                <Header className='header' $height={seasonHeight} $invertBorder>
+                    <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'>
+                        Anime Seasons
+                    </Link>
+                </Header>
+            )}
             <Header
                 className='header'
-                $height={SEASON_HEIGHT[$animeTitle]}
-                $invertBorder
-            >
-                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'>
-                    Anime Seasons
-                </Link>
-            </Header>
-            <Header
-                className='header'
-                $height={ARC_HEIGHT[$animeTitle]}
+                $height={TIMELINE[$animeTitle].extra.ARC_HEIGHT}
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'>
@@ -79,7 +75,9 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             </Header>
             <Header
                 className='header'
-                $height={TIMELINE_HEIGHT + CHAPTER_HEIGHT[$animeTitle]}
+                $height={
+                    TIMELINE_HEIGHT + TIMELINE[$animeTitle].extra.CHAPTER_HEIGHT
+                }
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
@@ -88,7 +86,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             </Header>
             <Header
                 className='header'
-                $height={VOLUME_HEIGHT[$animeTitle]}
+                $height={TIMELINE[$animeTitle].extra.VOLUME_HEIGHT}
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>

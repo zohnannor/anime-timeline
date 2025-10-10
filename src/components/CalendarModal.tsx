@@ -8,7 +8,7 @@ import React, {
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
-import { CHAPTER_DATES, scale } from '../constants';
+import { scale, TIMELINE } from '../constants';
 import {
     DAYS_GRADIENT,
     fetchNextChapterDate,
@@ -268,11 +268,11 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
-    const startDate = CHAPTER_DATES[animeTitle][0]!;
+    const startDate = TIMELINE[animeTitle].extra.CHAPTER_DATES[0]!;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
-        CHAPTER_DATES[animeTitle].forEach((date, index) => {
+        TIMELINE[animeTitle].extra.CHAPTER_DATES.forEach((date, index) => {
             const dateStr = date.toISOString();
             map.set(dateStr, index + 1);
         });

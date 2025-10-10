@@ -7,7 +7,7 @@ import {
 } from '../helpers';
 import { Flatten, Length, Tuple } from '../types';
 import { map, range, sum } from '../util';
-import { Offset, TimelineInfo, TimelineInfoExtra } from '.';
+import { Offset, TimelineConfig, TimelineTitle } from '.';
 
 const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -17,8 +17,10 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 2;
 const MAX_HEIGHT = SEASON_HEIGHT + ARC_HEIGHT + CHAPTER_HEIGHT + VOLUME_HEIGHT;
 
 const CHAPTERS_TOTAL = 398; // 16 + 382
+const SEASONS_TOTAL = 1;
 const EPISODES_TOTAL = 25;
 const ARCS_TOTAL = 5;
+const VOLUMES_RELEASED_TOTAL = 42;
 const VOLUMES_TOTAL = 43;
 
 const PAGES_PER_CHAPTER_PER_VOLUME = [
@@ -95,8 +97,8 @@ const _ASSERT_LEGNTHS: [
     EPISODES_TOTAL,
     EPISODES_TOTAL,
     EPISODES_TOTAL,
-    1,
-    1,
+    SEASONS_TOTAL,
+    SEASONS_TOTAL,
 ] as const;
 
 void _ASSERT_LEGNTHS; // to ignore error
@@ -553,7 +555,10 @@ const SEASON_COVERS = ['Berserk_Anime_Box_Art'] as const;
 
 const CHAPTERS_PER_SEASON: [number, number][] = [[1, 94]];
 
-const EPISODE_THUMBNAILS = map(range(0, EPISODES_TOTAL), n => n.toString());
+const EPISODE_THUMBNAILS = map(
+    map(range(0, EPISODES_TOTAL), n => n + 1),
+    n => n.toString()
+);
 
 const SPLIT_CHAPTERS: Record<number, number> = {} as const;
 
@@ -1012,90 +1017,93 @@ const VOLUME_TITLES = [
     null,
 ] as const;
 
-export const BERSERK_TIMELINE_INFO: TimelineInfo = {
-    season: {
-        type: 'season',
-        height: SEASON_HEIGHT,
-        covers: SEASON_COVERS,
-        titles: SEASON_TITLES,
-        blankfontSize: 250,
-        titleFontSize: 100,
-        widthHandler: (...args) => getSeasonWidth('berserk', ...args),
-        wikiLink: season => `https://berserk.fandom.com/wiki/${season}`,
-        offsets: SEASON_OFFSETS,
+export const BERSERK_TIMELINE: TimelineTitle = {
+    info: {
+        season: {
+            type: 'season',
+            height: SEASON_HEIGHT,
+            covers: SEASON_COVERS,
+            titles: SEASON_TITLES,
+            blankfontSize: 250,
+            titleFontSize: 100,
+            widthHandler: (...args) => getSeasonWidth('berserk', ...args),
+            wikiLink: season => `https://berserk.fandom.com/wiki/${season}`,
+            offsets: SEASON_OFFSETS,
+            timeline: {
+                type: 'episode',
+                height: EPISODE_HEIGHT,
+                covers: EPISODE_THUMBNAILS,
+                scale: 1.2,
+                titles: EPISODE_TITLES,
+                titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+                blankfontSize: 42,
+                titleFontSize: 42,
+                widthHandler: (...args) => getEpisodeWidth('berserk', ...args),
+                wikiLink: (_, n) =>
+                    `https://berserk.fandom.com/wiki/Episode_${n}_(1997_Anime)`,
+                offsets: EPISODE_OFFSETS,
+            },
+        },
+        arc: {
+            type: 'arc',
+            height: ARC_HEIGHT,
+            covers: ARC_IMAGES,
+            titles: ARC_NAMES,
+            sidewaysText: true,
+            titleProcessor: title => `${title} Arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
+            widthHandler: (...args) => getArcWidth('berserk', ...args),
+            wikiLink: arcName =>
+                `https://berserk.fandom.com/wiki/${arcName}_Arc`,
+            offsets: ARC_OFFSETS,
+        },
         timeline: {
-            type: 'episode',
-            height: EPISODE_HEIGHT,
-            covers: EPISODE_THUMBNAILS,
-            scale: 1.2,
-            titles: EPISODE_TITLES,
-            titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
-            blankfontSize: 42,
-            titleFontSize: 42,
-            widthHandler: (...args) => getEpisodeWidth('berserk', ...args),
+            type: 'timeline',
+        },
+        chapter: {
+            type: 'chapter',
+            height: CHAPTER_HEIGHT,
+            covers: CHAPTER_PICTURES_FLAT,
+            fit: 'contain',
+            backgroundColor: 'white',
+            titles: CHAPTER_NAMES,
+            titleProcessor: title => title,
+            blankfontSize: 45,
+            titleFontSize: 45,
+            widthHandler: (...args) => getChapterWidth('berserk', ...args),
+            wikiLink: s =>
+                `https://berserk.fandom.com/wiki/Episode_${s}_(Manga)`,
+            focusable: true,
+        },
+        volume: {
+            type: 'volume',
+            height: VOLUME_HEIGHT,
+            covers: VOLUME_COVERS,
+            titles: VOLUME_TITLES,
+            titleProcessor: title => title,
+            blankfontSize: 500,
+            titleFontSize: 100,
+            widthHandler: (...args) => getVolumeWidth('berserk', ...args),
             wikiLink: (_, n) =>
-                `https://berserk.fandom.com/wiki/Episode_${n}_(1997_Anime)`,
-            offsets: EPISODE_OFFSETS,
+                `https://berserk.fandom.com/wiki/Releases_(Manga)#vol${n}`,
         },
     },
-    arc: {
-        type: 'arc',
-        height: ARC_HEIGHT,
-        covers: ARC_IMAGES,
-        titles: ARC_NAMES,
-        sidewaysText: true,
-        titleProcessor: title => `${title} Arc`,
-        blankfontSize: 100,
-        titleFontSize: 100,
-        widthHandler: (...args) => getArcWidth('berserk', ...args),
-        wikiLink: arcName => `https://berserk.fandom.com/wiki/${arcName}_Arc`,
-        offsets: ARC_OFFSETS,
+    extra: {
+        title: 'Berserk',
+        ARC_HEIGHT,
+        CHAPTER_DATES,
+        CHAPTER_HEIGHT,
+        CHAPTERS_PER_ARC,
+        CHAPTERS_PER_VOLUME,
+        CHAPTERS_TOTAL,
+        MAX_HEIGHT,
+        PAGES_PER_CHAPTER_FLAT,
+        PAGES_PER_VOLUME,
+        VOLUME_HEIGHT,
+        CHAPTERS_PER_EPISODE,
+        CHAPTERS_PER_SEASON,
+        SEASON_HEIGHT,
+        SPLIT_CHAPTERS,
     },
-    timeline: {
-        type: 'timeline',
-    },
-    chapter: {
-        type: 'chapter',
-        height: CHAPTER_HEIGHT,
-        covers: CHAPTER_PICTURES_FLAT,
-        fit: 'contain',
-        backgroundColor: 'white',
-        titles: CHAPTER_NAMES,
-        titleProcessor: title => title,
-        blankfontSize: 45,
-        titleFontSize: 45,
-        widthHandler: (...args) => getChapterWidth('berserk', ...args),
-        wikiLink: s => `https://berserk.fandom.com/wiki/Episode_${s}_(Manga)`,
-        focusable: true,
-    },
-    volume: {
-        type: 'volume',
-        height: VOLUME_HEIGHT,
-        covers: VOLUME_COVERS,
-        titles: VOLUME_TITLES,
-        titleProcessor: title => title,
-        blankfontSize: 500,
-        titleFontSize: 100,
-        widthHandler: (...args) => getVolumeWidth('berserk', ...args),
-        wikiLink: (_, n) =>
-            `https://berserk.fandom.com/wiki/Releases_(Manga)#vol${n}`,
-    },
-};
-
-export const BERSERK_TIMELINE_INFO_EXTRA: TimelineInfoExtra = {
-    title: 'Berserk',
-    ARC_HEIGHT,
-    CHAPTER_DATES,
-    CHAPTER_HEIGHT,
-    CHAPTERS_PER_ARC,
-    CHAPTERS_PER_SEASON,
-    CHAPTERS_PER_VOLUME,
-    CHAPTERS_TOTAL,
-    MAX_HEIGHT,
-    PAGES_PER_CHAPTER_FLAT,
-    PAGES_PER_VOLUME,
-    SEASON_HEIGHT,
-    SPLIT_CHAPTERS,
-    VOLUME_HEIGHT,
-    CHAPTERS_PER_EPISODE,
 };

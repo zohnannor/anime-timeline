@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import {
     AnimeTitle,
-    CHAPTER_DATES,
     CHAPTER_DATES_BY_MONTH,
     CHAPTER_DATES_BY_YEAR,
     scale,
     SMALL_FONT_SIZE,
+    TIMELINE,
     TIMELINE_HEIGHT,
 } from '../constants';
 import {
@@ -165,11 +165,13 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
-    const daysSegments = CHAPTER_DATES[$animeTitle].map((date, idx) => ({
-        chapterNumbers: [idx + 1],
-        colorValue: date.getDate(),
-        label: date.getDate().toString(),
-    }));
+    const daysSegments = TIMELINE[$animeTitle].extra.CHAPTER_DATES.map(
+        (date, idx) => ({
+            chapterNumbers: [idx + 1],
+            colorValue: date.getDate(),
+            label: date.getDate().toString(),
+        })
+    );
 
     const monthsSegments = CHAPTER_DATES_BY_MONTH($animeTitle).map(dates => {
         const month = dates[0]![1].getMonth();

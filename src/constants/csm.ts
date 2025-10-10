@@ -7,7 +7,7 @@ import {
 } from '../helpers';
 import { Flatten, Length, Tuple } from '../types';
 import { map, pad, range, sum } from '../util';
-import { Offset, TimelineInfo, TimelineInfoExtra } from '.';
+import { Offset, TimelineConfig, TimelineTitle } from '.';
 
 const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -17,6 +17,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 const MAX_HEIGHT = SEASON_HEIGHT + ARC_HEIGHT + CHAPTER_HEIGHT + VOLUME_HEIGHT;
 
 const CHAPTERS_TOTAL = 216;
+const SEASONS_TOTAL = 2;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 22;
@@ -77,7 +78,7 @@ const _ASSERT_LEGNTHS: [
     EPISODES_TOTAL,
     EPISODES_TOTAL,
     4,
-    2,
+    SEASONS_TOTAL,
 ] as const;
 
 void _ASSERT_LEGNTHS; // to ignore error
@@ -591,7 +592,10 @@ const CHAPTERS_PER_SEASON: [number, number][] = [
     [98, CHAPTERS_TOTAL],
 ];
 
-const EPISODE_THUMBNAILS = map(range(0, EPISODES_TOTAL), n => n.toString());
+const EPISODE_THUMBNAILS = map(
+    map(range(0, EPISODES_TOTAL), n => n + 1),
+    n => n.toString()
+);
 
 const SPLIT_CHAPTERS: Record<number, number> = {
     5: 10,
@@ -910,90 +914,102 @@ const VOLUME_TITLES = [
     CHAPTER_NAMES[210],
 ] as const;
 
-export const CSM_TIMELINE_INFO: TimelineInfo = {
-    season: {
-        type: 'season',
-        height: SEASON_HEIGHT,
-        covers: SEASON_COVERS,
-        titles: SEASON_TITLES,
-        blankfontSize: 250,
-        titleFontSize: 100,
-        widthHandler: (...args) => getSeasonWidth('csm', ...args),
-        wikiLink: season => `https://chainsaw-man.fandom.com/wiki/${season}`,
-        offsets: SEASON_OFFSETS,
+export const CSM_TIMELINE: TimelineTitle = {
+    info: {
+        season: {
+            type: 'season',
+            height: SEASON_HEIGHT,
+            covers: SEASON_COVERS,
+            titles: SEASON_TITLES,
+            blankfontSize: 250,
+            titleFontSize: 100,
+            widthHandler: (...args) => getSeasonWidth('csm', ...args),
+            wikiLink: season =>
+                `https://chainsaw-man.fandom.com/wiki/${season}`,
+            offsets: SEASON_OFFSETS,
+            timeline: {
+                type: 'episode',
+                height: EPISODE_HEIGHT,
+                covers: EPISODE_THUMBNAILS,
+                scale: 1.2,
+                titles: EPISODE_TITLES,
+                titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+                blankfontSize: 42,
+                titleFontSize: 42,
+                widthHandler: (...args) => getEpisodeWidth('csm', ...args),
+                wikiLink: (_, n) =>
+                    `https://chainsaw-man.fandom.com/wiki/Episode_${n}`,
+                offsets: EPISODE_OFFSETS,
+            },
+        },
+        arc: {
+            type: 'arc',
+            height: ARC_HEIGHT,
+            covers: ARC_IMAGES,
+            titles: ARC_NAMES,
+            sidewaysText: true,
+            titleProcessor: title => `${title} arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
+            widthHandler: (...args) => getArcWidth('csm', ...args),
+            wikiLink: arcName =>
+                `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`,
+            offsets: ARC_OFFSETS,
+        },
         timeline: {
-            type: 'episode',
-            height: EPISODE_HEIGHT,
-            covers: EPISODE_THUMBNAILS,
-            scale: 1.2,
-            titles: EPISODE_TITLES,
-            titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
-            blankfontSize: 42,
-            titleFontSize: 42,
-            widthHandler: (...args) => getEpisodeWidth('csm', ...args),
+            type: 'timeline',
+        },
+        chapter: {
+            type: 'chapter',
+            height: CHAPTER_HEIGHT,
+            covers: CHAPTER_PICTURES_FLAT,
+            fit: 'contain',
+            backgroundColor: 'white',
+            titles: CHAPTER_NAMES,
+            titleProcessor: title => title,
+            blankfontSize: 45,
+            titleFontSize: 45,
+            widthHandler: (...args) => getChapterWidth('csm', ...args),
             wikiLink: (_, n) =>
-                `https://chainsaw-man.fandom.com/wiki/Episode_${n}`,
-            offsets: EPISODE_OFFSETS,
+                `https://chainsaw-man.fandom.com/wiki/Chapter_${n}`,
+            focusable: true,
+        },
+        volume: {
+            type: 'volume',
+            height: VOLUME_HEIGHT,
+            covers: VOLUME_COVERS,
+            titles: VOLUME_TITLES,
+            titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
+            blankfontSize: 500,
+            titleFontSize: 100,
+            widthHandler: (...args) => getVolumeWidth('csm', ...args),
+            wikiLink: (_, n) =>
+                `https://chainsaw-man.fandom.com/wiki/Volume_${n}`,
         },
     },
-    arc: {
-        type: 'arc',
-        height: ARC_HEIGHT,
-        covers: ARC_IMAGES,
-        titles: ARC_NAMES,
-        sidewaysText: true,
-        titleProcessor: title => `${title} arc`,
-        blankfontSize: 100,
-        titleFontSize: 100,
-        widthHandler: (...args) => getArcWidth('csm', ...args),
-        wikiLink: arcName =>
-            `https://chainsaw-man.fandom.com/wiki/${arcName}_arc`,
-        offsets: ARC_OFFSETS,
-    },
-    timeline: {
-        type: 'timeline',
-    },
-    chapter: {
-        type: 'chapter',
-        height: CHAPTER_HEIGHT,
-        covers: CHAPTER_PICTURES_FLAT,
-        fit: 'contain',
-        backgroundColor: 'white',
-        titles: CHAPTER_NAMES,
-        titleProcessor: title => title,
-        blankfontSize: 45,
-        titleFontSize: 45,
-        widthHandler: (...args) => getChapterWidth('csm', ...args),
-        wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Chapter_${n}`,
-        focusable: true,
-    },
-    volume: {
-        type: 'volume',
-        height: VOLUME_HEIGHT,
-        covers: VOLUME_COVERS,
-        titles: VOLUME_TITLES,
-        titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
-        blankfontSize: 500,
-        titleFontSize: 100,
-        widthHandler: (...args) => getVolumeWidth('csm', ...args),
-        wikiLink: (_, n) => `https://chainsaw-man.fandom.com/wiki/Volume_${n}`,
-    },
-};
+    extra: {
+        title: 'Chainsaw Man',
+        ARC_HEIGHT,
+        CHAPTER_DATES,
+        CHAPTER_HEIGHT,
+        CHAPTERS_PER_ARC,
+        CHAPTERS_PER_SEASON,
+        CHAPTERS_PER_VOLUME,
+        CHAPTERS_TOTAL,
+        MAX_HEIGHT,
+        PAGES_PER_CHAPTER_FLAT,
+        PAGES_PER_VOLUME,
+        SEASON_HEIGHT,
+        SPLIT_CHAPTERS,
+        VOLUME_HEIGHT,
+        CHAPTERS_PER_EPISODE,
 
-export const CSM_TIMELINE_INFO_EXTRA: TimelineInfoExtra = {
-    title: 'Chainsaw Man',
-    ARC_HEIGHT,
-    CHAPTER_DATES,
-    CHAPTER_HEIGHT,
-    CHAPTERS_PER_ARC,
-    CHAPTERS_PER_SEASON,
-    CHAPTERS_PER_VOLUME,
-    CHAPTERS_TOTAL,
-    MAX_HEIGHT,
-    PAGES_PER_CHAPTER_FLAT,
-    PAGES_PER_VOLUME,
-    SEASON_HEIGHT,
-    SPLIT_CHAPTERS,
-    VOLUME_HEIGHT,
-    CHAPTERS_PER_EPISODE,
+        ARCS_TOTAL,
+        CHAPTER_PICTURES,
+        EPISODES_TOTAL,
+        PAGES_PER_CHAPTER_PER_VOLUME,
+        VOLUMES_RELEASED_TOTAL,
+        VOLUMES_TOTAL,
+        SEASONS_TOTAL,
+    },
 };

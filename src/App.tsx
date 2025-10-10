@@ -8,12 +8,7 @@ import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { TimelineSection } from './components/TimelineSection';
-import {
-    FLOATING_BUTTONS,
-    TIMELINE_HEIGHT,
-    TIMELINE_INFO,
-    TIMELINE_INFO_EXTRA,
-} from './constants';
+import { FLOATING_BUTTONS, TIMELINE, TIMELINE_HEIGHT } from './constants';
 import useWindowSize from './hooks/useWindowSize';
 import { useSettings } from './providers/SettingsProvider';
 
@@ -52,10 +47,10 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${TIMELINE_INFO_EXTRA[animeTitle].MAX_HEIGHT + TIMELINE_HEIGHT}`
+            `${TIMELINE[animeTitle].extra.MAX_HEIGHT + TIMELINE_HEIGHT}`
         );
         // set title
-        document.title = `${TIMELINE_INFO_EXTRA[animeTitle].title} Timeline`;
+        document.title = `${TIMELINE[animeTitle].extra.title} Timeline`;
     }, [animeTitle]);
 
     return (
@@ -75,7 +70,7 @@ const App: React.FC = () => {
                         />
                     ))}
                 </FloatingButtons>
-                {Object.values(TIMELINE_INFO[animeTitle]).map(item => (
+                {Object.values(TIMELINE[animeTitle].info).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
                 {width > 768 && <Scroller />}

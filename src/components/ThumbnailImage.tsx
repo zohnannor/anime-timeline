@@ -21,7 +21,8 @@ const Thumbnail = styled.div<ThumbnailProps & Offset>`
     filter: blur(${scale(10)});
     background-image: url(${({ $thumbnail }) => $thumbnail});
     background-position: ${({ $offsetX, $offsetY }) =>
-        `${-scale($offsetX ?? 0)} ${-scale($offsetY ?? 0)}`};
+        `${scale($offsetX ?? 0)}
+         ${scale($offsetY ?? 0)}`};
 `;
 
 interface ImageProps {
@@ -51,8 +52,8 @@ export const ThumbnailImage: React.FC<
                 <Thumbnail
                     className='thumbnail'
                     $thumbnail={thumbnailSrc}
-                    $offsetX={$offsetX}
-                    $offsetY={$offsetY}
+                    $offsetX={$offsetX ? -$offsetX : $offsetX}
+                    $offsetY={$offsetY ? -$offsetY : $offsetY}
                     draggable={false}
                 />
             )}
