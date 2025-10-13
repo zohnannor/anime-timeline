@@ -8,7 +8,8 @@ import { InfoBox } from './components/InfoBox';
 import { Scroller } from './components/Scroller';
 import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { TimelineSection } from './components/TimelineSection';
-import { FLOATING_BUTTONS, TIMELINE, TIMELINE_HEIGHT } from './constants';
+import { FLOATING_BUTTONS, TIMELINE } from './constants';
+import { maxHeight } from './helpers';
 import useWindowSize from './hooks/useWindowSize';
 import { useSettings } from './providers/SettingsProvider';
 
@@ -47,11 +48,22 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${TIMELINE[animeTitle].extra.MAX_HEIGHT + TIMELINE_HEIGHT}`
+            `${maxHeight(animeTitle)}`
         );
-        // set title
-        document.title = `${TIMELINE[animeTitle].extra.title} Timeline`;
+        document.title = `${TIMELINE[animeTitle].data.title} Timeline`;
+        setAnimeTitle(animeTitle);
+        // TODO: favicon
     }, [animeTitle]);
+
+    // const entities = {
+    //     arc: TIMELINE[animeTitle].data.arcs,
+    //     chapter: TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
+    //     season: TIMELINE[animeTitle].data.seasons,
+    //     episode: TIMELINE[animeTitle].data.seasons.flatMap(
+    //         s => s.episodes ?? []
+    //     ),
+    //     volume: TIMELINE[animeTitle].data.volumes,
+    // };
 
     return (
         <>
@@ -70,9 +82,16 @@ const App: React.FC = () => {
                         />
                     ))}
                 </FloatingButtons>
-                {Object.values(TIMELINE[animeTitle].info).map(item => (
+                {Object.values(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
+                {/* {Object.values(TIMELINE[animeTitle].layout).map(item => (
+                    <TimelineSection
+                        type={item.type}
+                        items={entities[item.type]}
+                        {...item}
+                    />  
+                ))} */}
                 {width > 768 && <Scroller />}
             </AppContainer>
         </>

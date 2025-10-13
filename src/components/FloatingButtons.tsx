@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
-import { scale } from '../constants';
+import { scale } from '../helpers';
 import {
     SETTINGS_FUNCTIONS,
     SettingsValues,

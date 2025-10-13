@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '../constants';
+import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 
 interface Offset {

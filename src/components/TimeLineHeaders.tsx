@@ -1,12 +1,8 @@
 import styled from 'styled-components';
 
-import {
-    AnimeTitle,
-    HEADERS_WIDTH,
-    scale,
-    TIMELINE,
-    TIMELINE_HEIGHT,
-} from '../constants';
+import { AnimeTitle, HEADERS_WIDTH, TIMELINE_HEIGHT } from '../constants';
+import { TIMELINE } from '../constants';
+import { scale } from '../helpers';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 
@@ -54,7 +50,7 @@ const Headers = styled.div`
 export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
-    const seasonHeight = TIMELINE[$animeTitle].extra.SEASON_HEIGHT;
+    const seasonHeight = TIMELINE[$animeTitle].layout.season?.height;
     return (
         <Headers className='headers'>
             {seasonHeight && (
@@ -66,7 +62,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             )}
             <Header
                 className='header'
-                $height={TIMELINE[$animeTitle].extra.ARC_HEIGHT}
+                $height={TIMELINE[$animeTitle].layout.arc.height}
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'>
@@ -76,7 +72,8 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             <Header
                 className='header'
                 $height={
-                    TIMELINE_HEIGHT + TIMELINE[$animeTitle].extra.CHAPTER_HEIGHT
+                    TIMELINE_HEIGHT +
+                    TIMELINE[$animeTitle].layout.chapter.height
                 }
                 $invertBorder
             >
@@ -86,7 +83,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             </Header>
             <Header
                 className='header'
-                $height={TIMELINE[$animeTitle].extra.VOLUME_HEIGHT}
+                $height={TIMELINE[$animeTitle].layout.volume.height}
                 $invertBorder
             >
                 <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>

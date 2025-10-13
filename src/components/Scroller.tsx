@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { scale, SCROLLER_WIDTH } from '../constants';
+import { SCROLLER_WIDTH } from '../constants';
+import { scale } from '../helpers';
 import useMousePosition from '../hooks/useMousePosition';
 import useWindowScroll from '../hooks/useWindowScroll';
 import { clamp } from '../util';

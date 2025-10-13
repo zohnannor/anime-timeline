@@ -2,9 +2,13 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
-import { scale, TimelineInfoItem } from '../constants';
-import { hueGlow } from '../helpers';
-import { useHover } from '../hooks/useHover';
+import {
+    TIMELINE,
+    TimelineSectionItem,
+    TimelineSectionType,
+} from '../constants';
+import { hueGlow, scale } from '../helpers';
+import useHover from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
@@ -175,7 +179,15 @@ export const SectionItemCover = withShadow(
     `
 );
 
-export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
+type TimelineSections =
+    | {
+          [K in TimelineSectionType]: TimelineSectionItem<K>;
+      }[TimelineSectionType]
+    | {
+          type: 'timeline';
+      };
+
+export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const [hoveredItem, hoverHandlers] = useHover();
     const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
@@ -184,37 +196,56 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
         return <Timeline $animeTitle={animeTitle} />;
 
     const {
-        covers,
+        type,
         fit = 'cover',
         backgroundColor = 'black',
         scale = 1.05,
-        titles,
         sidewaysText = false,
-        offsets,
-        widthHandler,
+        width,
         wikiLink,
         height,
         titleProcessor,
         blankfontSize,
         titleFontSize,
         focusable = false,
-        timeline: nestedTimeline,
+        subTimeline: nestedTimeline,
     } = timelineItem;
+
+    const entities = {
+        arc: TIMELINE[animeTitle].data.arcs,
+        chapter: TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
+        season: TIMELINE[animeTitle].data.seasons,
+        episode: TIMELINE[animeTitle].data.seasons.flatMap(
+            s => s.episodes ?? []
+        ),
+        volume: TIMELINE[animeTitle].data.volumes,
+    };
 
     return (
         <TimelineContainer>
-            {covers.map((cover, idx) => {
+            {entities[type].map((entity, idx) => {
+                const title =
+                    typeof entity.title === 'function'
+                        ? entity.title(TIMELINE[animeTitle].data, idx)
+                        : entity.title;
+                const cover =
+                    typeof entity.cover === 'function'
+                        ? entity.cover(TIMELINE[animeTitle].data, idx)
+                        : entity.cover;
+                const offset = 'offset' in entity ? entity.offset : null;
+
                 const itemNumber = idx + 1;
-                const itemWidth = widthHandler(
+                const itemWidth = width(
+                    TIMELINE[animeTitle].data,
                     itemNumber,
                     unboundedChapterWidth
                 );
-                const link = wikiLink(titles[idx] ?? '', itemNumber);
-                const title =
+                const link = wikiLink(title ?? '', itemNumber);
+                const itemTitle =
                     timelineItem.type === 'chapter'
                         ? itemNumber
-                        : titleProcessor?.(titles[idx] ?? '', itemNumber) ??
-                          titles[idx];
+                        : titleProcessor?.(title ?? '', itemNumber) ?? title;
+
                 const titleVisible = showTitles || hoveredItem(itemNumber);
                 const textColor =
                     backgroundColor === 'black' ? 'white' : 'black';
@@ -225,11 +256,11 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                             {cover ? (
                                 <ThumbnailImage
                                     src={cover}
-                                    $offsetX={offsets?.[idx]?.x ?? 0}
-                                    $offsetY={offsets?.[idx]?.y ?? 0}
+                                    $offsetX={offset?.x}
+                                    $offsetY={offset?.y}
                                 />
                             ) : timelineItem.type === 'arc' ? (
-                                title
+                                itemTitle
                             ) : (
                                 itemNumber
                             )}
@@ -241,7 +272,7 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                 const sectionCover = (
                     <SectionItemCover
                         className={`${timelineItem.type}Cover`}
-                        data-title={title}
+                        data-title={itemTitle}
                         $invertBorder={!cover && backgroundColor === 'black'}
                         $titleVisible={
                             (!!cover || textColor === 'black') && titleVisible
@@ -261,7 +292,7 @@ export const TimelineSection: React.FC<TimelineInfoItem> = timelineItem => {
                 const chapterPreview = (
                     <ChapterPreview className='preview' $hasPicture={!!cover}>
                         {cover && <ThumbnailImage src={cover} />}
-                        {titleProcessor?.(titles[idx] ?? '', itemNumber)}
+                        {titleProcessor?.(title ?? '', itemNumber)}
                     </ChapterPreview>
                 );
 

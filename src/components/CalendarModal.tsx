@@ -8,14 +8,15 @@ import React, {
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
-import { scale, TIMELINE } from '../constants';
 import {
+    chapterDates,
     DAYS_GRADIENT,
     fetchNextChapterDate,
     hueGlow,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
+    scale,
 } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { Tooltip } from './Tooltip';
@@ -268,11 +269,10 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
-    const startDate = TIMELINE[animeTitle].extra.CHAPTER_DATES[0]!;
-
+    const startDate = chapterDates(animeTitle)[0]!;
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
-        TIMELINE[animeTitle].extra.CHAPTER_DATES.forEach((date, index) => {
+        chapterDates(animeTitle).forEach((date, index) => {
             const dateStr = date.toISOString();
             map.set(dateStr, index + 1);
         });

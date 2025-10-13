@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
-import { scale, TIMELINE } from '../constants';
-import { getChapterWidth } from '../helpers';
+import { TIMELINE } from '../constants';
+import { maxHeight, scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { map, range, sum } from '../util';
+import { map, sum } from '../util';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -55,12 +55,15 @@ export const CaptureTimelineModal: React.FC = () => {
         animeTitle,
     } = useSettings();
 
+    void unboundedChapterWidth; // TODO: remove
+
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: TIMELINE[animeTitle].extra.MAX_HEIGHT,
+        canvasHeight: maxHeight(animeTitle),
         canvasWidth: sum(
-            map(range(0, TIMELINE[animeTitle].extra.CHAPTERS_TOTAL), v =>
-                getChapterWidth(animeTitle, v + 1, unboundedChapterWidth)
+            map(
+                TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
+                _v => 100 // TODO: chapter width
             )
         ),
         backgroundColor: '#000',

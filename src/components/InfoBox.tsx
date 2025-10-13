@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
-import { scale } from '../constants';
+import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { Link } from './Link';
 

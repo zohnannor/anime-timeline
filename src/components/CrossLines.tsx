@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { scale } from '../constants';
+import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 
 interface CrossLinesProps {

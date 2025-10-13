@@ -1,23 +1,18 @@
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import { AnimeTitle, SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '../constants';
 import {
-    AnimeTitle,
-    CHAPTER_DATES_BY_MONTH,
-    CHAPTER_DATES_BY_YEAR,
-    scale,
-    SMALL_FONT_SIZE,
-    TIMELINE,
-    TIMELINE_HEIGHT,
-} from '../constants';
-import {
+    chapterDates,
+    chapterDatesByMonth,
+    chapterDatesByYear,
     DAYS_GRADIENT,
-    getChapterWidth,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
+    scale,
 } from '../helpers';
-import { useHover } from '../hooks/useHover';
+import useHover from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
@@ -80,8 +75,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, setCalendarOpen, animeTitle } =
-        useSettings();
+    const { unboundedChapterWidth, setCalendarOpen } = useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -120,16 +114,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             {segments.map((segment, idx) => {
                 const { chapterNumbers, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
-                const totalWidth = chapterNumbers.reduce(
-                    (total, chapterNumber) =>
-                        total +
-                        getChapterWidth(
-                            animeTitle,
-                            chapterNumber,
-                            unboundedChapterWidth
-                        ),
-                    0
-                );
+                const totalWidth = 10000; // TODO: actual sum of chapter widths
+                void [chapterNumbers, unboundedChapterWidth]; // TODO: remove
 
                 const color = interpolateColor(
                     colorValue,
@@ -165,15 +151,13 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
-    const daysSegments = TIMELINE[$animeTitle].extra.CHAPTER_DATES.map(
-        (date, idx) => ({
-            chapterNumbers: [idx + 1],
-            colorValue: date.getDate(),
-            label: date.getDate().toString(),
-        })
-    );
+    const daysSegments = chapterDates($animeTitle).map((date, idx) => ({
+        chapterNumbers: [idx + 1],
+        colorValue: date.getDate(),
+        label: date.getDate().toString(),
+    }));
 
-    const monthsSegments = CHAPTER_DATES_BY_MONTH($animeTitle).map(dates => {
+    const monthsSegments = chapterDatesByMonth($animeTitle).map(dates => {
         const month = dates[0]![1].getMonth();
         return {
             chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
@@ -182,7 +166,7 @@ export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
         };
     });
 
-    const yearsSegments = CHAPTER_DATES_BY_YEAR($animeTitle).map(dates => {
+    const yearsSegments = chapterDatesByYear($animeTitle).map(dates => {
         const yearDate = dates[0]![1];
         return {
             chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),

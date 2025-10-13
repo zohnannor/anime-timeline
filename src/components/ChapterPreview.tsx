@@ -1,10 +1,11 @@
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { HEADERS_WIDTH, scale, TIMELINE, TIMELINE_HEIGHT } from '../constants';
+import { HEADERS_WIDTH } from '../constants';
+import { maxHeight, scale } from '../helpers';
 import useWindowScroll from '../hooks/useWindowScroll';
-import { getDocumentPosition as getElementPosition } from '../util';
 import { useSettings } from '../providers/SettingsProvider';
+import { getDocumentPosition as getElementPosition } from '../util';
 
 interface PreviewProps {
     $hasPicture: boolean;
@@ -52,13 +53,9 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
     const { scrollX } = useWindowScroll();
 
     const scaleToPx = (n: number) =>
-        n *
-        (window.innerHeight /
-            (TIMELINE[animeTitle].extra.MAX_HEIGHT + TIMELINE_HEIGHT));
+        n * (window.innerHeight / maxHeight(animeTitle));
     const pxToScale = (n: number) =>
-        n *
-        ((TIMELINE[animeTitle].extra.MAX_HEIGHT + TIMELINE_HEIGHT) /
-            window.innerHeight);
+        n * (maxHeight(animeTitle) / window.innerHeight);
 
     useEffect(() => {
         const element = previewRef.current;

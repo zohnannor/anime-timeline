@@ -1,15 +1,5 @@
 export type Length<T extends readonly unknown[]> = T['length'];
 
-export type Flatten<
-    T,
-    Acc extends readonly unknown[] = readonly []
-> = T extends readonly [
-    infer A extends readonly unknown[],
-    ...infer B extends readonly unknown[]
-]
-    ? Flatten<B, readonly [...Acc, ...A]>
-    : Acc;
-
 export type Enumerate<
     N extends number,
     Acc extends readonly number[] = readonly []
@@ -18,10 +8,10 @@ export type Enumerate<
 export type Map<
     Arr extends readonly unknown[],
     Ty,
-    Mapped extends readonly unknown[] = readonly []
-> = Mapped['length'] extends Arr['length']
-    ? Mapped
-    : Map<Arr, Ty, readonly [...Mapped, Ty]>;
+    Acc extends readonly unknown[] = readonly []
+> = Acc['length'] extends Arr['length']
+    ? Acc
+    : Map<Arr, Ty, readonly [...Acc, Ty]>;
 
 export type Sub<A extends number, B extends number> = Enumerate<A> extends [
     ...Enumerate<B>,
@@ -33,3 +23,8 @@ export type Sub<A extends number, B extends number> = Enumerate<A> extends [
     : never;
 
 export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
+
+export type ExactUnion<
+    T,
+    AllKeys extends keyof any = T extends any ? keyof T : never
+> = T extends any ? T & { [K in Exclude<AllKeys, keyof T>]?: never } : never;
