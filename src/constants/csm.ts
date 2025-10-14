@@ -1606,99 +1606,90 @@ export const CSM_TIMELINE: Timeline = {
                 cover: 'Chainsaw_Man_Anime_Key_Visual_1',
                 offset: { x: 0, y: 1900 },
                 chapters: { from: 1, to: 38 },
-                splitChapters: {
-                    5: 10,
-                    12: 1,
-                    15: 10,
-                    18: 12,
-                    25: 14,
-                    31: 18,
-                    38: 22,
-                },
                 episodes: [
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[0]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 1,
+                        chapters: { from: 1, to: 1 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[2]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 2, to: 5 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[6]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 5, to: 8 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[8]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 20, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 9, to: 12 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[12]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 12, to: 15 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[16]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 15, to: 18 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[20]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 18, to: 21 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[22]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 22, to: 25 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[26]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 25, to: 28 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[29]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 29, to: 31 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[32]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 31, to: 35 },
                     },
                     {
                         title: ({ volumes }) =>
                             volumes.flatMap(v => v.chapters)[35]!.title,
                         cover: (_, n) => (n + 1).toString(),
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 35, to: 38 },
                     },
                 ],
             },
@@ -1707,7 +1698,6 @@ export const CSM_TIMELINE: Timeline = {
                 cover: 'Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1',
                 offset: { x: 0, y: 800 },
                 chapters: { from: 39, to: 52 },
-                splitChapters: {},
                 episodes: [],
             },
             {
@@ -1717,5 +1707,15 @@ export const CSM_TIMELINE: Timeline = {
                 chapters: { from: 98 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        splitChapters: {
+            5: 10,
+            12: 1,
+            15: 10,
+            18: 12,
+            25: 14,
+            31: 18,
+            35: 6,
+            38: 22,
+        },
     },
 };

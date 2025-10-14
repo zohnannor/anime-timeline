@@ -54,16 +54,6 @@ const App: React.FC = () => {
         // TODO: favicon
     }, [animeTitle]);
 
-    // const entities = {
-    //     arc: TIMELINE[animeTitle].data.arcs,
-    //     chapter: TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
-    //     season: TIMELINE[animeTitle].data.seasons,
-    //     episode: TIMELINE[animeTitle].data.seasons.flatMap(
-    //         s => s.episodes ?? []
-    //     ),
-    //     volume: TIMELINE[animeTitle].data.volumes,
-    // };
-
     return (
         <>
             <TimeLineHeaders $animeTitle={animeTitle} />

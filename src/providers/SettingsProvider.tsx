@@ -90,16 +90,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [captureTimelineModalOpen, setCaptureTimelineModalOpen] =
         useState(false);
-    const [showTitles, setShowTitlesRaw] = useState(() => {
+    const [showTitles, setShowTitlesRaw] = useState(
         // default to true if not set (first visit), otherwise get from storage
-        return window.localStorage.getItem('showTitles') !== 'false';
-    });
+        () => window.localStorage.getItem('showTitles') !== 'false'
+    );
     const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(document.location.search);
         const animeTitle = params.get('title');
         if (animeTitle && TITLES.includes(animeTitle as AnimeTitle)) {
             return animeTitle as AnimeTitle;
         }
+        window.history.replaceState({}, '', `?title=csm`);
         return 'csm';
     });
 
@@ -173,7 +174,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     }, [infoBoxOpen, calendarOpen]);
 
     const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
-        document.location.search = `?title=${title}`;
+        window.history.replaceState({}, '', `?title=${title}`);
         setAnimeTitleRaw(title);
     };
 

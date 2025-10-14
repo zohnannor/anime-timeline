@@ -79,16 +79,39 @@ export const getEpisodeWidth: WidthHelper = (
     idx,
     unboundedChapterWidth
 ) => {
-    const allEpisodes = timeline.seasons.flatMap(season => season.episodes!);
-    const chapters = allEpisodes[idx]!.chapters;
-    const chaptersBefore = sum(
-        allEpisodes.slice(0, idx).map(ep => ep.chapters)
-    );
-    return sum(
-        range(chaptersBefore, chaptersBefore + chapters).map(ci =>
-            getChapterWidth(timeline, ci, unboundedChapterWidth)
+    const chaptersWithPagesSplit = timeline.volumes
+        .flatMap(v => v.chapters)
+        .map((c, ci) => {
+            const split = timeline.splitChapters[ci + 1] ?? c.pages;
+            return [split, c.pages - split] as const;
+        });
+
+    return timeline.seasons
+        .flatMap(season => season.episodes ?? [])
+        .map(e => {
+            return [
+                e.chapters.from - 1,
+                e.chapters.to ??
+                    timeline.volumes.flatMap(v => v.chapters).length,
+            ] as const;
+        })
+        .map(([start, end]) =>
+            range(start, end).map(ci => {
+                const [split, rest] = chaptersWithPagesSplit[ci]!;
+                return split !== 0 && ci === end - 1
+                    ? split *
+                          getChapterPageWidth(
+                              timeline,
+                              ci,
+                              unboundedChapterWidth
+                          )
+                    : rest !== 0 && ci === start
+                    ? rest *
+                      getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+                    : getChapterWidth(timeline, ci, unboundedChapterWidth);
+            })
         )
-    );
+        .map(sum)[idx]!;
 };
 
 export const getSeasonWidth: WidthHelper = (
@@ -97,38 +120,21 @@ export const getSeasonWidth: WidthHelper = (
     unboundedChapterWidth
 ) => {
     const season = timeline.seasons[idx]!;
-
     const { from, to } = season.chapters;
-    const endChapter = to ?? timeline.volumes.flatMap(v => v.chapters).length;
-
-    const splitChapters = season.splitChapters ?? {};
-    const splitFirst = splitChapters[from];
-    const splitLast = splitChapters[endChapter];
-
+    const start = from - 1;
+    const end = (to ?? timeline.volumes.flatMap(v => v.chapters).length) - 1;
+    const splitChapters = timeline.splitChapters;
+    const splitFirst = splitChapters[start];
+    const splitLast = splitChapters[end + 1];
     return sum(
-        range(from, endChapter).map(ci =>
-            getChapterWidth(timeline, ci, unboundedChapterWidth)
-        )
-    );
-
-    return sum(
-        range(from, endChapter).map(ci => {
-            const chapter = timeline.volumes.flatMap(v => v.chapters)[ci]!;
-
-            const fullChapterWidth = getChapterWidth(
-                timeline,
-                ci,
-                unboundedChapterWidth
-            );
-            const pageWidth = fullChapterWidth / chapter.pages;
-
-            if (splitLast !== undefined && ci === endChapter) {
-                return splitLast * pageWidth;
-            } else if (splitFirst !== undefined && ci === from) {
-                return splitFirst * pageWidth;
-            } else {
-                return fullChapterWidth;
-            }
+        range(start, end + 1).map(ci => {
+            return splitFirst && ci === start
+                ? splitFirst *
+                      getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+                : splitLast && ci === end
+                ? splitLast *
+                  getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+                : getChapterWidth(timeline, ci, unboundedChapterWidth);
         })
     );
 };

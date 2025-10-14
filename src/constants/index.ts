@@ -45,7 +45,7 @@ export type Episode = {
     title: Callback<string>;
     cover: Callback<string>;
     offset: Offset;
-    chapters: number;
+    chapters: Range;
 };
 
 export type Season = ExactUnion<
@@ -54,7 +54,6 @@ export type Season = ExactUnion<
           cover: string;
           offset: Offset;
           chapters: Range;
-          splitChapters: Record<number, number>;
           episodes: Episode[];
       }
     | { chapters: Range }
@@ -104,6 +103,7 @@ export type TimelineData = {
     volumes: readonly Volume[];
     arcs: readonly Arc[];
     seasons: readonly Season[];
+    splitChapters: Record<number, number>;
 };
 
 export type Timeline = { layout: TimelineSectionLayout } & {

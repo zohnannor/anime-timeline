@@ -1,5 +1,12 @@
 import { Tuple } from '../types';
 import { Arc, Season, Timeline, TimelineData, Volume } from '.';
+import {
+    getArcWidth,
+    getChapterWidth,
+    getEpisodeWidth,
+    getSeasonWidth,
+    getVolumeWidth,
+} from './widthHelpers';
 
 const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -16,22 +23,14 @@ export const BERSERK_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: (
-                _timeline: TimelineData,
-                _idx: number,
-                _unboundedChapterWidth: boolean
-            ) => 0,
+            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             wikiLink: season => `https://berserk.fandom.com/wiki/${season}`,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: (
-                    _timeline: TimelineData,
-                    _idx: number,
-                    _unboundedChapterWidth: boolean
-                ) => 0,
+                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
                 blankfontSize: 42,
@@ -43,11 +42,7 @@ export const BERSERK_TIMELINE: Timeline = {
         arc: {
             type: 'arc',
             height: ARC_HEIGHT,
-            width: (
-                _timeline: TimelineData,
-                _idx: number,
-                _unboundedChapterWidth: boolean
-            ) => 0,
+            width: getArcWidth,
             sidewaysText: true,
             titleProcessor: title => `${title} Arc`,
             blankfontSize: 100,
@@ -61,11 +56,7 @@ export const BERSERK_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: (
-                _timeline: TimelineData,
-                _idx: number,
-                _unboundedChapterWidth: boolean
-            ) => 0,
+            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             titleProcessor: title => title,
@@ -78,11 +69,7 @@ export const BERSERK_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: (
-                _timeline: TimelineData,
-                _idx: number,
-                _unboundedChapterWidth: boolean
-            ) => 0,
+            width: getVolumeWidth,
             titleProcessor: title => title,
             blankfontSize: 500,
             titleFontSize: 100,
@@ -2778,160 +2765,160 @@ export const BERSERK_TIMELINE: Timeline = {
                 cover: 'Berserk_Anime_Box_Art',
                 offset: { x: 0, y: 0 },
                 chapters: { from: 1, to: 94 },
-                splitChapters: {},
                 episodes: [
                     {
                         title: () => 'Black Swordsman',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 2,
+                        chapters: { from: 1, to: 2 },
                     },
                     {
                         title: () => 'Band of the Falcon',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 11, to: 13 },
                     },
                     {
                         title: () => 'First Battle',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'The Hand of God',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 8, to: 11 },
                     },
                     {
                         title: () => 'Sword Wind',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 2,
+                        chapters: { from: 16 + 1, to: 16 + 2 },
                     },
                     {
                         title: () => 'Zodd the Immortal',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 16 + 2, to: 16 + 5 },
                     },
                     {
                         title: () => 'Sword Master',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 2,
+                        chapters: { from: 16 + 6, to: 16 + 7 },
                     },
                     {
                         title: () => 'Conspiracy',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 1,
+                        chapters: { from: 16 + 7, to: 16 + 7 },
                     },
                     {
                         title: () => 'Assassination',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 8, to: 16 + 10 },
                     },
                     {
                         title: () => 'Precious Thing',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 10, to: 16 + 12 },
                     },
                     {
                         title: () => 'The Battle',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 13, to: 16 + 15 },
                     },
                     {
                         title: () => 'Together',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 5,
+                        chapters: { from: 16 + 15, to: 16 + 18 },
                     },
                     {
                         title: () => 'Ready to Die',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 18, to: 16 + 20 },
                     },
                     {
                         title: () => 'Bonfire of Dreams',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 20, to: 16 + 22 },
                     },
                     {
                         title: () => 'The Decisive Battle',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 22, to: 16 + 24 },
                     },
                     {
                         title: () => 'The Conqueror',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 6,
+                        chapters: { from: 16 + 24, to: 16 + 29 },
                     },
                     {
                         title: () => 'Moment of Glory',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 29, to: 16 + 31 },
                     },
                     {
                         title: () => 'Tombstone of Flames',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 31, to: 16 + 33 },
                     },
                     {
                         title: () => 'Separation',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 6,
+                        chapters: { from: 16 + 33, to: 16 + 38 },
                     },
                     {
                         title: () => 'Sparks',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 3,
+                        chapters: { from: 16 + 41, to: 16 + 42 },
                     },
                     {
                         title: () => 'Confession',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 7,
+                        chapters: { from: 16 + 43, to: 16 + 48 },
                     },
                     {
                         title: () => 'Infiltration',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 9,
+                        chapters: { from: 16 + 49, to: 16 + 58 },
                     },
                     {
                         title: () => 'Eve of the Feast',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 4,
+                        chapters: { from: 16 + 67, to: 16 + 73 },
                     },
                     {
                         title: () => 'Eclipse',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 6,
+                        chapters: { from: 16 + 73, to: 16 + 78 },
                     },
                     {
                         title: () => 'Time of Eternity',
                         cover: (_, idx) => `Episode${idx + 1}`,
                         offset: { x: 0, y: 0 },
-                        chapters: 10,
+                        chapters: { from: 16 + 79, to: 16 + 94 },
                     },
                 ],
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        splitChapters: {},
     },
 };
