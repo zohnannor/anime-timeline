@@ -33,7 +33,7 @@ export const HEADERS_WIDTH = 150;
 export const LARGE_FONT_SIZE = 500;
 export const SMALL_FONT_SIZE = 45;
 
-export const CHAPTERS_TOTAL = 216;
+export const CHAPTERS_TOTAL = 217;
 const EPISODES_TOTAL = 12;
 const ARCS_TOTAL = 14;
 const VOLUMES_RELEASED_TOTAL = 22;
@@ -62,7 +62,7 @@ const PAGES_PER_CHAPTER_PER_VOLUME = [
     [18, 16, 17, 17, 18, 17, 16, 15, 15, 15, 17],
     [15, 14, 16, 15, 17, 15, 13, 15, 15, 19, 15, 15],
     [15, 15, 15, 15, 15, 15, 15, 15, 15, 14, 15, 15],
-    [16, 15, 15, 14, 15, 15],
+    [16, 15, 15, 14, 15, 15, 14],
 ] as const;
 
 const _ASSERT_LEGNTHS: [
@@ -310,7 +310,7 @@ const CHAPTER_PICTURES = [
         'Volume_22_Pochita_Sketch_3',
         'Volume_22_Pochita_Sketch_4',
     ],
-    [null, null, null, null, null, null],
+    [null, null, null, null, null, null, null],
 ] as const;
 
 const CHAPTER_PICTURES_FLAT = CHAPTER_PICTURES.flat() as Flatten<
@@ -568,6 +568,7 @@ const CHAPTER_NAMES = [
     'Bff, Creak, Door',
     'Declaration of War',
     'Yearning',
+    'Two Good People',
 ] as const;
 
 const ARC_NAMES = [
@@ -874,6 +875,7 @@ export const CHAPTER_DATES = map(
         'September 17, 2025',
         'September 24, 2025',
         'October 1, 2025',
+        'October 15, 2025',
     ] as const,
     d => new Date(`${d} GMT+9`) // Tokyo timezone
 );
