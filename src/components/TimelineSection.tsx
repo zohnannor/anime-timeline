@@ -240,7 +240,10 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                     idx,
                     unboundedChapterWidth
                 );
-                const link = wikiLink(title ?? '', itemNumber);
+                const link = `${TIMELINE[animeTitle].data.wikiBase}${wikiLink(
+                    title ?? '',
+                    itemNumber
+                )}`;
                 const itemTitle =
                     timelineItem.type === 'chapter'
                         ? itemNumber

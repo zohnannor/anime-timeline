@@ -1,6 +1,6 @@
 import { Tuple } from '../types';
 import { pad } from '../util';
-import { Arc, Season, Timeline, Volume } from './';
+import { Arc, Season, Timeline, Volume } from '.';
 import {
     getArcWidth,
     getChapterWidth,
@@ -8,8 +8,6 @@ import {
     getSeasonWidth,
     getVolumeWidth,
 } from './widthHelpers';
-
-const WIKI_BASE = 'https://chainsaw-man.fandom.com/wiki/';
 
 const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -29,7 +27,7 @@ export const CSM_TIMELINE: Timeline = {
             width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
-            wikiLink: season => `${WIKI_BASE}${season}`,
+            wikiLink: season => season,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -38,7 +36,7 @@ export const CSM_TIMELINE: Timeline = {
                 titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                wikiLink: (_, n) => `${WIKI_BASE}Episode_${n}`,
+                wikiLink: (_, n) => `Episode_${n}`,
             },
         },
         arc: {
@@ -49,7 +47,7 @@ export const CSM_TIMELINE: Timeline = {
             titleProcessor: title => `${title} arc`,
             blankfontSize: 100,
             titleFontSize: 100,
-            wikiLink: arcName => `${WIKI_BASE}${arcName}_arc`,
+            wikiLink: arcName => `${arcName} arc`,
         },
         timeline: {
             type: 'timeline',
@@ -63,7 +61,7 @@ export const CSM_TIMELINE: Timeline = {
             titleProcessor: title => title,
             blankfontSize: 45,
             titleFontSize: 45,
-            wikiLink: (_, n) => `${WIKI_BASE}Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
         },
         volume: {
@@ -73,7 +71,7 @@ export const CSM_TIMELINE: Timeline = {
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            wikiLink: (_, n) => `${WIKI_BASE}Volume_${n}`,
+            wikiLink: (_, n) => `Volume_${n}`,
         },
     },
     data: {
@@ -1511,6 +1509,12 @@ export const CSM_TIMELINE: Timeline = {
                         pages: 15,
                         cover: null,
                     },
+                    {
+                        title: 'Two Good People',
+                        date: 'October 15, 2025',
+                        pages: 14,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
@@ -1717,5 +1721,6 @@ export const CSM_TIMELINE: Timeline = {
             35: 6,
             38: 22,
         },
+        wikiBase: 'https://chainsaw-man.fandom.com/wiki/',
     },
 };

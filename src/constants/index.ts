@@ -104,6 +104,7 @@ export type TimelineData = {
     arcs: readonly Arc[];
     seasons: readonly Season[];
     splitChapters: Record<number, number>;
+    wikiBase: string;
 };
 
 export type Timeline = { layout: TimelineSectionLayout } & {
