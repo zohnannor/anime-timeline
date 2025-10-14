@@ -33,7 +33,8 @@ const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY }) =>
-        `${-scale($offsetX ?? 0)} ${-scale($offsetY ?? 0)}`};
+        `${scale($offsetX ? -$offsetX : 0)}
+         ${scale($offsetY ? -$offsetY : 0)}`};
 `;
 
 export const ThumbnailImage: React.FC<

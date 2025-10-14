@@ -1,7 +1,6 @@
 import { keyframes } from 'styled-components';
 
-import { AnimeTitle, TIMELINE_HEIGHT, TimelineData } from './constants';
-import { TIMELINE } from './constants';
+import { AnimeTitle, TIMELINE, TIMELINE_HEIGHT } from './constants';
 import { sum } from './util';
 
 export { fetchNextChapterDate } from './ProtobufReader';
@@ -42,46 +41,6 @@ export const chapterDatesByMonth = (animeTitle: AnimeTitle) =>
 
 export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
     groupBy(chapterDates(animeTitle), date => date.getFullYear() + 1);
-
-export const getVolumeWidth: (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number = (timeline, idx, unboundedChapterWidth) =>
-    unboundedChapterWidth
-        ? sum(
-              timeline.volumes[idx]!.chapters.map((_, idx) =>
-                  getChapterWidth(timeline, idx, unboundedChapterWidth)
-              )
-          )
-        : 1000;
-
-export const getChapterWidth: (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number = (timeline, idx, unboundedChapterWidth) =>
-    unboundedChapterWidth
-        ? timeline.volumes.flatMap(v => v.chapters)[idx]!.pages
-        : 100; // TODO
-
-export const getArcWidth: (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number = (timeline, idx, unboundedChapterWidth) => 10;
-
-export const getEpisodeWidth: (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number = (timeline, idx, unboundedChapterWidth) => 10;
-
-export const getSeasonWidth: (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number = (timeline, idx, unboundedChapterWidth) => 10;
 
 // thanks deepseek-r1 (he thought for 245+150+92 = 487 seconds in total)
 export const interpolateColor = (

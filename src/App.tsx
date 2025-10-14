@@ -51,7 +51,6 @@ const App: React.FC = () => {
             `${maxHeight(animeTitle)}`
         );
         document.title = `${TIMELINE[animeTitle].data.title} Timeline`;
-        setAnimeTitle(animeTitle);
         // TODO: favicon
     }, [animeTitle]);
 
@@ -85,13 +84,6 @@ const App: React.FC = () => {
                 {Object.values(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
-                {/* {Object.values(TIMELINE[animeTitle].layout).map(item => (
-                    <TimelineSection
-                        type={item.type}
-                        items={entities[item.type]}
-                        {...item}
-                    />  
-                ))} */}
                 {width > 768 && <Scroller />}
             </AppContainer>
         </>

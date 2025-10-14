@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitle, SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '../constants';
+import {
+    AnimeTitle,
+    SMALL_FONT_SIZE,
+    TIMELINE,
+    TIMELINE_HEIGHT,
+} from '../constants';
+import { getChapterWidth } from '../constants/widthHelpers';
 import {
     chapterDates,
     chapterDatesByMonth,
@@ -14,6 +20,7 @@ import {
 } from '../helpers';
 import useHover from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
+import { sum } from '../util';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 
@@ -75,7 +82,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, setCalendarOpen } = useSettings();
+    const { unboundedChapterWidth, setCalendarOpen, animeTitle } =
+        useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -114,9 +122,15 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             {segments.map((segment, idx) => {
                 const { chapterNumbers, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
-                const totalWidth = 10000; // TODO: actual sum of chapter widths
-                void [chapterNumbers, unboundedChapterWidth]; // TODO: remove
-
+                const totalWidth = sum(
+                    chapterNumbers.map(ci =>
+                        getChapterWidth(
+                            TIMELINE[animeTitle].data,
+                            ci - 1,
+                            unboundedChapterWidth
+                        )
+                    )
+                );
                 const color = interpolateColor(
                     colorValue,
                     inputRange,

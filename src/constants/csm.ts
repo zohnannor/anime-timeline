@@ -1,12 +1,13 @@
+import { Tuple } from '../types';
+import { pad } from '../util';
+import { Arc, Season, Timeline, Volume } from './';
 import {
     getArcWidth,
     getChapterWidth,
     getEpisodeWidth,
     getSeasonWidth,
     getVolumeWidth,
-} from '../helpers';
-import { Tuple } from '../types';
-import { Arc, Season, Timeline, Volume } from '.';
+} from './widthHelpers';
 
 const WIKI_BASE = 'https://chainsaw-man.fandom.com/wiki/';
 
@@ -80,7 +81,7 @@ export const CSM_TIMELINE: Timeline = {
         volumes: [
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Dog & Chainsaw',
@@ -128,7 +129,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Chainsaw vs. Bat',
@@ -188,7 +189,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Kill Denji',
@@ -248,7 +249,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'The Gun is Mightier',
@@ -308,7 +309,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Minor',
@@ -368,7 +369,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Boom Boom Boom',
@@ -428,7 +429,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'In a Dream',
@@ -488,7 +489,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Super Mess',
@@ -548,7 +549,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Bath',
@@ -608,7 +609,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: "A Dog's Feeling",
@@ -668,7 +669,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: "Go Get 'Em, Chainsaw Man",
@@ -728,7 +729,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Bird and War',
@@ -770,7 +771,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Spoiler',
@@ -830,7 +831,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'I Wanna See Penguins!',
@@ -896,7 +897,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: "Hors D'oeuvre",
@@ -968,7 +969,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Ordinary Happiness',
@@ -1034,7 +1035,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Guns, Nails, Katana',
@@ -1100,7 +1101,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'All Pets',
@@ -1172,7 +1173,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Everyday Scenery',
@@ -1244,7 +1245,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Two Children',
@@ -1316,7 +1317,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Barf!',
@@ -1394,7 +1395,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: ({ volumes }, idx) => volumes[idx]!.chapters[0]!.title,
-                cover: (_, n) => `Volume_${n}`,
+                cover: (_, n) => `Volume_${pad(n + 1)}`,
                 chapters: [
                     {
                         title: 'Enjoy Your Food',

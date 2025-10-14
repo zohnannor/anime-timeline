@@ -237,7 +237,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                 const itemNumber = idx + 1;
                 const itemWidth = width(
                     TIMELINE[animeTitle].data,
-                    itemNumber,
+                    idx,
                     unboundedChapterWidth
                 );
                 const link = wikiLink(title ?? '', itemNumber);

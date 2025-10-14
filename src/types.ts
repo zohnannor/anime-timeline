@@ -13,15 +13,6 @@ export type Map<
     ? Acc
     : Map<Arr, Ty, readonly [...Acc, Ty]>;
 
-export type Sub<A extends number, B extends number> = Enumerate<A> extends [
-    ...Enumerate<B>,
-    ...infer Rest
-]
-    ? Rest extends number[]
-        ? Rest['length']
-        : never
-    : never;
-
 export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
 
 export type ExactUnion<
