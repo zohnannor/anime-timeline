@@ -6,7 +6,7 @@ import { useToPng } from '@hugocxl/react-to-image';
 
 import { TIMELINE } from '../constants';
 import { getVolumeWidth } from '../constants/widthHelpers';
-import { maxHeight, scale } from '../helpers';
+import { maxHeight, scale, toTitleCase } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { sum } from '../util';
 
@@ -79,7 +79,9 @@ export const CaptureTimelineModal: React.FC = () => {
         onSuccess: dataUrl => {
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `${animeTitle?.toUpperCase()}_Timeline_${new Date().toISOString()}.png`;
+            link.download = `${toTitleCase(
+                animeTitle
+            )}_Timeline_${new Date().toISOString()}.png`;
             link.click();
             setLoading(false);
         },

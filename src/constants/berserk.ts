@@ -2763,7 +2763,7 @@ export const BERSERK_TIMELINE: Timeline = {
         seasons: [
             {
                 title: 'Berserk (1997 Anime)',
-                cover: 'Berserk_Anime_Box_Art',
+                cover: () => 'Berserk_Anime_Box_Art',
                 offset: { x: 0, y: 0 },
                 chapters: { from: 1, to: 94 },
                 episodes: [

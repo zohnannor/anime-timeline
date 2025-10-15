@@ -1618,7 +1618,7 @@ export const CSM_TIMELINE: Timeline = {
         seasons: [
             {
                 title: 'Chainsaw Man (Anime)',
-                cover: 'Chainsaw_Man_Anime_Key_Visual_1',
+                cover: () => 'Chainsaw_Man_Anime_Key_Visual_1',
                 offset: { x: 0, y: 1900 },
                 chapters: { from: 1, to: 38 },
                 episodes: [
@@ -1698,7 +1698,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: 'Chainsaw Man – The Movie: Reze Arc',
-                cover: 'Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1',
+                cover: () => 'Chainsaw_Man_Movie_-_Reze_Arc_Key_Visual_1',
                 offset: { x: 0, y: 800 },
                 chapters: { from: 39, to: 52 },
                 episodes: [],

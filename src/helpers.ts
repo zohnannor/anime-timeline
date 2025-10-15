@@ -3,6 +3,11 @@ import { keyframes } from 'styled-components';
 import { AnimeTitle, TIMELINE, TIMELINE_HEIGHT } from './constants';
 import { sum } from './util';
 
+export const toTitleCase = (s: string) =>
+    s.replace(/^_*(.)|_+(.)/g, (_, c, d) =>
+        c ? c.toUpperCase() : ' ' + d.toUpperCase()
+    );
+
 export { fetchNextChapterDate } from './ProtobufReader';
 
 export const scale = (n: number) =>
