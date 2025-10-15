@@ -1,5 +1,5 @@
 import { Tuple } from '../types';
-import { Arc, Season, Timeline, Volume } from '.';
+import { Arc, Season, Timeline, Volume } from './';
 import {
     getArcWidth,
     getChapterWidth,
@@ -8,11 +8,11 @@ import {
     getVolumeWidth,
 } from './widthHelpers';
 
-const SEASON_HEIGHT = 742;
+const SEASON_HEIGHT = 1421 / 2;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
-const VOLUME_HEIGHT = 1356;
+const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
-const ARC_HEIGHT = VOLUME_HEIGHT * 2;
+const ARC_HEIGHT = VOLUME_HEIGHT;
 
 const SEASONS_TOTAL = 1;
 const ARCS_TOTAL = 5;
@@ -2917,5 +2917,36 @@ export const BERSERK_TIMELINE: Timeline = {
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {},
         wikiBase: 'https://berserk.fandom.com/wiki/',
+        smallImages: {
+            'scroller-or-favicon': 'circle',
+            'read-info': 'circle',
+            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-cross-lines': 'circle',
+            'open-chapter-calendar': 'circle',
+            'toggle-always-show-titles': 'circle',
+            'capture-timeline': 'circle',
+        },
+        socialLinks: [
+            {
+                name: 'Official Berserk Website',
+                url: 'https://www.younganimal.com/berserk/',
+            },
+            {
+                name: 'SkullKnight.net',
+                url: 'http://www.skullknight.net/',
+            },
+            {
+                name: 'The Berserk Exhibition',
+                url: 'https://www.dai-berserk-ten.com/',
+            },
+            {
+                name: 'Berserk-Anime.com',
+                url: 'https://berserk-anime.com/',
+            },
+            {
+                name: 'Dark Horse',
+                url: 'https://www.darkhorse.com/',
+            },
+        ],
     },
 };

@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 
-import { AnimeTitle, HEADERS_WIDTH, TIMELINE_HEIGHT } from '../constants';
-import { TIMELINE } from '../constants';
+import {
+    AnimeTitle,
+    HEADERS_WIDTH,
+    TIMELINE,
+    TIMELINE_HEIGHT,
+} from '../constants';
 import { scale } from '../helpers';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';

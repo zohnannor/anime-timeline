@@ -1,6 +1,6 @@
 import { Tuple } from '../types';
 import { pad } from '../util';
-import { Arc, Season, Timeline, Volume } from '.';
+import { Arc, Season, Timeline, Volume } from './';
 import {
     getArcWidth,
     getChapterWidth,
@@ -1705,9 +1705,11 @@ export const CSM_TIMELINE: Timeline = {
                 episodes: [],
             },
             {
+                title: '2',
                 chapters: { from: 53, to: 97 },
             },
             {
+                title: '3',
                 chapters: { from: 98 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
@@ -1722,5 +1724,32 @@ export const CSM_TIMELINE: Timeline = {
             38: 22,
         },
         wikiBase: 'https://chainsaw-man.fandom.com/wiki/',
+        smallImages: {
+            'scroller-or-favicon': 'pochita',
+            'read-info': 'pochita2',
+            'toggle-unbounded-chapter-width': 'pochita3',
+            'toggle-cross-lines': 'pochita6',
+            'open-chapter-calendar': 'pochita4',
+            'toggle-always-show-titles': 'pochita5',
+            'capture-timeline': 'pochita7',
+        },
+        socialLinks: [
+            {
+                name: 'Manga Plus',
+                url: 'https://mangaplus.shueisha.co.jp/titles/100037',
+            },
+            {
+                name: 'VIZ Media',
+                url: 'https://www.viz.com/shonenjump/chapters/chainsaw-man',
+            },
+            {
+                name: "Author's Twitter",
+                url: 'https://x.com/nagayama_koharu',
+            },
+            {
+                name: 'Official Site',
+                url: 'https://www.shonenjump.com/j/rensai/chainsaw.html',
+            },
+        ],
     },
 };

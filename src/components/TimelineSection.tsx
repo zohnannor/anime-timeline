@@ -269,7 +269,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                             )}
                         </Link>
                     ) : (
-                        `SEASON ${itemNumber - 1}`
+                        `SEASON ${title}`
                     );
 
                 const sectionCover = (

@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
 import { TIMELINE } from '../constants';
+import { getVolumeWidth } from '../constants/widthHelpers';
 import { maxHeight, scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { map, sum } from '../util';
+import { sum } from '../util';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -54,25 +55,38 @@ export const CaptureTimelineModal: React.FC = () => {
         unboundedChapterWidth,
         animeTitle,
     } = useSettings();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    void unboundedChapterWidth; // TODO: remove
-
+    const timeline = TIMELINE[animeTitle].data;
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
         canvasHeight: maxHeight(animeTitle),
         canvasWidth: sum(
-            map(
-                TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
-                _v => 100 // TODO: chapter width
+            timeline.volumes.map((_, vi) =>
+                getVolumeWidth(timeline, vi, unboundedChapterWidth)
             )
         ),
         backgroundColor: '#000',
-        filter: el => !el.classList?.contains('floatingButtons'),
+        filter: el =>
+            ['floatingButtons', 'scrollerHoverArea'].every(
+                className => !el.classList?.contains(className)
+            ),
+        onStart: () => {
+            setLoading(false);
+            setError(null);
+        },
         onSuccess: dataUrl => {
             const link = document.createElement('a');
             link.href = dataUrl;
             link.download = `${animeTitle?.toUpperCase()}_Timeline_${new Date().toISOString()}.png`;
             link.click();
+            setLoading(false);
+        },
+        onLoading: () => setLoading(true),
+        onError: error => {
+            setLoading(false);
+            setError(error);
         },
     });
 
@@ -82,7 +96,11 @@ export const CaptureTimelineModal: React.FC = () => {
         <>
             <ShadowOverlay
                 className='shadow'
-                onClick={() => setCaptureTimelineModalOpen(false)}
+                onClick={() => {
+                    setCaptureTimelineModalOpen(false);
+                    setLoading(false);
+                    setError(null);
+                }}
             />
             <ModalContainer className='captureTimelineModal'>
                 <Title>Are you sure?</Title>
@@ -94,8 +112,10 @@ export const CaptureTimelineModal: React.FC = () => {
                 </h5>
                 <Button onClick={captureTimeline}>Yes, proceed</Button>
                 <h6>(this might take a while)</h6>
+                {loading && <div>Loading...</div>}
+                {error && <div style={{ color: 'red' }}>{error}</div>}
             </ModalContainer>
         </>,
-        document.querySelector('#captureTimelineModal')!
+        document.querySelector('#modal')!
     );
 };

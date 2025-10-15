@@ -12,8 +12,8 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export type AnimeTitle = 'csm' | 'berserk';
-export const TITLES: AnimeTitle[] = ['csm', 'berserk'];
+export const TITLES = ['csm', 'berserk'] as const;
+export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
 
@@ -56,7 +56,7 @@ export type Season = ExactUnion<
           chapters: Range;
           episodes: Episode[];
       }
-    | { chapters: Range }
+    | { title: string; chapters: Range }
 >;
 
 export type TimelineSectionType =
@@ -98,6 +98,21 @@ export type TimelineSectionLayout = {
     };
 };
 
+type SmallImages = {
+    'scroller-or-favicon': string;
+    'read-info': string;
+    'toggle-unbounded-chapter-width': string;
+    'toggle-cross-lines': string;
+    'open-chapter-calendar': string;
+    'toggle-always-show-titles': string;
+    'capture-timeline': string;
+};
+
+type SocialLink = {
+    name: string;
+    url: string;
+};
+
 export type TimelineData = {
     title: string;
     volumes: readonly Volume[];
@@ -105,6 +120,8 @@ export type TimelineData = {
     seasons: readonly Season[];
     splitChapters: Record<number, number>;
     wikiBase: string;
+    smallImages: SmallImages;
+    socialLinks: SocialLink[];
 };
 
 export type Timeline = { layout: TimelineSectionLayout } & {
@@ -116,86 +133,38 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
 };
 
-// const pagesPerChapterFlat = (animeTitle: AnimeTitle) =>
-//     TIMELINE[animeTitle].extra.volumes
-//         .flatMap(v => v.chapters)
-//         .map(c => c.pages);
-
-// const CHAPTERS_WITH_PAGES = (animeTitle: AnimeTitle) =>
-//     pagesPerChapterFlat(animeTitle).map(
-//         (pages, chapterIdx) => [chapterIdx + 1, pages] as const
-//     );
-
-// const tokyoDate = (d: string) => new Date(`${d} GMT+9`); // Tokyo timezone
-
-// export const pagesPerEpisodeWithChapters = (animeTitle: AnimeTitle) =>
-//     TIMELINE[animeTitle].extra.seasons
-//         .flatMap(s => s.episodes ?? [])
-//         .map(e => e?.chapters)
-//         .reduce<[number[][][], number]>(
-//             ([groups, cursor], chapterCount) => {
-//                 const episodeChapters = chaptersSplitForEpisodes(
-//                     animeTitle
-//                 ).slice(cursor, cursor + chapterCount);
-//                 return [[...groups, episodeChapters], cursor + chapterCount];
-//             },
-//             [[], 0]
-//         )[0];
-
-// const chaptersSplitForEpisodes = (animeTitle: AnimeTitle) => {
-//     const splitChapters =
-//         TIMELINE[animeTitle].extra.seasons[0]?.splitChapters ?? {};
-//     return CHAPTERS_WITH_PAGES(animeTitle)
-//         .slice(0, 38 + 1)
-//         .reduce(
-//             (a, [chapter = 0, pages = 0]) => [
-//                 ...a,
-//                 // make two of the same "chapter" if it needs to be split
-//                 ...(chapter in splitChapters
-//                     ? [
-//                           [chapter, splitChapters[chapter]!],
-//                           [chapter, pages - splitChapters[chapter]!],
-//                       ]
-//                     : // leave as is
-//                       [[chapter, pages]]),
-//             ],
-//             [] as number[][]
-//         );
-// };
-
 export const FLOATING_BUTTONS: {
-    filename: string;
+    filename: Exclude<keyof SmallImages, 'scroller-or-favicon'>;
     title: string;
     option: keyof SettingsValues;
 }[] = [
-    { filename: 'pochita2', title: 'Read info', option: 'infoBoxOpen' },
-
+    { filename: 'read-info', title: 'Read info', option: 'infoBoxOpen' },
     {
-        filename: 'pochita3',
+        filename: 'toggle-unbounded-chapter-width',
         title: 'Toggle unbounded chapter width',
         option: 'unboundedChapterWidth',
     },
     ...(!isMobileDevice() // include cross-lines button only on desktop
         ? [
               {
-                  filename: 'pochita6',
+                  filename: 'toggle-cross-lines',
                   title: 'Toggle cross-lines',
                   option: 'showCrosslines',
               } as const,
           ]
         : []),
     {
-        filename: 'pochita4',
+        filename: 'open-chapter-calendar',
         title: 'Open chapter calendar',
         option: 'calendarOpen',
     },
     {
-        filename: 'pochita5',
+        filename: 'toggle-always-show-titles',
         title: 'Toggle always show titles',
         option: 'showTitles',
     },
     {
-        filename: 'pochita7',
+        filename: 'capture-timeline',
         title: 'Capture timeline (Save as a PNG)',
         option: 'captureTimelineModalOpen',
     },

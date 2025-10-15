@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { SCROLLER_WIDTH } from '../constants';
+import { SCROLLER_WIDTH, TIMELINE } from '../constants';
 import { scale } from '../helpers';
 import useMousePosition from '../hooks/useMousePosition';
 import useWindowScroll from '../hooks/useWindowScroll';
+import { useSettings } from '../providers/SettingsProvider';
 import { clamp } from '../util';
 import { ThumbnailImage } from './ThumbnailImage';
 
@@ -81,6 +82,7 @@ export const Scroller = () => {
     const { scrollX, setScrollX, scrolling } = useWindowScroll();
     const [dragging, setDragging] = useState(false);
     const { y: mouseY } = useMousePosition();
+    const { animeTitle } = useSettings();
 
     const body = document.body;
     const totalX = body.scrollWidth - body.clientWidth;
@@ -127,7 +129,11 @@ export const Scroller = () => {
                 onClick={handleScrollerClick}
             >
                 <ThumbnailImage
-                    src='pochita'
+                    src={
+                        TIMELINE[animeTitle].data.smallImages[
+                            'scroller-or-favicon'
+                        ]
+                    }
                     onMouseDown={() => setDragging(true)}
                 />
             </ScrollerWrapper>

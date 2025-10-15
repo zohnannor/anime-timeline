@@ -25,6 +25,8 @@ export interface Settings {
     setCaptureTimelineModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     animeTitle: AnimeTitle;
     setAnimeTitle: React.Dispatch<React.SetStateAction<AnimeTitle>>;
+    animeTitleSelectorOpen: boolean;
+    setAnimeTitleSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // ☝🤓
@@ -56,6 +58,7 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     calendarOpen: 'setCalendarOpen',
     showTitles: 'setShowTitles',
     captureTimelineModalOpen: 'setCaptureTimelineModalOpen',
+    animeTitleSelectorOpen: 'setAnimeTitleSelectorOpen',
 };
 
 const SettingsContext = createContext<Settings>({
@@ -73,6 +76,8 @@ const SettingsContext = createContext<Settings>({
     setCaptureTimelineModalOpen: () => {},
     animeTitle: 'csm',
     setAnimeTitle: () => {},
+    animeTitleSelectorOpen: false,
+    setAnimeTitleSelectorOpen: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -103,6 +108,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         window.history.replaceState({}, '', `?title=csm`);
         return 'csm';
     });
+    const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
 
     const setShowTitles = (show: React.SetStateAction<boolean>) => {
         if (typeof show === 'function') {
@@ -143,6 +149,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
             }
         }
         setCaptureTimelineModalOpen(open);
+    };
+
+    const openAnimeTitleSelector = (open: React.SetStateAction<boolean>) => {
+        if (open) {
+            window.history.pushState({ animeTitleSelector: true }, '');
+        } else {
+            if (window.history.state?.animeTitleSelector) {
+                window.history.back();
+            }
+        }
+        setAnimeTitleSelectorOpen(open);
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -195,6 +212,8 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 setCaptureTimelineModalOpen: openCaptureTimelineModal,
                 animeTitle,
                 setAnimeTitle,
+                animeTitleSelectorOpen,
+                setAnimeTitleSelectorOpen: openAnimeTitleSelector,
             }}
         >
             {children}

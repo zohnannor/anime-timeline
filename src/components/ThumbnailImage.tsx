@@ -29,7 +29,7 @@ interface ImageProps {
     $loading: boolean;
 }
 
-const Image = styled.img<ImageProps & Offset>`
+export const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY }) =>

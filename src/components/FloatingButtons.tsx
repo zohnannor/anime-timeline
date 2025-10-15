@@ -25,7 +25,6 @@ const ButtonSection = styled.div`
 
     & > div > img {
         width: ${scale(160)};
-        height: ${scale(160)};
         filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 1));
     }
 

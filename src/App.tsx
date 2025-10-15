@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
+import { AnimeTitleSelector } from './components/AnimeTitleSelector';
 import { CalendarModal } from './components/CalendarModal';
 import { CaptureTimelineModal } from './components/CaptureTimelineModal';
 import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
@@ -22,15 +23,10 @@ const AppContainer = styled.div`
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
-    const {
-        infoBoxOpen,
-        calendarOpen,
-        captureTimelineModalOpen,
-        animeTitle,
-        setAnimeTitle,
-    } = useSettings();
+    const { infoBoxOpen, calendarOpen, captureTimelineModalOpen, animeTitle } =
+        useSettings();
 
-    console.log({ animeTitle, setAnimeTitle });
+    const timeline = TIMELINE[animeTitle].data;
 
     const handleScroll = useCallback(
         (e: WheelEvent) => {
@@ -50,22 +46,31 @@ const App: React.FC = () => {
             '--max-height',
             `${maxHeight(animeTitle)}`
         );
-        document.title = `${TIMELINE[animeTitle].data.title} Timeline`;
-        // TODO: favicon
+        document.title = `${timeline.title} Timeline`;
+        document.head.querySelector<HTMLLinkElement>(
+            "link[rel~='icon']"
+        )!.href = `./${animeTitle}/${timeline.smallImages['scroller-or-favicon']}.webp`;
     }, [animeTitle]);
 
     return (
         <>
             <TimeLineHeaders $animeTitle={animeTitle} />
+            <AnimeTitleSelector />
             <CalendarModal />
             <CaptureTimelineModal />
             <InfoBox />
             <AppContainer className='appContainer'>
                 <FloatingButtons>
+                    <FloatingButton
+                        key='animeTitleSelectorOpen'
+                        filename={timeline.smallImages['scroller-or-favicon']}
+                        title='Select Manga/Anime Title'
+                        option='animeTitleSelectorOpen'
+                    />
                     {FLOATING_BUTTONS.map(({ filename, title, option }) => (
                         <FloatingButton
                             key={filename}
-                            filename={filename}
+                            filename={timeline.smallImages[filename]}
                             title={title}
                             option={option}
                         />
