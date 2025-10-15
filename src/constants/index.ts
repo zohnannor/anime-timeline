@@ -1,10 +1,8 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
-import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
 import { FP_TIMELINE } from './fp';
-import { FRIEREN_TIMELINE } from './frieren';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
@@ -14,7 +12,7 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const TITLES = ['csm', 'berserk', 'fp', 'frieren'] as const;
+export const TITLES = ['csm', 'fp'] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
@@ -132,9 +130,7 @@ export type Timeline = { layout: TimelineSectionLayout } & {
 
 export const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
-    berserk: BERSERK_TIMELINE,
     fp: FP_TIMELINE,
-    frieren: FRIEREN_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {
