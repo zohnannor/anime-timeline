@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitleSelector } from './components/AnimeTitleSelector';
+import { AnimeTitleSelectorModal } from './components/AnimeTitleSelector';
 import { CalendarModal } from './components/CalendarModal';
 import { CaptureTimelineModal } from './components/CaptureTimelineModal';
 import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
@@ -55,7 +55,7 @@ const App: React.FC = () => {
     return (
         <>
             <TimeLineHeaders $animeTitle={animeTitle} />
-            <AnimeTitleSelector />
+            <AnimeTitleSelectorModal />
             <CalendarModal />
             <CaptureTimelineModal />
             <InfoBox />

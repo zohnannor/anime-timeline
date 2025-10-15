@@ -195,6 +195,8 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     if (timelineItem.type === 'timeline')
         return <Timeline $animeTitle={animeTitle} />;
 
+    const timeline = TIMELINE[animeTitle].data;
+
     const {
         type,
         fit = 'cover',
@@ -212,13 +214,11 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     } = timelineItem;
 
     const entities = {
-        arc: TIMELINE[animeTitle].data.arcs,
-        chapter: TIMELINE[animeTitle].data.volumes.flatMap(v => v.chapters),
-        season: TIMELINE[animeTitle].data.seasons,
-        episode: TIMELINE[animeTitle].data.seasons.flatMap(
-            s => s.episodes ?? []
-        ),
-        volume: TIMELINE[animeTitle].data.volumes,
+        arc: timeline.arcs,
+        chapter: timeline.volumes.flatMap(v => v.chapters),
+        season: timeline.seasons,
+        episode: timeline.seasons.flatMap(s => s.episodes ?? []),
+        volume: timeline.volumes,
     };
 
     return (
@@ -226,28 +226,24 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
             {entities[type].map((entity, idx) => {
                 const title =
                     typeof entity.title === 'function'
-                        ? entity.title(TIMELINE[animeTitle].data, idx)
+                        ? entity.title(timeline, idx)
                         : entity.title;
                 const cover =
                     typeof entity.cover === 'function'
-                        ? entity.cover(TIMELINE[animeTitle].data, idx)
+                        ? entity.cover(timeline, idx)
                         : entity.cover;
                 const offset = 'offset' in entity ? entity.offset : null;
 
                 const itemNumber = idx + 1;
-                const itemWidth = width(
-                    TIMELINE[animeTitle].data,
-                    idx,
-                    unboundedChapterWidth
-                );
-                const link = `${TIMELINE[animeTitle].data.wikiBase}${wikiLink(
-                    title ?? '',
+                const itemWidth = width(timeline, idx, unboundedChapterWidth);
+                const link = `${timeline.wikiBase}${wikiLink(
+                    title,
                     itemNumber
                 )}`;
                 const itemTitle =
                     timelineItem.type === 'chapter'
                         ? itemNumber
-                        : titleProcessor?.(title ?? '', itemNumber) ?? title;
+                        : titleProcessor?.(title, itemNumber) ?? title;
 
                 const titleVisible = showTitles || hoveredItem(itemNumber);
                 const textColor =
@@ -295,7 +291,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                 const chapterPreview = (
                     <ChapterPreview className='preview' $hasPicture={!!cover}>
                         {cover && <ThumbnailImage src={cover} />}
-                        {titleProcessor?.(title ?? '', itemNumber)}
+                        {titleProcessor?.(title, itemNumber)}
                     </ChapterPreview>
                 );
 

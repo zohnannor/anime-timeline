@@ -49,7 +49,7 @@ const TitleButton = styled.div`
     }
 `;
 
-export const AnimeTitleSelector: React.FC = () => {
+export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =
         useSettings();
 

@@ -80,6 +80,7 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
         idx: number,
         unboundedChapterWidth: boolean
     ) => number;
+    sectionLink: string;
     wikiLink: (name: string, idx: number) => string;
     focusable?: boolean;
     subTimeline?: TimelineSectionItem<'episode'>;
