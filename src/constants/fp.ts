@@ -1,0 +1,653 @@
+import { Tuple } from '../types';
+import { pad } from '../util';
+import { Arc, Season, Timeline, Volume } from './';
+import { getArcWidth, getChapterWidth, getVolumeWidth } from './widthHelpers';
+
+export const VOLUME_HEIGHT = 1579;
+export const CHAPTER_HEIGHT = 100;
+export const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
+
+export const SCROLLER_WIDTH = 1300;
+export const HEADERS_WIDTH = 150;
+
+export const LARGE_FONT_SIZE = 500;
+export const SMALL_FONT_SIZE = 45;
+
+const ARCS_TOTAL = 5;
+const VOLUMES_TOTAL = 8;
+
+export const FP_TIMELINE: Timeline = {
+    layout: {
+        arc: {
+            type: 'arc',
+            height: ARC_HEIGHT,
+            sidewaysText: true,
+            titleProcessor: title => `${title} arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
+            width: getArcWidth,
+            wikiLink: arcName => `Story_Arcs#${arcName.replace(' ', '_')}_Arc`,
+        },
+        timeline: {
+            type: 'timeline',
+        },
+        chapter: {
+            type: 'chapter',
+            height: CHAPTER_HEIGHT,
+            fit: 'contain',
+            backgroundColor: 'white',
+            titleProcessor: title => title,
+            blankfontSize: 45,
+            titleFontSize: 45,
+            width: getChapterWidth,
+            wikiLink: (_, n) => `Chapter_${n}`,
+            focusable: true,
+        },
+        volume: {
+            type: 'volume',
+            height: VOLUME_HEIGHT,
+            titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
+            blankfontSize: 500,
+            titleFontSize: 100,
+            width: getVolumeWidth,
+            wikiLink: (_, n) => `Volume_${n}`,
+        },
+    },
+    data: {
+        title: 'Fire Punch',
+        volumes: [
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: () => 'Witness A Miracle!!',
+                        date: 'April 18, 2016',
+                        pages: 65,
+                        cover: null,
+                    },
+                    {
+                        title: () =>
+                            'The Warm Memories of The Far Distant Past',
+                        date: 'April 25, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 02, 2016',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 09, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 16, 2016',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 23, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 30, 2016',
+                        pages: 22,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 06, 2016',
+                        pages: 20,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 20, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 27, 2016',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 04, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 11, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 18, 2016',
+                        pages: 22,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 25, 2016',
+                        pages: 25,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 01, 2016',
+                        pages: 23,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 08, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 15, 2016',
+                        pages: 15,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 22, 2016',
+                        pages: 14,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 05, 2016',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 12, 2016',
+                        pages: 24,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 19, 2016',
+                        pages: 22,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 26, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 03, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 10, 2016',
+                        pages: 23,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 17, 2016',
+                        pages: 22,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 24, 2016',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 31, 2016',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 07, 2016',
+                        pages: 17,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 21, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 28, 2016',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 05, 2016',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 12, 2016',
+                        pages: 21,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 19, 2016',
+                        pages: 22,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 26, 2016',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 02, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 09, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 16, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 23, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 30, 2017',
+                        pages: 14,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'February 13, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'February 20, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'February 27, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: '2017/03/06',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: '2017/03/13',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: '2017/03/20',
+                        pages: 26,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: '2017/03/27',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'April 03, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'April 10, 2017',
+                        pages: 15,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'April 17, 2017',
+                        pages: 25,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 01, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 08, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 15, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 22, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'May 29, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 05, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 12, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 19, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'June 26, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 03, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 10, 2017',
+                        pages: 14,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 24, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'July 31, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 07, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 14, 2017',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 21, 2017',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'August 28, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 04, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 11, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 18, 2017',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'September 25, 2017',
+                        pages: 21,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 02, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: (_, idx) => `Volume ${idx + 1}`,
+                cover: (_, idx) => `Volume_${pad(idx + 1)}`,
+                chapters: [
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 16, 2017',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 23, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'October 30, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 06, 2017',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 13, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 20, 2017',
+                        pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'November 27, 2017',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 04, 2017',
+                        pages: 19,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 11, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 18, 2017',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'December 25, 2017',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: (_, n) => `Chapter ${n + 1}`,
+                        date: 'January 01, 2018',
+                        pages: 18,
+                        cover: null,
+                    },
+                ],
+            },
+        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        arcs: [
+            {
+                title: 'Behemdorg',
+                cover: null,
+                offset: { x: 0, y: 0 },
+                chapters: { from: 1, to: 33 },
+            },
+            {
+                title: 'Catharsis',
+                cover: null,
+                offset: { x: 0, y: 0 },
+                chapters: { from: 34, to: 52 },
+            },
+            {
+                title: 'Amnesia',
+                cover: null,
+                offset: { x: 0, y: 0 },
+                chapters: { from: 53, to: 62 },
+            },
+            {
+                title: 'Fire Punch',
+                cover: null,
+                offset: { x: 0, y: 0 },
+                chapters: { from: 63, to: 80 },
+            },
+            {
+                title: 'Final Film',
+                cover: null,
+                offset: { x: 0, y: 0 },
+                chapters: { from: 81, to: 83 },
+            },
+        ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+        seasons: [] as const satisfies Tuple<Season, 0>,
+        splitChapters: {} as const,
+        wikiBase: 'https://fire-punch.fandom.com/wiki/',
+        smallImages: {
+            'scroller-or-favicon': 'circle',
+            'read-info': 'circle',
+            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-cross-lines': 'circle',
+            'open-chapter-calendar': 'circle',
+            'toggle-always-show-titles': 'circle',
+            'capture-timeline': 'circle',
+        },
+        socialLinks: [],
+    },
+};
