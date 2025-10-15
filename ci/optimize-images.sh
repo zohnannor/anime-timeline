@@ -104,9 +104,6 @@ case $TITLE in
   csm)
     magick "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Chainsaw_Man_Anime_Key_Visual_1.webp"
     ;;
-  berserk)
-    magick "$MAIN_DIR/Berserk_Anime_Box_Art.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Berserk_Anime_Box_Art.webp"
-    ;;
 esac
 
 # Final size report
