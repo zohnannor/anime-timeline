@@ -27,7 +27,6 @@ export const FRIEREN_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            titleProcessor: title => title,
             blankfontSize: 250,
             titleFontSize: 100,
             width: getSeasonWidth,
@@ -64,7 +63,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: CHAPTER_HEIGHT,
             fit: 'contain',
             backgroundColor: 'white',
-            titleProcessor: title => title,
             blankfontSize: 45,
             titleFontSize: 45,
             width: getChapterWidth,
@@ -75,12 +73,11 @@ export const FRIEREN_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            titleProcessor: title => title,
             blankfontSize: 500,
             titleFontSize: 100,
             width: getVolumeWidth,
             sectionLink: 'Chapters_and_Volumes#Volumes',
-            wikiLink: (_, n) => `Volume_${n <= 15 ? n : n - 1}`,
+            wikiLink: (_, n) => `Volume_${n}`,
         },
     },
     data: {
