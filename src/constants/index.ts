@@ -62,7 +62,7 @@ export type Season = ExactUnion<
           chapters: Range;
           episodes: Episode[];
       }
-    | { title: string; chapters: Range }
+    | { chapters: Range }
 >;
 
 export type TimelineSectionType =
@@ -80,7 +80,8 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (title: string, idx: number) => string;
+    titleProcessor?: (title: string, n: number) => string;
+    numberProcessor?: (number: number) => string;
     height: number;
     width: WidthHelper;
     sectionLink: string;

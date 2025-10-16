@@ -1,5 +1,5 @@
 import { Tuple } from '../types';
-import { Arc, Season, Timeline, Volume } from './';
+import { Arc, Season, Timeline, TimelineData, Volume } from './';
 import {
     getArcWidth,
     getChapterWidth,
@@ -8,15 +8,25 @@ import {
     getVolumeWidth,
 } from './widthHelpers';
 
-const SEASON_HEIGHT = 1421 / 2;
-const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+const SEASON_HEIGHT = 1200;
+const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
-const ARC_HEIGHT = VOLUME_HEIGHT;
+const ARC_HEIGHT = VOLUME_HEIGHT * 0.75;
 
 const SEASONS_TOTAL = 1;
 const ARCS_TOTAL = 5;
 const VOLUMES_TOTAL = 43;
+
+const chapterNumber = (n: number): string =>
+    n <= 16 ? `0-${n}` : (n - 16).toString();
+const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
+const volumeCover1 = (_: TimelineData, idx: number) =>
+    `V${idx + 1}-Cover-Manga`;
+const volumeCover2 = (_: TimelineData, idx: number) =>
+    `Manga_V${idx + 1}_Cover`;
+const episodeCover1 = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
+const episodeCover2 = (_: TimelineData, idx: number) => `Episode${idx + 1}`;
 
 export const BERSERK_TIMELINE: Timeline = {
     layout: {
@@ -33,7 +43,7 @@ export const BERSERK_TIMELINE: Timeline = {
                 height: EPISODE_HEIGHT,
                 width: getEpisodeWidth,
                 scale: 1.2,
-                titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+                titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Berserk_(1997_Anime)#Episodes',
@@ -45,7 +55,7 @@ export const BERSERK_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             width: getArcWidth,
             sidewaysText: true,
-            titleProcessor: title => `${title} Arc`,
+            titleProcessor: title => `${title} arc`,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Releases_(Manga)#Arcs',
@@ -60,18 +70,17 @@ export const BERSERK_TIMELINE: Timeline = {
             width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
-            titleProcessor: title => title,
+            numberProcessor: chapterNumber,
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Releases_(Manga)#Volumes',
-            wikiLink: s => `Episode_${s}_(Manga)`,
+            wikiLink: (_, n) => `Episode_${chapterNumber(n)}_(Manga)`,
             focusable: true,
         },
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
-            titleProcessor: title => title,
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Releases_(Manga)#Volumes',
@@ -82,8 +91,8 @@ export const BERSERK_TIMELINE: Timeline = {
         title: 'Berserk',
         volumes: [
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Black Swordsman',
@@ -106,8 +115,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Guardian Angels of Desire (2)',
@@ -124,8 +133,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Guardian Angels of Desire (4)',
@@ -154,8 +163,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Golden Age (2)',
@@ -190,8 +199,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Golden Age (7)',
@@ -244,8 +253,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Sword Master (2)',
@@ -310,8 +319,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Casca (3)',
@@ -376,8 +385,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Battle to Capture Doldrey (5)',
@@ -442,8 +451,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Skull Knight',
@@ -514,8 +523,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Sparks from a Sword Tip',
@@ -586,8 +595,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Demon Dog (1)',
@@ -658,8 +667,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Requiem of the Wind',
@@ -724,8 +733,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Storm of Death (1)',
@@ -802,8 +811,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Demon Child',
@@ -856,8 +865,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Queen',
@@ -928,8 +937,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Monster',
@@ -1000,8 +1009,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'The Unseen',
@@ -1072,8 +1081,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Kushan Scouts (1)',
@@ -1144,8 +1153,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Black Swordsman on the Holy Ground',
@@ -1216,8 +1225,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => "Spider's Thread",
@@ -1289,8 +1298,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Jumping Fish',
@@ -1361,8 +1370,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Ruptured World',
@@ -1427,8 +1436,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Winter Journey (1)',
@@ -1493,8 +1502,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Trolls',
@@ -1559,8 +1568,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Magic Sword',
@@ -1625,8 +1634,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Retribution',
@@ -1691,8 +1700,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Fire Dragon',
@@ -1757,8 +1766,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Proclaimed Omen',
@@ -1823,8 +1832,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Bloodshed',
@@ -1889,8 +1898,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Duel',
@@ -1955,8 +1964,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Blazing Bay',
@@ -2021,8 +2030,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Human Bullet',
@@ -2087,8 +2096,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Bubbles of Futility',
@@ -2153,8 +2162,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Giant God of Blindness',
@@ -2219,8 +2228,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Falconia',
@@ -2279,8 +2288,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Full Moon (1)',
@@ -2339,8 +2348,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Merrow (2)',
@@ -2399,8 +2408,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Capital City of Humanity',
@@ -2459,8 +2468,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Blazing Puppet',
@@ -2513,8 +2522,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `V${n + 1}-Cover-Manga`,
+                title: volumeTitle,
+                cover: volumeCover1,
                 chapters: [
                     {
                         title: () => 'Forest of Corpses and Thorny Cedars',
@@ -2561,8 +2570,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `Manga_V${n + 1}_Cover`,
+                title: volumeTitle,
+                cover: volumeCover2,
                 chapters: [
                     {
                         title: () => 'Dawn of an Empire',
@@ -2609,8 +2618,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: (_, n) => `Manga_V${n + 1}_Cover`,
+                title: volumeTitle,
+                cover: volumeCover2,
                 chapters: [
                     {
                         title: () => 'Lull of the Waning Moon',
@@ -2669,8 +2678,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, n) => `Volume ${n + 1}`,
-                cover: null,
+                title: volumeTitle,
+                cover: volumeCover2,
                 chapters: [
                     {
                         title: () =>
@@ -2730,6 +2739,12 @@ export const BERSERK_TIMELINE: Timeline = {
                         pages: 23,
                         cover: null,
                     },
+                    {
+                        title: () => 'Anādi Avidyā',
+                        date: '12 September 2025',
+                        pages: 22,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
@@ -2737,31 +2752,31 @@ export const BERSERK_TIMELINE: Timeline = {
             {
                 title: 'Black Swordsman',
                 cover: 'V3-Cover_Art-Manga',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1270 },
                 chapters: { from: 1, to: 8 },
             },
             {
                 title: 'Golden Age',
                 cover: 'V5-Cover_Art-Manga',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1000 },
                 chapters: { from: 9, to: 16 + 94 },
             },
             {
-                title: 'Convitcion',
+                title: 'Conviction',
                 cover: 'V18-Cover_Art-Manga',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 2500 },
                 chapters: { from: 16 + 95, to: 16 + 176 },
             },
             {
-                title: 'Millenium Falcon',
+                title: 'Millennium Falcon',
                 cover: 'V34-Cover_Art-Manga',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 3980 },
                 chapters: { from: 16 + 177, to: 16 + 307 },
             },
             {
                 title: 'Fantasia',
                 cover: 'V38-Guts-Manga',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 2310 },
                 chapters: { from: 16 + 308 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
@@ -2769,157 +2784,157 @@ export const BERSERK_TIMELINE: Timeline = {
             {
                 title: 'Berserk (1997 Anime)',
                 cover: () => 'Berserk_Anime_Box_Art',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 11180 },
                 chapters: { from: 1, to: 94 },
                 episodes: [
                     {
                         title: () => 'Black Swordsman',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover1,
+                        offset: { x: 0, y: 150 },
                         chapters: { from: 1, to: 2 },
                     },
                     {
                         title: () => 'Band of the Falcon',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover1,
+                        offset: { x: 0, y: 90 },
                         chapters: { from: 11, to: 13 },
                     },
                     {
                         title: () => 'First Battle',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 60 },
                         chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'The Hand of God',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 190 },
                         chapters: { from: 8, to: 11 },
                     },
                     {
                         title: () => 'Sword Wind',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 1, to: 16 + 2 },
                     },
                     {
                         title: () => 'Zodd the Immortal',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 2, to: 16 + 5 },
                     },
                     {
                         title: () => 'Sword Master',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 6, to: 16 + 7 },
                     },
                     {
                         title: () => 'Conspiracy',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 7, to: 16 + 7 },
                     },
                     {
                         title: () => 'Assassination',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 8, to: 16 + 10 },
                     },
                     {
                         title: () => 'Precious Thing',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 10, to: 16 + 12 },
                     },
                     {
                         title: () => 'The Battle',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 13, to: 16 + 15 },
                     },
                     {
                         title: () => 'Together',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 15, to: 16 + 18 },
                     },
                     {
                         title: () => 'Ready to Die',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 18, to: 16 + 20 },
                     },
                     {
                         title: () => 'Bonfire of Dreams',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 20, to: 16 + 22 },
                     },
                     {
                         title: () => 'The Decisive Battle',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 22, to: 16 + 24 },
                     },
                     {
                         title: () => 'The Conqueror',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 70 },
                         chapters: { from: 16 + 24, to: 16 + 29 },
                     },
                     {
                         title: () => 'Moment of Glory',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 29, to: 16 + 31 },
                     },
                     {
                         title: () => 'Tombstone of Flames',
-                        cover: (_, idx) => `Episode${idx + 1}`,
+                        cover: episodeCover2,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 31, to: 16 + 33 },
                     },
                     {
                         title: () => 'Separation',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 70 },
                         chapters: { from: 16 + 33, to: 16 + 38 },
                     },
                     {
                         title: () => 'Sparks',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 10 },
                         chapters: { from: 16 + 41, to: 16 + 42 },
                     },
                     {
                         title: () => 'Confession',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 80 },
                         chapters: { from: 16 + 43, to: 16 + 48 },
                     },
                     {
                         title: () => 'Infiltration',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 190 },
                         chapters: { from: 16 + 49, to: 16 + 58 },
                     },
                     {
                         title: () => 'Eve of the Feast',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 130 },
                         chapters: { from: 16 + 67, to: 16 + 73 },
                     },
                     {
                         title: () => 'Eclipse',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 60 },
                         chapters: { from: 16 + 73, to: 16 + 78 },
                     },
                     {
                         title: () => 'Time of Eternity',
-                        cover: (_, idx) => `Episode${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover2,
+                        offset: { x: 0, y: 320 },
                         chapters: { from: 16 + 79, to: 16 + 94 },
                     },
                 ],
