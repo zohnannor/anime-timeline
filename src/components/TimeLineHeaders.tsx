@@ -55,41 +55,44 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
     const wikiBase = TIMELINE[$animeTitle].data.wikiBase;
-    const seasonHeight = TIMELINE[$animeTitle].layout.season?.height;
+    const layout = TIMELINE[$animeTitle].layout;
     return (
         <Headers className='headers'>
-            {seasonHeight && (
-                <Header className='header' $height={seasonHeight} $invertBorder>
-                    <Link href={`${wikiBase}Chainsaw_Man_(Anime)`}>
+            {layout.season && (
+                <Header
+                    className='header'
+                    $height={layout.season.height}
+                    $invertBorder
+                >
+                    <Link href={`${wikiBase}${layout.season.sectionLink}`}>
                         Anime Seasons
                     </Link>
                 </Header>
             )}
             <Header
                 className='header'
-                $height={TIMELINE[$animeTitle].layout.arc.height}
+                $height={layout.arc.height}
                 $invertBorder
             >
-                <Link href={`${wikiBase}Story_Arcs`}>Story Arcs</Link>
+                <Link href={`${wikiBase}${layout.arc.sectionLink}`}>
+                    Story Arcs
+                </Link>
             </Header>
             <Header
                 className='header'
-                $height={
-                    TIMELINE_HEIGHT +
-                    TIMELINE[$animeTitle].layout.chapter.height
-                }
+                $height={TIMELINE_HEIGHT + layout.chapter.height}
                 $invertBorder
             >
-                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
+                <Link href={`${wikiBase}${layout.chapter.sectionLink}`}>
                     Chapters
                 </Link>
             </Header>
             <Header
                 className='header'
-                $height={TIMELINE[$animeTitle].layout.volume.height}
+                $height={layout.volume.height}
                 $invertBorder
             >
-                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
+                <Link href={`${wikiBase}${layout.volume.sectionLink}`}>
                     Volumes
                 </Link>
             </Header>
