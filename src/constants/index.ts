@@ -20,6 +20,12 @@ type Range = { from: number; to?: number };
 
 type Callback<T> = (timeline: TimelineData, idx: number) => T;
 
+export type WidthHelper = (
+    timeline: TimelineData,
+    idx: number,
+    unboundedChapterWidth: boolean
+) => number;
+
 export type Chapter = {
     title: Callback<string>;
     date: string;
@@ -75,15 +81,11 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     titleFontSize: number;
     titleProcessor?: (title: string, idx: number) => string;
     height: number;
-    width: (
-        timeline: TimelineData,
-        idx: number,
-        unboundedChapterWidth: boolean
-    ) => number;
+    width: WidthHelper;
     sectionLink: string;
     wikiLink: (name: string, idx: number) => string;
     focusable?: boolean;
-    subTimeline?: TimelineSectionItem<'episode'>;
+    subTimeline?: TimelineSectionItem<TimelineSectionType>;
 };
 
 export type TimelineSectionLayout = {

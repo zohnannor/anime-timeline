@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
+import { TIMELINE, TITLES } from '../constants';
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { TIMELINE, TITLES } from '../constants';
-import { Image } from './ThumbnailImage';
+import { ThumbnailImage } from './ThumbnailImage';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -40,7 +40,6 @@ const TitleButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: ${scale(1500)};
     gap: ${scale(100)};
     padding: ${scale(50)} 0;
 
@@ -69,13 +68,12 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                             setAnimeTitle(title);
                         }}
                     >
-                        <Image
-                            className='animeTitleImage'
-                            src={`./${title}/${TIMELINE[title].data.smallImages['scroller-or-favicon']}.webp`}
-                            alt=''
-                            loading='lazy'
-                            $loading={false}
-                            draggable={false}
+                        <ThumbnailImage
+                            src={
+                                TIMELINE[title].data.smallImages[
+                                    'scroller-or-favicon'
+                                ]
+                            }
                         />
                         {TIMELINE[title].data.title}
                     </TitleButton>
