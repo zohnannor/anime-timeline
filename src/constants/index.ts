@@ -1,6 +1,7 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
+import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
 
 export const SCROLLER_WIDTH = 1300;
@@ -11,7 +12,7 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const TITLES = ['csm'] as const;
+export const TITLES = ['csm', 'berserk'] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
@@ -61,7 +62,7 @@ export type Season = ExactUnion<
           chapters: Range;
           episodes: Episode[];
       }
-    | { title: string; chapters: Range }
+    | { chapters: Range }
 >;
 
 export type TimelineSectionType =
@@ -79,7 +80,8 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (title: string, idx: number) => string;
+    titleProcessor?: (title: string, n: number) => string;
+    numberProcessor?: (number: number) => string;
     height: number;
     width: WidthHelper;
     sectionLink: string;
@@ -132,6 +134,7 @@ export type Timeline = { layout: TimelineSectionLayout } & {
 
 export const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
+    berserk: BERSERK_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {

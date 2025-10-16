@@ -41,6 +41,7 @@ export const CSM_TIMELINE: Timeline = {
             width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
+            numberProcessor: n => (n - 1).toString(),
             sectionLink: 'Chainsaw Man (Anime)',
             wikiLink: season => season,
             subTimeline: {
@@ -48,7 +49,7 @@ export const CSM_TIMELINE: Timeline = {
                 height: EPISODE_HEIGHT,
                 width: getEpisodeWidth,
                 scale: 1.2,
-                titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+                titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
@@ -75,7 +76,6 @@ export const CSM_TIMELINE: Timeline = {
             width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
-            titleProcessor: title => title,
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
@@ -1713,11 +1713,9 @@ export const CSM_TIMELINE: Timeline = {
                 episodes: [],
             },
             {
-                title: '2',
                 chapters: { from: 53, to: 97 },
             },
             {
-                title: '3',
                 chapters: { from: 98 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
