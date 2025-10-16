@@ -1,6 +1,7 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
+import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
 import { FP_TIMELINE } from './fp';
 
@@ -12,7 +13,7 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const TITLES = ['csm', 'fp'] as const;
+export const TITLES = ['csm', 'berserk', 'fp'] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
@@ -20,6 +21,12 @@ export type Offset = { x: number; y: number };
 type Range = { from: number; to?: number };
 
 type Callback<T> = (timeline: TimelineData, idx: number) => T;
+
+export type WidthHelper = (
+    timeline: TimelineData,
+    idx: number,
+    unboundedChapterWidth: boolean
+) => number;
 
 export type Chapter = {
     title: Callback<string>;
@@ -56,7 +63,7 @@ export type Season = ExactUnion<
           chapters: Range;
           episodes: Episode[];
       }
-    | { title: string; chapters: Range }
+    | { chapters: Range }
 >;
 
 export type TimelineSectionType =
@@ -74,16 +81,14 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (title: string, idx: number) => string;
+    titleProcessor?: (title: string, n: number) => string;
+    numberProcessor?: (number: number) => string;
     height: number;
-    width: (
-        timeline: TimelineData,
-        idx: number,
-        unboundedChapterWidth: boolean
-    ) => number;
+    width: WidthHelper;
+    sectionLink: string;
     wikiLink: (name: string, idx: number) => string;
     focusable?: boolean;
-    subTimeline?: TimelineSectionItem<'episode'>;
+    subTimeline?: TimelineSectionItem<TimelineSectionType>;
 };
 
 export type TimelineSectionLayout = {
@@ -130,6 +135,7 @@ export type Timeline = { layout: TimelineSectionLayout } & {
 
 export const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
+    berserk: BERSERK_TIMELINE,
     fp: FP_TIMELINE,
 };
 

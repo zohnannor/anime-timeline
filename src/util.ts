@@ -10,11 +10,6 @@ export const map = <T extends readonly unknown[], U>(
     fn: (item: T[number], index: number) => U
 ) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
 
-export const zip = <T extends readonly unknown[], U extends readonly unknown[]>(
-    arr1: T,
-    arr2: U
-) => arr1.map((item, index) => [item, arr2[index]] as const);
-
 export const pad = (n: number) => String(n).padStart(2, '0');
 
 export const sum = <T extends readonly number[]>(arr: T) =>

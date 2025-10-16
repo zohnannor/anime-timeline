@@ -1,17 +1,11 @@
 import { range, sum } from '../util';
-import { TimelineData } from './';
+import { TimelineData, WidthHelper } from './';
 
 const chaptersVolumes = (timeline: TimelineData) =>
     timeline.volumes.flatMap((v, vi) => v.chapters.map(() => vi));
 
 const chapters = (timeline: TimelineData) =>
     timeline.volumes.flatMap(v => v.chapters);
-
-type WidthHelper = (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number;
 
 export const getVolumeWidth: WidthHelper = (
     timeline,
