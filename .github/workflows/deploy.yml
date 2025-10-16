@@ -36,7 +36,7 @@ jobs:
                   for dir in public/*/; do
                       dir_name=$(basename "$dir")
                       echo "Optimizing images in: $dir_name"
-                      ci/optimize-images.sh "$dir_name"
+                      bash ci/optimize-images.sh "$dir_name"
                   done
               env:
                   CPU: 2 # GitHub runners have 2 cores
