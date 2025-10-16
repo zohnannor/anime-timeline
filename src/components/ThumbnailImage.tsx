@@ -38,11 +38,17 @@ export const Image = styled.img<ImageProps & Offset>`
 `;
 
 export const ThumbnailImage: React.FC<
-    React.ComponentProps<'img'> & Offset
+    React.ComponentProps<'img'> & Offset & { animeTitle?: string }
 > = props => {
-    const { animeTitle } = useSettings();
+    const { animeTitle: currentAnimeTitle } = useSettings();
     const [loading, setLoading] = useState(true);
-    const { src, $offsetX, $offsetY, ...rest } = props;
+    const {
+        src,
+        $offsetX,
+        $offsetY,
+        animeTitle = currentAnimeTitle,
+        ...rest
+    } = props;
 
     const realSrc = `./${animeTitle}/${src}.webp`;
     const thumbnailSrc = `./${animeTitle}-thumbnails/${src}.webp`;

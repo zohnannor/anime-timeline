@@ -188,7 +188,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [infoBoxOpen, calendarOpen]);
+    }, [
+        infoBoxOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        animeTitleSelectorOpen,
+    ]);
+
+    const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
+        setAnimeTitleRaw(title);
+        window.history.replaceState({}, '', `?title=${title}`);
+    };
 
     const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
         window.history.replaceState({}, '', `?title=${title}`);

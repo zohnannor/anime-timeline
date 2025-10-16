@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
+import { TIMELINE, TITLES } from '../constants';
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { TIMELINE, TITLES } from '../constants';
-import { Image } from './ThumbnailImage';
+import { ThumbnailImage } from './ThumbnailImage';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -23,13 +23,12 @@ const ModalContainer = styled.div`
     z-index: 100;
     background: rgba(0, 0, 0, 0.85);
     padding: ${scale(40)} ${scale(190)};
-    max-width: 50svw;
+    width: 80svw;
+    max-width: ${scale(3000)};
+    font-size: ${scale(75)};
 
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: ${scale(75)};
-    width: 80vw;
+    align-items: flex-start;
 `;
 
 const TitleButton = styled.div`
@@ -39,8 +38,6 @@ const TitleButton = styled.div`
     border-color: white;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    width: ${scale(1500)};
     gap: ${scale(100)};
     padding: ${scale(50)} 0;
 
@@ -49,7 +46,7 @@ const TitleButton = styled.div`
     }
 `;
 
-export const AnimeTitleSelector: React.FC = () => {
+export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =
         useSettings();
 
@@ -64,18 +61,20 @@ export const AnimeTitleSelector: React.FC = () => {
             <ModalContainer className='captureTimelineModal'>
                 {TITLES.map(title => (
                     <TitleButton
+                        key={title}
                         onClick={() => {
-                            setAnimeTitleSelectorOpen(false);
                             setAnimeTitle(title);
+                            setAnimeTitleSelectorOpen(false);
                         }}
                     >
-                        <Image
+                        <ThumbnailImage
                             className='animeTitleImage'
-                            src={`./${title}/${TIMELINE[title].data.smallImages['scroller-or-favicon']}.webp`}
-                            alt=''
-                            loading='lazy'
-                            $loading={false}
-                            draggable={false}
+                            animeTitle={title}
+                            src={
+                                TIMELINE[title].data.smallImages[
+                                    'scroller-or-favicon'
+                                ]
+                            }
                         />
                         {TIMELINE[title].data.title}
                     </TitleButton>

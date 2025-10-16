@@ -271,6 +271,7 @@ export const CalendarModal: React.FC = () => {
 
     const currentDate = new Date();
     const startDate = chapterDates(animeTitle)[0]!;
+
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
         chapterDates(animeTitle).forEach((date, index) => {

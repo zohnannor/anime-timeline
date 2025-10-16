@@ -54,12 +54,13 @@ const Headers = styled.div`
 export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
+    const wikiBase = TIMELINE[$animeTitle].data.wikiBase;
     const seasonHeight = TIMELINE[$animeTitle].layout.season?.height;
     return (
         <Headers className='headers'>
             {seasonHeight && (
                 <Header className='header' $height={seasonHeight} $invertBorder>
-                    <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Anime)'>
+                    <Link href={`${wikiBase}Chainsaw_Man_(Anime)`}>
                         Anime Seasons
                     </Link>
                 </Header>
@@ -69,9 +70,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
                 $height={TIMELINE[$animeTitle].layout.arc.height}
                 $invertBorder
             >
-                <Link href='https://chainsaw-man.fandom.com/wiki/Story_Arcs'>
-                    Story Arcs
-                </Link>
+                <Link href={`${wikiBase}Story_Arcs`}>Story Arcs</Link>
             </Header>
             <Header
                 className='header'
@@ -81,7 +80,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
                 }
                 $invertBorder
             >
-                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
+                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
                     Chapters
                 </Link>
             </Header>
@@ -90,7 +89,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
                 $height={TIMELINE[$animeTitle].layout.volume.height}
                 $invertBorder
             >
-                <Link href='https://chainsaw-man.fandom.com/wiki/Chainsaw_Man_(Manga)#Chapters'>
+                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
                     Volumes
                 </Link>
             </Header>
