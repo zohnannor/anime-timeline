@@ -1,5 +1,5 @@
 import { Tuple } from '../types';
-import { Arc, Season, Timeline, Volume } from './';
+import { Arc, Season, Timeline, TimelineData, Volume } from './';
 import {
     getArcWidth,
     getChapterWidth,
@@ -16,7 +16,11 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.6;
 
 const SEASONS_TOTAL = 3;
 const ARCS_TOTAL = 10;
-const VOLUMES_TOTAL = 16;
+const VOLUMES_TOTAL = 15;
+
+const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
+const volumeCover = (_: TimelineData, idx: number) => `Volume_${idx + 1}`;
+const episodeCover = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
 
 export const FRIEREN_TIMELINE: Timeline = {
     layout: {
@@ -27,6 +31,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             width: getSeasonWidth,
+            sectionLink: "Frieren: Beyond Journey's End (Anime)",
             wikiLink: season => season,
             subTimeline: {
                 type: 'episode',
@@ -34,8 +39,9 @@ export const FRIEREN_TIMELINE: Timeline = {
                 scale: 1.2,
                 titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
                 blankfontSize: 42,
-                titleFontSize: 42,
+                titleFontSize: 38,
                 width: getEpisodeWidth,
+                sectionLink: "Frieren:_Beyond_Journey's_End_(Anime)#Episodes",
                 wikiLink: (_, n) => `Episode_${n}`,
             },
         },
@@ -47,6 +53,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 100,
             titleFontSize: 100,
             width: getArcWidth,
+            sectionLink: 'Story Arcs',
             wikiLink: arcName => `${arcName}_Arc`,
         },
         timeline: {
@@ -61,6 +68,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             width: getChapterWidth,
+            sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
         },
@@ -71,6 +79,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             width: getVolumeWidth,
+            sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Volume_${n <= 15 ? n : n - 1}`,
         },
     },
@@ -78,8 +87,8 @@ export const FRIEREN_TIMELINE: Timeline = {
         title: 'Frieren',
         volumes: [
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => "The Journey's End",
@@ -126,8 +135,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'One One-Hundredth',
@@ -192,8 +201,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'The Undead Army',
@@ -258,8 +267,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'The Priest and His Regret',
@@ -324,8 +333,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Stille—Meteoric Iron Bird',
@@ -390,8 +399,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => "The Ruins of the King's Tomb",
@@ -456,8 +465,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => "Serie's Intuition",
@@ -523,8 +532,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Northern Plateau',
@@ -589,8 +598,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Lake Korridor',
@@ -656,8 +665,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Solitär',
@@ -722,8 +731,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Retribution',
@@ -788,8 +797,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Reunion',
@@ -854,8 +863,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Vialathor',
@@ -920,8 +929,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (_, idx) => `Volume ${idx + 1}`,
-                cover: (_, idx) => `Volume_${idx + 1}`,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Magic Special Forces',
@@ -986,8 +995,8 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: () => ``,
-                cover: null,
+                title: volumeTitle,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Traitor',
@@ -1043,12 +1052,6 @@ export const FRIEREN_TIMELINE: Timeline = {
                         pages: 18,
                         cover: null,
                     },
-                ],
-            },
-            {
-                title: (_, idx) => `Volume ${idx}`,
-                cover: (_, idx) => `Volume_${idx}`,
-                chapters: [
                     {
                         title: () => 'The Land with No Hero',
                         date: 'October 15, 2025',
@@ -1129,171 +1132,171 @@ export const FRIEREN_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => "The Journey's End",
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 120, y: 0 },
                         chapters: { from: 1, to: 2 },
                     },
                     {
                         title: () => "It Didn't Have to Be Magic...",
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 150, y: 0 },
                         chapters: { from: 2, to: 3 },
                     },
                     {
                         title: () => 'Killing Magic',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 250, y: 0 },
                         chapters: { from: 4, to: 5 },
                     },
                     {
                         title: () => 'The Land Where Souls Rest',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 170, y: 0 },
                         chapters: { from: 6, to: 8 },
                     },
                     {
                         title: () => 'Phantoms of the Dead',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 70, y: 0 },
                         chapters: { from: 8, to: 10 },
                     },
                     {
                         title: () => 'The Hero of the Village',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 180, y: 0 },
                         chapters: { from: 11, to: 12 },
                     },
                     {
                         title: () => 'Like a Fairy Tale',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 200, y: 0 },
                         chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'Frieren the Slayer',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 180, y: 0 },
                         chapters: { from: 15, to: 17 },
                     },
                     {
                         title: () => 'Aura the Guillotine',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 240, y: 0 },
                         chapters: { from: 18, to: 20 },
                     },
                     {
                         title: () => 'A Powerful Mage',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 200, y: 0 },
                         chapters: { from: 21, to: 22 },
                     },
                     {
                         title: () => 'Winter in the Northern Lands',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 30, y: 0 },
                         chapters: { from: 23, to: 24 },
                     },
                     {
                         title: () => 'A Real Hero',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 140, y: 0 },
                         chapters: { from: 25, to: 26 },
                     },
                     {
                         title: () => "Aversion to One's Own Kind",
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 190, y: 0 },
                         chapters: { from: 27, to: 28 },
                     },
                     {
                         title: () => 'Privilege of the Young',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 260, y: 0 },
                         chapters: { from: 29, to: 30 },
                     },
                     {
                         title: () => 'Smells like Trouble',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 200, y: 0 },
                         chapters: { from: 31, to: 32 },
                     },
                     {
                         title: () => 'Long-Lived Friends',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 80, y: 0 },
                         chapters: { from: 33, to: 34 },
                     },
                     {
                         title: () => 'Take Care',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 190, y: 0 },
                         chapters: { from: 35, to: 36 },
                     },
                     {
                         title: () => 'First-Class Mage Exam',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 250, y: 0 },
                         chapters: { from: 37, to: 38 },
                     },
                     {
                         title: () => 'Well-Laid Plans',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 290, y: 0 },
                         chapters: { from: 38, to: 41 },
                     },
                     {
                         title: () => 'Necessary Killing',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 270, y: 0 },
                         chapters: { from: 41, to: 43 },
                     },
                     {
                         title: () => 'The World of Magic',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 130, y: 0 },
                         chapters: { from: 43, to: 45 },
                     },
                     {
                         title: () => 'Future Enemies',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 170, y: 0 },
                         chapters: { from: 46, to: 47 },
                     },
                     {
                         title: () => 'Conquering the Labyrinth',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 170, y: 0 },
                         chapters: { from: 48, to: 49 },
                     },
                     {
                         title: () => 'Perfect Replicas',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 130, y: 0 },
                         chapters: { from: 50, to: 51 },
                     },
                     {
                         title: () => 'A Fatal Vulnerability',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 310, y: 0 },
                         chapters: { from: 52, to: 53 },
                     },
                     {
                         title: () => 'The Height of Magic',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 230, y: 0 },
                         chapters: { from: 54, to: 55 },
                     },
                     {
                         title: () => 'An Era of Humans',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 180, y: 0 },
                         chapters: { from: 56, to: 58 },
                     },
                     {
                         title: () =>
                             'It Would Be Embarrassing When We Met Again',
-                        cover: (_, idx) => `Episode_${idx + 1}`,
-                        offset: { x: 0, y: 0 },
+                        cover: episodeCover,
+                        offset: { x: 150, y: 0 },
                         chapters: { from: 58, to: 60 },
                     },
                 ],
@@ -1306,7 +1309,6 @@ export const FRIEREN_TIMELINE: Timeline = {
                 episodes: [],
             },
             {
-                title: '3',
                 chapters: { from: 120 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,

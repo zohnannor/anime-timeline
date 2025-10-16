@@ -200,11 +200,6 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         window.history.replaceState({}, '', `?title=${title}`);
     };
 
-    const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
-        window.history.replaceState({}, '', `?title=${title}`);
-        setAnimeTitleRaw(title);
-    };
-
     return (
         <SettingsContext.Provider
             value={{

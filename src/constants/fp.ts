@@ -20,6 +20,7 @@ export const FP_TIMELINE: Timeline = {
             blankfontSize: 100,
             titleFontSize: 100,
             width: getArcWidth,
+            sectionLink: 'Story Arcs',
             wikiLink: arcName => `Story_Arcs#${arcName.replace(' ', '_')}_Arc`,
         },
         timeline: {
@@ -34,6 +35,7 @@ export const FP_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             width: getChapterWidth,
+            sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
         },
@@ -44,6 +46,7 @@ export const FP_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             width: getVolumeWidth,
+            sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
         },
     },

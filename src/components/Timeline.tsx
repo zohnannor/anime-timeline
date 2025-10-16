@@ -131,6 +131,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         )
                     )
                 );
+
                 const color = interpolateColor(
                     colorValue,
                     inputRange,
