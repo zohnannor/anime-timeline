@@ -107,6 +107,10 @@ case $TITLE in
   berserk)
     magick "$MAIN_DIR/Berserk_Anime_Box_Art.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Berserk_Anime_Box_Art.webp"
     ;;
+  frieren)
+    magick "$MAIN_DIR/Season_1_key_visual_3.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Season_1_key_visual_3.webp"
+    magick "$MAIN_DIR/Season_2_key_visual_3.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Season_2_key_visual_3.webp"
+    ;;
 esac
 
 # Final size report
