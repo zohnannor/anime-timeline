@@ -1,13 +1,14 @@
-import React from 'react';
+import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
-import { CHAPTERS_TOTAL, MAX_HEIGHT, scale } from '../constants';
-import { getChapterWidth } from '../helpers';
+import { TIMELINE } from '../constants';
+import { getVolumeWidth } from '../constants/widthHelpers';
+import { maxHeight, scale, toTitleCase } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { map, range, sum } from '../util';
+import { sum } from '../util';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -25,13 +26,13 @@ const ModalContainer = styled.div`
     transform: translate(-50%, -40%);
     z-index: 100;
     background: rgba(0, 0, 0, 0.85);
-    padding: ${scale(40)}svh ${scale(190)}svh;
+    padding: ${scale(40)} ${scale(190)};
     max-width: 50svw;
 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: ${scale(75)}svh;
+    font-size: ${scale(75)};
     width: 80vw;
 `;
 
@@ -43,7 +44,7 @@ const Button = styled.button`
     cursor: pointer;
     background-color: black;
     color: white;
-    font-size: ${scale(60)}svh;
+    font-size: ${scale(60)};
     border-color: white;
 `;
 
@@ -52,23 +53,42 @@ export const CaptureTimelineModal: React.FC = () => {
         captureTimelineModalOpen,
         setCaptureTimelineModalOpen,
         unboundedChapterWidth,
+        animeTitle,
     } = useSettings();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
+    const timeline = TIMELINE[animeTitle].data;
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: MAX_HEIGHT,
+        canvasHeight: maxHeight(animeTitle),
         canvasWidth: sum(
-            map(range(0, CHAPTERS_TOTAL), v =>
-                getChapterWidth(v + 1, unboundedChapterWidth)
+            timeline.volumes.map((_, vi) =>
+                getVolumeWidth(timeline, vi, unboundedChapterWidth)
             )
         ),
         backgroundColor: '#000',
-        filter: el => !el.classList?.contains('floatingButtons'),
+        filter: el =>
+            ['floatingButtons', 'scrollerHoverArea'].every(
+                className => !el.classList?.contains(className)
+            ),
+        onStart: () => {
+            setLoading(false);
+            setError(null);
+        },
         onSuccess: dataUrl => {
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `CSM_Timeline_${new Date().toISOString()}.png`;
+            link.download = `${toTitleCase(
+                animeTitle
+            )}_Timeline_${new Date().toISOString()}.png`;
             link.click();
+            setLoading(false);
+        },
+        onLoading: () => setLoading(true),
+        onError: error => {
+            setLoading(false);
+            setError(error);
         },
     });
 
@@ -78,7 +98,11 @@ export const CaptureTimelineModal: React.FC = () => {
         <>
             <ShadowOverlay
                 className='shadow'
-                onClick={() => setCaptureTimelineModalOpen(false)}
+                onClick={() => {
+                    setCaptureTimelineModalOpen(false);
+                    setLoading(false);
+                    setError(null);
+                }}
             />
             <ModalContainer className='captureTimelineModal'>
                 <Title>Are you sure?</Title>
@@ -90,8 +114,10 @@ export const CaptureTimelineModal: React.FC = () => {
                 </h5>
                 <Button onClick={captureTimeline}>Yes, proceed</Button>
                 <h6>(this might take a while)</h6>
+                {loading && <div>Loading...</div>}
+                {error && <div style={{ color: 'red' }}>{error}</div>}
             </ModalContainer>
         </>,
-        document.querySelector('#captureTimelineModal')!
+        document.querySelector('#modal')!
     );
 };

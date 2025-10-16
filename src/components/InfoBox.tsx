@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
-import { scale } from '../constants';
+import { TIMELINE, TimelineData } from '../constants';
+import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { Link } from './Link';
 
@@ -46,26 +47,26 @@ const Box = styled.div<BoxProps>`
     justify-content: center;
     width: 90vw;
     max-width: 90vw;
-    padding: ${scale(40)}svh ${scale(190)}svh;
+    padding: ${scale(40)} ${scale(190)};
     white-space: pre-line;
-    font-size: ${scale(75)}svh;
+    font-size: ${scale(75)};
 
     & a {
         text-decoration: underline dotted;
-        text-underline-offset: ${scale(10)}svh;
-        text-decoration-thickness: ${scale(3)}svh;
+        text-underline-offset: ${scale(10)};
+        text-decoration-thickness: ${scale(3)};
     }
 
     & kbd:has(kbd) {
-        margin: ${scale(20)}svh;
+        margin: ${scale(20)};
     }
 
     & kbd:not(:has(kbd)) {
         background-color: rgba(0, 0, 0, 0.5);
-        border: ${scale(3)}svh solid rgba(255, 255, 255, 0.5);
-        border-radius: ${scale(10)}svh;
-        box-shadow: 0 ${scale(3)}svh 0 rgba(255, 255, 255, 0.5);
-        padding: ${scale(2)}svh ${scale(12)}svh;
+        border: ${scale(3)} solid rgba(255, 255, 255, 0.5);
+        border-radius: ${scale(10)};
+        box-shadow: 0 ${scale(3)} 0 rgba(255, 255, 255, 0.5);
+        padding: ${scale(2)} ${scale(12)};
         font-size: 0.8em;
         line-height: 1;
     }
@@ -112,13 +113,13 @@ const CloseButton = styled.span`
     inset: 0;
     cursor: pointer;
     font-size: 1.5em;
-    top: ${scale(100)}svh;
-    right: ${scale(100)}svh;
+    top: ${scale(100)};
+    right: ${scale(100)};
     z-index: 101;
     float: right;
 `;
 
-export const InfoBoxContent = (
+export const InfoBoxContent = (timeline: TimelineData) => (
     <Box $dir='column'>
         <Box $align='flex-start'>
             <Box $wrap>
@@ -137,8 +138,9 @@ export const InfoBoxContent = (
         </Box>
         <SpoilerWarning>
             <h1>SPOILER WARNING</h1>
-            This site contains spoilers for the Chainsaw Man manga and anime. I
-            would suggest leaving the page if you are interested in the story.
+            This site contains spoilers for the {timeline.title} manga and
+            anime. I would suggest leaving the page if you are interested in the
+            story.
         </SpoilerWarning>
 
         <Box $dir='column'>
@@ -148,9 +150,7 @@ export const InfoBoxContent = (
                     <InlineLinkGroup $gap>
                         Click any image (season, episode, arc, chapter, volume)
                         to go to the corresponding
-                        <Link href='https://chainsaw-man.fandom.com/wiki/'>
-                            wiki
-                        </Link>
+                        <Link href={timeline.wikiBase}>wiki</Link>
                         page
                     </InlineLinkGroup>
                 </li>
@@ -162,12 +162,14 @@ export const InfoBoxContent = (
                 </li>
                 <li>
                     Save the page as a huge PNG file (warning: it's about 50 MB
-                    in size)
+                    in size). Might not work properly in some browsers, try
+                    Chrome if you have any issues
                 </li>
                 <li>
                     Seasons and volumes without images are not officially
-                    confirmed and may be incorrect. Not every chapter has a
-                    Pochita sketch, so some are just numbers
+                    confirmed and may be incorrect. Not every manga has chapter
+                    sketches (and even ones that do, don't have them for every
+                    chapter), so some are just numbers
                 </li>
                 <li>
                     Chapter release dates in the timeline are displayed in your
@@ -192,7 +194,7 @@ export const InfoBoxContent = (
                 <li>Episode widths are accurate down to the chapter page</li>
                 <li>
                     I will personally update this site whenever new chapter
-                    releases. There can be a slight delay if i'm busy, but also
+                    releases. There can be a slight delay if I'm busy, but also
                     your browser might use cached version of the page. On
                     desktop browsers, you can press
                     <KeyboardShortcut keys={['Ctrl', 'R']} />
@@ -203,30 +205,25 @@ export const InfoBoxContent = (
 
         <Box>
             This is a non-profit, unofficial fan site. We are not affiliated
-            with VIZ Media or the authors of Chainsaw Man. All images are
-            copyrighted by their respective owners and are used for illustration
-            purposes only. We do not own any artwork, characters, or
-            intellectual property on this site.
+            with any publishers or the authors of {timeline.title}. All images
+            are copyrighted by their respective owners and are used for
+            illustration purposes only. We do not own any artwork, characters,
+            or intellectual property on this site.
         </Box>
 
         <Box $dir='column'>
             <h3>Official Links:</h3>
-            <Link href='https://mangaplus.shueisha.co.jp/titles/100037'>
-                Manga Plus
-            </Link>
-            <Link href='https://www.viz.com/shonenjump/chapters/chainsaw-man'>
-                VIZ Media
-            </Link>
-            <Link href='https://x.com/nagayama_koharu'>Author's Twitter</Link>
-            <Link href='https://www.shonenjump.com/j/rensai/chainsaw.html'>
-                Official Site
-            </Link>
+            {timeline.socialLinks.map(({ name, url }) => (
+                <Link key={name} href={url}>
+                    {name}
+                </Link>
+            ))}
         </Box>
     </Box>
 );
 
 export const InfoBox: React.FC = () => {
-    const { infoBoxOpen, setInfoBoxOpen } = useSettings();
+    const { infoBoxOpen, setInfoBoxOpen, animeTitle } = useSettings();
 
     if (!infoBoxOpen) return null;
 
@@ -240,9 +237,9 @@ export const InfoBox: React.FC = () => {
                 <CloseButton onClick={() => setInfoBoxOpen(false)}>
                     &times;
                 </CloseButton>
-                {InfoBoxContent}
+                {InfoBoxContent(TIMELINE[animeTitle].data)}
             </InfoBoxContainer>
         </>,
-        document.querySelector('#infoBox')!
+        document.querySelector('#modal')!
     );
 };

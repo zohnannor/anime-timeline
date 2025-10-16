@@ -1,117 +1,51 @@
 import { keyframes } from 'styled-components';
 
-import {
-    CHAPTERS_PER_ARC,
-    CHAPTERS_PER_SEASON,
-    CHAPTERS_PER_VOLUME,
-    PAGES_PER_CHAPTER_FLAT,
-    PAGES_PER_EPISODE_WITH_CHAPTERS,
-    PAGES_PER_VOLUME,
-    SPLIT_CHAPTERS,
-} from './constants';
-import { map, range, sum } from './util';
+import { AnimeTitle, TIMELINE, TIMELINE_HEIGHT } from './constants';
+import { sum } from './util';
+
+export const toTitleCase = (s: string) =>
+    s.replace(/^_*(.)|_+(.)/g, (_, c, d) =>
+        c ? c.toUpperCase() : ' ' + d.toUpperCase()
+    );
 
 export { fetchNextChapterDate } from './ProtobufReader';
 
-const getPagesInChapter = (chapter: number) =>
-    PAGES_PER_CHAPTER_FLAT?.[chapter - 1] ?? 19;
+export const scale = (n: number) =>
+    `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
-const getChapterNumber = (volume: number, volumeChapter: number) =>
-    sum(CHAPTERS_PER_VOLUME.slice(0, volume - 1)) + volumeChapter + 1;
+export const tokyoDate = (d: string) => new Date(`${d} GMT+9`); // Tokyo timezone
 
-export const getVolumeWidth = (
-    volume: number,
-    unboundedChapterWidth: boolean
-): number => {
-    const volumeWidth = volume > 11 ? 1005 : 1000;
-    return unboundedChapterWidth
-        ? sum(
-              map(
-                  range(0, CHAPTERS_PER_VOLUME[volume - 1] ?? 0),
-                  volumeChapters =>
-                      getChapterWidth(
-                          getChapterNumber(volume, volumeChapters),
-                          unboundedChapterWidth
-                      )
-              )
-          )
-        : volumeWidth;
-};
+export const maxHeight = (animeTitle: AnimeTitle) =>
+    sum(
+        Object.values(TIMELINE[animeTitle].layout)
+            .filter(s => s.type !== 'timeline')
+            .map(s => s.height)
+    ) + TIMELINE_HEIGHT;
 
-const getVolumeByChapter = (chapter: number) =>
-    CHAPTERS_PER_VOLUME.reduce<number[]>(
-        (chapters, pages) => [
-            ...chapters,
-            pages + (chapters[chapters.length - 1] ?? 0),
-        ],
-        []
-    ).findIndex(volume => volume >= chapter) + 1;
+export const chapterDates = (animeTitle: AnimeTitle) =>
+    TIMELINE[animeTitle].data.volumes
+        .flatMap(v => v.chapters)
+        .map(c => tokyoDate(c.date));
 
-export const getChapterWidth = (
-    chapter: number,
-    unboundedChapterWidth: boolean
-): number => {
-    const volume = getVolumeByChapter(chapter);
-    const pagesInChapter = getPagesInChapter(chapter);
-    return unboundedChapterWidth
-        ? pagesInChapter * (1000 / PAGES_PER_VOLUME[0]) * 1.05
-        : (pagesInChapter / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
-              getVolumeWidth(volume, false);
-};
-
-const getChapterPageWidth = (
-    chapter: number,
-    unboundedChapterWidth: boolean
-) => {
-    const volume = getVolumeByChapter(chapter);
-    return (
-        (1 / (PAGES_PER_VOLUME[volume - 1] ?? 0)) *
-        getVolumeWidth(volume, unboundedChapterWidth)
-    );
-};
-
-export const getArcWidth = (arc: number, unboundedChapterWidth: boolean) => {
-    const [start, end] = CHAPTERS_PER_ARC[arc - 1] ?? [1, 1];
-    return range(start, end + 1).reduce((acc, chapter) => {
-        return acc + getChapterWidth(chapter, unboundedChapterWidth);
-    }, 0);
-};
-
-export const getSeasonWidth = (
-    season: number,
-    unboundedChapterWidth: boolean
-) => {
-    const [start, end] = CHAPTERS_PER_SEASON[season - 1] ?? [1, 1];
-    const splitFirst = SPLIT_CHAPTERS[start - 1];
-    const splitLast = SPLIT_CHAPTERS[end];
-    // shorten/lengthen the season if it doesn't cover the whole chapter
-    return range(start, end + 1).reduce((acc, chapter) => {
-        return (
-            acc +
-            (splitLast && chapter === end
-                ? splitLast * getChapterPageWidth(end, unboundedChapterWidth)
-                : splitFirst && chapter === start
-                ? splitFirst *
-                  getChapterPageWidth(start - 1, unboundedChapterWidth)
-                : getChapterWidth(chapter, unboundedChapterWidth))
-        );
-    }, 0);
-};
-
-export const getEpisodeWidth = (
-    episodeNumber: number,
-    unboundedChapterWidth: boolean
-) => {
-    return (PAGES_PER_EPISODE_WITH_CHAPTERS[episodeNumber - 1] ?? []).reduce(
-        (episodeWidth, [chapterNumber = 1, chapterPages = 0]) => {
-            const chapterWidth =
-                getChapterPageWidth(chapterNumber, unboundedChapterWidth) *
-                chapterPages;
-            return episodeWidth + chapterWidth;
+const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
+    array.reduce<[[number, T][][], number | null]>(
+        ([groups, previous], date, idx) => {
+            const key = getKey(date);
+            if (key === previous) {
+                groups[groups.length - 1]!.push([idx, date]);
+            } else {
+                groups.push([[idx, date]]);
+            }
+            return [groups, key];
         },
-        0
-    );
-};
+        [[], null]
+    )[0];
+
+export const chapterDatesByMonth = (animeTitle: AnimeTitle) =>
+    groupBy(chapterDates(animeTitle), date => date.getMonth() + 1);
+
+export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
+    groupBy(chapterDates(animeTitle), date => date.getFullYear() + 1);
 
 // thanks deepseek-r1 (he thought for 245+150+92 = 487 seconds in total)
 export const interpolateColor = (

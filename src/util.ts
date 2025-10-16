@@ -1,12 +1,9 @@
-import { Enumerate, Map, Sub } from './types';
+import { Map } from './types';
 
 export const range = <Start extends number, End extends number>(
     start: Start,
     end: End
-) =>
-    Array.from({ length: end - start }, (_, k) => k + start) as Enumerate<
-        Sub<End, Start>
-    >;
+) => Array.from({ length: end - start }, (_, k) => k + start);
 
 export const map = <T extends readonly unknown[], U>(
     arr: T,
