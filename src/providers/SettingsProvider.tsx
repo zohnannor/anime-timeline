@@ -8,6 +8,8 @@ import React, {
     useState,
 } from 'react';
 
+import { AnimeTitle, TITLES } from '../constants';
+
 export interface Settings {
     showCrosslines: boolean;
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +23,10 @@ export interface Settings {
     setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
     captureTimelineModalOpen: boolean;
     setCaptureTimelineModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    animeTitle: AnimeTitle;
+    setAnimeTitle: React.Dispatch<React.SetStateAction<AnimeTitle>>;
+    animeTitleSelectorOpen: boolean;
+    setAnimeTitleSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // ☝🤓
@@ -52,6 +58,7 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     calendarOpen: 'setCalendarOpen',
     showTitles: 'setShowTitles',
     captureTimelineModalOpen: 'setCaptureTimelineModalOpen',
+    animeTitleSelectorOpen: 'setAnimeTitleSelectorOpen',
 };
 
 const SettingsContext = createContext<Settings>({
@@ -67,6 +74,10 @@ const SettingsContext = createContext<Settings>({
     setShowTitles: () => {},
     captureTimelineModalOpen: false,
     setCaptureTimelineModalOpen: () => {},
+    animeTitle: 'csm',
+    setAnimeTitle: () => {},
+    animeTitleSelectorOpen: false,
+    setAnimeTitleSelectorOpen: () => {},
 });
 
 export const useSettings = () => useContext(SettingsContext);
@@ -84,10 +95,20 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [captureTimelineModalOpen, setCaptureTimelineModalOpen] =
         useState(false);
-    const [showTitles, setShowTitlesRaw] = useState(() => {
+    const [showTitles, setShowTitlesRaw] = useState(
         // default to true if not set (first visit), otherwise get from storage
-        return window.localStorage.getItem('showTitles') !== 'false';
+        () => window.localStorage.getItem('showTitles') !== 'false'
+    );
+    const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
+        const params = new URLSearchParams(document.location.search);
+        const animeTitle = params.get('title');
+        if (animeTitle && TITLES.includes(animeTitle as AnimeTitle)) {
+            return animeTitle as AnimeTitle;
+        }
+        window.history.replaceState({}, '', `?title=csm`);
+        return 'csm';
     });
+    const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
 
     const setShowTitles = (show: React.SetStateAction<boolean>) => {
         if (typeof show === 'function') {
@@ -130,6 +151,17 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setCaptureTimelineModalOpen(open);
     };
 
+    const openAnimeTitleSelector = (open: React.SetStateAction<boolean>) => {
+        if (open) {
+            window.history.pushState({ animeTitleSelector: true }, '');
+        } else {
+            if (window.history.state?.animeTitleSelector) {
+                window.history.back();
+            }
+        }
+        setAnimeTitleSelectorOpen(open);
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.ctrlKey && e.code == 'KeyC') {
             setShowCrosslines(p => !p);
@@ -158,6 +190,11 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [infoBoxOpen, calendarOpen]);
 
+    const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
+        window.history.replaceState({}, '', `?title=${title}`);
+        setAnimeTitleRaw(title);
+    };
+
     return (
         <SettingsContext.Provider
             value={{
@@ -173,6 +210,10 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
                 setShowTitles,
                 captureTimelineModalOpen,
                 setCaptureTimelineModalOpen: openCaptureTimelineModal,
+                animeTitle,
+                setAnimeTitle,
+                animeTitleSelectorOpen,
+                setAnimeTitleSelectorOpen: openAnimeTitleSelector,
             }}
         >
             {children}

@@ -1,24 +1,25 @@
 {
+  "name": "anime-timeline",
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build"
   },
   "dependencies": {
     "@hugocxl/react-to-image": "^0.0.9",
     "html-to-image": "^1.11.13",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-scripts": "^5.0.1",
-    "styled-components": "^6.1.15",
+    "styled-components": "^6.1.19",
     "varint": "^6.0.0"
   },
   "packageManager": "yarn@4.6.0",
   "devDependencies": {
-    "@types/node": "^22.13.1",
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
     "@types/varint": "^6.0.3",
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.3"
   },
   "browserslist": {
     "production": [

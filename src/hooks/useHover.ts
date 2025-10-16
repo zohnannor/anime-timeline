@@ -11,7 +11,7 @@ type Handlers = (item?: number) => {
 
 type UseHover = [Comparator, Handlers];
 
-export function useHover(): UseHover {
+const useHover = (): UseHover => {
     const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
     const hovered = (item?: number) => hoveredItem === (item ?? 1);
@@ -34,4 +34,6 @@ export function useHover(): UseHover {
     });
 
     return [hovered, handlers];
-}
+};
+
+export default useHover;

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { styled } from 'styled-components';
 
-import { scale } from '../constants';
+import { scale } from '../helpers';
 
 interface ShadowProps {
     $invertBorder?: boolean | undefined;
@@ -11,7 +11,7 @@ const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: inset 0 0 0 ${scale(5)}svh
+    box-shadow: inset 0 0 0 ${scale(5)}
         ${({ $invertBorder }) => ($invertBorder ? '#ffffff' : '#000000')};
     pointer-events: none;
 `;
