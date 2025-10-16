@@ -35,7 +35,6 @@ export const FP_TIMELINE: Timeline = {
             height: CHAPTER_HEIGHT,
             fit: 'contain',
             backgroundColor: 'white',
-            titleProcessor: title => title,
             blankfontSize: 45,
             titleFontSize: 45,
             width: getChapterWidth,
@@ -46,7 +45,6 @@ export const FP_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
             width: getVolumeWidth,
