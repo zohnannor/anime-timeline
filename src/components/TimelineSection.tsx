@@ -220,9 +220,10 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         arc: timeline.arcs,
         chapter: timeline.volumes.flatMap(v => v.chapters),
         season: timeline.seasons,
-        episode: specificIndex
-            ? timeline.seasons[specificIndex]!.episodes ?? []
-            : timeline.seasons.flatMap(s => s.episodes ?? []),
+        episode:
+            specificIndex !== undefined
+                ? timeline.seasons[specificIndex]!.episodes ?? []
+                : timeline.seasons.flatMap(s => s.episodes ?? []),
         volume: timeline.volumes,
     };
 
