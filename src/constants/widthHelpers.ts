@@ -25,7 +25,7 @@ export const getVolumeWidth: WidthHelper = (
           )
         : 1000;
 
-const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
+export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
     chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
 
 const pagesPerVolume = (timeline: TimelineData, idx: number) =>

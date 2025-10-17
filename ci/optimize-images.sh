@@ -111,6 +111,10 @@ case $TITLE in
     magick "$MAIN_DIR/Season_1_key_visual_3.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Season_1_key_visual_3.webp"
     magick "$MAIN_DIR/Season_2_key_visual_3.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Season_2_key_visual_3.webp"
     ;;
+  eva)
+    magick "$MAIN_DIR/End_of_Evangelion_poster.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/End_of_Evangelion_poster.webp"
+    magick "$MAIN_DIR/Neon_Genesis_Evangelion_logo.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Neon_Genesis_Evangelion_logo.webp"
+    ;;
 esac
 
 # Final size report
