@@ -23,10 +23,8 @@ const VOLUMES_TOTAL = 14;
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
     idx === 2 ? `Volume${idx + 1}Manga` : `Sadamoto_Volume_${idx + 1}`;
-const episodeTitle = (title: string, n: number) =>
-    !['Love is destructive.', 'I Need You.'].includes(title)
-        ? `Episode ${pad(n)}`
-        : `Episode ${n + 24}'`;
+const episodeTitle = (_: string, n: number) =>
+    n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
 
 export const EVA_TIMELINE: Timeline = {
     layout: {
@@ -63,7 +61,7 @@ export const EVA_TIMELINE: Timeline = {
             type: 'arc',
             height: ARC_HEIGHT,
             width: getArcWidth,
-            titleProcessor: title => `${title} arc`,
+            titleProcessor: (title, n) => (n <= 3 ? `${title} arc` : title),
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Episodes_and_Films_(Portal)#Notes',
@@ -99,186 +97,186 @@ export const EVA_TIMELINE: Timeline = {
                 title: 'Neon Genesis Evangelion',
                 cover: () => 'Neon_Genesis_Evangelion_logo',
                 offset: { x: 0, y: 2050 },
-                chapters: { from: 1, to: 74 },
+                chapters: { from: 1, to: 75 },
                 episodes: [
                     {
                         title: () => 'Angel Attack',
                         cover: () => 'Episode-01-Info',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 100, y: 0 },
+                        chapters: { from: 1, to: 3 },
                     },
                     {
                         title: () => 'The Beast',
                         cover: () => 'Episode_02_info',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 100, y: 0 },
+                        chapters: { from: 3, to: 7 },
                     },
                     {
                         title: () => 'A Transfer',
                         cover: () => 'Episode-03-info',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 7, to: 10 },
                     },
                     {
                         title: () => "Hedgehog's Dilemma",
                         cover: () => 'Shinjitrain',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 170, y: 0 },
+                        chapters: { from: 11, to: 12 },
                     },
                     {
                         title: () => 'Rei I',
                         cover: () => 'Shinji_Rei_Escalator',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 150, y: 0 },
+                        chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'Rei II',
                         cover: () => 'Japan_Blackout',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 400, y: 0 },
+                        chapters: { from: 15, to: 19 },
                     },
                     {
                         title: () => 'A Human Work',
                         cover: () => '07_C178_ohshi',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 200, y: 0 },
+                        chapters: { from: 19, to: 20 }, // shrug
                     },
                     {
                         title: () => 'Asuka Strikes!',
                         cover: () => 'Asuka_Ships_Bridge',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 300, y: 0 },
+                        chapters: { from: 19, to: 21 },
                     },
                     {
                         title: () => 'Both of You, Dance Like You Want to Win!',
                         cover: () => 'Dance_Vs_Israfel',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 21, to: 26 },
                     },
                     {
                         title: () => 'Magma Diver',
                         cover: () => 'D-Type-Submerge',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 250, y: 0 },
+                        chapters: { from: 26, to: 26 }, // shrug
                     },
                     {
                         title: () => 'The Day Tokyo-3 Stood Still',
                         cover: () => 'Fuyutsuki_Candle',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 100, y: 0 },
+                        chapters: { from: 26, to: 27 }, // shrug
                     },
                     {
                         title: () =>
                             'She Said, "Don\'t Make Others Suffer for Your Personal Hatred."',
                         cover: () => 'Misatos_Intuition',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 100, y: 0 },
+                        chapters: { from: 27, to: 30 },
                     },
                     {
                         title: () => 'Lilliputian Hitcher',
                         cover: () => 'Ireul_Hacking_Magi',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 300, y: 0 },
+                        chapters: { from: 30, to: 31 }, // shrug
                     },
                     {
                         title: () => 'Weaving a Story',
                         cover: () => 'Gendo_With_Committee',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 200, y: 0 },
+                        chapters: { from: 30, to: 31 }, // shrug
                     },
                     {
                         title: () =>
                             "Those Women Longed for the Touch of Other's Lips, and Thus Invited Their Kisses",
                         cover: () => 'Visiting_Yuis_Grave',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 200, y: 0 },
+                        chapters: { from: 31, to: 32 },
                     },
                     {
                         title: () => 'Splitting of the Breast',
                         cover: () => '16_C221_hell-train',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 400, y: 0 },
+                        chapters: { from: 32, to: 33 }, // shrug
                     },
                     {
                         title: () => 'FOURTH CHILDREN',
                         cover: () => '17_C153_shinji-kaji',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 34, to: 36 },
                     },
                     {
                         title: () => 'Ambivalence',
                         cover: () => '18_C167_eva03-silhouette',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 50, y: 0 },
+                        chapters: { from: 37, to: 41 },
                     },
                     {
                         title: () => 'Introjection',
                         cover: () => '19_C067_shinji-stern',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 42, to: 46 },
                     },
                     {
                         title: () => 'Weaving a story 2: Oral Stage',
                         cover: () => '20_C023_being-watched',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 50, y: 0 },
+                        chapters: { from: 47, to: 51 },
                     },
                     {
                         title: () => 'He was aware that he was still a child',
                         cover: () => '21_C181_path-to-god',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 52, to: 56 },
                     },
                     {
                         title: () => "Don't be.",
                         cover: () => '22_C400_asuka-lonely',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 57, to: 61 },
                     },
                     {
                         title: () => 'Rei III',
                         cover: () => '23_C141_rei-namida',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 62, to: 70 },
                     },
                     {
                         title: () =>
                             'The Beginning and the End, or "Knockin\' on Heaven\'s Door"',
                         cover: () => '24_C308_deliberation',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 71, to: 75 },
                     },
                     {
                         title: () => 'Do you love me?',
                         cover: () => 'Ep25_screenshot_naked_shinji',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 20, y: 0 },
+                        chapters: { from: 74, to: 75 }, // shrug
                     },
                     {
                         title: () => 'Take Care of Yourself',
                         cover: () => 'Ep26_screenshot_sketch_shinji',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 300, y: 0 },
+                        chapters: { from: 74, to: 75 }, // shrug
                     },
                 ],
             },
             {
                 title: 'The End of Evangelion',
                 cover: () => 'End_of_Evangelion_poster',
-                offset: { x: 0, y: 3680 },
+                offset: { x: 0, y: 3550 },
                 chapters: { from: 75 },
                 episodes: [
                     {
                         title: () => 'Love is destructive.',
                         cover: () => 'M25_C640_otona-no-kisu',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        offset: { x: 0, y: 200 },
+                        chapters: { from: 75, to: 86 },
                     },
                     {
                         title: () => 'I Need You.',
                         cover: () => 'M26_C130_zomgrei',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 1 },
+                        chapters: { from: 87 },
                     },
                 ],
             },
@@ -288,37 +286,37 @@ export const EVA_TIMELINE: Timeline = {
                 title: 'Intro',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 1, to: 15 },
             },
             {
                 title: 'Action',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 16, to: 31 },
             },
             {
                 title: 'Descent',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 32, to: 51 },
             },
             {
                 title: 'Bitter End',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 52, to: 72 },
             },
             {
                 title: 'End of TV',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 73, to: 74 },
             },
             {
                 title: 'Movies',
                 cover: null,
                 offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
+                chapters: { from: 75 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
         volumes: [
@@ -1023,7 +1021,14 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
-        splitChapters: {},
+        splitChapters: {
+            3: 24,
+            7: 9,
+            15: 25,
+            19: 20,
+            21: 14,
+            75: 15,
+        },
         wikiBase: 'https://wiki.evageeks.org/',
         smallImages: {
             'scroller-or-favicon': 'circle',
