@@ -1302,11 +1302,11 @@ export const FRIEREN_TIMELINE: Timeline = {
                 title: "Frieren: Beyond Journey's End Season 2",
                 cover: (_, idx) => `Season_${idx + 1}_key_visual_3`,
                 offset: { x: 0, y: 2000 },
-                chapters: { from: 61, to: 119 },
+                chapters: { from: 61, to: 125 },
                 episodes: [],
             },
             {
-                chapters: { from: 120 },
+                chapters: { from: 126 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {
