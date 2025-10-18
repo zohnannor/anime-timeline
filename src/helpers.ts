@@ -1,14 +1,19 @@
 import { keyframes } from 'styled-components';
 
-import { AnimeTitle, TIMELINE, TIMELINE_HEIGHT } from './constants';
+import {
+    AnimeTitle,
+    TIMELINE,
+    TIMELINE_HEIGHT,
+    TimelineSectionType,
+} from './constants';
 import { sum } from './util';
+
+export { fetchNextChapterDate } from './ProtobufReader';
 
 export const toTitleCase = (s: string) =>
     s.replace(/^_*(.)|_+(.)/g, (_, c, d) =>
         c ? c.toUpperCase() : ' ' + d.toUpperCase()
     );
-
-export { fetchNextChapterDate } from './ProtobufReader';
 
 export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
@@ -42,7 +47,10 @@ const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
     )[0];
 
 export const chapterDatesByMonth = (animeTitle: AnimeTitle) =>
-    groupBy(chapterDates(animeTitle), date => date.getMonth() + 1);
+    groupBy(
+        chapterDates(animeTitle),
+        date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12
+    );
 
 export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
     groupBy(chapterDates(animeTitle), date => date.getFullYear() + 1);
@@ -125,3 +133,11 @@ export const hueGlow = keyframes`
         filter: hue-rotate(360deg);
     }
 `;
+
+export const HEADER_TITLES: Record<TimelineSectionType, string> = {
+    arc: 'Story Arcs',
+    chapter: 'Chapters',
+    volume: 'Volumes',
+    season: 'Anime Seasons',
+    episode: 'Episodes',
+};

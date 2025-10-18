@@ -19,13 +19,13 @@ export const FP_TIMELINE: Timeline = {
         arc: {
             type: 'arc',
             height: ARC_HEIGHT,
-            sidewaysText: true,
             titleProcessor: title => `${title} arc`,
             blankfontSize: 100,
             titleFontSize: 100,
             width: getArcWidth,
             sectionLink: 'Story Arcs',
-            wikiLink: arcName => `Story_Arcs#${arcName.replace(' ', '_')}_Arc`,
+            wikiLink: arcName =>
+                `Story_Arcs#${arcName.replaceAll(' ', '_')}_Arc`,
         },
         timeline: {
             type: 'timeline',
