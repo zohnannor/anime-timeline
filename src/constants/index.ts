@@ -1,7 +1,11 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
+import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
+import { EVA_TIMELINE } from './eva';
+import { FP_TIMELINE } from './fp';
+import { FRIEREN_TIMELINE } from './frieren';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
@@ -11,7 +15,7 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const TITLES = ['csm'] as const;
+export const TITLES = ['csm', 'berserk', 'fp', 'frieren', 'eva'] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
@@ -36,7 +40,7 @@ export type Chapter = {
 export type Volume = {
     title: Callback<string>;
     cover: Callback<string> | null;
-    chapters: Chapter[];
+    chapters: readonly Chapter[];
 };
 
 export type Arc = {
@@ -61,7 +65,7 @@ export type Season = ExactUnion<
           chapters: Range;
           episodes: Episode[];
       }
-    | { title: string; chapters: Range }
+    | { chapters: Range }
 >;
 
 export type TimelineSectionType =
@@ -79,7 +83,8 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (title: string, idx: number) => string;
+    titleProcessor?: (title: string, n: number) => string;
+    numberProcessor?: (number: number) => string;
     height: number;
     width: WidthHelper;
     sectionLink: string;
@@ -132,6 +137,10 @@ export type Timeline = { layout: TimelineSectionLayout } & {
 
 export const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
+    berserk: BERSERK_TIMELINE,
+    fp: FP_TIMELINE,
+    frieren: FRIEREN_TIMELINE,
+    eva: EVA_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {

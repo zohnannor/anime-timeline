@@ -179,13 +179,14 @@ export const SectionItemCover = withShadow(
     `
 );
 
-type TimelineSections =
+type TimelineSections = (
     | {
           [K in TimelineSectionType]: TimelineSectionItem<K>;
       }[TimelineSectionType]
     | {
           type: 'timeline';
-      };
+      }
+) & { specificIndex?: number };
 
 export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const [hoveredItem, hoverHandlers] = useHover();
@@ -206,51 +207,63 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         width,
         wikiLink,
         height,
-        titleProcessor,
+        titleProcessor = a => a,
+        numberProcessor = a => a.toString(),
         blankfontSize,
         titleFontSize,
         focusable = false,
         subTimeline: nestedTimeline,
+        specificIndex,
     } = timelineItem;
 
+    // TODO: refactor this???
+    const withGlobalIndex = <T,>(xs: readonly T[]) =>
+        xs.map((x, idx) => [idx, x] as const);
     const entities = {
-        arc: timeline.arcs,
-        chapter: timeline.volumes.flatMap(v => v.chapters),
-        season: timeline.seasons,
-        episode: timeline.seasons.flatMap(s => s.episodes ?? []),
-        volume: timeline.volumes,
+        arc: withGlobalIndex(timeline.arcs),
+        chapter: withGlobalIndex(timeline.volumes.flatMap(v => v.chapters)),
+        season: withGlobalIndex(timeline.seasons),
+        episode: timeline.seasons
+            .flatMap((s, si) => (s.episodes ?? []).map(e => [si, e] as const))
+            .map(([si, e], ei) => [si, ei, e] as const)
+            .filter(([si]) => si === specificIndex)
+            .map(([_, ei, e]) => [ei, e] as const),
+        volume: withGlobalIndex(timeline.volumes),
     };
 
     return (
         <TimelineContainer>
-            {entities[type].map((entity, idx) => {
+            {entities[type].map(([idx, entity]) => {
+                const itemNumber = idx + 1;
+                const processedNumber = numberProcessor(itemNumber);
+
                 const title =
-                    typeof entity.title === 'function'
+                    (typeof entity.title === 'function'
                         ? entity.title(timeline, idx)
-                        : entity.title;
+                        : entity.title) ?? processedNumber;
                 const cover =
                     typeof entity.cover === 'function'
                         ? entity.cover(timeline, idx)
                         : entity.cover;
                 const offset = 'offset' in entity ? entity.offset : null;
 
-                const itemNumber = idx + 1;
                 const itemWidth = width(timeline, idx, unboundedChapterWidth);
                 const link = `${timeline.wikiBase}${wikiLink(
                     title,
                     itemNumber
                 )}`;
                 const itemTitle =
-                    timelineItem.type === 'chapter'
-                        ? itemNumber
-                        : titleProcessor?.(title, itemNumber) ?? title;
+                    type === 'chapter'
+                        ? processedNumber
+                        : titleProcessor(title, itemNumber);
 
-                const titleVisible = showTitles || hoveredItem(itemNumber);
+                const hovered = hoveredItem(itemNumber);
+                const titleVisible = showTitles || hovered;
                 const textColor =
                     backgroundColor === 'black' ? 'white' : 'black';
 
                 const linkImage =
-                    timelineItem.type !== 'season' || !!cover ? (
+                    type !== 'season' || cover ? (
                         <Link href={link}>
                             {cover ? (
                                 <ThumbnailImage
@@ -258,19 +271,22 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                                     $offsetX={offset?.x}
                                     $offsetY={offset?.y}
                                 />
-                            ) : timelineItem.type === 'arc' ? (
+                            ) : type === 'arc' ? (
+                                // for arcs without cover, just show the title
                                 itemTitle
                             ) : (
-                                itemNumber
+                                // for everything else, show the number
+                                processedNumber
                             )}
                         </Link>
                     ) : (
-                        `SEASON ${title}`
+                        // don't add link to seasons without cover (speculation)
+                        `SEASON ${processedNumber}`
                     );
 
-                const sectionCover = (
+                const itemCover = (
                     <SectionItemCover
-                        className={`${timelineItem.type}Cover`}
+                        className={`${type}Cover`}
                         data-title={itemTitle}
                         $invertBorder={!cover && backgroundColor === 'black'}
                         $titleVisible={
@@ -291,42 +307,43 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                 const chapterPreview = (
                     <ChapterPreview className='preview' $hasPicture={!!cover}>
                         {cover && <ThumbnailImage src={cover} />}
-                        {titleProcessor?.(title, itemNumber)}
+                        {titleProcessor(title, itemNumber)}
                     </ChapterPreview>
                 );
 
-                const sectionCoverTooltip =
-                    timelineItem.type === 'chapter' ? (
+                const itemCoverTooltip =
+                    type === 'chapter' ? (
                         <Tooltip
                             placement='top'
                             animation='grow'
                             content={chapterPreview}
-                            visible={!showCrosslines && hoveredItem(itemNumber)}
+                            visible={!showCrosslines && hovered}
                         >
-                            {sectionCover}
+                            {itemCover}
                         </Tooltip>
                     ) : (
-                        sectionCover
+                        itemCover
                     );
 
                 return (
                     <SectionItem
-                        id={`${timelineItem.type}-${itemNumber}`}
-                        className={timelineItem.type}
+                        id={`${type}-${itemNumber}`}
+                        className={type}
                         $width={itemWidth}
                         $height={height}
                         key={cover || itemNumber}
-                        $crossLinesVisible={hoveredItem(itemNumber)}
+                        $crossLinesVisible={hovered}
                         {...hoverHandlers(itemNumber)}
                         $focusable={focusable}
                         tabIndex={focusable ? -1 : undefined}
                     >
-                        {sectionCoverTooltip}
-                        {nestedTimeline &&
-                            timelineItem.type === 'season' &&
-                            itemNumber === 1 && (
-                                <TimelineSection {...nestedTimeline} />
-                            )}
+                        {itemCoverTooltip}
+                        {nestedTimeline && (
+                            <TimelineSection
+                                specificIndex={idx}
+                                {...nestedTimeline}
+                            />
+                        )}
                     </SectionItem>
                 );
             })}
