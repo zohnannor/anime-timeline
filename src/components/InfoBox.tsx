@@ -191,7 +191,10 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                     click on a day in the timeline to open a calendar and
                     navigate to the chapter date
                 </li>
-                <li>Episode widths are accurate down to the chapter page</li>
+                <li>
+                    If the title's adaptation closely follows the source, widths
+                    are accurate down to the chapter page
+                </li>
                 <li>
                     I will personally update this site whenever new chapter
                     releases. There can be a slight delay if I'm busy, but also

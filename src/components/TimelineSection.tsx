@@ -99,6 +99,8 @@ export const SectionItemCover = withShadow(
             transition: 0.1s ease-in-out;
             pointer-events: none;
 
+            object-position: top;
+
             will-change: transform, filter;
         }
 
@@ -248,6 +250,8 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                 const offset = 'offset' in entity ? entity.offset : null;
 
                 const itemWidth = width(timeline, idx, unboundedChapterWidth);
+                console.log({ type, idx, itemWidth, width });
+
                 const link = `${timeline.wikiBase}${wikiLink(
                     title,
                     itemNumber

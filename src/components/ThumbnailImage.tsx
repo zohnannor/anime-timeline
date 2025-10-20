@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
@@ -32,9 +32,12 @@ interface ImageProps {
 export const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
-    object-position: ${({ $offsetX, $offsetY }) =>
-        `${scale($offsetX ? -$offsetX : 0)}
-         ${scale($offsetY ? -$offsetY : 0)}`};
+    ${({ $offsetX, $offsetY }) =>
+        ($offsetX || $offsetY) &&
+        css`
+            object-position: ${scale($offsetX ? -$offsetX : 0)}
+                ${scale($offsetY ? -$offsetY : 0)} !important;
+        `}; // TODO: refactor?
 `;
 
 export const ThumbnailImage: React.FC<
