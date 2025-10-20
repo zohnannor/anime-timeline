@@ -18,7 +18,8 @@ export const toTitleCase = (s: string) =>
 export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
-export const tokyoDate = (d: string) => new Date(`${d} GMT+9`); // Tokyo timezone
+export const tokyoDate = (d: string) =>
+    new Date(`${d.replaceAll('th', '')} GMT+9`); // Tokyo timezone
 
 export const maxHeight = (animeTitle: AnimeTitle) =>
     sum(

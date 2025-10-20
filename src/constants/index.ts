@@ -1,6 +1,7 @@
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
+import { AOT_TIMELINE } from './aot';
 import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
 import { EVA_TIMELINE } from './eva';
@@ -15,7 +16,14 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const TITLES = ['csm', 'berserk', 'fp', 'frieren', 'eva'] as const;
+export const TITLES = [
+    'csm',
+    'berserk',
+    'fp',
+    'frieren',
+    'eva',
+    'aot',
+] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type Offset = { x: number; y: number };
@@ -88,7 +96,7 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     height: number;
     width: WidthHelper;
     sectionLink: string;
-    wikiLink: (name: string, idx: number) => string;
+    wikiLink: (title: string, n: number) => string;
     focusable?: boolean;
     subTimeline?: TimelineSectionItem<TimelineSectionType>;
 };
@@ -141,6 +149,7 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     fp: FP_TIMELINE,
     frieren: FRIEREN_TIMELINE,
     eva: EVA_TIMELINE,
+    aot: AOT_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {
