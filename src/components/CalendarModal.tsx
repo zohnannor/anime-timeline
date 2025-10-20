@@ -163,7 +163,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             MONTHS_GRADIENT
         ).toString(16);
 
-        const days = [];
+        const days: React.JSX.Element[] = [];
 
         for (let i = 0; i < lastDay; i++) {
             days.push(<div key={`empty-${month.getTime()}-${i}`} />);
@@ -172,7 +172,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
             date.setDate(dayN);
-            const dateStr = date.toISOString();
+            const dateStr = date.toISOString().split('T')[0]!;
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
             const isChapter = chapterNumber !== null;
             const isToday = date.toDateString() === currentDate.toDateString();
@@ -269,13 +269,14 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
+    const allChapterDates = chapterDates(animeTitle);
     const currentDate = new Date();
-    const startDate = chapterDates(animeTitle)[0]!;
+    const startDate = allChapterDates[0]!;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
-        chapterDates(animeTitle).forEach((date, index) => {
-            const dateStr = date.toISOString();
+        allChapterDates.forEach((date, index) => {
+            const dateStr = date.toISOString().split('T')[0]!;
             map.set(dateStr, index + 1);
         });
         return map;

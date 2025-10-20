@@ -31,7 +31,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             titleFontSize: 100,
             width: getSeasonWidth,
             sectionLink: "Frieren: Beyond Journey's End (Anime)",
-            wikiLink: season => season,
+            wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -53,7 +53,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             titleFontSize: 100,
             width: getArcWidth,
             sectionLink: 'Story Arcs',
-            wikiLink: arcName => `${arcName}_Arc`,
+            wikiLink: title => `${title}_Arc`,
         },
         timeline: {
             type: 'timeline',
@@ -1110,7 +1110,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             {
                 title: 'Imperial Territory Travels',
                 cover: 'Chapter_124',
-                offset: { x: 0, y: 0 },
+                offset: { x: 60, y: 0 },
                 chapters: { from: 120, to: 125 },
             },
             {

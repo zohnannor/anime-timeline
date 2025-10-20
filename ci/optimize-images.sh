@@ -106,6 +106,11 @@ case $TITLE in
     ;;
   berserk)
     magick "$MAIN_DIR/Berserk_Anime_Box_Art.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Berserk_Anime_Box_Art.webp"
+    magick "$MAIN_DIR/V3-Cover_Art-Manga.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/V3-Cover_Art-Manga.webp"
+    magick "$MAIN_DIR/V5-Cover_Art-Manga.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/V5-Cover_Art-Manga.webp"
+    magick "$MAIN_DIR/V18-Cover_Art-Manga.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/V18-Cover_Art-Manga.webp"
+    magick "$MAIN_DIR/V34-Cover_Art-Manga.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/V34-Cover_Art-Manga.webp"
+    magick "$MAIN_DIR/V38-Guts-Manga.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/V38-Guts-Manga.webp"
     ;;
   frieren)
     magick "$MAIN_DIR/Season_1_key_visual_3.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Season_1_key_visual_3.webp"
@@ -114,6 +119,22 @@ case $TITLE in
   eva)
     magick "$MAIN_DIR/End_of_Evangelion_poster.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/End_of_Evangelion_poster.webp"
     magick "$MAIN_DIR/Neon_Genesis_Evangelion_logo.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Neon_Genesis_Evangelion_logo.webp"
+    ;;
+  aot)
+    magick "$MAIN_DIR/Attack_on_Titan_Season_1.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Season_1.webp"
+    magick "$MAIN_DIR/Attack_on_Titan_Season_2_Official_Poster.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Season_2_Official_Poster.webp"
+    magick "$MAIN_DIR/Attack_on_Titan_Season_3.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Season_3.webp"
+    magick "$MAIN_DIR/Attack_on_Titan_Season_3_sixth_key_visual_(clean).jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Season_3_sixth_key_visual_(clean).webp"
+    magick "$MAIN_DIR/Attack_on_Titan_The_Final_Season.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_The_Final_Season.webp"
+    magick "$MAIN_DIR/Attack_on_Titan_The_Final_Season_Part_2_-_Key_Visual_6.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_The_Final_Season_Part_2_-_Key_Visual_6.webp"
+    magick "$MAIN_DIR/Attack_on_Titan_Final_Season_Part_3_key_visual_8_(textless).jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Final_Season_Part_3_key_visual_8_(textless).webp"
+    magick "$MAIN_DIR/Attack_on_Titan_Final_Season_Part_4_key_visual_9_(no_quotation).jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Attack_on_Titan_Final_Season_Part_4_key_visual_9_(no_quotation).webp"
+    magick "$MAIN_DIR/The_Female_Titan_battle.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/The_Female_Titan_battle.webp"
+    magick "$MAIN_DIR/Clash_of_the_Titans.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Clash_of_the_Titans.webp"
+    magick "$MAIN_DIR/Erwin_and_Pixis_speaking.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Erwin_and_Pixis_speaking.webp"
+    magick "$MAIN_DIR/Eren_returns_home.jpg" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Eren_returns_home.webp"
+    magick "$MAIN_DIR/Volume_23_Cover_-_Clean_Version.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Volume_23_Cover_-_Clean_Version.webp"
+    magick "$MAIN_DIR/Volume_29_Cover_-_Clean_Version.png" -resize "1000>" -strip -quality 80 "$MAIN_DIR/Volume_29_Cover_-_Clean_Version.webp"
     ;;
 esac
 

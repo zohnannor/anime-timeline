@@ -24,8 +24,7 @@ export const FP_TIMELINE: Timeline = {
             titleFontSize: 100,
             width: getArcWidth,
             sectionLink: 'Story Arcs',
-            wikiLink: arcName =>
-                `Story_Arcs#${arcName.replaceAll(' ', '_')}_Arc`,
+            wikiLink: title => `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
         },
         timeline: {
             type: 'timeline',

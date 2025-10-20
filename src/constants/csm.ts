@@ -57,12 +57,11 @@ export const CSM_TIMELINE: Timeline = {
             type: 'arc',
             height: ARC_HEIGHT,
             width: getArcWidth,
-            sidewaysText: true,
             titleProcessor: title => `${title} arc`,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: arcName => `${arcName} arc`,
+            wikiLink: title => `${title} arc`,
         },
         timeline: {
             type: 'timeline',

@@ -37,7 +37,7 @@ export const BERSERK_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Category:Anime',
-            wikiLink: season => season,
+            wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -59,7 +59,7 @@ export const BERSERK_TIMELINE: Timeline = {
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Releases_(Manga)#Arcs',
-            wikiLink: arcName => `${arcName}_Arc`,
+            wikiLink: title => `${title}_Arc`,
         },
         timeline: {
             type: 'timeline',

@@ -22,7 +22,9 @@ const VOLUMES_TOTAL = 14;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 2 ? `Volume${idx + 1}Manga` : `Sadamoto_Volume_${idx + 1}`;
+    idx === 2
+        ? `Volume${idx + 1}Manga`
+        : `Sadamoto_${idx === 12 ? 'v' : 'V'}olume_${idx + 1}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
 
@@ -74,7 +76,7 @@ export const EVA_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Episodes_and_Films_(Portal)',
-            wikiLink: season => season.replaceAll(' ', '_'),
+            wikiLink: title => title.replaceAll(' ', '_'),
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
