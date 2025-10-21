@@ -39,7 +39,7 @@ export const getChapterWidth: WidthHelper = (
     const pagesInChapter = chapters(timeline)[idx]!.pages;
     const volume = getVolumeByChapter(timeline, idx);
     return unboundedChapterWidth
-        ? pagesInChapter * (1000 / pagesPerVolume(timeline, 0)) * 1.05
+        ? pagesInChapter * (1000 / 180) * 1.05
         : pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
 };
 

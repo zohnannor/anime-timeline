@@ -76,6 +76,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             width: getVolumeWidth,
+            defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
         },
@@ -1110,7 +1111,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             {
                 title: 'Imperial Territory Travels',
                 cover: 'Chapter_124',
-                offset: { x: 60, y: 0 },
+                offset: { x: 0, y: 0 },
                 chapters: { from: 120, to: 125 },
             },
             {

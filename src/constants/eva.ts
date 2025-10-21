@@ -34,6 +34,7 @@ export const EVA_TIMELINE: Timeline = {
             type: 'volume',
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
+            defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',

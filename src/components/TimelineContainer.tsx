@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-interface ContainerProps {
+type ContainerProps = {
     $dir?: 'row' | 'column';
-}
+};
 
 export const TimelineContainer = styled.div.attrs<ContainerProps>({
     className: 'timelineContainer',

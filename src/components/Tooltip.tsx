@@ -7,21 +7,21 @@ import useHover from '../hooks/useHover';
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 type TooltipAnimation = 'fade' | 'grow';
 
-interface TooltipProps {
+type TooltipProps = {
     placement: TooltipPlacement;
     content: React.ReactNode;
     animation?: TooltipAnimation;
     visible?: boolean;
-}
+};
 
-interface TooltipWrapperProps {
+type TooltipWrapperProps = {
     $placement: TooltipPlacement;
-}
+};
 
-interface TooltipContentProps extends TooltipWrapperProps {
+type TooltipContentProps = TooltipWrapperProps & {
     $visible: boolean;
     $animation?: TooltipAnimation;
-}
+};
 
 const OPPOSITE: Record<TooltipPlacement, TooltipPlacement> = {
     top: 'bottom',

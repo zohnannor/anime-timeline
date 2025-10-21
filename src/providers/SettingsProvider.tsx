@@ -10,7 +10,7 @@ import React, {
 
 import { AnimeTitle, TITLES } from '../constants';
 
-export interface Settings {
+export type Settings = {
     showCrosslines: boolean;
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
     infoBoxOpen: boolean;
@@ -27,7 +27,7 @@ export interface Settings {
     setAnimeTitle: React.Dispatch<React.SetStateAction<AnimeTitle>>;
     animeTitleSelectorOpen: boolean;
     setAnimeTitleSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 // ☝🤓
 

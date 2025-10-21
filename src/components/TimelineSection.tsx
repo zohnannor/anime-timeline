@@ -19,11 +19,11 @@ import { Timeline } from './Timeline';
 import { TimelineContainer } from './TimelineContainer';
 import { Tooltip } from './Tooltip';
 
-interface SectionItemProps {
+type SectionItemProps = {
     $width: number;
     $height: number;
     $focusable: boolean;
-}
+};
 
 const SectionItem = withCrossLines(
     styled.div<SectionItemProps>`
@@ -46,17 +46,17 @@ const SectionItem = withCrossLines(
     `
 );
 
-interface SectionItemCoverProps {
+type SectionItemCoverProps = {
     $titleVisible?: boolean;
     $invertBorder?: boolean;
     $blankFontSize: number;
     $titleFontSize: number;
-    $fit: 'cover' | 'contain';
+    $fit: CSS.Property.ObjectFit;
     $backgroundColor: CSS.Property.Color;
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
-}
+};
 
 export const SectionItemCover = withShadow(
     styled.div<SectionItemCoverProps>`
@@ -200,6 +200,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const {
         type,
         fit = 'cover',
+        defaultCoverPosition = 'center',
         backgroundColor = 'black',
         scale = 1.05,
         sidewaysText = false,
@@ -271,6 +272,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                                     src={cover}
                                     $offsetX={offset?.x}
                                     $offsetY={offset?.y}
+                                    $defaultPosition={defaultCoverPosition}
                                 />
                             ) : type === 'arc' ? (
                                 // for arcs without cover, just show the title

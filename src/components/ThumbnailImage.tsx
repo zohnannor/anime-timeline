@@ -3,15 +3,17 @@ import styled from 'styled-components';
 
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
+import { CSS } from 'styled-components/dist/types';
 
-interface Offset {
+type Offset = {
     $offsetX?: number | undefined;
     $offsetY?: number | undefined;
-}
+    $defaultPosition?: CSS.Property.ObjectPosition | undefined;
+};
 
-interface ThumbnailProps {
+type ThumbnailProps = {
     $thumbnail: string;
-}
+};
 
 const Thumbnail = styled.div<ThumbnailProps & Offset>`
     position: absolute;
@@ -25,18 +27,18 @@ const Thumbnail = styled.div<ThumbnailProps & Offset>`
          ${scale($offsetY ?? 0)}`};
 `;
 
-interface ImageProps {
+type ImageProps = {
     $loading: boolean;
-}
+};
 
 export const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
-    object-position: ${({ $offsetX, $offsetY }) =>
+    object-position: ${({ $offsetX, $offsetY, $defaultPosition = 'center' }) =>
         $offsetX || $offsetY
             ? `${scale($offsetX !== undefined ? -$offsetX : 0)}
                ${scale($offsetY !== undefined ? -$offsetY : 0)}`
-            : 'center'}; // TODO: refactor?
+            : $defaultPosition}; // TODO: refactor?
 `;
 
 export const ThumbnailImage: React.FC<
@@ -48,6 +50,7 @@ export const ThumbnailImage: React.FC<
         src,
         $offsetX,
         $offsetY,
+        $defaultPosition,
         animeTitle = currentAnimeTitle,
         ...rest
     } = props;
@@ -63,6 +66,7 @@ export const ThumbnailImage: React.FC<
                     $thumbnail={thumbnailSrc}
                     $offsetX={$offsetX ? -$offsetX : $offsetX}
                     $offsetY={$offsetY ? -$offsetY : $offsetY}
+                    $defaultPosition={$defaultPosition}
                     draggable={false}
                 />
             )}
@@ -75,6 +79,7 @@ export const ThumbnailImage: React.FC<
                 onLoad={() => setLoading(false)}
                 $offsetX={$offsetX}
                 $offsetY={$offsetY}
+                $defaultPosition={$defaultPosition}
                 draggable={false}
                 {...rest}
             />

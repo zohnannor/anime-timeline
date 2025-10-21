@@ -81,6 +81,7 @@ export const BERSERK_TIMELINE: Timeline = {
             type: 'volume',
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
+            defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Releases_(Manga)#Volumes',

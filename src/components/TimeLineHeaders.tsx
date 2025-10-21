@@ -11,9 +11,9 @@ import { HEADER_TITLES, scale } from '../helpers';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 
-interface HeaderProps {
+type HeaderProps = {
     $height: number;
-}
+};
 
 const Header = withShadow(
     styled.div<HeaderProps>`

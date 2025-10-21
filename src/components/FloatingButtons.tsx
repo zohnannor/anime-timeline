@@ -50,12 +50,12 @@ export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => {
     );
 };
 
-interface ButtonProps {
+type ButtonProps = {
     filename: string;
     title: string;
     option: keyof SettingsValues;
     cursor?: CSS.Property.Cursor;
-}
+};
 
 export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
     filename,
