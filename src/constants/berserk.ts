@@ -2790,19 +2790,19 @@ export const BERSERK_TIMELINE: Timeline = {
                     {
                         title: () => 'Black Swordsman',
                         cover: episodeCover1,
-                        offset: { x: 0, y: 150 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 1, to: 2 },
                     },
                     {
                         title: () => 'Band of the Falcon',
                         cover: episodeCover1,
-                        offset: { x: 0, y: 90 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 11, to: 13 },
                     },
                     {
                         title: () => 'First Battle',
                         cover: episodeCover2,
-                        offset: { x: 0, y: 60 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 13, to: 15 },
                     },
                     {
@@ -2880,7 +2880,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     {
                         title: () => 'The Conqueror',
                         cover: episodeCover2,
-                        offset: { x: 0, y: 70 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 24, to: 16 + 29 },
                     },
                     {
@@ -2898,19 +2898,19 @@ export const BERSERK_TIMELINE: Timeline = {
                     {
                         title: () => 'Separation',
                         cover: episodeCover2,
-                        offset: { x: 0, y: 70 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 33, to: 16 + 38 },
                     },
                     {
                         title: () => 'Sparks',
                         cover: episodeCover2,
-                        offset: { x: 0, y: 10 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 41, to: 16 + 42 },
                     },
                     {
                         title: () => 'Confession',
                         cover: episodeCover2,
-                        offset: { x: 0, y: 80 },
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 43, to: 16 + 48 },
                     },
                     {

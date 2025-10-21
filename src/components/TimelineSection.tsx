@@ -98,9 +98,6 @@ export const SectionItemCover = withShadow(
             width: ${({ $fit }) => ($fit === 'cover' ? '100%' : 'auto')};
             transition: 0.1s ease-in-out;
             pointer-events: none;
-
-            object-position: top;
-
             will-change: transform, filter;
         }
 

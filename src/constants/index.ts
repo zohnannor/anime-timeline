@@ -53,10 +53,9 @@ export type Volume = {
 
 export type Arc = {
     title: string;
-    cover: string | null;
-    offset: Offset;
-    chapters: Range;
-};
+} & ({ cover: string; offset: Offset } | { cover: null }) & {
+        chapters: Range;
+    };
 
 export type Episode = {
     title: Callback<string>;

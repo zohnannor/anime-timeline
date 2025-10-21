@@ -202,7 +202,7 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () => 'FOURTH CHILDREN',
                         cover: () => '17_C153_shinji-kaji',
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 150, y: 0 },
                         chapters: { from: 34, to: 36 },
                     },
                     {
@@ -214,7 +214,7 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () => 'Introjection',
                         cover: () => '19_C067_shinji-stern',
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 1, y: 0 },
                         chapters: { from: 42, to: 46 },
                     },
                     {
@@ -277,7 +277,7 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () => 'I Need You.',
                         cover: () => 'M26_C130_zomgrei',
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 0, y: 100 },
                         chapters: { from: 87 },
                     },
                 ],
@@ -287,37 +287,31 @@ export const EVA_TIMELINE: Timeline = {
             {
                 title: 'Intro',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 1, to: 15 },
             },
             {
                 title: 'Action',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 16, to: 31 },
             },
             {
                 title: 'Descent',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 32, to: 51 },
             },
             {
                 title: 'Bitter End',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 52, to: 72 },
             },
             {
                 title: 'End of TV',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 73, to: 74 },
             },
             {
                 title: 'Movies',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 75 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,

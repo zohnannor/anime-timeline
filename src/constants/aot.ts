@@ -1185,7 +1185,7 @@ export const AOT_TIMELINE: Timeline = {
             {
                 title: 'Clash of the Titans',
                 cover: 'Clash_of_the_Titans',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1 },
                 chapters: { from: 35, to: 50 },
             },
             {
