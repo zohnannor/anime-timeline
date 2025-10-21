@@ -1586,7 +1586,7 @@ export const CSM_TIMELINE: Timeline = {
             {
                 title: 'Justice Devil',
                 cover: 'Asa_vs_Yuko_as_Justice_Devil',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1 },
                 chapters: { from: 98, to: 111 },
             },
             {
@@ -1616,7 +1616,6 @@ export const CSM_TIMELINE: Timeline = {
             {
                 title: 'Current',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 191 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,

@@ -23,7 +23,15 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v4
 
-            - name: Install dependencies
+            - name: Cache Linux dependencies
+              uses: actions/cache@v4
+              with:
+                  path: /var/cache/apt
+                  key: ${{ runner.os }}-apt-${{ hashFiles('**/apt-packages') }}
+                  restore-keys: |
+                      ${{ runner.os }}-apt-
+
+            - name: Install Linux dependencies
               run: |
                   sudo apt-get update
                   sudo apt-get install -y webp
@@ -31,13 +39,19 @@ jobs:
             - name: Install ImageMagick
               uses: mfinelli/setup-imagemagick@v6
 
+            - name: Cache optimized images
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      public/**/*.webp
+                      public/*-thumbnails/**
+                  key: ${{ runner.os }}-images-${{ hashFiles('public/**/*.png', 'public/**/*.jpg', 'public/**/*.jpeg') }}
+                  restore-keys: |
+                      ${{ runner.os }}-images-
+
             - name: Run image optimization
               run: |
-                  for dir in public/*/; do
-                      dir_name=$(basename "$dir")
-                      echo "Optimizing images in: $dir_name"
-                      bash ci/optimize-images.sh "$dir_name"
-                  done
+                  bash ci/optimize-images.sh --all
               env:
                   CPU: 2 # GitHub runners have 2 cores
 

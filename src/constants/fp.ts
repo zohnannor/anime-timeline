@@ -606,31 +606,26 @@ export const FP_TIMELINE: Timeline = {
             {
                 title: 'Behemdorg',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 1, to: 33 },
             },
             {
                 title: 'Catharsis',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 34, to: 52 },
             },
             {
                 title: 'Amnesia',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 53, to: 62 },
             },
             {
                 title: 'Fire Punch',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 63, to: 80 },
             },
             {
                 title: 'Final Film',
                 cover: null,
-                offset: { x: 0, y: 0 },
                 chapters: { from: 81, to: 83 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
