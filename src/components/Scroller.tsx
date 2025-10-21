@@ -9,9 +9,9 @@ import { useSettings } from '../providers/SettingsProvider';
 import { clamp } from '../util';
 import { ThumbnailImage } from './ThumbnailImage';
 
-interface ScrollHoverAreaProps {
+type ScrollHoverAreaProps = {
     $visible: boolean;
-}
+};
 
 export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
@@ -32,9 +32,9 @@ export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     }
 `;
 
-interface ScrollProps {
+type ScrollProps = {
     $offset: number;
-}
+};
 
 export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     return {

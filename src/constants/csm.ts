@@ -82,6 +82,7 @@ export const CSM_TIMELINE: Timeline = {
             type: 'volume',
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
+            defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,

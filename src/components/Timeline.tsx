@@ -24,11 +24,11 @@ import { sum } from '../util';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from './ShadowWrapper';
 
-interface DayProps {
+type DayProps = {
     $width: number;
     $background: string;
     $variant: string;
-}
+};
 
 const Timeframe = withCrossLines(
     withShadow(
@@ -67,14 +67,14 @@ type Segment = {
     label: string;
 };
 
-interface TimelineSegmentProps {
+type TimelineSegmentProps = {
     segments: Segment[];
     colorInterpolation: {
         inputRange: [number, number];
         outputGradient: number[];
     };
     variant: string;
-}
+};
 
 const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     segments,

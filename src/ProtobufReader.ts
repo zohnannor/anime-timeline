@@ -1,35 +1,35 @@
 import * as varint from 'varint';
 
-interface ProtobufReader {
+type ProtobufReader = {
     buf: Uint8Array;
     pos: number;
     len: number;
     u32(): number;
     string(): string;
-}
+};
 
-interface Title {
+type Title = {
     titleId?: number;
     name?: string;
     author?: string;
     portraitImageUrl?: string;
     titleUpdateStatus?: number;
-}
+};
 
-interface TitleDetailView {
+type TitleDetailView = {
     title?: Title;
     titleImageUrl?: string;
     overview?: string;
     nextTimeStamp?: number;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
     titleDetailView?: TitleDetailView;
-}
+};
 
-interface ApiResponse {
+type ApiResponse = {
     Ok?: SuccessResponse;
-}
+};
 
 const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 const MANGA_API_URL =

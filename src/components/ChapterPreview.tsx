@@ -7,10 +7,10 @@ import useWindowScroll from '../hooks/useWindowScroll';
 import { useSettings } from '../providers/SettingsProvider';
 import { getDocumentPosition as getElementPosition } from '../util';
 
-interface PreviewProps {
+type PreviewProps = {
     $hasPicture: boolean;
     $offsetX: number;
-}
+};
 
 const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
     return {

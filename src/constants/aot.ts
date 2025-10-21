@@ -81,6 +81,7 @@ export const AOT_TIMELINE: Timeline = {
             type: 'volume',
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
+            defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'List of Attack on Titan chapters',
@@ -1173,7 +1174,7 @@ export const AOT_TIMELINE: Timeline = {
             {
                 title: '104th Training Corps',
                 cover: '104th_Training_Corps',
-                offset: { x: 150, y: 0 },
+                offset: { x: 0, y: 0 },
                 chapters: { from: 15, to: 18 },
             },
             {

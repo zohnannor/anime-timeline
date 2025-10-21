@@ -61,20 +61,20 @@ const DayName = styled.div`
     text-align: center;
 `;
 
-interface MonthProps {
+type MonthProps = {
     $color: string;
-}
+};
 
 const Month = styled.div<MonthProps>`
     color: ${({ $color: $background }) => $background};
 `;
 
-interface DayProps {
+type DayProps = {
     $isChapter: boolean;
     $isToday: boolean;
     $isNextChapter: boolean;
     $background: string;
-}
+};
 
 const Day = styled.a<DayProps>`
     display: flex;
@@ -136,13 +136,13 @@ const TooltipContent = styled.div`
     gap: ${scale(40)};
 `;
 
-interface MonthComponentProps {
+type MonthComponentProps = {
     month: Date;
     currentDate: Date;
     chapterDateMap: Map<string, number>;
     nextChapterDate: Date | null;
     onDayClick: (e: React.MouseEvent, chapterNumber: number | null) => void;
-}
+};
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     ({ month, currentDate, chapterDateMap, nextChapterDate, onDayClick }) => {

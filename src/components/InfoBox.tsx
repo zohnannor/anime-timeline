@@ -31,11 +31,11 @@ const InfoBoxContainer = styled.div`
     }
 `;
 
-interface BoxProps {
+type BoxProps = {
     $dir?: 'row' | 'column';
     $wrap?: boolean;
     $align?: CSS.Property.JustifyContent;
-}
+};
 
 const Box = styled.div<BoxProps>`
     position: relative;
@@ -77,9 +77,9 @@ const ListContainer = styled.ul`
     padding-left: 1.5em;
 `;
 
-interface InlineLinkGroupProps {
+type InlineLinkGroupProps = {
     $gap?: boolean;
-}
+};
 
 const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     display: flex;

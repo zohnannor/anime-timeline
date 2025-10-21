@@ -1,3 +1,5 @@
+import { CSS } from 'styled-components/dist/types';
+
 import { SettingsValues } from '../providers/SettingsProvider';
 import { ExactUnion } from '../types';
 import { isMobileDevice } from '../util';
@@ -84,7 +86,8 @@ export type TimelineSectionType =
 
 export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
-    fit?: 'contain' | 'cover';
+    fit?: CSS.Property.ObjectFit;
+    defaultCoverPosition?: CSS.Property.ObjectPosition;
     backgroundColor?: 'black' | 'white';
     scale?: number;
     sidewaysText?: boolean;
