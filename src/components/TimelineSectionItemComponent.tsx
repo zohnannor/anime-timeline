@@ -19,7 +19,7 @@ import { ThumbnailImage } from './ThumbnailImage';
 import { TimelineSection } from './TimelineSection';
 import { Tooltip } from './Tooltip';
 
-interface SectionItemCoverProps {
+type SectionItemCoverProps = {
     $titleVisible?: boolean;
     $invertBorder?: boolean;
     $blankFontSize: number;
@@ -29,7 +29,7 @@ interface SectionItemCoverProps {
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
-}
+};
 
 export const SectionItemCover = withShadow(
     styled.div<SectionItemCoverProps>`
@@ -71,7 +71,6 @@ export const SectionItemCover = withShadow(
             width: ${({ $fit }) => ($fit === 'cover' ? '100%' : 'auto')};
             transition: 0.1s ease-in-out;
             pointer-events: none;
-
             will-change: transform, filter;
         }
 
@@ -152,11 +151,11 @@ export const SectionItemCover = withShadow(
     `
 );
 
-interface SectionItemProps {
+type SectionItemProps = {
     $width: number;
     $height: number;
     $focusable: boolean;
-}
+};
 
 const SectionItem = withCrossLines(
     styled.div<SectionItemProps>`
@@ -189,9 +188,8 @@ type TimelineSectionItemProps = {
 
 export const TimelineSectionItemComponent: React.FC<
     TimelineSectionItemProps
-> = props => {
+> = ({ timelineSection, entity, idx }) => {
     const [hoveredItem, hoverHandlers] = useHover();
-    const { timelineSection, entity, idx } = props;
     const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
     const [itemWidth, setItemWidth] = useState(0);
@@ -201,6 +199,7 @@ export const TimelineSectionItemComponent: React.FC<
     const {
         type,
         fit = 'cover',
+        defaultCoverPosition = 'center',
         backgroundColor = 'black',
         scale = 1.05,
         sidewaysText = false,
@@ -250,6 +249,7 @@ export const TimelineSectionItemComponent: React.FC<
                         src={cover}
                         $offsetX={offset?.x}
                         $offsetY={offset?.y}
+                        $defaultPosition={defaultCoverPosition}
                     />
                 ) : type === 'arc' ? (
                     // for arcs without cover, just show the title
