@@ -1,14 +1,14 @@
 import { CSS } from 'styled-components/dist/types';
 
-import { SettingsValues } from '../providers/SettingsProvider';
-import { ExactUnion } from '../types';
-import { isMobileDevice } from '../util';
-import { AOT_TIMELINE } from './aot';
-import { BERSERK_TIMELINE } from './berserk';
-import { CSM_TIMELINE } from './csm';
-import { EVA_TIMELINE } from './eva';
-import { FP_TIMELINE } from './fp';
-import { FRIEREN_TIMELINE } from './frieren';
+import { WidthHelper } from './helpers';
+import { SettingsValues } from './providers/SettingsProvider';
+import { AOT_TIMELINE } from './timelines/aot';
+import { BERSERK_TIMELINE } from './timelines/berserk';
+import { CSM_TIMELINE } from './timelines/csm';
+import { EVA_TIMELINE } from './timelines/eva';
+import { FP_TIMELINE } from './timelines/fp';
+import { FRIEREN_TIMELINE } from './timelines/frieren';
+import { ExactUnion, isMobileDevice } from './util';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
@@ -33,12 +33,6 @@ export type Offset = { x: number; y: number };
 type Range = { from: number; to?: number };
 
 type Callback<T> = (timeline: TimelineData, idx: number) => T;
-
-export type WidthHelper = (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean
-) => number;
 
 export type Chapter = {
     title: Callback<string>;

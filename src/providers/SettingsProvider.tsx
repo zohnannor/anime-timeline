@@ -1,6 +1,5 @@
-import React, {
+import {
     createContext,
-    FC,
     PropsWithChildren,
     useCallback,
     useContext,
@@ -82,7 +81,7 @@ const SettingsContext = createContext<Settings>({
 
 export const useSettings = () => useContext(SettingsContext);
 
-export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
         const firstVisit = window.localStorage.getItem('firstVisit') === null;

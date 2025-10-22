@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale } from '../helpers';
@@ -52,7 +52,9 @@ const CrossLine = styled.div<CrossLineProps>`
     }
 `;
 
-export const CrossLines: FC<CrossLinesProps> = ({ $crossLinesVisible }) => {
+export const CrossLines: React.FC<CrossLinesProps> = ({
+    $crossLinesVisible,
+}) => {
     const { showCrosslines } = useSettings();
 
     const crossLinesVisible = showCrosslines && $crossLinesVisible;

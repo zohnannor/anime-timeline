@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import { useToPng } from '@hugocxl/react-to-image';
 
 import { TIMELINE } from '../constants';
-import { getVolumeWidth } from '../constants/widthHelpers';
-import { maxHeight, scale, toTitleCase } from '../helpers';
+import { getVolumeWidth, maxHeight, scale, toTitleCase } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { sum } from '../util';
 

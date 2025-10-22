@@ -5,7 +5,7 @@ import { HEADERS_WIDTH } from '../constants';
 import { maxHeight, scale } from '../helpers';
 import useWindowScroll from '../hooks/useWindowScroll';
 import { useSettings } from '../providers/SettingsProvider';
-import { getDocumentPosition as getElementPosition } from '../util';
+import { getDocumentPosition } from '../util';
 
 type PreviewProps = {
     $hasPicture: boolean;
@@ -61,7 +61,7 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
         const element = previewRef.current;
         if (!element) return;
 
-        const { x: left, width } = getElementPosition(element);
+        const { x: left, width } = getDocumentPosition(element);
         const right = left + width;
 
         const visibleLeft = scrollX + scaleToPx(HEADERS_WIDTH);
