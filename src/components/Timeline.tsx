@@ -7,12 +7,12 @@ import {
     TIMELINE,
     TIMELINE_HEIGHT,
 } from '../constants';
-import { getChapterWidth } from '../constants/widthHelpers';
 import {
     chapterDates,
     chapterDatesByMonth,
     chapterDatesByYear,
     DAYS_GRADIENT,
+    getChapterWidth,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,

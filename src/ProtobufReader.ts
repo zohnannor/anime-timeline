@@ -129,7 +129,7 @@ const decodeApiResponse = (
     ]);
 };
 
-export const fetchNextChapterDate = async (): Promise<Date | null> => {
+export default async (): Promise<Date | null> => {
     try {
         const response = await fetch(
             `${PROXY_URL}${encodeURIComponent(MANGA_API_URL)}`

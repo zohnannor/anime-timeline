@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
@@ -8,16 +8,16 @@ import {
     TimelineSectionItem,
     TimelineSectionType,
 } from '../constants';
+import { hueGlow, scale } from '../helpers';
 import useHover from '../hooks/useHover';
 import { useSettings } from '../providers/SettingsProvider';
-import { hueGlow, scale } from '../helpers';
-import { ThumbnailImage } from './ThumbnailImage';
-import { TimelineSection } from './TimelineSection';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
-import { withShadow } from './ShadowWrapper';
-import { Tooltip } from './Tooltip';
 import { Link } from './Link';
+import { withShadow } from './ShadowWrapper';
+import { ThumbnailImage } from './ThumbnailImage';
+import { TimelineSection } from './TimelineSection';
+import { Tooltip } from './Tooltip';
 
 interface SectionItemCoverProps {
     $titleVisible?: boolean;
@@ -187,7 +187,7 @@ type TimelineSectionItemProps = {
     idx: number;
 };
 
-export const TimelineSectionItemComponent: FC<
+export const TimelineSectionItemComponent: React.FC<
     TimelineSectionItemProps
 > = props => {
     const [hoveredItem, hoverHandlers] = useHover();

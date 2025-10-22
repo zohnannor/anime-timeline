@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { CSS } from 'styled-components/dist/types';
 
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
-import { CSS } from 'styled-components/dist/types';
 
 type Offset = {
     $offsetX?: number | undefined;
