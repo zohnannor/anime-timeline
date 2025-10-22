@@ -32,13 +32,18 @@ type DayProps = {
 
 const Timeframe = withCrossLines(
     withShadow(
-        styled.div<DayProps>`
+        styled.div.attrs<DayProps>(({ $width }) => {
+            return {
+                style: {
+                    width: scale($width),
+                },
+            };
+        })`
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             height: ${scale(TIMELINE_HEIGHT / 3)};
-            width: ${({ $width }) => scale($width)};
             background: ${({ $background }) => $background};
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)};
@@ -118,7 +123,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     }, [setCalendarOpen]);
 
     return (
-        <TimelineWrapper className={variant}>
+        <TimelineWrapper className={`wrapper-${variant}`}>
             {segments.map((segment, idx) => {
                 const { chapterNumbers, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
@@ -141,7 +146,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                 return (
                     <Timeframe
                         key={idx}
-                        className={variant}
+                        className={`frame-${variant}`}
                         $width={totalWidth}
                         $crossLinesVisible={hoveredSegment(idx + 1)}
                         {...hoverHandlers(idx + 1)}
@@ -153,7 +158,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         }
                         $variant={variant}
                     >
-                        <TimeframeDate className={variant}>
+                        <TimeframeDate className={`date-${variant}`}>
                             {label}
                         </TimeframeDate>
                     </Timeframe>
