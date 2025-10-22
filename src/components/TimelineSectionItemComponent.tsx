@@ -216,7 +216,7 @@ export const TimelineSectionItemComponent: React.FC<
 
     useEffect(() => {
         setItemWidth(width(timeline, idx, unboundedChapterWidth));
-    }, [unboundedChapterWidth]);
+    }, [unboundedChapterWidth, animeTitle]);
 
     const itemNumber = idx + 1;
     const processedNumber = numberProcessor(itemNumber);
