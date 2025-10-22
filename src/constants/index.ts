@@ -66,6 +66,8 @@ export type Episode = {
     chapters: Range;
 };
 
+export type TimelineEntity = Chapter | Arc | Season | Volume | Episode;
+
 export type Season = ExactUnion<
     | {
           title: string;
