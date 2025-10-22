@@ -138,16 +138,19 @@ fi
 if [[ "$1" == "--all" ]]; then
     echo "Finding all anime titles in ./public directory..."
     titles=$(find_all_titles)
-    
+
     if [ -z "$titles" ]; then
         echo "No anime titles found in ./public directory"
         exit 1
     fi
-    
+
     echo "Found titles:"
     echo "$titles"
     echo
-    
+
+    echo "Source images found: $(find "public" -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)"
+    echo "Existing WebP files: $(find "public" -name "*.webp" | wc -l)"
+
     # Process each title by calling this script recursively
     echo "$titles" | while read title; do
         echo "========================================================================"
@@ -156,7 +159,7 @@ if [[ "$1" == "--all" ]]; then
         bash "$0" "$title"
         echo
     done
-    
+
     echo "========================================================================"
     echo "All titles processed successfully!"
     exit 0
@@ -178,6 +181,10 @@ mkdir -p "$THUMB_DIR"
 # Export functions
 export -f convert_orphan_webp process_image generate_thumbnail process_special_image
 export MAIN_DIR THUMB_DIR THUMB_WIDTH THUMB_QUALITY MAIN_QUALITY MAIN_WIDTH
+
+echo "=== Image Optimization ==="
+echo "Source images found: $(find "public/$TITLE" -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)"
+echo "Existing WebP files: $(find "public/$TITLE" -name "*.webp" | wc -l)"
 
 # Step 0: Convert orphan WebP images to PNG (if no PNG/JPG/JPEG exists)
 echo "=== Converting orphan WebP images to PNG ==="
