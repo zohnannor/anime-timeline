@@ -31,31 +31,39 @@ jobs:
             - name: Install ImageMagick
               uses: mfinelli/setup-imagemagick@v6
 
-            - name: Generate cache key
+            - name: Set up cache key
               id: cache-key
               run: |
-                  # Create a hash of image files and the optimization script
-                  find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | sort | xargs ls -la | sha256sum > image_manifest.txt
-                  echo "key=${{ runner.os }}-images-$(sha256sum image_manifest.txt ci/optimize-images.sh | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+                  # Generate a cache key based on the image files and script
+                  echo "key=webp-cache-$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | sort | xargs sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
-            - name: Cache optimized images
-              id: images-cache
-              uses: actions/cache@v4
+            - name: Restore WebP cache
+              uses: actions/cache/restore@v4
+              id: webp-cache
               with:
+                  key: ${{ steps.cache-key.outputs.key }}
                   path: |
                       public/**/*.webp
-                      public/**/*-thumbnails/**
-                  key: ${{ steps.cache-key.outputs.key }}
+                      public/*-thumbnails
                   restore-keys: |
-                      ${{ runner.os }}-images-
+                      webp-cache-
 
             - name: Run image optimization
-              if: steps.images-cache.outputs.cache-hit != 'true'
               run: |
-                  echo "Cache miss - optimizing images..."
+                  echo "Running image optimization..."
+                  echo "Cache hit: ${{ steps.webp-cache.outputs.cache-hit }}"
                   bash ci/optimize-images.sh --all
               env:
                   CPU: 2 # GitHub runners have 2 cores
+
+            - name: Save WebP cache
+              uses: actions/cache/save@v4
+              if: ${{ steps.webp-cache.outputs.cache-hit != 'true' }}
+              with:
+                  key: ${{ steps.cache-key.outputs.key }}
+                  path: |
+                      public/**/*.webp
+                      public/*-thumbnails
 
             - name: Enable Corepack
               run: corepack enable
