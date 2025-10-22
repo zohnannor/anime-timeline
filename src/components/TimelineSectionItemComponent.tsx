@@ -158,12 +158,17 @@ type SectionItemProps = {
 };
 
 const SectionItem = withCrossLines(
-    styled.div<SectionItemProps>`
+    styled.div.attrs<SectionItemProps>(({ $width }) => {
+        return {
+            style: {
+                width: scale($width),
+            },
+        };
+    })`
         position: relative;
         display: flex;
         flex-direction: column;
         height: ${({ $height }) => scale($height)};
-        width: ${({ $width }) => scale($width)};
         transition: width 0.2s ease-in-out;
 
         ${({ $focusable }) =>

@@ -15,13 +15,18 @@ type ThumbnailProps = {
     $thumbnail: string;
 };
 
-const Thumbnail = styled.div<ThumbnailProps & Offset>`
+const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
+    ({ $thumbnail }) => ({
+        style: {
+            backgroundImage: `url(${$thumbnail})`,
+        },
+    })
+)`
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
     filter: blur(${scale(10)});
-    background-image: url(${({ $thumbnail }) => $thumbnail});
     background-position: ${({ $offsetX, $offsetY }) =>
         `${scale($offsetX ?? 0)}
          ${scale($offsetY ?? 0)}`};
