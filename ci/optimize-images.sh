@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# In your optimize-images.sh, add this at the beginning:
+echo "=== Image Optimization ==="
+echo "Source images found: $(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)"
+echo "Existing WebP files: $(find public -name "*.webp" | wc -l)"
+
 # Configuration
 if [ $# -eq 0 ]; then
     echo "Error: Title argument is required"
