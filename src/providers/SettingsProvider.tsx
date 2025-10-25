@@ -177,6 +177,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         setInfoBoxOpen(!!e.state?.infoBoxOpen);
         setCalendarOpen(!!e.state?.calendarOpen);
         setCaptureTimelineModalOpen(!!e.state?.captureTimelineModal);
+        setAnimeTitleSelectorOpen(!!e.state?.animeTitleSelectorOpen);
     }, []);
 
     useEffect(() => {

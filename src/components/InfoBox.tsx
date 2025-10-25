@@ -155,10 +155,12 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                     </InlineLinkGroup>
                 </li>
                 <li>Show/hide season/episode/arc/volume titles</li>
-                <li>Hover over chapter images for previews (desktop only)</li>
+                <li>
+                    Hover over chapter images for previews (desktop only ☹️)
+                </li>
                 <li>
                     Use the scrollbar at the bottom of the page for faster
-                    navigation (desktop only)
+                    navigation (desktop only ☹️)
                 </li>
                 <li>
                     Save the page as a huge PNG file (warning: it's about 50 MB
@@ -178,7 +180,9 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                 <li>
                     Press
                     <KeyboardShortcut keys={['Ctrl', 'C']} />
-                    to toggle cross-lines (desktop only)
+                    to toggle cross-lines (desktop only ☹️). Press
+                    <KeyboardShortcut keys={['Ctrl', 'V']} />
+                    to hide the UI elements (desktop only ☹️)
                 </li>
                 <li>
                     The button below the info button toggles unbounded chapter
