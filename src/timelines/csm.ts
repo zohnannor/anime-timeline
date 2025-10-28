@@ -1531,6 +1531,12 @@ export const CSM_TIMELINE: Timeline = {
                         pages: 14,
                         cover: null,
                     },
+                    {
+                        title: () => 'Eat Me',
+                        date: 'October 29, 2025',
+                        pages: 14,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
