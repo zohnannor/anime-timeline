@@ -1210,8 +1210,8 @@ export const AOT_TIMELINE: Timeline = {
             {
                 title: 'War for Paradis ',
                 cover: 'Volume_29_Cover_-_Clean_Version',
-                offset: { x: 0, y: 2500 },
-                chapters: { from: 107 },
+                offset: { x: 0, y: 2200 },
+                chapters: { from: 107, to: 139 },
             },
         ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
         seasons: [
