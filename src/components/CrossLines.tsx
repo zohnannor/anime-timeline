@@ -1,12 +1,12 @@
-import { FC, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 
-interface CrossLinesProps {
+type CrossLinesProps = {
     $crossLinesVisible?: boolean | undefined;
-}
+};
 
 const CrossLinesWrapper = styled.div<CrossLinesProps>`
     position: absolute;
@@ -20,9 +20,9 @@ const CrossLinesWrapper = styled.div<CrossLinesProps>`
     justify-content: space-between;
 `;
 
-interface CrossLineProps {
+type CrossLineProps = {
     $side: 'left' | 'right';
-}
+};
 
 const CrossLine = styled.div<CrossLineProps>`
     position: relative;
@@ -52,7 +52,9 @@ const CrossLine = styled.div<CrossLineProps>`
     }
 `;
 
-export const CrossLines: FC<CrossLinesProps> = ({ $crossLinesVisible }) => {
+export const CrossLines: React.FC<CrossLinesProps> = ({
+    $crossLinesVisible,
+}) => {
     const { showCrosslines } = useSettings();
 
     const crossLinesVisible = showCrosslines && $crossLinesVisible;

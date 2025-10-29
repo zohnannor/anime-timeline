@@ -1,6 +1,5 @@
-import React, {
+import {
     createContext,
-    FC,
     PropsWithChildren,
     useCallback,
     useContext,
@@ -10,7 +9,7 @@ import React, {
 
 import { AnimeTitle, TITLES } from '../constants';
 
-export interface Settings {
+export type Settings = {
     showCrosslines: boolean;
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
     infoBoxOpen: boolean;
@@ -27,7 +26,7 @@ export interface Settings {
     setAnimeTitle: React.Dispatch<React.SetStateAction<AnimeTitle>>;
     animeTitleSelectorOpen: boolean;
     setAnimeTitleSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 // ☝🤓
 
@@ -82,7 +81,7 @@ const SettingsContext = createContext<Settings>({
 
 export const useSettings = () => useContext(SettingsContext);
 
-export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
         const firstVisit = window.localStorage.getItem('firstVisit') === null;
@@ -178,6 +177,7 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
         setInfoBoxOpen(!!e.state?.infoBoxOpen);
         setCalendarOpen(!!e.state?.calendarOpen);
         setCaptureTimelineModalOpen(!!e.state?.captureTimelineModal);
+        setAnimeTitleSelectorOpen(!!e.state?.animeTitleSelectorOpen);
     }, []);
 
     useEffect(() => {
@@ -188,11 +188,16 @@ export const SettingsProvider: FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [infoBoxOpen, calendarOpen]);
+    }, [
+        infoBoxOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        animeTitleSelectorOpen,
+    ]);
 
     const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
-        window.history.replaceState({}, '', `?title=${title}`);
         setAnimeTitleRaw(title);
+        window.history.replaceState({}, '', `?title=${title}`);
     };
 
     return (

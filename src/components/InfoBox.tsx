@@ -31,11 +31,11 @@ const InfoBoxContainer = styled.div`
     }
 `;
 
-interface BoxProps {
+type BoxProps = {
     $dir?: 'row' | 'column';
     $wrap?: boolean;
     $align?: CSS.Property.JustifyContent;
-}
+};
 
 const Box = styled.div<BoxProps>`
     position: relative;
@@ -77,9 +77,9 @@ const ListContainer = styled.ul`
     padding-left: 1.5em;
 `;
 
-interface InlineLinkGroupProps {
+type InlineLinkGroupProps = {
     $gap?: boolean;
-}
+};
 
 const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     display: flex;
@@ -155,10 +155,12 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                     </InlineLinkGroup>
                 </li>
                 <li>Show/hide season/episode/arc/volume titles</li>
-                <li>Hover over chapter images for previews (desktop only)</li>
+                <li>
+                    Hover over chapter images for previews (desktop only ☹️)
+                </li>
                 <li>
                     Use the scrollbar at the bottom of the page for faster
-                    navigation (desktop only)
+                    navigation (desktop only ☹️)
                 </li>
                 <li>
                     Save the page as a huge PNG file (warning: it's about 50 MB
@@ -178,7 +180,9 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                 <li>
                     Press
                     <KeyboardShortcut keys={['Ctrl', 'C']} />
-                    to toggle cross-lines (desktop only)
+                    to toggle cross-lines (desktop only ☹️). Press
+                    <KeyboardShortcut keys={['Ctrl', 'V']} />
+                    to hide the UI elements (desktop only ☹️)
                 </li>
                 <li>
                     The button below the info button toggles unbounded chapter
@@ -191,7 +195,10 @@ export const InfoBoxContent = (timeline: TimelineData) => (
                     click on a day in the timeline to open a calendar and
                     navigate to the chapter date
                 </li>
-                <li>Episode widths are accurate down to the chapter page</li>
+                <li>
+                    If the title's adaptation closely follows the source, widths
+                    are accurate down to the chapter page
+                </li>
                 <li>
                     I will personally update this site whenever new chapter
                     releases. There can be a slight delay if I'm busy, but also

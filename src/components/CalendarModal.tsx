@@ -61,20 +61,20 @@ const DayName = styled.div`
     text-align: center;
 `;
 
-interface MonthProps {
+type MonthProps = {
     $color: string;
-}
+};
 
 const Month = styled.div<MonthProps>`
     color: ${({ $color: $background }) => $background};
 `;
 
-interface DayProps {
+type DayProps = {
     $isChapter: boolean;
     $isToday: boolean;
     $isNextChapter: boolean;
     $background: string;
-}
+};
 
 const Day = styled.a<DayProps>`
     display: flex;
@@ -136,13 +136,13 @@ const TooltipContent = styled.div`
     gap: ${scale(40)};
 `;
 
-interface MonthComponentProps {
+type MonthComponentProps = {
     month: Date;
     currentDate: Date;
     chapterDateMap: Map<string, number>;
     nextChapterDate: Date | null;
     onDayClick: (e: React.MouseEvent, chapterNumber: number | null) => void;
-}
+};
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     ({ month, currentDate, chapterDateMap, nextChapterDate, onDayClick }) => {
@@ -163,7 +163,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             MONTHS_GRADIENT
         ).toString(16);
 
-        const days = [];
+        const days: React.JSX.Element[] = [];
 
         for (let i = 0; i < lastDay; i++) {
             days.push(<div key={`empty-${month.getTime()}-${i}`} />);
@@ -172,7 +172,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
             date.setDate(dayN);
-            const dateStr = date.toISOString();
+            const dateStr = date.toISOString().split('T')[0]!;
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
             const isChapter = chapterNumber !== null;
             const isToday = date.toDateString() === currentDate.toDateString();
@@ -183,10 +183,12 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 .toString(16)
                 .padStart(6, '0');
 
+            const dayKey = `day-${dateStr}-${chapterNumber || 'no-chapter'}`;
+
             let day = (
                 <Day
                     id={`day-${chapterNumber}`}
-                    key={`day-${month.getTime()}-${dayN}`}
+                    key={dayKey}
                     className='day'
                     $isChapter={isChapter}
                     $isToday={isToday}
@@ -203,6 +205,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             if (isNextChapter) {
                 day = (
                     <Tooltip
+                        key={`tooltip-${dayKey}`}
                         content={<TooltipContent>Next chapter!</TooltipContent>}
                         placement='top'
                     >
@@ -222,7 +225,10 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 <CalendarGrid className='calendarGrid'>
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
                         day => (
-                            <DayName className='dayName' key={day}>
+                            <DayName
+                                className='dayName'
+                                key={`dayname-${day}-${month.getTime()}`}
+                            >
                                 {day}
                             </DayName>
                         )
@@ -269,17 +275,18 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
+    const allChapterDates = chapterDates(animeTitle);
     const currentDate = new Date();
-    const startDate = chapterDates(animeTitle)[0]!;
+    const startDate = allChapterDates[0]!;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
-        chapterDates(animeTitle).forEach((date, index) => {
-            const dateStr = date.toISOString();
+        allChapterDates.forEach((date, index) => {
+            const dateStr = date.toISOString().split('T')[0]!;
             map.set(dateStr, index + 1);
         });
         return map;
-    }, []);
+    }, [animeTitle]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];

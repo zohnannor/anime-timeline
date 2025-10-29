@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import { useToPng } from '@hugocxl/react-to-image';
 
 import { TIMELINE } from '../constants';
-import { getVolumeWidth } from '../constants/widthHelpers';
-import { maxHeight, scale, toTitleCase } from '../helpers';
+import { getVolumeWidth, maxHeight, scale, toTitleCase } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { sum } from '../util';
 
@@ -59,14 +58,17 @@ export const CaptureTimelineModal: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const timeline = TIMELINE[animeTitle].data;
+    const height = maxHeight(animeTitle);
+    const width = sum(
+        timeline.volumes.map((_, vi) =>
+            getVolumeWidth(timeline, vi, unboundedChapterWidth)
+        )
+    );
+
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: maxHeight(animeTitle),
-        canvasWidth: sum(
-            timeline.volumes.map((_, vi) =>
-                getVolumeWidth(timeline, vi, unboundedChapterWidth)
-            )
-        ),
+        canvasHeight: height,
+        canvasWidth: width,
         backgroundColor: '#000',
         filter: el =>
             ['floatingButtons', 'scrollerHoverArea'].every(
@@ -107,10 +109,12 @@ export const CaptureTimelineModal: React.FC = () => {
             <ModalContainer className='captureTimelineModal'>
                 <Title>Are you sure?</Title>
                 <h5>
-                    This will save a huge (around 50MB) PNG file. It is
+                    This will save a huge (50MB-100MB) PNG file. It is
                     recommended to scroll to the end of the timeline to load all
                     images. Your settings (visibility of titles and chapter
-                    width) will affect the rendered image.
+                    width) will affect the rendered image. The maximum width is
+                    16384px. If something renders incorrectly, try Chrome
+                    browser.
                 </h5>
                 <Button onClick={captureTimeline}>Yes, proceed</Button>
                 <h6>(this might take a while)</h6>

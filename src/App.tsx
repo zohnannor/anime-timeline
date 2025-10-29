@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AnimeTitleSelectorModal } from './components/AnimeTitleSelector';
@@ -25,6 +25,7 @@ const App: React.FC = () => {
     const { width } = useWindowSize();
     const { infoBoxOpen, calendarOpen, captureTimelineModalOpen, animeTitle } =
         useSettings();
+    const [renderUi, setRenderUi] = useState(true);
 
     const timeline = TIMELINE[animeTitle].data;
 
@@ -40,6 +41,17 @@ const App: React.FC = () => {
         window.addEventListener('wheel', handleScroll);
         return () => window.removeEventListener('wheel', handleScroll);
     }, [handleScroll]);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.code == 'KeyV') {
+            setRenderUi(p => !p);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [handleKeyDown]);
 
     useEffect(() => {
         document.documentElement.style.setProperty(
@@ -60,26 +72,30 @@ const App: React.FC = () => {
             <CaptureTimelineModal />
             <InfoBox />
             <AppContainer className='appContainer'>
-                <FloatingButtons>
-                    <FloatingButton
-                        key='animeTitleSelectorOpen'
-                        filename={timeline.smallImages['scroller-or-favicon']}
-                        title='Select Manga/Anime Title'
-                        option='animeTitleSelectorOpen'
-                    />
-                    {FLOATING_BUTTONS.map(({ filename, title, option }) => (
+                {renderUi && (
+                    <FloatingButtons>
                         <FloatingButton
-                            key={filename}
-                            filename={timeline.smallImages[filename]}
-                            title={title}
-                            option={option}
+                            key='animeTitleSelectorOpen'
+                            filename={
+                                timeline.smallImages['scroller-or-favicon']
+                            }
+                            title='Select Manga/Anime Title'
+                            option='animeTitleSelectorOpen'
                         />
-                    ))}
-                </FloatingButtons>
+                        {FLOATING_BUTTONS.map(({ filename, title, option }) => (
+                            <FloatingButton
+                                key={filename}
+                                filename={timeline.smallImages[filename]}
+                                title={title}
+                                option={option}
+                            />
+                        ))}
+                    </FloatingButtons>
+                )}
                 {Object.values(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
-                {width > 768 && <Scroller />}
+                {renderUi && width > 768 && <Scroller />}
             </AppContainer>
         </>
     );

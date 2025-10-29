@@ -5,14 +5,15 @@ import {
     HEADERS_WIDTH,
     TIMELINE,
     TIMELINE_HEIGHT,
+    TimelineSectionLayout,
 } from '../constants';
-import { scale } from '../helpers';
+import { HEADER_TITLES, scale } from '../helpers';
 import { Link } from './Link';
 import { withShadow } from './ShadowWrapper';
 
-interface HeaderProps {
+type HeaderProps = {
     $height: number;
-}
+};
 
 const Header = withShadow(
     styled.div<HeaderProps>`
@@ -55,44 +56,40 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
     const wikiBase = TIMELINE[$animeTitle].data.wikiBase;
-    const seasonHeight = TIMELINE[$animeTitle].layout.season?.height;
+    const layout = TIMELINE[$animeTitle].layout;
     return (
         <Headers className='headers'>
-            {seasonHeight && (
-                <Header className='header' $height={seasonHeight} $invertBorder>
-                    <Link href={`${wikiBase}Chainsaw_Man_(Anime)`}>
-                        Anime Seasons
-                    </Link>
-                </Header>
-            )}
-            <Header
-                className='header'
-                $height={TIMELINE[$animeTitle].layout.arc.height}
-                $invertBorder
-            >
-                <Link href={`${wikiBase}Story_Arcs`}>Story Arcs</Link>
-            </Header>
-            <Header
-                className='header'
-                $height={
-                    TIMELINE_HEIGHT +
-                    TIMELINE[$animeTitle].layout.chapter.height
-                }
-                $invertBorder
-            >
-                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
-                    Chapters
-                </Link>
-            </Header>
-            <Header
-                className='header'
-                $height={TIMELINE[$animeTitle].layout.volume.height}
-                $invertBorder
-            >
-                <Link href={`${wikiBase}Chainsaw_Man_(Manga)#Chapters`}>
-                    Volumes
-                </Link>
-            </Header>
+            {Object.keys(layout)
+                .filter(
+                    (
+                        section
+                    ): section is Exclude<
+                        keyof TimelineSectionLayout,
+                        'timeline'
+                    > => section !== 'timeline' // TODO: add it correctly?
+                )
+                .map(
+                    section =>
+                        layout[section] && (
+                            <Header
+                                className={`${section}Header`}
+                                key={section}
+                                $height={
+                                    layout[section].height +
+                                    (section === 'chapter' // TODO: see above
+                                        ? TIMELINE_HEIGHT
+                                        : 0)
+                                }
+                                $invertBorder
+                            >
+                                <Link
+                                    href={`${wikiBase}${layout[section].sectionLink}`}
+                                >
+                                    {HEADER_TITLES[section]}
+                                </Link>
+                            </Header>
+                        )
+                )}
         </Headers>
     );
 };

@@ -1,11 +1,11 @@
 import { PropsWithChildren } from 'react';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 import { scale } from '../helpers';
 
-interface ShadowProps {
+type ShadowProps = {
     $invertBorder?: boolean | undefined;
-}
+};
 
 const Shadow = styled.div<ShadowProps>`
     position: absolute;
