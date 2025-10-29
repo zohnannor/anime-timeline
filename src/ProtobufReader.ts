@@ -143,7 +143,7 @@ export default async (): Promise<Date | null> => {
             throw new Error('Next chapter timestamp not found in response');
         }
 
-        console.log('protobuf result:', result);
+        console.debug('protobuf result:', result);
 
         return new Date(result.Ok.titleDetailView.nextTimeStamp * 1000);
     } catch (error) {
