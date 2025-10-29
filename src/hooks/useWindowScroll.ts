@@ -6,22 +6,22 @@ const useWindowScroll = () => {
     const [scrolling, setScrolling] = useState(false);
     const body = document.body;
 
-    useEffect(() => {
-        let timeout: NodeJS.Timeout;
+    let timeout: NodeJS.Timeout;
+    const handleScroll = () => {
+        setScrolling(true);
+        setScrollX(body.scrollLeft);
+        setScrollY(body.scrollTop);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => setScrolling(false), 400);
+    };
 
-        const handleScroll = () => {
-            setScrolling(true);
-            setScrollX(body.scrollLeft);
-            setScrollY(body.scrollTop);
-            clearTimeout(timeout);
-            timeout = setTimeout(() => setScrolling(false), 400);
-        };
+    useEffect(() => {
         body.addEventListener('scroll', handleScroll);
         return () => {
             body.removeEventListener('scroll', handleScroll);
             clearTimeout(timeout);
         };
-    }, []);
+    }, [handleScroll]);
 
     return {
         scrollX,

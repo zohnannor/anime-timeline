@@ -183,10 +183,12 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 .toString(16)
                 .padStart(6, '0');
 
+            const dayKey = `day-${dateStr}-${chapterNumber || 'no-chapter'}`;
+
             let day = (
                 <Day
                     id={`day-${chapterNumber}`}
-                    key={`day-${month.getTime()}-${dayN}`}
+                    key={dayKey}
                     className='day'
                     $isChapter={isChapter}
                     $isToday={isToday}
@@ -203,6 +205,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             if (isNextChapter) {
                 day = (
                     <Tooltip
+                        key={`tooltip-${dayKey}`}
                         content={<TooltipContent>Next chapter!</TooltipContent>}
                         placement='top'
                     >
@@ -222,7 +225,10 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 <CalendarGrid className='calendarGrid'>
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
                         day => (
-                            <DayName className='dayName' key={day}>
+                            <DayName
+                                className='dayName'
+                                key={`dayname-${day}-${month.getTime()}`}
+                            >
                                 {day}
                             </DayName>
                         )
@@ -280,7 +286,7 @@ export const CalendarModal: React.FC = () => {
             map.set(dateStr, index + 1);
         });
         return map;
-    }, []);
+    }, [animeTitle]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];
