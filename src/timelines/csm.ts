@@ -1783,6 +1783,10 @@ export const CSM_TIMELINE: Timeline = {
                 name: 'Official Site',
                 url: 'https://www.shonenjump.com/j/rensai/chainsaw.html',
             },
+            {
+                name: 'Anime Website',
+                url: 'https://chainsawman.dog/',
+            },
         ],
     },
 };

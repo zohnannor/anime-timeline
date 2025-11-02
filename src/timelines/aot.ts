@@ -1928,6 +1928,17 @@ export const AOT_TIMELINE: Timeline = {
             'toggle-always-show-titles': 'circle',
             'capture-timeline': 'circle',
         },
-        socialLinks: [],
+        socialLinks: [
+            { name: 'Anime website', url: 'http://shingeki.tv/' },
+            { name: 'Manga website', url: 'http://shingeki.net/' },
+            {
+                name: 'Bessatsu Shōnen Magazine',
+                url: 'http://www.shonenmagazine.com/bmaga/index.html',
+            },
+            {
+                name: "Author's Blog",
+                url: 'http://blog.livedoor.jp/isayamahazime/',
+            },
+        ],
     },
 };

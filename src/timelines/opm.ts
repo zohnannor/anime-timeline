@@ -2137,7 +2137,7 @@ export const OPM_TIMELINE: Timeline = {
             {
                 title: 'Season One',
                 cover: () => 'One-Punch_Man_TV_Anime_Key_Visual',
-                offset: { x: 0, y: 2700 },
+                offset: { x: 0, y: 3200 },
                 chapters: { from: 1, to: 37 },
                 episodes: [
                     {
@@ -2337,6 +2337,35 @@ export const OPM_TIMELINE: Timeline = {
             'toggle-always-show-titles': 'circle',
             'capture-timeline': 'circle',
         },
-        socialLinks: [],
+        socialLinks: [
+            {
+                name: 'Young Jump',
+                url: 'https://tonarinoyj.jp/episode/13932016480028985383',
+            },
+            {
+                name: 'VIZ Media',
+                url: 'https://www.viz.com/one-punch-man',
+            },
+            {
+                name: "Murata's Twitter",
+                url: 'https://x.com/NEBU_KURO',
+            },
+            {
+                name: "ONE's Twitter",
+                url: 'https://x.com/ONE_rakugaki',
+            },
+            {
+                name: 'Manga',
+                url: 'https://cubari.moe/read/gist/OPM/',
+            },
+            {
+                name: 'Webcomic',
+                url: 'https://cubari.moe/read/gist/JYHJU/',
+            },
+            {
+                name: 'Anime',
+                url: 'https://onepunchman-anime.net/',
+            },
+        ],
     },
 };
