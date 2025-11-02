@@ -184,10 +184,8 @@ const SectionItem = withCrossLines(
 );
 
 type TimelineSectionItemProps = {
-    timelineSection: {
-        [K in TimelineSectionType]: TimelineSectionItem<K>;
-    }[TimelineSectionType];
-    entity: TimelineEntity;
+    timelineSection: TimelineSectionItem<TimelineSectionType>;
+    entity: TimelineEntity[TimelineSectionType];
     idx: number;
 };
 
@@ -237,17 +235,18 @@ export const TimelineSectionItemComponent: React.FC<
     const offset = 'offset' in entity ? entity.offset : null;
 
     const link = `${timeline.wikiBase}${wikiLink(title, itemNumber)}`;
-    const itemTitle =
-        type === 'chapter'
-            ? processedNumber
-            : titleProcessor(title, itemNumber);
+    const processedTitle = titleProcessor(title, itemNumber);
+    const itemTitle = type === 'chapter' ? processedNumber : processedTitle;
 
     const hovered = hoveredItem(itemNumber);
     const titleVisible = showTitles || hovered;
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
-        type !== 'season' || cover ? (
+        type === 'season' && typeof cover !== 'string' ? (
+            // don't add link to seasons without cover (speculation)
+            `SEASON ${processedNumber}`
+        ) : (
             <Link href={link}>
                 {cover ? (
                     <ThumbnailImage
@@ -256,17 +255,14 @@ export const TimelineSectionItemComponent: React.FC<
                         $offsetY={offset?.y}
                         $defaultPosition={defaultCoverPosition}
                     />
-                ) : type === 'arc' ? (
-                    // for arcs without cover, just show the title
+                ) : type === 'arc' || type === 'saga' ? (
+                    // for sagas/arcs without cover, just show the title
                     itemTitle
                 ) : (
                     // for everything else, show the number
                     processedNumber
                 )}
             </Link>
-        ) : (
-            // don't add link to seasons without cover (speculation)
-            `SEASON ${processedNumber}`
         );
 
     const itemCover = (
@@ -290,7 +286,7 @@ export const TimelineSectionItemComponent: React.FC<
     const chapterPreview = (
         <ChapterPreview className='preview' $hasPicture={!!cover}>
             {cover && <ThumbnailImage src={cover} />}
-            {titleProcessor(title, itemNumber)}
+            {processedTitle}
         </ChapterPreview>
     );
 

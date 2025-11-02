@@ -8,6 +8,7 @@ import { CSM_TIMELINE } from './timelines/csm';
 import { EVA_TIMELINE } from './timelines/eva';
 import { FP_TIMELINE } from './timelines/fp';
 import { FRIEREN_TIMELINE } from './timelines/frieren';
+import { OPM_TIMELINE } from './timelines/opm';
 import { ExactUnion, isMobileDevice } from './util';
 
 export const SCROLLER_WIDTH = 1300;
@@ -25,6 +26,7 @@ export const TITLES = [
     'frieren',
     'eva',
     'aot',
+    'opm',
 ] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
@@ -47,6 +49,13 @@ export type Volume = {
     chapters: readonly Chapter[];
 };
 
+export type Saga = {
+    title: string;
+} & ({ cover: string; offset: Offset } | { cover: null }) & {
+        chapters: Range;
+        arcs: readonly Arc[];
+    };
+
 export type Arc = {
     title: string;
 } & ({ cover: string; offset: Offset } | { cover: null }) & {
@@ -59,8 +68,6 @@ export type Episode = {
     offset: Offset;
     chapters: Range;
 };
-
-export type TimelineEntity = Chapter | Arc | Season | Volume | Episode;
 
 export type Season = ExactUnion<
     | {
@@ -76,9 +83,19 @@ export type Season = ExactUnion<
 export type TimelineSectionType =
     | 'season'
     | 'episode'
+    | 'saga'
     | 'arc'
     | 'chapter'
     | 'volume';
+
+export type TimelineEntity = {
+    season: Season;
+    episode: Episode;
+    saga: Saga;
+    arc: Arc;
+    chapter: Chapter;
+    volume: Volume;
+};
 
 export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
@@ -100,12 +117,10 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
 };
 
 export type TimelineSectionLayout = {
-    arc: TimelineSectionItem<'arc'>;
+    season?: TimelineSectionItem<'season'>;
+    saga: TimelineSectionItem<'saga'>;
     chapter: TimelineSectionItem<'chapter'>;
     volume: TimelineSectionItem<'volume'>;
-} & {
-    season?: TimelineSectionItem<'season'>;
-} & {
     timeline: {
         type: 'timeline';
     };
@@ -129,7 +144,7 @@ type SocialLink = {
 export type TimelineData = {
     title: string;
     volumes: readonly Volume[];
-    arcs: readonly Arc[];
+    sagas: readonly Saga[];
     seasons: readonly Season[];
     splitChapters: Record<number, number>;
     wikiBase: string;
@@ -148,6 +163,7 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     frieren: FRIEREN_TIMELINE,
     eva: EVA_TIMELINE,
     aot: AOT_TIMELINE,
+    opm: OPM_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {

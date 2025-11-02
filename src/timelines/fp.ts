@@ -1,5 +1,10 @@
 import { Arc, Season, Timeline, TimelineData, Volume } from '../constants';
-import { getArcWidth, getChapterWidth, getVolumeWidth } from '../helpers';
+import {
+    getArcWidth,
+    getChapterWidth,
+    getSagaWidth,
+    getVolumeWidth,
+} from '../helpers';
 import { pad, Tuple } from '../util';
 
 const VOLUME_HEIGHT = 1579;
@@ -15,15 +20,25 @@ const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx + 1}`;
 
 export const FP_TIMELINE: Timeline = {
     layout: {
-        arc: {
-            type: 'arc',
+        saga: {
+            type: 'saga',
             height: ARC_HEIGHT,
-            titleProcessor: title => `${title} arc`,
-            blankfontSize: 100,
-            titleFontSize: 100,
-            width: getArcWidth,
+            blankfontSize: 0,
+            titleFontSize: 0,
+            width: getSagaWidth,
             sectionLink: 'Story Arcs',
-            wikiLink: title => `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
+            wikiLink: () => 'unused',
+            subTimeline: {
+                type: 'arc',
+                height: ARC_HEIGHT,
+                titleProcessor: title => `${title} arc`,
+                blankfontSize: 100,
+                titleFontSize: 100,
+                width: getArcWidth,
+                sectionLink: 'Story Arcs',
+                wikiLink: title =>
+                    `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
+            },
         },
         timeline: {
             type: 'timeline',
@@ -602,33 +617,41 @@ export const FP_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
-        arcs: [
+        sagas: [
             {
-                title: 'Behemdorg',
-                cover: null,
-                chapters: { from: 1, to: 33 },
+                title: '',
+                cover: '',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 1 },
+                arcs: [
+                    {
+                        title: 'Behemdorg',
+                        cover: null,
+                        chapters: { from: 1, to: 33 },
+                    },
+                    {
+                        title: 'Catharsis',
+                        cover: null,
+                        chapters: { from: 34, to: 52 },
+                    },
+                    {
+                        title: 'Amnesia',
+                        cover: null,
+                        chapters: { from: 53, to: 62 },
+                    },
+                    {
+                        title: 'Fire Punch',
+                        cover: null,
+                        chapters: { from: 63, to: 80 },
+                    },
+                    {
+                        title: 'Final Film',
+                        cover: null,
+                        chapters: { from: 81, to: 83 },
+                    },
+                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
             },
-            {
-                title: 'Catharsis',
-                cover: null,
-                chapters: { from: 34, to: 52 },
-            },
-            {
-                title: 'Amnesia',
-                cover: null,
-                chapters: { from: 53, to: 62 },
-            },
-            {
-                title: 'Fire Punch',
-                cover: null,
-                chapters: { from: 63, to: 80 },
-            },
-            {
-                title: 'Final Film',
-                cover: null,
-                chapters: { from: 81, to: 83 },
-            },
-        ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+        ],
         seasons: [] as const satisfies Tuple<Season, 0>,
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',

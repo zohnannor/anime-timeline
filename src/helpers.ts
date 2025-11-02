@@ -20,7 +20,7 @@ export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
 export const tokyoDate = (d: string) =>
-    new Date(`${d.replaceAll('th', '')} GMT+9`); // Tokyo timezone
+    new Date(`${d.replaceAll(/(st|nd|rd|th)/g, '')} GMT+9`); // Tokyo timezone
 
 export const maxHeight = (animeTitle: AnimeTitle) =>
     sum(
@@ -108,13 +108,27 @@ export const getArcWidth: WidthHelper = (
     idx,
     unboundedChapterWidth
 ) => {
-    const { from, to } = timeline.arcs[idx]!.chapters;
+    const { from, to } = timeline.sagas.flatMap(s => s.arcs)[idx]!.chapters;
     return sum(
         range(from - 1, to ?? chapters(timeline).length).map(i =>
             getChapterWidth(timeline, i, unboundedChapterWidth)
         )
     );
 };
+
+export const getSagaWidth: WidthHelper = (
+    timeline,
+    idx,
+    unboundedChapterWidth
+) =>
+    sum(
+        timeline.sagas
+            .flatMap((s, si) => s.arcs.map(() => si))
+            .map((si, ai) => [si, ai] as const)
+            .filter(([si, _]) => si === idx)
+            .map(([_, ai]) => getArcWidth(timeline, ai, unboundedChapterWidth))
+    );
+
 const getChapterPageWidth = (
     timeline: TimelineData,
     chapter: number,
@@ -126,6 +140,7 @@ const getChapterPageWidth = (
         pagesPerVolume(timeline, volume)
     );
 };
+
 const chaptersWithPagesSplit = (timeline: TimelineData) =>
     timeline.volumes
         .flatMap(v => v.chapters)
@@ -270,9 +285,10 @@ export const hueGlow = keyframes`
 `;
 
 export const HEADER_TITLES: Record<TimelineSectionType, string> = {
+    season: 'Anime Seasons',
+    episode: 'Episodes',
+    saga: 'Story Arcs',
     arc: 'Story Arcs',
     chapter: 'Chapters',
     volume: 'Volumes',
-    season: 'Anime Seasons',
-    episode: 'Episodes',
 };
