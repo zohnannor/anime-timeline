@@ -1,8 +1,9 @@
-import { Arc, Season, Timeline, TimelineData, Volume } from '../constants';
+import { Saga, Season, Timeline, TimelineData, Volume } from '../constants';
 import {
     getArcWidth,
     getChapterWidth,
     getEpisodeWidth,
+    getSagaWidth,
     getSeasonWidth,
     getVolumeWidth,
 } from '../helpers';
@@ -13,9 +14,10 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
+const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const VOLUMES_TOTAL = 23;
-const ARCS_TOTAL = 14;
+const SAGAS_TOTAL = 2;
 const SEASONS_TOTAL = 4;
 
 const volumeTitle = (timeline: TimelineData, idx: number) => {
@@ -52,15 +54,25 @@ export const CSM_TIMELINE: Timeline = {
                 wikiLink: (_, n) => `Episode_${n}`,
             },
         },
-        arc: {
-            type: 'arc',
-            height: ARC_HEIGHT,
-            width: getArcWidth,
-            titleProcessor: title => `${title} arc`,
+        saga: {
+            type: 'saga',
+            height: SAGA_HEIGHT,
+            width: getSagaWidth,
+            titleProcessor: title => `${title} saga`,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: title => `${title} arc`,
+            wikiLink: title => `${title} Saga`,
+            subTimeline: {
+                type: 'arc',
+                height: ARC_HEIGHT,
+                width: getArcWidth,
+                titleProcessor: title => `${title} arc`,
+                blankfontSize: 100,
+                titleFontSize: 100,
+                sectionLink: 'Story Arcs',
+                wikiLink: title => `${title} arc`,
+            },
         },
         timeline: {
             type: 'timeline',
@@ -1540,91 +1552,105 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
-        arcs: [
+        sagas: [
             {
-                title: 'Introduction',
-                cover: 'Denji_fighting_zombies',
-                offset: { x: 130, y: 0 },
-                chapters: { from: 1, to: 4 },
-            },
-            {
-                title: 'Bat Devil',
-                cover: 'Denji_attacking_the_Bat_Devil',
-                offset: { x: 220, y: 0 },
-                chapters: { from: 5, to: 13 },
-            },
-            {
-                title: 'Eternity Devil',
-                cover: 'Denji_fighting_the_Eternity_Devil',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 14, to: 22 },
-            },
-            {
-                title: 'Katana Man',
-                cover: 'Denji_engaging_the_Katana_Man',
-                offset: { x: 0, y: 150 },
-                chapters: { from: 23, to: 38 },
-            },
-            {
-                title: 'Bomb Girl',
-                cover: 'Denji_engaging_Reze',
-                offset: { x: 0, y: 90 },
-                chapters: { from: 39, to: 52 },
-            },
-            {
-                title: 'International Assassins',
-                cover: 'Denji_engaging_Santa_Claus',
-                offset: { x: 0, y: 750 },
-                chapters: { from: 53, to: 70 },
-            },
-            {
-                title: 'Gun Devil',
-                cover: 'Chainsaw_vs_Gun_Fiend',
-                offset: { x: 0, y: 250 },
-                chapters: { from: 71, to: 79 },
-            },
-            {
-                title: 'Control Devil',
-                cover: 'Hybrids_attacking_Chainsaw',
-                offset: { x: 0, y: 120 },
-                chapters: { from: 80, to: 97 },
-            },
-            {
-                title: 'Justice Devil',
-                cover: 'Asa_vs_Yuko_as_Justice_Devil',
-                offset: { x: 0, y: 1 },
-                chapters: { from: 98, to: 111 },
-            },
-            {
-                title: 'Dating Denji',
-                cover: 'Dating_Denji_arc_infobox_picture',
-                offset: { x: 150, y: 0 },
-                chapters: { from: 112, to: 120 },
-            },
-            {
-                title: 'Falling Devil',
-                cover: 'Denji_tears_through_the_Falling_Devil',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 121, to: 131 },
-            },
-            {
-                title: 'Chainsaw Man Church',
-                cover: 'Denji_and_Miri_impale_each_other',
-                offset: { x: 0, y: 430 },
-                chapters: { from: 132, to: 155 },
-            },
-            {
-                title: 'Aging Devil',
-                cover: 'Chainsaw_vs_Aging',
-                offset: { x: 0, y: 250 },
-                chapters: { from: 156, to: 190 },
-            },
-            {
-                title: 'Current',
+                title: 'Public Safety',
                 cover: null,
-                chapters: { from: 191 },
+                chapters: { from: 1, to: 97 },
+                arcs: [
+                    {
+                        title: 'Introduction',
+                        cover: 'Denji_fighting_zombies',
+                        offset: { x: 130, y: 0 },
+                        chapters: { from: 1, to: 4 },
+                    },
+                    {
+                        title: 'Bat Devil',
+                        cover: 'Denji_attacking_the_Bat_Devil',
+                        offset: { x: 220, y: 0 },
+                        chapters: { from: 5, to: 13 },
+                    },
+                    {
+                        title: 'Eternity Devil',
+                        cover: 'Denji_fighting_the_Eternity_Devil',
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 14, to: 22 },
+                    },
+                    {
+                        title: 'Katana Man',
+                        cover: 'Denji_engaging_the_Katana_Man',
+                        offset: { x: 0, y: 150 },
+                        chapters: { from: 23, to: 38 },
+                    },
+                    {
+                        title: 'Bomb Girl',
+                        cover: 'Denji_engaging_Reze',
+                        offset: { x: 0, y: 90 },
+                        chapters: { from: 39, to: 52 },
+                    },
+                    {
+                        title: 'International Assassins',
+                        cover: 'Denji_engaging_Santa_Claus',
+                        offset: { x: 0, y: 750 },
+                        chapters: { from: 53, to: 70 },
+                    },
+                    {
+                        title: 'Gun Devil',
+                        cover: 'Chainsaw_vs_Gun_Fiend',
+                        offset: { x: 0, y: 250 },
+                        chapters: { from: 71, to: 79 },
+                    },
+                    {
+                        title: 'Control Devil',
+                        cover: 'Hybrids_attacking_Chainsaw',
+                        offset: { x: 0, y: 120 },
+                        chapters: { from: 80, to: 97 },
+                    },
+                ],
             },
-        ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+            {
+                title: 'Academy',
+                cover: null,
+                chapters: { from: 98 },
+                arcs: [
+                    {
+                        title: 'Justice Devil',
+                        cover: 'Asa_vs_Yuko_as_Justice_Devil',
+                        offset: { x: 0, y: 1 },
+                        chapters: { from: 98, to: 111 },
+                    },
+                    {
+                        title: 'Dating Denji',
+                        cover: 'Dating_Denji_arc_infobox_picture',
+                        offset: { x: 150, y: 0 },
+                        chapters: { from: 112, to: 120 },
+                    },
+                    {
+                        title: 'Falling Devil',
+                        cover: 'Denji_tears_through_the_Falling_Devil',
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 121, to: 131 },
+                    },
+                    {
+                        title: 'Chainsaw Man Church',
+                        cover: 'Denji_and_Miri_impale_each_other',
+                        offset: { x: 0, y: 430 },
+                        chapters: { from: 132, to: 155 },
+                    },
+                    {
+                        title: 'Aging Devil',
+                        cover: 'Chainsaw_vs_Aging',
+                        offset: { x: 0, y: 250 },
+                        chapters: { from: 156, to: 190 },
+                    },
+                    {
+                        title: 'Current',
+                        cover: null,
+                        chapters: { from: 191 },
+                    },
+                ],
+            },
+        ] as const satisfies Tuple<Saga, typeof SAGAS_TOTAL>,
         seasons: [
             {
                 title: 'Chainsaw Man (Anime)',

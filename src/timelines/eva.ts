@@ -3,6 +3,7 @@ import {
     getArcWidth,
     getChapterWidth,
     getEpisodeWidth,
+    getSagaWidth,
     getSeasonWidth,
     getVolumeByChapter,
     getVolumeWidth,
@@ -19,7 +20,6 @@ const SEASONS_TOTAL = 2;
 const ARCS_TOTAL = 6;
 const VOLUMES_TOTAL = 14;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
     idx === 2
         ? `Volume${idx + 1}Manga`
@@ -34,6 +34,7 @@ export const EVA_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             width: getVolumeWidth,
             defaultCoverPosition: 'top',
+            titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
@@ -59,15 +60,24 @@ export const EVA_TIMELINE: Timeline = {
                     '_'
                 )}`,
         },
-        arc: {
-            type: 'arc',
+        saga: {
+            type: 'saga',
             height: ARC_HEIGHT,
-            width: getArcWidth,
-            titleProcessor: (title, n) => (n <= 3 ? `${title} arc` : title),
-            blankfontSize: 100,
-            titleFontSize: 100,
+            blankfontSize: 0,
+            titleFontSize: 0,
+            width: getSagaWidth,
             sectionLink: 'Episodes_and_Films_(Portal)#Notes',
-            wikiLink: () => 'Episodes_and_Films_(Portal)#Notes',
+            wikiLink: () => 'unused',
+            subTimeline: {
+                type: 'arc',
+                height: ARC_HEIGHT,
+                width: getArcWidth,
+                titleProcessor: (title, n) => (n <= 3 ? `${title} arc` : title),
+                blankfontSize: 100,
+                titleFontSize: 100,
+                sectionLink: 'Episodes_and_Films_(Portal)#Notes',
+                wikiLink: () => 'Episodes_and_Films_(Portal)#Notes',
+            },
         },
         season: {
             type: 'season',
@@ -283,41 +293,49 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
-        arcs: [
+        sagas: [
             {
-                title: 'Intro',
-                cover: null,
-                chapters: { from: 1, to: 15 },
+                title: '',
+                cover: '',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 1 },
+                arcs: [
+                    {
+                        title: 'Intro',
+                        cover: null,
+                        chapters: { from: 1, to: 15 },
+                    },
+                    {
+                        title: 'Action',
+                        cover: null,
+                        chapters: { from: 16, to: 31 },
+                    },
+                    {
+                        title: 'Descent',
+                        cover: null,
+                        chapters: { from: 32, to: 51 },
+                    },
+                    {
+                        title: 'Bitter End',
+                        cover: null,
+                        chapters: { from: 52, to: 72 },
+                    },
+                    {
+                        title: 'End of TV',
+                        cover: null,
+                        chapters: { from: 73, to: 74 },
+                    },
+                    {
+                        title: 'Movies',
+                        cover: null,
+                        chapters: { from: 75 },
+                    },
+                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
             },
-            {
-                title: 'Action',
-                cover: null,
-                chapters: { from: 16, to: 31 },
-            },
-            {
-                title: 'Descent',
-                cover: null,
-                chapters: { from: 32, to: 51 },
-            },
-            {
-                title: 'Bitter End',
-                cover: null,
-                chapters: { from: 52, to: 72 },
-            },
-            {
-                title: 'End of TV',
-                cover: null,
-                chapters: { from: 73, to: 74 },
-            },
-            {
-                title: 'Movies',
-                cover: null,
-                chapters: { from: 75 },
-            },
-        ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+        ],
         volumes: [
             {
-                title: volumeTitle,
+                title: () => 'Angel Attack (使徒、襲来 / Shito, Shūrai)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -362,7 +380,8 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () =>
+                    'Shōnen and Knife (ナイフと少年 / Naifu to Shōnen)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -410,7 +429,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'White Scars (白い傷跡 / Shiroi Kizuato)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -463,7 +482,8 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () =>
+                    'Asuka Comes to Japan (アスカ、来日 / Asuka, Rainichi)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -516,7 +536,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'Cenotaph (墓標 / Bohyō)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -568,7 +588,8 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () =>
+                    'The Fourth Child (四人目の適格者 / Yoninme no Tekikakusha)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -620,7 +641,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => "A Man's Battle (男の戦い / Otoko no Tatakai)",
                 cover: volumeCover,
                 chapters: [
                     {
@@ -677,7 +698,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'Mother (MOTHER)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -734,7 +755,8 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () =>
+                    'The Fifth Child (フィフス・チルドレン / Fifusu Chirudoren)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -783,7 +805,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'Tears (涙 / Namida)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -831,7 +853,8 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () =>
+                    'Memories Within My Palm (手のひらの記憶 / Te no Hira no Kioku)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -873,7 +896,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'Father and Child (父と子 / Chan to Ko)',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -921,7 +944,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'Calling',
                 cover: volumeCover,
                 chapters: [
                     {
@@ -969,7 +992,7 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: () => 'The Journey Begins (旅立ち / Tabidachi)',
                 cover: volumeCover,
                 chapters: [
                     {
