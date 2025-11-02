@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Configuration
 if [ $# -eq 0 ]; then
     echo "Error: Title argument is required"
@@ -42,17 +41,18 @@ run_parallel() {
     echo
 }
 
-# Convert orphan WebP images to PNG (if no PNG/JPG/JPEG exists)
-convert_orphan_webp() {
-    local webp="$1"
-    local base="${webp%.webp}"
+# Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)
+convert_orphan_images() {
+    local src="$1"
+    local base="${src%.*}"
     # Check if any of the common image formats exist (case-insensitive)
     if [[ ! -e "$base.png" && ! -e "$base.jpg" && ! -e "$base.jpeg" &&
-          ! -e "$base.PNG" && ! -e "$base.JPG" && ! -e "$base.JPEG" ]]; then
-        echo "Converting orphan WebP: $webp -> ${base}.png"
-        magick "$webp" "${base}.png"
+        ! -e "$base.PNG" && ! -e "$base.JPG" && ! -e "$base.JPEG" ]]; then
+        echo "Converting orphan image: $src -> ${base}.png"
+        # Extract only the first frame for animated WebP and GIF
+        magick "$src[0]" -strip "${base}.png" &>/dev/null
     else
-        echo "Skipping (has original): $webp"
+        echo "Skipping (has original): $src"
     fi
 }
 
@@ -69,8 +69,8 @@ process_image() {
 
     echo "Processing image: $src -> $webp_dest"
     # Create WebP version without altering original
-    magick "$src" -resize "${MAIN_WIDTH}>" -strip -quality 100 "$webp_dest"
-    cwebp -q "$MAIN_QUALITY" -m 6 -sharp_yuv "$webp_dest" -o "$webp_dest"
+    magick "$src" -resize "${MAIN_WIDTH}>" -strip -quality 100 "$webp_dest" &>/dev/null
+    cwebp -q "$MAIN_QUALITY" -m 6 -sharp_yuv "$webp_dest" -o "$webp_dest" &>/dev/null
 }
 
 # Generate thumbnail version from original
@@ -87,7 +87,7 @@ generate_thumbnail() {
 
     echo "Generating thumbnail: $src -> $thumb_dest"
     mkdir -p "$(dirname "$thumb_dest")"
-    magick "$src" -resize "${THUMB_WIDTH}>" -strip -quality "$THUMB_QUALITY" "$thumb_dest"
+    magick "$src" -resize "${THUMB_WIDTH}>" -strip -quality "$THUMB_QUALITY" "$thumb_dest" &>/dev/null
 }
 
 process_special_image() {
@@ -95,26 +95,33 @@ process_special_image() {
     local full_src="$MAIN_DIR/$src"
     local webp_dest="${full_src%.*}.webp"
 
-    # Skip if special WebP already exists and is newer than source
+    # Skip if source doesn't exist
+    if [ ! -f "$full_src" ]; then
+        echo "Warning: Special image not found: $full_src"
+        return 1
+    fi
+
+    # Skip if WebP already exists and is newer than source
     if [ -f "$webp_dest" ] && [ "$webp_dest" -nt "$full_src" ]; then
-        echo "Skipping special (up to date): $src"
+        echo "Skipping special (up to date): $full_src > $webp_dest"
         return 0
     fi
 
-    echo "Processing special image: $src"
-    magick "$full_src" -resize "1000>" -strip -quality 80 "$webp_dest"
+    echo "Processing special image: $full_src -> $webp_dest"
+    # Use magick to resize and convert to WebP in one step
+    magick "$full_src" -strip -quality 80 "WEBP:$webp_dest" &>/dev/null
 }
 
 # Find all anime titles in the public directory
 find_all_titles() {
     # Look for directories that match the pattern of having a thumbnails counterpart
     # This finds all directories that don't end with "-thumbnails" and aren't "index.html"
-    find ./public -maxdepth 1 -type d ! -name "*-thumbnails" ! -name "index.html" ! -name "." ! -name "public" | \
-    while read dir; do
-        if [ "$dir" != "./public" ]; then
-            basename "$dir"
-        fi
-    done
+    find ./public -maxdepth 1 -type d ! -name "*-thumbnails" ! -name "index.html" ! -name "." ! -name "public" |
+        while read dir; do
+            if [ "$dir" != "./public" ]; then
+                basename "$dir"
+            fi
+        done
 }
 
 # ------------------------------------------------------------------------------
@@ -179,66 +186,72 @@ echo
 mkdir -p "$THUMB_DIR"
 
 # Export functions
-export -f convert_orphan_webp process_image generate_thumbnail process_special_image
+export -f convert_orphan_images process_image generate_thumbnail process_special_image
 export MAIN_DIR THUMB_DIR THUMB_WIDTH THUMB_QUALITY MAIN_QUALITY MAIN_WIDTH
 
 echo "=== Image Optimization ==="
 echo "Source images found: $(find "public/$TITLE" -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)"
 echo "Existing WebP files: $(find "public/$TITLE" -name "*.webp" | wc -l)"
 
-# Step 0: Convert orphan WebP images to PNG (if no PNG/JPG/JPEG exists)
-echo "=== Converting orphan WebP images to PNG ==="
-run_parallel '-iname "*.webp"' 'convert_orphan_webp "$@"'
+# Step 0: Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)
+echo "=== Converting orphan images to PNG ==="
+run_parallel '\( -iname "*.webp" -o -iname "*.gif" \)' 'convert_orphan_images "$@"'
 
 # Step 1: Create thumbnails from originals
 echo "=== Generating thumbnails ==="
 run_parallel '\( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \)' 'generate_thumbnail "$@"'
 
-# Step 2: Create optimized WebP versions (keep originals)
-echo "=== Creating optimized WebP versions ==="
-run_parallel '\( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \)' 'process_image "$@"'
-
-# Step 2.1: Special handling for key visual (preserve original)
+# Step 2: Special handling for key visual (preserve original)
 echo "=== Processing special images ==="
 case $TITLE in
-    csm)
-        process_special_image "Chainsaw_Man_Anime_Key_Visual_1.png"
-        ;;
-    berserk)
-        process_special_image "Berserk_Anime_Box_Art.png"
-        process_special_image "V3-Cover_Art-Manga.png"
-        process_special_image "V5-Cover_Art-Manga.png"
-        process_special_image "V18-Cover_Art-Manga.png"
-        process_special_image "V34-Cover_Art-Manga.png"
-        process_special_image "V38-Guts-Manga.png"
-        ;;
-    frieren)
-        process_special_image "Season_1_key_visual_3.png"
-        process_special_image "Season_2_key_visual_3.png"
-        ;;
-    eva)
-        process_special_image "End_of_Evangelion_poster.jpg"
-        process_special_image "Neon_Genesis_Evangelion_logo.jpg"
-        ;;
-    aot)
-        process_special_image "Attack_on_Titan_Season_1.jpg"
-        process_special_image "Attack_on_Titan_Season_2_Official_Poster.png"
-        process_special_image "Attack_on_Titan_Season_3.jpg"
-        process_special_image "Attack_on_Titan_Season_3_sixth_key_visual_(clean).jpg"
-        process_special_image "Attack_on_Titan_The_Final_Season.jpg"
-        process_special_image "Attack_on_Titan_The_Final_Season_Part_2_-_Key_Visual_6.jpg"
-        process_special_image "Attack_on_Titan_Final_Season_Part_3_key_visual_8_(textless).jpg"
-        process_special_image "Attack_on_Titan_Final_Season_Part_4_key_visual_9_(no_quotation).jpg"
-        process_special_image "The_Female_Titan_battle.png"
-        process_special_image "Clash_of_the_Titans.png"
-        process_special_image "Erwin_and_Pixis_speaking.jpg"
-        process_special_image "Eren_returns_home.jpg"
-        process_special_image "Volume_23_Cover_-_Clean_Version.png"
-        process_special_image "Volume_29_Cover_-_Clean_Version.png"
-        ;;
+csm)
+    process_special_image "Chainsaw_Man_Anime_Key_Visual_1.png"
+    ;;
+berserk)
+    process_special_image "Berserk_Anime_Box_Art.png"
+    process_special_image "V3-Cover_Art-Manga.png"
+    process_special_image "V5-Cover_Art-Manga.png"
+    process_special_image "V18-Cover_Art-Manga.png"
+    process_special_image "V34-Cover_Art-Manga.png"
+    process_special_image "V38-Guts-Manga.png"
+    ;;
+frieren)
+    process_special_image "Season_1_key_visual_3.png"
+    process_special_image "Season_2_key_visual_3.png"
+    ;;
+eva)
+    process_special_image "End_of_Evangelion_poster.jpg"
+    process_special_image "Neon_Genesis_Evangelion_logo.jpg"
+    ;;
+aot)
+    process_special_image "Attack_on_Titan_Season_1.jpg"
+    process_special_image "Attack_on_Titan_Season_2_Official_Poster.png"
+    process_special_image "Attack_on_Titan_Season_3.jpg"
+    process_special_image "Attack_on_Titan_Season_3_sixth_key_visual_(clean).jpg"
+    process_special_image "Attack_on_Titan_The_Final_Season.jpg"
+    process_special_image "Attack_on_Titan_The_Final_Season_Part_2_-_Key_Visual_6.jpg"
+    process_special_image "Attack_on_Titan_Final_Season_Part_3_key_visual_8_(textless).jpg"
+    process_special_image "Attack_on_Titan_Final_Season_Part_4_key_visual_9_(no_quotation).jpg"
+    process_special_image "The_Female_Titan_battle.png"
+    process_special_image "Clash_of_the_Titans.png"
+    process_special_image "Erwin_and_Pixis_speaking.jpg"
+    process_special_image "Eren_returns_home.jpg"
+    process_special_image "Volume_23_Cover_-_Clean_Version.png"
+    process_special_image "Volume_29_Cover_-_Clean_Version.png"
+    ;;
+opm)
+    process_special_image "Heroes_Spread.png"
+    process_special_image "One-Punch_Man_TV_Anime_Key_Visual.png"
+    process_special_image "One-Punch_Man_Anime_Season_2_Key_Visual.png"
+    process_special_image "One-Punch_Man_Season_3_Key_Visual_2.png"
+    ;;
 esac
 echo "Completed special images processing"
 echo
+
+# Step 3: Create optimized WebP versions (keep originals)
+echo "=== Creating optimized WebP versions ==="
+run_parallel '\( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \)' 'process_image "$@"'
 
 # Final size report
 echo "=== Size Report ==="

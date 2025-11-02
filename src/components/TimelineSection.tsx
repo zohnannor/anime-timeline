@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
     TIMELINE,
+    TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
 } from '../constants';
@@ -28,19 +29,28 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
 
     const timeline = TIMELINE[animeTitle].data;
 
-    // TODO: refactor this???
-    const withGlobalIndex = <T,>(xs: readonly T[]) =>
-        xs.map((x, idx) => [idx, x] as const);
-    const entities = {
-        arc: withGlobalIndex(timeline.arcs),
-        chapter: withGlobalIndex(timeline.volumes.flatMap(v => v.chapters)),
-        season: withGlobalIndex(timeline.seasons),
-        episode: timeline.seasons
-            .flatMap((s, si) => (s.episodes ?? []).map(e => [si, e] as const))
-            .map(([si, e], ei) => [si, ei, e] as const)
-            .filter(([si]) => si === specificIndex)
-            .map(([_, ei, e]) => [ei, e] as const),
-        volume: withGlobalIndex(timeline.volumes),
+    const withGlobalIndex = <T, U>(
+        xs: readonly T[],
+        inner: (x: T) => readonly U[]
+    ) =>
+        xs
+            .flatMap((x, xi) => inner(x).map(el => [xi, el] as const))
+            .map(([xi, el], gi) => [xi, gi, el] as const)
+            .filter(([xi]) => xi === (specificIndex ?? xi))
+            .map(([_, ei, e]) => [ei, e] as const);
+
+    const entities: {
+        [K in keyof TimelineEntity]: (readonly [number, TimelineEntity[K]])[];
+    } = {
+        episode: withGlobalIndex(timeline.seasons, s => s.episodes ?? []),
+        season: withGlobalIndex(timeline.seasons, s => [s]),
+        saga: withGlobalIndex(timeline.sagas, s => [s]),
+        arc: withGlobalIndex(timeline.sagas, s => s.arcs),
+        chapter: withGlobalIndex(
+            timeline.volumes.flatMap(v => v.chapters),
+            c => [c]
+        ),
+        volume: withGlobalIndex(timeline.volumes, v => [v]),
     };
 
     return (

@@ -3,6 +3,7 @@ import {
     getArcWidth,
     getChapterWidth,
     getEpisodeWidth,
+    getSagaWidth,
     getSeasonWidth,
     getVolumeWidth,
 } from '../helpers';
@@ -50,16 +51,25 @@ export const BERSERK_TIMELINE: Timeline = {
                 wikiLink: (_, n) => `Episode_${n}_(1997_Anime)`,
             },
         },
-        arc: {
-            type: 'arc',
+        saga: {
+            type: 'saga',
             height: ARC_HEIGHT,
-            width: getArcWidth,
-            sidewaysText: true,
-            titleProcessor: title => `${title} arc`,
-            blankfontSize: 100,
-            titleFontSize: 100,
+            width: getSagaWidth,
+            blankfontSize: 0,
+            titleFontSize: 0,
             sectionLink: 'Releases_(Manga)#Arcs',
-            wikiLink: title => `${title}_Arc`,
+            wikiLink: () => 'unused',
+            subTimeline: {
+                type: 'arc',
+                height: ARC_HEIGHT,
+                width: getArcWidth,
+                sidewaysText: true,
+                titleProcessor: title => `${title} arc`,
+                blankfontSize: 100,
+                titleFontSize: 100,
+                sectionLink: 'Releases_(Manga)#Arcs',
+                wikiLink: title => `${title}_Arc`,
+            },
         },
         timeline: {
             type: 'timeline',
@@ -2749,38 +2759,46 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
-        arcs: [
+        sagas: [
             {
-                title: 'Black Swordsman',
-                cover: 'V3-Cover_Art-Manga',
-                offset: { x: 0, y: 1270 },
-                chapters: { from: 1, to: 8 },
+                title: '',
+                cover: '',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 1 },
+                arcs: [
+                    {
+                        title: 'Black Swordsman',
+                        cover: 'V3-Cover_Art-Manga',
+                        offset: { x: 0, y: 1270 },
+                        chapters: { from: 1, to: 8 },
+                    },
+                    {
+                        title: 'Golden Age',
+                        cover: 'V5-Cover_Art-Manga',
+                        offset: { x: 0, y: 1000 },
+                        chapters: { from: 9, to: 16 + 94 },
+                    },
+                    {
+                        title: 'Conviction',
+                        cover: 'V18-Cover_Art-Manga',
+                        offset: { x: 0, y: 2500 },
+                        chapters: { from: 16 + 95, to: 16 + 176 },
+                    },
+                    {
+                        title: 'Millennium Falcon',
+                        cover: 'V34-Cover_Art-Manga',
+                        offset: { x: 0, y: 3980 },
+                        chapters: { from: 16 + 177, to: 16 + 307 },
+                    },
+                    {
+                        title: 'Fantasia',
+                        cover: 'V38-Guts-Manga',
+                        offset: { x: 0, y: 2310 },
+                        chapters: { from: 16 + 308 },
+                    },
+                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
             },
-            {
-                title: 'Golden Age',
-                cover: 'V5-Cover_Art-Manga',
-                offset: { x: 0, y: 1000 },
-                chapters: { from: 9, to: 16 + 94 },
-            },
-            {
-                title: 'Conviction',
-                cover: 'V18-Cover_Art-Manga',
-                offset: { x: 0, y: 2500 },
-                chapters: { from: 16 + 95, to: 16 + 176 },
-            },
-            {
-                title: 'Millennium Falcon',
-                cover: 'V34-Cover_Art-Manga',
-                offset: { x: 0, y: 3980 },
-                chapters: { from: 16 + 177, to: 16 + 307 },
-            },
-            {
-                title: 'Fantasia',
-                cover: 'V38-Guts-Manga',
-                offset: { x: 0, y: 2310 },
-                chapters: { from: 16 + 308 },
-            },
-        ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+        ],
         seasons: [
             {
                 title: 'Berserk (1997 Anime)',
