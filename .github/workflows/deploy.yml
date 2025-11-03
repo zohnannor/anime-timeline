@@ -28,6 +28,18 @@ jobs:
             - name: Restore file modification times
               uses: chetan/git-restore-mtime-action@v2
 
+            - name: Check for force optimization
+              id: check_force
+              run: |
+                  # Check commit message for [force-optimize]
+                  if [[ "${{ github.event.head_commit.message }}" == *"[force-optimize]"* ]]; then
+                      echo "force_flag=--force" >> $GITHUB_OUTPUT
+                      echo "Force optimization detected in commit message"
+                  else
+                      echo "force_flag=" >> $GITHUB_OUTPUT
+                      echo "Normal optimization mode"
+                  fi
+
             - name: Install Linux dependencies
               run: |
                   sudo apt-get update
@@ -57,7 +69,8 @@ jobs:
               run: |
                   echo "Running image optimization..."
                   echo "Cache hit: ${{ steps.webp-cache.outputs.cache-hit }}"
-                  bash ci/optimize-images.sh --all
+                  echo "Force flag: ${{ steps.check_force.outputs.force_flag }}"
+                  bash ci/optimize-images.sh --all ${{ steps.check_force.outputs.force_flag }}
               env:
                   CPU: 2 # GitHub runners have 2 cores
 
