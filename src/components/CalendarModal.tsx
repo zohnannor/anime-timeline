@@ -259,11 +259,11 @@ export const CalendarModal: React.FC = () => {
     useEffect(() => {
         (async () => {
             if (!calendarOpen) return;
-            if (animeTitle !== 'csm') return; // fetch from Manga Plus only for csm
-            const date = await fetchNextChapterDate();
-            setNextChapterDate(date);
+            // fetch from Manga Plus only for csm
+            if (animeTitle !== 'csm') return setNextChapterDate(null);
+            setNextChapterDate(await fetchNextChapterDate());
         })();
-    }, [calendarOpen]);
+    }, [calendarOpen, animeTitle]);
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
