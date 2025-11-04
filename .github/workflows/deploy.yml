@@ -48,6 +48,11 @@ jobs:
             - name: Install ImageMagick
               uses: mfinelli/setup-imagemagick@v6
 
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.x"
+
             - name: Set up cache key
               id: cache-key
               run: |
@@ -70,7 +75,7 @@ jobs:
                   echo "Running image optimization..."
                   echo "Cache hit: ${{ steps.webp-cache.outputs.cache-hit }}"
                   echo "Force flag: ${{ steps.check_force.outputs.force_flag }}"
-                  bash ci/optimize-images.sh --all ${{ steps.check_force.outputs.force_flag }}
+                  python ci/optimize-images.py --all ${{ steps.check_force.outputs.force_flag }} --cpu $CPU
               env:
                   CPU: 2 # GitHub runners have 2 cores
 
