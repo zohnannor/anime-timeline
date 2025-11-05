@@ -55,6 +55,9 @@ SPECIAL_IMAGES: Dict[str, set[str]] = {
         "One-Punch_Man_Anime_Season_2_Key_Visual.png",
         "One-Punch_Man_Season_3_Key_Visual_2.png",
     },
+    "deathnote": {
+        "DEATH_NOTE_anime.png",
+    },
 }
 
 
@@ -132,23 +135,13 @@ class ImageProcessor:
     def _convert_orphan_single(self, path: Path) -> bool:
         """Convert a single orphan image"""
 
-        base = path.with_suffix("")
-        # Check if any common image format exists (case-insensitive)
-        has_original = False
-        for original_ext in [".png", ".jpg", ".jpeg"]:
-            for ext_variant in [original_ext, original_ext.upper()]:
-                if base.with_suffix(ext_variant).exists():
-                    has_original = True
-                    break
-            if has_original:
-                break
-
-        if has_original:
+        # Skip if already converted or has original
+        if any([path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]]):
             logging.debug(f"Skipping (has original): {path}")
             return True
 
         dest = path.with_suffix(".png")
-        cmd = ["magick", f"{path}[0]", str(dest)]
+        cmd = ["magick", f"{path}[0]", "-strip", str(dest)]
 
         if self.run_command(cmd):
             logging.debug(f"Converted orphan image: {path} -> {dest}")
