@@ -20,15 +20,11 @@ const VOLUMES_TOTAL = 23;
 const SAGAS_TOTAL = 2;
 const SEASONS_TOTAL = 4;
 
-const volumeTitle = (timeline: TimelineData, idx: number) => {
-    const title = timeline.volumes[idx]!.chapters[0]!.title;
-    return title(timeline, idx);
-};
+const volumeTitle = (timeline: TimelineData, idx: number) =>
+    timeline.volumes[idx]!.chapters[0]!.title(timeline, idx);
 const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
-const episodeTitle = (idx: number) => (timeline: TimelineData) => {
-    const title = timeline.volumes.flatMap(v => v.chapters)[idx]!.title;
-    return title(timeline, idx);
-};
+const episodeTitle = (idx: number) => (timeline: TimelineData) =>
+    timeline.volumes.flatMap(v => v.chapters)[idx]!.title(timeline, idx);
 const episodeCover = (_: TimelineData, idx: number) => (idx + 1).toString();
 
 export const CSM_TIMELINE: Timeline = {

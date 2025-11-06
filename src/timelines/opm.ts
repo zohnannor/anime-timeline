@@ -7,7 +7,7 @@ import {
     getSeasonWidth,
     getVolumeWidth,
 } from '../helpers';
-import { Tuple } from '../util';
+import { Tuple, Add } from '../util';
 
 const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -18,7 +18,8 @@ const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 4;
 const CHAPTERS_TOTAL = 222;
-const VOLUMES_TOTAL = 49;
+const VOLUMES_TOTAL = 43;
+const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
@@ -119,7 +120,10 @@ export const OPM_TIMELINE: Timeline = {
             width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volume_List',
-            wikiLink: (_, n) => `Volume_${n}`,
+            wikiLink: (_, n) =>
+                n <= VOLUMES_TOTAL
+                    ? `Volume_${n}`
+                    : 'Chapters_and_Volumes#Volume_List',
         },
     },
     data: {
@@ -1976,7 +1980,10 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<
+            Volume,
+            Add<typeof VOLUMES_TOTAL, typeof VOLUMES_EXTRA>
+        >,
         sagas: [
             {
                 title: 'Introduction',

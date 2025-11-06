@@ -5,6 +5,7 @@ import { SettingsValues } from './providers/SettingsProvider';
 import { AOT_TIMELINE } from './timelines/aot';
 import { BERSERK_TIMELINE } from './timelines/berserk';
 import { CSM_TIMELINE } from './timelines/csm';
+import { DEATHNOTE_TIMELINE } from './timelines/deathnote';
 import { EVA_TIMELINE } from './timelines/eva';
 import { FP_TIMELINE } from './timelines/fp';
 import { FRIEREN_TIMELINE } from './timelines/frieren';
@@ -27,6 +28,7 @@ export const TITLES = [
     'eva',
     'aot',
     'opm',
+    'deathnote',
 ] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
@@ -164,6 +166,7 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     eva: EVA_TIMELINE,
     aot: AOT_TIMELINE,
     opm: OPM_TIMELINE,
+    deathnote: DEATHNOTE_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {
