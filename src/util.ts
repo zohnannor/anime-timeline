@@ -24,6 +24,11 @@ export type ExactUnion<
       }
     : never;
 
+export type Add<A extends number, B extends number> = [
+    ...Tuple<number, A>,
+    ...Tuple<number, B>
+]['length'];
+
 export const range = <Start extends number, End extends number>(
     start: Start,
     end: End
