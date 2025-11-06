@@ -55,6 +55,9 @@ SPECIAL_IMAGES: Dict[str, set[str]] = {
         "One-Punch_Man_Anime_Season_2_Key_Visual.png",
         "One-Punch_Man_Season_3_Key_Visual_2.png",
     },
+    "deathnote": {
+        "DEATH_NOTE_anime.png",
+    },
 }
 
 

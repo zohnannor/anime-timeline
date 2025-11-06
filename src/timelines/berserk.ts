@@ -15,7 +15,7 @@ const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.75;
 
-const SEASONS_TOTAL = 1;
+const SEASONS_TOTAL = 3;
 const ARCS_TOTAL = 5;
 const VOLUMES_TOTAL = 43;
 
@@ -2957,6 +2957,20 @@ export const BERSERK_TIMELINE: Timeline = {
                         chapters: { from: 16 + 79, to: 16 + 94 },
                     },
                 ],
+            },
+            {
+                title: 'Berserk (2016 Anime)',
+                cover: () => 'Berserk_2016_Premier_visual_art_version_2',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 94, to: 176 },
+                episodes: [],
+            },
+            {
+                title: 'Berserk (2017 Anime)',
+                cover: () => 'Berserk_2017_Anime_Key_Visual',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 176, to: 176 },
+                episodes: [],
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {},
