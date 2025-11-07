@@ -17,7 +17,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 4;
-const CHAPTERS_TOTAL = 222;
+const CHAPTERS_TOTAL = 223;
 const VOLUMES_TOTAL = 43;
 const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
@@ -1719,6 +1719,12 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 21,
                         cover: null,
                     },
+                    {
+                        title: () => 'Just Getting Started',
+                        date: 'November 6, 2025',
+                        pages: 21,
+                        cover: null,
+                    },
                 ],
             },
             {
@@ -2013,7 +2019,7 @@ export const OPM_TIMELINE: Timeline = {
             {
                 title: 'Hero Association',
                 cover: null,
-                chapters: { from: 16, to: 44 },
+                chapters: { from: 16, to: 39 },
                 arcs: [
                     {
                         title: 'National Superhero Registry',
@@ -2056,7 +2062,7 @@ export const OPM_TIMELINE: Timeline = {
             {
                 title: 'Human Monster',
                 cover: null,
-                chapters: { from: 45, to: 94 },
+                chapters: { from: 40, to: 175 },
                 arcs: [
                     {
                         title: 'Garou Introduction',
@@ -2099,7 +2105,7 @@ export const OPM_TIMELINE: Timeline = {
             {
                 title: 'Neo Heroes',
                 cover: null,
-                chapters: { from: 95 },
+                chapters: { from: 171 + 5 },
                 arcs: [
                     {
                         title: 'Psychic Sisters',
@@ -2123,7 +2129,7 @@ export const OPM_TIMELINE: Timeline = {
                         title: 'Supreme Hero',
                         cover: 'Supreme_Hero_Arc_Manga',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 204 + 5, to: 217 + 5 },
+                        chapters: { from: 204 + 5, to: CHAPTERS_TOTAL },
                     },
                     // {
                     //     title: 'Neo Heroes Uprising',
