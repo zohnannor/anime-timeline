@@ -22,6 +22,7 @@ type SectionItemCoverProps = {
     $titleFontSize: number;
     $fit: CSS.Property.ObjectFit;
     $backgroundColor: CSS.Property.Color;
+    $showBackgroundCover?: boolean;
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
@@ -82,7 +83,7 @@ const SectionItemCover = withShadow(
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
             pointer-events: none;
-            z-index: 1;
+            z-index: 11;
             ${({ $titleVisible }) =>
                 $titleVisible &&
                 css`
@@ -133,7 +134,7 @@ const SectionItemCover = withShadow(
             text-align: center;
             font-size: ${({ $titleFontSize }) => scale($titleFontSize)};
             color: white;
-            z-index: 2;
+            z-index: 12;
             opacity: 0;
             inset: 0;
             pointer-events: none;

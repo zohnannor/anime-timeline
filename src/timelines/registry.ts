@@ -9,6 +9,7 @@ import { FRIEREN_TIMELINE } from '@timelines/frieren';
 import { HXH_TIMELINE } from '@timelines/hxh';
 import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
+import { JOJO_TIMELINE } from './jojo';
 import resolveTimeline from '@timelines/resolved';
 
 export const TIMELINE = resolveTimeline({
@@ -22,6 +23,7 @@ export const TIMELINE = resolveTimeline({
     deathnote: DEATHNOTE_TIMELINE,
     jr: JR_TIMELINE,
     hxh: HXH_TIMELINE,
+    jojo: JOJO_TIMELINE,
 });
 
 export const TITLES = typedKeyTuple(TIMELINE);
