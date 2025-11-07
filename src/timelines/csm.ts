@@ -37,7 +37,7 @@ export const CSM_TIMELINE: Timeline = {
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
             sectionLink: 'Chainsaw Man (Anime)',
-            wikiLink: season => season,
+            wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,

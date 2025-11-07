@@ -59,7 +59,7 @@ export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
 
 const chaptersVolumes = (timeline: TimelineData) =>
     timeline.volumes.flatMap((v, vi) => v.chapters.map(() => vi));
-const chapters = (timeline: TimelineData) =>
+export const chapters = (timeline: TimelineData) =>
     timeline.volumes.flatMap(v => v.chapters);
 
 export type WidthHelper = (
