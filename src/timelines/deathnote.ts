@@ -66,7 +66,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
             sectionLink: 'Death Note (anime)',
-            wikiLink: season => season,
+            wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -75,7 +75,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
+                sectionLink: 'Death Note (anime)',
                 wikiLink: title =>
                     episodeLinkExceptions.includes(title)
                         ? `${title} (episode)`
