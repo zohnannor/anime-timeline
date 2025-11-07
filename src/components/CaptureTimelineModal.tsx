@@ -77,6 +77,7 @@ export const CaptureTimelineModal: React.FC = () => {
         onStart: () => {
             setLoading(false);
             setError(null);
+            console.debug(`Real dimensions: ${width}x${height}`);
         },
         onSuccess: dataUrl => {
             const link = document.createElement('a');
