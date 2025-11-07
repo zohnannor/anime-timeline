@@ -30,6 +30,8 @@ SPECIAL_IMAGES: Dict[str, set[str]] = {
         "V18-Cover_Art-Manga.png",
         "V34-Cover_Art-Manga.png",
         "V38-Guts-Manga.png",
+        "Berserk_2016_Premier_visual_art_version_2.png",
+        "Berserk_2017_Anime_Key_Visual.png",
     },
     "frieren": {"Season_1_key_visual_3.png", "Season_2_key_visual_3.png"},
     "eva": {"End_of_Evangelion_poster.jpg", "Neon_Genesis_Evangelion_logo.jpg"},
