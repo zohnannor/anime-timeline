@@ -26,6 +26,7 @@ type SectionItemCoverProps = {
     $titleFontSize: number;
     $fit: CSS.Property.ObjectFit;
     $backgroundColor: CSS.Property.Color;
+    $showBackgroundCover?: boolean;
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
@@ -85,7 +86,7 @@ export const SectionItemCover = withShadow(
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
             pointer-events: none;
-            z-index: 1;
+            z-index: 11;
             ${({ $titleVisible }) =>
                 $titleVisible &&
                 css`
@@ -131,7 +132,7 @@ export const SectionItemCover = withShadow(
             text-align: center;
             font-size: ${({ $titleFontSize }) => scale($titleFontSize)};
             color: white;
-            z-index: 2;
+            z-index: 12;
             opacity: 0;
             inset: 0;
             pointer-events: none;
@@ -148,6 +149,20 @@ export const SectionItemCover = withShadow(
                     opacity: 1;
                 `}
         }
+
+        ${({ $showBackgroundCover }) =>
+            $showBackgroundCover &&
+            css`
+                & > a > img:first-child {
+                    z-index: 10;
+                }
+
+                & > a > img:last-child {
+                    width: 100%;
+                    object-fit: cover;
+                    filter: brightness(0.5) blur(${scale(30)});
+                }
+            `}
     `
 );
 
@@ -215,6 +230,7 @@ export const TimelineSectionItemComponent: React.FC<
         titleFontSize,
         focusable = false,
         subTimeline: nestedTimeline,
+        showBackgroundCover,
     } = timelineSection;
 
     useEffect(() => {
@@ -275,6 +291,7 @@ export const TimelineSectionItemComponent: React.FC<
             $titleFontSize={titleFontSize}
             $fit={fit}
             $backgroundColor={backgroundColor}
+            $showBackgroundCover={showBackgroundCover ?? false}
             $color={textColor}
             $scale={scale}
             $sidewaysText={sidewaysText}

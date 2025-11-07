@@ -10,6 +10,7 @@ import { EVA_TIMELINE } from './timelines/eva';
 import { FP_TIMELINE } from './timelines/fp';
 import { FRIEREN_TIMELINE } from './timelines/frieren';
 import { OPM_TIMELINE } from './timelines/opm';
+import { JOJO_TIMELINE } from './timelines/jojo';
 import { ExactUnion, isMobileDevice } from './util';
 
 export const SCROLLER_WIDTH = 1300;
@@ -29,6 +30,7 @@ export const TITLES = [
     'aot',
     'opm',
     'deathnote',
+    'jojo',
 ] as const;
 export type AnimeTitle = (typeof TITLES)[number];
 
@@ -103,6 +105,7 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
     fit?: CSS.Property.ObjectFit;
     defaultCoverPosition?: CSS.Property.ObjectPosition;
+    showBackgroundCover?: boolean;
     backgroundColor?: 'black' | 'white';
     scale?: number;
     sidewaysText?: boolean;
@@ -167,6 +170,7 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     aot: AOT_TIMELINE,
     opm: OPM_TIMELINE,
     deathnote: DEATHNOTE_TIMELINE,
+    jojo: JOJO_TIMELINE,
 };
 
 export const FLOATING_BUTTONS: {
