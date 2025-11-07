@@ -1719,6 +1719,12 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 21,
                         cover: null,
                     },
+                    {
+                        title: () => 'Just Getting Started',
+                        date: 'November 6, 2025',
+                        pages: 21,
+                        cover: null,
+                    },
                 ],
             },
             {
