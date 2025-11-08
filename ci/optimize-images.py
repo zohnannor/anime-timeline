@@ -4,7 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Dict, Optional
+from typing import Callable, List, Dict, Optional
 import subprocess
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -96,7 +96,7 @@ class ImageProcessor:
         return path.name in self.special_images
 
     def run_command(self, cmd: List[str]) -> bool:
-        """Run a shell command with proper error handling"""
+        """Run a shell command and handle errors"""
         try:
             result = subprocess.run(
                 cmd,
@@ -112,213 +112,221 @@ class ImageProcessor:
 
     def find_files(self, patterns: List[str]) -> List[Path]:
         """Find files matching patterns in main directory"""
-        files: list[Path] = []
-        for pattern in patterns:
-            # Use glob with case-insensitive matching
-            for ext in [pattern, pattern.upper()]:
-                files.extend(self.main_dir.rglob(f"*.{ext}"))
-        return list(set(files))  # Remove duplicates
+        return list(
+            {file for ext in patterns for file in self.main_dir.rglob(f"*.{ext}")}
+        )
+
+    def process_files(
+        self,
+        *,
+        header: str,
+        files: List[Path],
+        no_files_message: str,
+        process_single: Callable[[Path], bool],
+        image_kind: str,
+    ):
+        """Process a list of files"""
+
+        logging.info(f"=== {header} ===")
+
+        if not files:
+            logging.info(no_files_message)
+            return
+
+        with ThreadPoolExecutor(max_workers=self.config.cpu_count) as executor:
+            results = list(executor.map(process_single, files))
+
+        successful = sum(1 for r in results if r)
+        logging.info(f"Completed converting {successful}/{len(files)} {image_kind}")
+
+    def process_single_file(
+        self,
+        *,
+        path: Path,
+        dest: Path,
+        should_skip: Callable[[], bool],
+        skip_reason: str,
+        commands: List[List[str]],
+        on_failure: Optional[Callable[[], None]] = None,
+        error_message: Optional[str] = None,
+        success_message: str,
+        fail_message: str,
+    ) -> bool:
+        """Process a single file"""
+
+        if should_skip():
+            logging.debug(f"Skipping {skip_reason}: {path}")
+            return True
+
+        success = True
+        try:
+            for cmd in commands:
+                if not self.run_command(cmd):
+                    success = False
+                    break
+        except Exception as e:
+            logging.error(f"{error_message} {path}: {e}")
+            success = False
+
+        if success:
+            logging.debug(f"{success_message}: {path} -> {dest}")
+            return True
+        else:
+            logging.error(f"{fail_message}: {path}")
+            if on_failure and dest.exists():
+                on_failure()
+            return False
 
     def convert_orphan_images(self):
         """Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)"""
-        logging.info("=== Converting orphan images to PNG ===")
 
-        files = self.find_files(["webp", "gif"])
-        if not files:
-            logging.info("No orphan images to convert")
-            return
+        def _convert_orphan_single(path: Path) -> bool:
+            dest = path.with_suffix(".png")
+            return self.process_single_file(
+                path=path,
+                dest=dest,
+                # Skip if already converted or has original
+                should_skip=lambda: any(
+                    path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]
+                ),
+                skip_reason="(has original)",
+                commands=[["magick", f"{path}[0]", "-strip", str(dest)]],
+                success_message="Converted orphan image",
+                fail_message="Failed to convert orphan image",
+            )
 
-        with ThreadPoolExecutor(max_workers=self.config.cpu_count) as executor:
-            results = list(executor.map(self._convert_orphan_single, files))
-
-        successful = sum(1 for r in results if r)
-        logging.info(f"Completed converting {successful}/{len(files)} orphan images")
-
-    def _convert_orphan_single(self, path: Path) -> bool:
-        """Convert a single orphan image"""
-
-        # Skip if already converted or has original
-        if any([path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]]):
-            logging.debug(f"Skipping (has original): {path}")
-            return True
-
-        dest = path.with_suffix(".png")
-        cmd = ["magick", f"{path}[0]", "-strip", str(dest)]
-
-        if self.run_command(cmd):
-            logging.debug(f"Converted orphan image: {path} -> {dest}")
-            return True
-        else:
-            logging.error(f"Failed to convert orphan image: {path}")
-            return False
+        self.process_files(
+            header="Converting orphan images to PNG",
+            files=self.find_files(["webp", "gif"]),
+            no_files_message="No orphan images to convert",
+            process_single=_convert_orphan_single,
+            image_kind="orphan images",
+        )
 
     def generate_thumbnails(self):
         """Generate thumbnails from originals"""
-        logging.info("=== Generating thumbnails ===")
 
-        files = self.find_files(["png", "jpg", "jpeg"])
-        if not files:
-            logging.info("No images found for thumbnail generation")
-            return
+        def _generate_thumbnail_single(path: Path) -> bool:
+            dest = self.thumb_dir / path.relative_to(self.main_dir).with_suffix(".webp")
+            return self.process_single_file(
+                path=path,
+                dest=dest,
+                # Skip if up to date and not force mode
+                should_skip=lambda: not self.force_mode
+                and dest.exists()
+                and dest.stat().st_mtime > path.stat().st_mtime,
+                skip_reason="thumbnail (up to date)",
+                commands=[
+                    [
+                        "magick",
+                        str(path),
+                        "-resize",
+                        f"{self.config.thumb_width}>",
+                        "-strip",
+                        "-quality",
+                        str(self.config.thumb_quality),
+                        str(dest),
+                    ]
+                ],
+                success_message="Generated thumbnail",
+                fail_message="Failed to generate thumbnail",
+            )
 
-        with ThreadPoolExecutor(max_workers=self.config.cpu_count) as executor:
-            results = list(executor.map(self._generate_thumbnail_single, files))
-
-        successful = sum(1 for r in results if r)
-        logging.info(f"Completed generating {successful}/{len(files)} thumbnails")
-
-    def _generate_thumbnail_single(self, path: Path) -> bool:
-        """Generate thumbnail for a single image"""
-        rel_path = path.relative_to(self.main_dir)
-        thumb_dest = self.thumb_dir / rel_path.with_suffix(".webp")
-
-        # Skip if up to date and not force mode
-        if (
-            not self.force_mode
-            and thumb_dest.exists()
-            and thumb_dest.stat().st_mtime > path.stat().st_mtime
-        ):
-            logging.debug(f"Skipping thumbnail (up to date): {path}")
-            return True
-
-        thumb_dest.parent.mkdir(parents=True, exist_ok=True)
-
-        cmd = [
-            "magick",
-            str(path),
-            "-resize",
-            f"{self.config.thumb_width}>",
-            "-strip",
-            "-quality",
-            str(self.config.thumb_quality),
-            str(thumb_dest),
-        ]
-
-        if self.run_command(cmd):
-            logging.debug(f"Generated thumbnail: {path} -> {thumb_dest}")
-            return True
-        else:
-            logging.error(f"Failed to generate thumbnail: {path}")
-            return False
+        self.process_files(
+            header="Generating thumbnails",
+            files=self.find_files(["png", "jpg", "jpeg"]),
+            no_files_message="No images found for thumbnail generation",
+            process_single=_generate_thumbnail_single,
+            image_kind="thumbnails",
+        )
 
     def process_special_images(self):
         """Process special images with custom settings"""
-        logging.info("=== Processing special images ===")
-
         if not self.special_images:
             logging.info(f"No special images defined for title: {self.title}")
             return
 
-        successful = 0
-        for image_name in self.special_images:
-            if self._process_special_single(image_name):
-                successful += 1
+        def _process_special_single(image_name: Path) -> bool:
+            path = self.main_dir / image_name
+            dest = path.with_suffix(".webp")
+            return self.process_single_file(
+                path=path,
+                dest=dest,
+                # Skip if up to date and not force mode
+                should_skip=lambda: not self.force_mode
+                and dest.exists()
+                and dest.stat().st_mtime > path.stat().st_mtime,
+                skip_reason="special (up to date)",
+                commands=[
+                    ["magick", str(path), "-strip", "-quality", "80", f"WEBP:{dest}"]
+                ],
+                success_message="Processed special image",
+                fail_message="Failed to process special image",
+            )
 
-        logging.info(
-            f"Completed processing {successful}/{len(self.special_images)} special images"
+        self.process_files(
+            header="Processing special images",
+            files=sorted([Path(path) for path in self.special_images]),
+            no_files_message="No special images defined for title",
+            process_single=_process_special_single,
+            image_kind="special images",
         )
-
-    def _process_special_single(self, image_name: str) -> bool:
-        """Process a single special image"""
-        path = self.main_dir / image_name
-        if not path.exists():
-            logging.warning(f"Special image not found: {path}")
-            return False
-
-        dest = path.with_suffix(".webp")
-
-        # Skip if up to date and not force mode
-        if (
-            not self.force_mode
-            and dest.exists()
-            and dest.stat().st_mtime > path.stat().st_mtime
-        ):
-            logging.debug(f"Skipping special (up to date): {path}")
-            return True
-
-        cmd = ["magick", str(path), "-strip", "-quality", "80", f"WEBP:{dest}"]
-
-        if self.run_command(cmd):
-            logging.debug(f"Processed special image: {path} -> {dest}")
-            return True
-        else:
-            logging.error(f"Failed to process special image: {path}")
-            return False
 
     def process_main_images(self):
         """Create optimized WebP versions (excluding special images)"""
-        logging.info("=== Creating optimized WebP versions ===")
 
-        files: list[Path] = []
-        for path in self.find_files(["png", "jpg", "jpeg"]):
-            # Skip special images in main processing
-            if not self.is_special_image(path):
-                files.append(path)
+        def _process_main_single(path: Path) -> bool:
+            dest = path.with_suffix(".webp")
+            return self.process_single_file(
+                path=path,
+                dest=dest,
+                # Skip if up to date and not force mode
+                should_skip=lambda: not self.force_mode
+                and dest.exists()
+                and dest.stat().st_mtime > path.stat().st_mtime,
+                skip_reason="(up to date)",
+                commands=[
+                    # Create WebP version with magick first
+                    [
+                        "magick",
+                        str(path),
+                        "-resize",
+                        f"{self.config.main_width}>",
+                        "-strip",
+                        "-quality",
+                        "100",
+                        str(dest),
+                    ],
+                    # Then optimize with cwebp (overwriting the same file)
+                    [
+                        "cwebp",
+                        "-q",
+                        str(self.config.main_quality),
+                        "-m",
+                        "6",
+                        "-sharp_yuv",
+                        str(dest),
+                        "-o",
+                        str(dest),
+                    ],
+                ],
+                on_failure=lambda: dest.unlink() if dest.exists() else None,
+                error_message="Error processing",
+                success_message="Processed image",
+                fail_message="Failed to process image",
+            )
 
-        if not files:
-            logging.info("No main images to process")
-            return
-
-        with ThreadPoolExecutor(max_workers=self.config.cpu_count) as executor:
-            results = list(executor.map(self._process_main_single, files))
-
-        successful = sum(1 for r in results if r)
-        logging.info(f"Completed processing {successful}/{len(files)} main images")
-
-    def _process_main_single(self, path: Path) -> bool:
-        """Process a single main image"""
-        dest = path.with_suffix(".webp")
-
-        # Skip if up to date and not force mode
-        if (
-            not self.force_mode
-            and dest.exists()
-            and dest.stat().st_mtime > path.stat().st_mtime
-        ):
-            logging.debug(f"Skipping (up to date): {path}")
-            return True
-
-        # Create WebP version with magick first
-        cmd1 = [
-            "magick",
-            str(path),
-            "-resize",
-            f"{self.config.main_width}>",
-            "-strip",
-            "-quality",
-            "100",
-            str(dest),
-        ]
-
-        # Then optimize with cwebp (overwriting the same file)
-        cmd2 = [
-            "cwebp",
-            "-q",
-            str(self.config.main_quality),
-            "-m",
-            "6",
-            "-sharp_yuv",
-            str(dest),
-            "-o",
-            str(dest),
-        ]
-
-        success = False
-        try:
-            if self.run_command(cmd1):
-                if self.run_command(cmd2):
-                    success = True
-                    logging.info(f"Processed image: {path} -> {dest}")
-        except Exception as e:
-            logging.error(f"Error processing {path}: {e}")
-            # Clean up on failure
-            if dest.exists():
-                dest.unlink()
-
-        if not success:
-            logging.error(f"Failed to process image: {path}")
-
-        return success
+        self.process_files(
+            header="Creating optimized WebP versions",
+            files=[
+                path
+                for path in self.find_files(["png", "jpg", "jpeg"])
+                if not self.is_special_image(path)
+            ],
+            no_files_message="No main images to process",
+            process_single=_process_main_single,
+            image_kind="main images",
+        )
 
     def get_size_report(self):
         """Generate size report for WebP files"""
@@ -360,13 +368,13 @@ class ImageProcessor:
         logging.info(f"Existing WebP files: {len(webp_files)}")
 
         self.convert_orphan_images()
-        print()
+        logging.info("")
         self.generate_thumbnails()
-        print()
+        logging.info("")
         self.process_special_images()
-        print()
+        logging.info("")
         self.process_main_images()
-        print()
+        logging.info("")
 
         self.get_size_report()
 
@@ -377,23 +385,25 @@ def find_all_titles() -> List[str]:
     if not public_dir.exists():
         return []
 
-    titles: list[str] = []
-    for item in public_dir.iterdir():
-        if (
-            item.is_dir()
-            and not item.name.endswith("-thumbnails")
-            and item.name not in ["index.html"]
-            and not item.name.startswith(".")
-        ):
-            titles.append(item.name)
-    return sorted(titles)
+    return sorted(
+        [
+            item.name
+            for item in public_dir.iterdir()
+            if (
+                item.is_dir()
+                and not item.name.endswith("-thumbnails")
+                and item.name not in ["index.html"]
+                and not item.name.startswith(".")
+            )
+        ]
+    )
 
 
 def process_single_title(title: str, force_mode: bool = False):
     """Process a single title"""
-    print("=" * 80)
-    print(f"Processing: {title}")
-    print("=" * 80)
+    logging.info("=" * 80)
+    logging.info(f"Processing: {title}")
+    logging.info("=" * 80)
 
     try:
         processor = ImageProcessor(title, force_mode)
@@ -453,16 +463,15 @@ def main():
 
         logging.info(f"Source images found: {source_count}")
         logging.info(f"Existing WebP files: {webp_count}")
-        print()
+        logging.info("")
 
         success_count = 0
         for title in titles:
             if process_single_title(title, args.force):
                 success_count += 1
-            print()
+            logging.info("")
 
         logging.info(f"Successfully processed {success_count}/{len(titles)} titles!")
-
     elif args.title:
         # Process single title
         try:
