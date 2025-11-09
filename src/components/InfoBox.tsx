@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { CSS } from 'styled-components/dist/types';
 
@@ -7,29 +6,7 @@ import { TIMELINE, TimelineData } from '../constants';
 import { scale } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { Link } from './Link';
-
-const ShadowOverlay = styled.div`
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-`;
-
-const InfoBoxContainer = styled.div`
-    position: fixed;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%, -40%);
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.85);
-    height: 90svh;
-    overflow-y: scroll;
-
-    @media (max-width: 768px) {
-        height: 80svh;
-    }
-`;
+import { Modal } from './Modal';
 
 type BoxProps = {
     $dir?: 'row' | 'column';
@@ -38,7 +15,6 @@ type BoxProps = {
 };
 
 const Box = styled.div<BoxProps>`
-    position: relative;
     display: flex;
     flex-direction: ${({ $dir }) => $dir || 'row'};
     flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
@@ -106,17 +82,6 @@ const SpoilerWarning = styled.div`
     text-align: center;
     color: red;
     line-height: 1;
-`;
-
-const CloseButton = styled.span`
-    position: sticky;
-    inset: 0;
-    cursor: pointer;
-    font-size: 1.5em;
-    top: ${scale(100)};
-    right: ${scale(100)};
-    z-index: 101;
-    float: right;
 `;
 
 export const InfoBoxContent = (timeline: TimelineData) => (
@@ -229,24 +194,23 @@ export const InfoBoxContent = (timeline: TimelineData) => (
     </Box>
 );
 
+const InfoBoxContainer = styled.div`
+    height: 80svh;
+`;
+
 export const InfoBox: React.FC = () => {
     const { infoBoxOpen, setInfoBoxOpen, animeTitle } = useSettings();
 
-    if (!infoBoxOpen) return null;
-
-    return ReactDOM.createPortal(
-        <>
-            <ShadowOverlay
-                className='shadowOverlay'
-                onClick={() => setInfoBoxOpen(false)}
-            />
-            <InfoBoxContainer className='infoBoxContainer'>
-                <CloseButton onClick={() => setInfoBoxOpen(false)}>
-                    &times;
-                </CloseButton>
+    return (
+        <Modal
+            isOpen={infoBoxOpen}
+            onClose={() => setInfoBoxOpen(false)}
+            title='About this site'
+            $bgColor='rgba(0, 0, 0, 0.85)'
+        >
+            <InfoBoxContainer>
                 {InfoBoxContent(TIMELINE[animeTitle].data)}
             </InfoBoxContainer>
-        </>,
-        document.querySelector('#modal')!
+        </Modal>
     );
 };

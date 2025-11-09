@@ -23,18 +23,34 @@ const AppContainer = styled.div`
 
 const App: React.FC = () => {
     const { width } = useWindowSize();
-    const { infoBoxOpen, calendarOpen, captureTimelineModalOpen, animeTitle } =
-        useSettings();
+    const {
+        infoBoxOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        animeTitleSelectorOpen,
+        animeTitle,
+    } = useSettings();
     const [renderUi, setRenderUi] = useState(true);
 
     const timeline = TIMELINE[animeTitle].data;
 
     const handleScroll = useCallback(
         (e: WheelEvent) => {
-            if (infoBoxOpen || calendarOpen || captureTimelineModalOpen) return;
+            if (
+                infoBoxOpen ||
+                calendarOpen ||
+                captureTimelineModalOpen ||
+                animeTitleSelectorOpen
+            )
+                return;
             document.body.scrollLeft += e.deltaY;
         },
-        [infoBoxOpen, calendarOpen]
+        [
+            infoBoxOpen,
+            calendarOpen,
+            captureTimelineModalOpen,
+            animeTitleSelectorOpen,
+        ]
     );
 
     useEffect(() => {
