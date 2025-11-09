@@ -5,7 +5,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
 import {
@@ -19,37 +18,8 @@ import {
     scale,
 } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
+import { HeaderButton, Modal } from './Modal';
 import { Tooltip } from './Tooltip';
-
-const ShadowOverlay = styled.div`
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-`;
-
-const ModalContainer = styled.div`
-    position: fixed;
-    z-index: 100;
-    left: 50%;
-    top: 40%;
-    background: black;
-    height: 90svh;
-    overflow-y: auto;
-    transform: translate(-50%, -40%);
-    user-select: none;
-
-    @media (max-width: 480px) {
-        height: 100svh;
-        inset: 0;
-        transform: none;
-    }
-`;
-
-const Title = styled.h2`
-    margin: 0;
-`;
 
 const CalendarGrid = styled.div`
     display: grid;
@@ -108,17 +78,6 @@ const Day = styled.a<DayProps>`
         outline: ${scale(20)} solid red;
         animation: ${hueGlow} 2s linear infinite;
     }
-`;
-
-const Header = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    inset: 0;
-    background: black;
-    padding: ${scale(100)};
-    border-bottom: ${scale(5)} solid #333;
 `;
 
 const CalendarContainer = styled.div`
@@ -240,16 +199,6 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     }
 );
 
-const Button = styled.span`
-    inset: 0;
-    cursor: pointer;
-    font-size: 1.5em;
-    top: ${scale(100)};
-    right: ${scale(100)};
-    float: right;
-    margin-left: ${scale(100)};
-`;
-
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
@@ -335,51 +284,42 @@ export const CalendarModal: React.FC = () => {
         [setCalendarOpen]
     );
 
-    if (!calendarOpen) return null;
-
-    return ReactDOM.createPortal(
-        <>
-            <ShadowOverlay
-                className='shadow'
-                onClick={() => setCalendarOpen(false)}
-            />
-            <ModalContainer className='calendarModal' ref={modalRef}>
-                <Header>
-                    <Title className='title'>Chapter Calendar</Title>
-                    <div>
-                        <Button onClick={() => setCalendarOpen(false)}>
-                            &times;
-                        </Button>
-                        <Button onClick={() => setScrolledToBottom(p => !p)}>
-                            <Tooltip
-                                placement='bottom'
-                                content={
-                                    <TooltipContent>
-                                        {`Scroll to ${
-                                            scrolledToBottom ? 'bottom' : 'top'
-                                        }`}
-                                    </TooltipContent>
-                                }
-                            >
-                                {scrolledToBottom ? '⇈' : '⇊'}
-                            </Tooltip>
-                        </Button>
-                    </div>
-                </Header>
-                <CalendarContainer>
-                    {months.map((month, monthIdx) => (
-                        <MonthComponent
-                            key={`month-${monthIdx}`}
-                            month={month}
-                            currentDate={currentDate}
-                            nextChapterDate={nextChapterDate}
-                            chapterDateMap={chapterDateMap}
-                            onDayClick={handleDayClick}
-                        />
-                    ))}
-                </CalendarContainer>
-            </ModalContainer>
-        </>,
-        document.querySelector('#modal')!
+    return (
+        <Modal
+            isOpen={calendarOpen}
+            onClose={() => setCalendarOpen(false)}
+            title='Chapter Calendar'
+            modalRef={modalRef}
+            additionalButtons={
+                <HeaderButton onClick={() => setScrolledToBottom(p => !p)}>
+                    <Tooltip
+                        placement='bottom'
+                        content={
+                            <TooltipContent>
+                                {`Scroll to ${
+                                    scrolledToBottom ? 'bottom' : 'top'
+                                }`}
+                            </TooltipContent>
+                        }
+                    >
+                        {scrolledToBottom ? '⇈' : '⇊'}
+                    </Tooltip>
+                </HeaderButton>
+            }
+            $mobileFullscreen
+        >
+            <CalendarContainer>
+                {months.map((month, monthIdx) => (
+                    <MonthComponent
+                        key={`month-${monthIdx}`}
+                        month={month}
+                        currentDate={currentDate}
+                        nextChapterDate={nextChapterDate}
+                        chapterDateMap={chapterDateMap}
+                        onDayClick={handleDayClick}
+                    />
+                ))}
+            </CalendarContainer>
+        </Modal>
     );
 };

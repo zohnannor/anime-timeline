@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
@@ -8,43 +7,27 @@ import { TIMELINE } from '../constants';
 import { getVolumeWidth, maxHeight, scale, toTitleCase } from '../helpers';
 import { useSettings } from '../providers/SettingsProvider';
 import { sum } from '../util';
+import { Modal } from './Modal';
 
-const ShadowOverlay = styled.div`
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-`;
-
-const ModalContainer = styled.div`
-    position: fixed;
-    display: flex;
-    left: 50%;
-    top: 40%;
-    transform: translate(-50%, -40%);
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.85);
-    padding: ${scale(40)} ${scale(190)};
-    max-width: 50svw;
-
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: ${scale(75)};
-    width: 80vw;
-`;
-
-const Title = styled.h2`
-    margin: 0;
-`;
-
-const Button = styled.button`
+const ConfirmButton = styled.button`
     cursor: pointer;
     background-color: black;
     color: white;
     font-size: ${scale(60)};
     border-color: white;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: ${scale(40)} ${scale(190)};
+    width: 50svw;
+    font-size: ${scale(75)};
+
+    @media (max-width: 768px) {
+        width: 80svw;
+    }
 `;
 
 export const CaptureTimelineModal: React.FC = () => {
@@ -95,20 +78,18 @@ export const CaptureTimelineModal: React.FC = () => {
         },
     });
 
-    if (!captureTimelineModalOpen) return null;
-
-    return ReactDOM.createPortal(
-        <>
-            <ShadowOverlay
-                className='shadow'
-                onClick={() => {
-                    setCaptureTimelineModalOpen(false);
-                    setLoading(false);
-                    setError(null);
-                }}
-            />
-            <ModalContainer className='captureTimelineModal'>
-                <Title>Are you sure?</Title>
+    return (
+        <Modal
+            isOpen={captureTimelineModalOpen}
+            onClose={() => {
+                setCaptureTimelineModalOpen(false);
+                setLoading(false);
+                setError(null);
+            }}
+            title='Are you sure?'
+            $bgColor='rgba(0, 0, 0, 0.85)'
+        >
+            <Container>
                 <h5>
                     This will save a huge (50MB-100MB) PNG file. It is
                     recommended to scroll to the end of the timeline to load all
@@ -117,12 +98,13 @@ export const CaptureTimelineModal: React.FC = () => {
                     16384px. If something renders incorrectly, try Chrome
                     browser.
                 </h5>
-                <Button onClick={captureTimeline}>Yes, proceed</Button>
+                <ConfirmButton onClick={captureTimeline}>
+                    Yes, proceed
+                </ConfirmButton>
                 <h6>(this might take a while)</h6>
                 {loading && <div>Loading...</div>}
                 {error && <div style={{ color: 'red' }}>{error}</div>}
-            </ModalContainer>
-        </>,
-        document.querySelector('#modal')!
+            </Container>
+        </Modal>
     );
 };
