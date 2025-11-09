@@ -68,7 +68,10 @@ export const OPM_TIMELINE: Timeline = {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
                 scale: 1.2,
-                titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
+                titleProcessor: (title, n) =>
+                    `${title}\n(Episode ${
+                        n <= 12 ? n : n <= 12 + 12 ? n - 12 : n - 12 - 12
+                    })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
                 width: getEpisodeWidth,
@@ -2325,6 +2328,18 @@ export const OPM_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 88, to: 89 },
                     },
+                    {
+                        title: () => 'Organism Limits',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 89, to: 90 },
+                    },
+                    {
+                        title: () => 'Counterattack Signal',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 90, to: 92 },
+                    },
                 ],
             },
             {
@@ -2339,6 +2354,9 @@ export const OPM_TIMELINE: Timeline = {
             79: 7,
             81: 41,
             83: 57,
+            89: 30,
+            90: 71,
+            92: 36,
         },
         wikiBase: 'https://onepunchman.fandom.com/wiki/',
         smallImages: {
