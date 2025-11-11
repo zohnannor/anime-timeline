@@ -2340,6 +2340,12 @@ export const OPM_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 90, to: 92 },
                     },
+                    {
+                        title: () => 'Monster King',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 92, to: 94 },
+                    },
                 ],
             },
             {
