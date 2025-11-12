@@ -227,7 +227,7 @@ export const TimelineSectionItemComponent = ({
     const offset = 'offset' in entity ? entity.offset : null;
     const itemTitle = type === 'chapter' ? itemNumber : title;
 
-    const hovered = hoveredItem(itemNumber);
+    const hovered = hoveredItem();
     const titleVisible = showTitles || hovered;
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
@@ -299,7 +299,7 @@ export const TimelineSectionItemComponent = ({
             $width={itemWidth}
             $height={height}
             $crossLinesVisible={hovered}
-            {...hoverHandlers(itemNumber)}
+            {...hoverHandlers()}
             $focusable={focusable}
             tabIndex={focusable ? -1 : undefined}
         >
