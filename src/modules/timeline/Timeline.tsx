@@ -87,7 +87,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     colorInterpolation,
     variant,
 }) => {
-    const [hoveredSegment, hoverHandlers] = useHover<string>();
+    const [hoveredSegment, hoverHandlers] = useHover();
     const { setCalendarOpen } = useSettings();
     const lastClickedChapter = useRef<string | null>(null);
 

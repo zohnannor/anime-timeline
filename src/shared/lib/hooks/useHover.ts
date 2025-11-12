@@ -1,55 +1,65 @@
-import { useState } from 'react';
+import { useId } from 'react';
 
-import { isMobileDevice } from '@shared/lib/util';
+import { useHoverContext } from '../../../providers/TouchHoverProvider';
+import { isMobileDevice } from '../util';
 
-type Comparator<T> = (_item: T) => boolean;
+type Comparator = (item?: string) => boolean;
 
-type Handlers<T> = (_item: T) => {
-    onMouseOver: (_ev: React.MouseEvent) => void;
-    onMouseOut: () => void;
-};
+type Handlers = (item?: string) =>
+    | {
+          onMouseOver: (e: React.MouseEvent) => void;
+          onMouseOut: () => void;
+      }
+    | {
+          onTouchStart: () => void;
+          onTouchEnd: () => void;
+          'data-hover-item': string;
+      };
 
-type UseHover<T> = [Comparator<T>, Handlers<T>];
+type UseHover = [Comparator, Handlers];
 
-const useHover = <T extends string | number>(): UseHover<T> => {
-    const [hoveredItem, setHoveredItem] = useState<T | null>(null);
+const useHover = (): UseHover => {
+    const { hoveredItem, setIsLongPressMode, touchTimer, setHoveredItem } =
+        useHoverContext();
+    const elementId = useId();
 
-    const hovered = (item: T) => hoveredItem === item;
+    const hovered = () => hoveredItem === elementId;
 
-    if (isMobileDevice()) {
-        const dummy = () => {
-            /* empty */
-        };
-        return [
-            () => false,
-            () => ({
-                onMouseOver: dummy,
-                onMouseOut: dummy,
-            }),
-        ];
-    }
+    const handlers = () =>
+        isMobileDevice() ?
+            {
+                onTouchStart: () => {
+                    clearTimeout(touchTimer.current ?? undefined);
 
-    const handlers = (item: T) => ({
-        onMouseOver: (ev: React.MouseEvent) => {
-            if (item) {
-                setHoveredItem(item);
+                    touchTimer.current = setTimeout(() => {
+                        navigator.vibrate && navigator.vibrate(25);
+                        setHoveredItem(elementId);
+                        setIsLongPressMode(true);
+                        document.body.style.overflow = 'hidden';
+                    }, 200);
+                },
+                onTouchEnd: () => {
+                    clearTimeout(touchTimer.current ?? undefined);
+                    touchTimer.current = null;
+                    setHoveredItem(null);
+                    setIsLongPressMode(false);
+                    document.body.style.overflow = '';
+                },
+                onContextMenu: (e: React.TouchEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                },
+                'data-hover-item': elementId,
             }
-            ev.stopPropagation();
-        },
-        onMouseOut: () => setHoveredItem(null),
-    });
+        :   {
+                onMouseOver: (e: React.MouseEvent) => {
+                    setHoveredItem(elementId);
+                    e.stopPropagation();
+                },
+                onMouseOut: () => setHoveredItem(null),
+            };
 
     return [hovered, handlers];
-};
-
-type UseSimpleHover<T> = [
-    () => ReturnType<Comparator<T>>,
-    () => ReturnType<Handlers<T>>,
-];
-
-export const useSimpleHover = (): UseSimpleHover<number> => {
-    const [hovered, handlers] = useHover<number>();
-    return [() => hovered(1), () => handlers(1)];
 };
 
 export default useHover;
