@@ -148,8 +148,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         key={idx}
                         className={`frame-${variant}`}
                         $width={totalWidth}
-                        $crossLinesVisible={hoveredSegment(idx + 1)}
-                        {...hoverHandlers(idx + 1)}
+                        $crossLinesVisible={hoveredSegment()}
+                        {...hoverHandlers()}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
                             variant === 'days'

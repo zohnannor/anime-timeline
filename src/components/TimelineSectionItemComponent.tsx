@@ -238,7 +238,7 @@ export const TimelineSectionItemComponent: React.FC<
     const processedTitle = titleProcessor(title, itemNumber);
     const itemTitle = type === 'chapter' ? processedNumber : processedTitle;
 
-    const hovered = hoveredItem(itemNumber);
+    const hovered = hoveredItem();
     const titleVisible = showTitles || hovered;
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
@@ -312,7 +312,7 @@ export const TimelineSectionItemComponent: React.FC<
             $height={height}
             key={cover || itemNumber}
             $crossLinesVisible={hovered}
-            {...hoverHandlers(itemNumber)}
+            {...hoverHandlers()}
             $focusable={focusable}
             tabIndex={focusable ? -1 : undefined}
         >
