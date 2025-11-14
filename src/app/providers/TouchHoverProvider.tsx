@@ -37,22 +37,13 @@ export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
                 touch.clientX,
                 touch.clientY,
             );
-            let foundItem: string | null = null;
-
-            let currentElement = element;
-            while (currentElement) {
-                const hoverItemAttr =
-                    currentElement.getAttribute('data-hover-item');
-                if (hoverItemAttr) {
-                    foundItem = hoverItemAttr;
-                    break;
-                }
-                currentElement = currentElement.parentElement;
-            }
+            const foundItem = element
+                ?.closest('[data-hover-item]')
+                ?.getAttribute('data-hover-item');
 
             if (foundItem !== hoveredItem) {
-                setHoveredItem(foundItem);
-                navigator.vibrate(25);
+                setHoveredItem(foundItem ?? null);
+                navigator.vibrate(5);
             }
         };
 

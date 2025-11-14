@@ -13,6 +13,7 @@ type Handlers<T> = (_item?: T) =>
     | {
           onTouchStart: () => void;
           onTouchEnd: () => void;
+          onContextMenu: (_ev: React.MouseEvent) => void;
           'data-hover-item': string;
       };
 
@@ -30,9 +31,7 @@ const useHover = <T extends string | number>(): UseHover<T> => {
             {
                 onTouchStart: () => {
                     clearTimeout(touchTimer.current ?? undefined);
-
                     touchTimer.current = setTimeout(() => {
-                        navigator.vibrate(25);
                         setHoveredItem(elementId);
                         setIsLongPressMode(true);
                         document.body.style.overflow = 'hidden';
@@ -45,7 +44,7 @@ const useHover = <T extends string | number>(): UseHover<T> => {
                     setIsLongPressMode(false);
                     document.body.style.overflow = '';
                 },
-                onContextMenu: (ev: React.TouchEvent) => {
+                onContextMenu: (ev: React.MouseEvent) => {
                     ev.preventDefault();
                     ev.stopPropagation();
                 },
