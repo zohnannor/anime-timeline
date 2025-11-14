@@ -1,5 +1,6 @@
 import {
     createContext,
+    PropsWithChildren,
     useCallback,
     useContext,
     useEffect,
@@ -9,13 +10,13 @@ import {
 
 import { isMobileDevice } from '../util';
 
-interface HoverContextType {
+type HoverContextType = {
     hoveredItem: string | null;
     setHoveredItem: (item: string | null) => void;
     isLongPressMode: boolean;
     setIsLongPressMode: (mode: boolean) => void;
     touchTimer: React.RefObject<NodeJS.Timeout | null>;
-}
+};
 
 const TouchHoverContext = createContext<HoverContextType>({
     hoveredItem: null,
@@ -27,11 +28,7 @@ const TouchHoverContext = createContext<HoverContextType>({
 
 export const useHoverContext = () => useContext(TouchHoverContext);
 
-interface HoverProviderProps {
-    children: React.ReactNode;
-}
-
-export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
+export const TouchHoverProvider: React.FC<PropsWithChildren> = ({
     children,
 }) => {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -62,8 +59,8 @@ export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
                 ?.getAttribute('data-hover-item');
 
             if (foundItem !== hoveredItem) {
-                setHoveredItem(foundItem ?? null);
                 navigator.vibrate && navigator.vibrate(5);
+                setHoveredItem(foundItem ?? null);
             }
         },
         [isLongPressMode, hoveredItem]
