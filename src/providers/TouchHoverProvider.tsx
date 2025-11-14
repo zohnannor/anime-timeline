@@ -43,6 +43,8 @@ export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
             if (!isLongPressMode) {
                 clearTimeout(touchTimer.current ?? undefined);
                 touchTimer.current = null;
+                setHoveredItem(null);
+                document.body.style.overflow = '';
                 return;
             }
 
@@ -55,22 +57,13 @@ export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
                 touch.clientX,
                 touch.clientY
             );
-            let foundItem: string | null = null;
-
-            let currentElement = element;
-            while (currentElement) {
-                const hoverItemAttr =
-                    currentElement.getAttribute('data-hover-item');
-                if (hoverItemAttr) {
-                    foundItem = hoverItemAttr;
-                    break;
-                }
-                currentElement = currentElement.parentElement;
-            }
+            let foundItem = element
+                ?.closest('[data-hover-item]')
+                ?.getAttribute('data-hover-item');
 
             if (foundItem !== hoveredItem) {
-                setHoveredItem(foundItem);
-                navigator.vibrate && navigator.vibrate(25);
+                setHoveredItem(foundItem ?? null);
+                navigator.vibrate && navigator.vibrate(5);
             }
         },
         [isLongPressMode, hoveredItem]
