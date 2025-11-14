@@ -3,9 +3,9 @@ import { useId } from 'react';
 import { useHoverContext } from '../providers/TouchHoverProvider';
 import { isMobileDevice } from '../util';
 
-type Comparator = (item?: string) => boolean;
+type Comparator = () => boolean;
 
-type Handlers = (item?: string) =>
+type Handlers = () =>
     | {
           onMouseOver: (e: React.MouseEvent) => void;
           onMouseOut: () => void;
@@ -13,6 +13,7 @@ type Handlers = (item?: string) =>
     | {
           onTouchStart: () => void;
           onTouchEnd: () => void;
+          onContextMenu: (e: React.MouseEvent) => void;
           'data-hover-item': string;
       };
 
@@ -30,9 +31,7 @@ const useHover = (): UseHover => {
             ? {
                   onTouchStart: () => {
                       clearTimeout(touchTimer.current ?? undefined);
-
                       touchTimer.current = setTimeout(() => {
-                          navigator.vibrate && navigator.vibrate(25);
                           setHoveredItem(elementId);
                           setIsLongPressMode(true);
                           document.body.style.overflow = 'hidden';
@@ -45,7 +44,7 @@ const useHover = (): UseHover => {
                       setIsLongPressMode(false);
                       document.body.style.overflow = '';
                   },
-                  onContextMenu: (e: React.TouchEvent) => {
+                  onContextMenu: (e: React.MouseEvent) => {
                       e.preventDefault();
                       e.stopPropagation();
                   },
