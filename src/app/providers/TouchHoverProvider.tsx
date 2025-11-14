@@ -1,13 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react';
 
 import { isMobileDevice } from '@shared/lib/util';
 import { TouchHoverContext } from '@shared/contexts/TouchHoverContext';
 
-type HoverProviderProps = {
-    children: React.ReactNode;
-};
-
-export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
+export const TouchHoverProvider: React.FC<PropsWithChildren> = ({
     children,
 }) => {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -42,8 +38,8 @@ export const TouchHoverProvider: React.FC<HoverProviderProps> = ({
                 ?.getAttribute('data-hover-item');
 
             if (foundItem !== hoveredItem) {
-                setHoveredItem(foundItem ?? null);
                 navigator.vibrate(5);
+                setHoveredItem(foundItem ?? null);
             }
         };
 
