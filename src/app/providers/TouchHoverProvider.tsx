@@ -29,11 +29,8 @@ export const TouchHoverProvider: React.FC<PropsWithChildren> = ({
                 return;
             }
 
-            const element = document.elementFromPoint(
-                touch.clientX,
-                touch.clientY,
-            );
-            const foundItem = element
+            const foundItem = document
+                .elementFromPoint(touch.clientX, touch.clientY)
                 ?.closest('[data-hover-item]')
                 ?.getAttribute('data-hover-item');
 
