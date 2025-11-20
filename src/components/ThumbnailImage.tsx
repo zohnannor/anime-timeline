@@ -18,7 +18,7 @@ type ThumbnailProps = {
 const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
     ({ $thumbnail }) => ({
         style: {
-            backgroundImage: `url(${$thumbnail})`,
+            backgroundImage: `url("${$thumbnail}")`,
         },
     })
 )`
@@ -26,7 +26,7 @@ const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
     inset: 0;
     background-size: cover;
     background-position: center;
-    filter: blur(${scale(10)});
+    filter: blur(${scale(20)});
     background-position: ${({ $offsetX, $offsetY }) =>
         `${scale($offsetX ?? 0)}
          ${scale($offsetY ?? 0)}`};
@@ -65,16 +65,6 @@ export const ThumbnailImage: React.FC<
 
     return (
         <>
-            {loading && (
-                <Thumbnail
-                    className='thumbnail'
-                    $thumbnail={thumbnailSrc}
-                    $offsetX={$offsetX ? -$offsetX : $offsetX}
-                    $offsetY={$offsetY ? -$offsetY : $offsetY}
-                    $defaultPosition={$defaultPosition}
-                    draggable={false}
-                />
-            )}
             <Image
                 className='thumbnailImage'
                 src={realSrc}
@@ -88,6 +78,16 @@ export const ThumbnailImage: React.FC<
                 draggable={false}
                 {...rest}
             />
+            {loading && (
+                <Thumbnail
+                    className='thumbnail'
+                    $thumbnail={thumbnailSrc}
+                    $offsetX={$offsetX ? -$offsetX : $offsetX}
+                    $offsetY={$offsetY ? -$offsetY : $offsetY}
+                    $defaultPosition={$defaultPosition}
+                    draggable={false}
+                />
+            )}
         </>
     );
 };
