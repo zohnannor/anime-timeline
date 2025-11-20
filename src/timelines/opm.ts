@@ -2346,6 +2346,12 @@ export const OPM_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 92, to: 94 },
                     },
+                    {
+                        title: () => 'Motley Heroes',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 95, to: 96 },
+                    },
                 ],
             },
             {
