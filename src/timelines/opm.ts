@@ -17,7 +17,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 4;
-const CHAPTERS_TOTAL = 223;
+const CHAPTERS_TOTAL = 224;
 const VOLUMES_TOTAL = 43;
 const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
@@ -1726,6 +1726,12 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Just Getting Started',
                         date: 'November 6, 2025',
                         pages: 21,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'A New...',
+                        date: 'November 20, 2025',
+                        pages: 14,
                         cover: null,
                     },
                 ],
