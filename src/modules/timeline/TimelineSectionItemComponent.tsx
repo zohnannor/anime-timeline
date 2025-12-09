@@ -22,7 +22,6 @@ type SectionItemCoverProps = {
     $titleFontSize: number;
     $fit: CSS.Property.ObjectFit;
     $backgroundColor: CSS.Property.Color;
-    $showBackgroundCover?: boolean;
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
