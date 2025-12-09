@@ -58,6 +58,16 @@ SPECIAL_IMAGES: Dict[str, set[str]] = {
     "deathnote": {
         "DEATH_NOTE_anime.png",
     },
+    "jojo": {
+        "Season_1_1.png",
+        "Season_1_2.png",
+        "Season_2_1.png",
+        "Season_2_2.png",
+        "Season_3.png",
+        "Season_4.png",
+        "Season_5.png",
+        "Season_6.png",
+    }
 }
 
 

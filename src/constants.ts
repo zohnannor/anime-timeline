@@ -105,7 +105,6 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
     fit?: CSS.Property.ObjectFit;
     defaultCoverPosition?: CSS.Property.ObjectPosition;
-    showBackgroundCover?: boolean;
     backgroundColor?: 'black' | 'white';
     scale?: number;
     sidewaysText?: boolean;

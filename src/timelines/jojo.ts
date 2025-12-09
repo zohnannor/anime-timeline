@@ -13,7 +13,7 @@ const SEASON_HEIGHT = 1579;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
-const ARC_HEIGHT = VOLUME_HEIGHT * 0.3;
+const ARC_HEIGHT = VOLUME_HEIGHT * 0.25;
 
 const VOLUMES_TOTAL = 138;
 const SAGAS_TOTAL = 1;
@@ -30,10 +30,8 @@ export const JOJO_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
-            sectionLink: 'Chainsaw Man (Anime)',
-            wikiLink: season => season,
-            fit: 'contain',
-            showBackgroundCover: true,
+            sectionLink: "JoJo's_Bizarre_Adventure_(Season)#Phantom_Blood",
+            wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -42,7 +40,7 @@ export const JOJO_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
+                sectionLink: "JoJo's_Bizarre_Adventure_(Season)#Phantom_Blood",
                 wikiLink: (_, n) => `Episode_${n}`,
             },
         },
@@ -77,7 +75,7 @@ export const JOJO_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
+            sectionLink: "List_of_JoJo's_Bizarre_Adventure_Chapters",
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
         },
@@ -88,7 +86,7 @@ export const JOJO_TIMELINE: Timeline = {
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
+            sectionLink: "List_of_JoJo's_Bizarre_Adventure_Chapters",
             wikiLink: (_, n) => `Volume_${n}`,
         },
     },
@@ -6971,7 +6969,7 @@ export const JOJO_TIMELINE: Timeline = {
             {
                 title: 'Phantom Blood',
                 cover: () => 'Season_1_1',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 2200 },
                 chapters: { from: 1, to: 44 },
                 episodes: [
                     {
@@ -7033,49 +7031,49 @@ export const JOJO_TIMELINE: Timeline = {
             {
                 title: 'Battle Tendency',
                 cover: () => 'Season_1_2',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1300 },
                 chapters: { from: 45, to: 113 },
                 episodes: [],
             },
             {
                 title: 'Stardust Crusaders - Road to Egypt',
                 cover: () => 'Season_2_1',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1100 },
                 chapters: { from: 114, to: 182 },
                 episodes: [],
             },
             {
                 title: 'Stardust Crusaders - Battle in Egypt',
                 cover: () => 'Season_2_2',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1000 },
                 chapters: { from: 183, to: 265 },
                 episodes: [],
             },
             {
                 title: 'Diamond is Unbreakable',
                 cover: () => 'Season_3',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 7500 },
                 chapters: { from: 266, to: 439 },
                 episodes: [],
             },
             {
                 title: 'Golden Wind',
                 cover: () => 'Season_4',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 1000 },
                 chapters: { from: 440, to: 594 },
                 episodes: [],
             },
             {
                 title: 'Stone Ocean',
                 cover: () => 'Season_5',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 4100 },
                 chapters: { from: 595, to: 752 },
                 episodes: [],
             },
             {
                 title: 'Steel Ball Run',
                 cover: () => 'Season_6',
-                offset: { x: 0, y: 0 },
+                offset: { x: 0, y: 21500 },
                 chapters: { from: 753, to: 847 },
                 episodes: [],
             },
