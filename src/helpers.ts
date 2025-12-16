@@ -149,36 +149,42 @@ const chaptersWithPagesSplit = (timeline: TimelineData) =>
             return [ci, [split, c.pages - split]] as const;
         });
 
+const getEpisodePages = (timeline: TimelineData, idx: number) => {
+    const chaptersSplit = chaptersWithPagesSplit(timeline);
+    const chaptersTotal = chapters(timeline).length;
+
+    const [start, end] = timeline.seasons
+        .flatMap(season => season.episodes ?? [])
+        .map(
+            ({ chapters: { from, to } }) =>
+                [from - 1, to ?? chaptersTotal] as const
+        )[idx]!;
+
+    return range(start, end).map(ci => {
+        const [_, [split, rest]] = chaptersSplit[ci]!;
+        const pagesInEpisode =
+            split !== 0 && ci === end - 1
+                ? split
+                : rest !== 0 && ci === start
+                ? rest
+                : split + rest;
+        return [pagesInEpisode, ci] as const;
+    });
+};
+
 export const getEpisodeWidth: WidthHelper = (
     timeline,
     idx,
     unboundedChapterWidth
 ) => {
-    const chaptersSplit = chaptersWithPagesSplit(timeline);
-    const chaptersTotal = chapters(timeline).length;
-
-    return timeline.seasons
-        .flatMap(season => season.episodes ?? [])
-        .map(({ chapters: { from, to } }) => {
-            return [from - 1, to ?? chaptersTotal] as const;
+    return sum(
+        getEpisodePages(timeline, idx).map(([pagesInEpisode, ci]) => {
+            return (
+                pagesInEpisode *
+                getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+            );
         })
-        .map(([start, end]) =>
-            range(start, end).map(ci => {
-                const [_, [split, rest]] = chaptersSplit[ci]!;
-                return split !== 0 && ci === end - 1
-                    ? split *
-                          getChapterPageWidth(
-                              timeline,
-                              ci,
-                              unboundedChapterWidth
-                          )
-                    : rest !== 0 && ci === start
-                    ? rest *
-                      getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-                    : getChapterWidth(timeline, ci, unboundedChapterWidth);
-            })
-        )
-        .map(sum)[idx]!;
+    );
 };
 
 export const getSeasonWidth: WidthHelper = (
@@ -190,6 +196,7 @@ export const getSeasonWidth: WidthHelper = (
     const startIdx = from - 1;
     const endIdx = (to ?? chapters(timeline).length) - 1;
 
+    // TODO: rewrite the same way as getEpisodeWidth?
     return sum(
         chaptersWithPagesSplit(timeline)
             .slice(startIdx, endIdx + 1)
