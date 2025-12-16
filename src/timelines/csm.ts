@@ -16,7 +16,7 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
-const VOLUMES_TOTAL = 23;
+const VOLUMES_TOTAL = 24;
 const SAGAS_TOTAL = 2;
 const SEASONS_TOTAL = 4;
 
@@ -1571,6 +1571,18 @@ export const CSM_TIMELINE: Timeline = {
                     },
                 ],
             },
+            {
+                title: volumeTitle,
+                cover: null,
+                chapters: [
+                    {
+                        title: () => 'Ultimate Armor',
+                        date: 'December 17, 2025',
+                        pages: 15,
+                        cover: null,
+                    },
+                ],
+            },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
         sagas: [
             {
@@ -1665,7 +1677,8 @@ export const CSM_TIMELINE: Timeline = {
                     },
                     {
                         title: 'Current',
-                        cover: null,
+                        cover: "Pochita_surrounded_by_Yoru's_Devil_Army",
+                        offset: { x: 0, y: 0 },
                         chapters: { from: 191 },
                     },
                 ],

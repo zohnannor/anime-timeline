@@ -22,7 +22,24 @@ class Config:
 
 
 SPECIAL_IMAGES: Dict[str, set[str]] = {
-    "csm": {"Chainsaw_Man_Anime_Key_Visual_1.png"},
+    "csm": {
+        "Chainsaw_Man_Anime_Key_Visual_1.png",
+        "Volume_01_Pochita_Sketch_2.png",
+        "Denji_fighting_zombies.png",
+        "Denji_attacking_the_Bat_Devil.png",
+        "Denji_fighting_the_Eternity_Devil.png",
+        "Denji_engaging_the_Katana_Man.png",
+        "Denji_engaging_Reze.png",
+        "Denji_engaging_Santa_Claus.png",
+        "Chainsaw_vs_Gun_Fiend.png",
+        "Hybrids_attacking_Chainsaw.png",
+        "Asa_vs_Yuko_as_Justice_Devil.png",
+        "Dating_Denji_arc_infobox_picture.png",
+        "Denji_tears_through_the_Falling_Devil.png",
+        "Denji_and_Miri_impale_each_other.png",
+        "Chainsaw_vs_Aging.png",
+        "Pochita_surrounded_by_Yoru's_Devil_Army.png",
+    },
     "berserk": {
         "Berserk_Anime_Box_Art.png",
         "V3-Cover_Art-Manga.png",
