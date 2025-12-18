@@ -17,8 +17,8 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 4;
-const CHAPTERS_TOTAL = 225;
-const VOLUMES_TOTAL = 43;
+const CHAPTERS_TOTAL = 226;
+const VOLUMES_TOTAL = 42;
 const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
 
@@ -1608,12 +1608,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 15,
                         cover: null,
                     },
-                ],
-            },
-            {
-                title: volumeTitle,
-                cover: null,
-                chapters: [
                     {
                         title: () => 'Divine Beasts',
                         date: 'April 24, 2025',
@@ -1638,18 +1632,18 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 16,
                         cover: null,
                     },
-                    {
-                        title: () => 'Tough Guy',
-                        date: 'September 19, 2024',
-                        pages: 15,
-                        cover: null,
-                    },
                 ],
             },
             {
                 title: volumeTitle,
                 cover: null,
                 chapters: [
+                    {
+                        title: () => 'Tough Guy',
+                        date: 'September 19, 2024',
+                        pages: 15,
+                        cover: null,
+                    },
                     {
                         title: () => 'Presence',
                         date: 'October 3, 2024',
@@ -1680,12 +1674,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 17,
                         cover: null,
                     },
-                ],
-            },
-            {
-                title: volumeTitle,
-                cover: null,
-                chapters: [
                     {
                         title: () => "After All, We're Human",
                         date: 'August 14, 2025',
@@ -1704,6 +1692,12 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 17,
                         cover: null,
                     },
+                ],
+            },
+            {
+                title: volumeTitle,
+                cover: null,
+                chapters: [
                     {
                         title: () => 'What You Are',
                         date: 'September 25, 2025',
@@ -1738,6 +1732,12 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Major Promotion',
                         date: 'December 4, 2025',
                         pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'New Faction',
+                        date: 'December 18, 2025',
+                        pages: 17,
                         cover: null,
                     },
                 ],
