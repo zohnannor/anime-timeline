@@ -2364,6 +2364,36 @@ export const OPM_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 95, to: 96 },
                     },
+                    {
+                        title: () => 'Counterstrike',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 96, to: 98 },
+                    },
+                    {
+                        title: () => 'Ninja Tale',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 98, to: 100 },
+                    },
+                    {
+                        title: () => 'Brave Child',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 101, to: 101 },
+                    },
+                    {
+                        title: () => 'Immortal Bloodbath',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 102, to: 108 },
+                    },
+                    // {
+                    //     title: () => 'Top Dragons',
+                    //     cover: episodeCover,
+                    //     offset: { x: 0, y: 0 },
+                    //     chapters: { from: 96, to: 98 },
+                    // },
                 ],
             },
             {
@@ -2381,6 +2411,8 @@ export const OPM_TIMELINE: Timeline = {
             89: 30,
             90: 71,
             92: 36,
+            96: 91,
+            98: 15,
         },
         wikiBase: 'https://onepunchman.fandom.com/wiki/',
         smallImages: {
