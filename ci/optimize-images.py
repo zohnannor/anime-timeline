@@ -39,6 +39,7 @@ SPECIAL_IMAGES: Dict[str, set[str]] = {
         "Denji_and_Miri_impale_each_other.png",
         "Chainsaw_vs_Aging.png",
         "Pochita_surrounded_by_Yoru's_Devil_Army.png",
+        "Chainsaw_Man_TV_Anime_Key_Visual_2.png",
     },
     "berserk": {
         "Berserk_Anime_Box_Art.png",
