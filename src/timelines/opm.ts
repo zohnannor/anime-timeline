@@ -36,7 +36,9 @@ const episodeCover = (_: TimelineData, idx: number) =>
         ? `Episode${idx + 1}_Pics`
         : idx <= 23
         ? `Season2Ep${idx - 11}pics`
-        : `OPMS3Ep${idx - 11 - 11 - 1}`;
+        : idx <= 28
+        ? `OPMS3Ep${idx - 11 - 11 - 1}`
+        : `One-Punch_Man_Episode_${idx + 1}`;
 const chapterLink = (title: string, n: number): string =>
     n <= 118
         ? `Chapter_${n}`
@@ -2326,7 +2328,7 @@ export const OPM_TIMELINE: Timeline = {
                 title: 'Season Three',
                 cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
                 offset: { x: 0, y: 0 },
-                chapters: { from: 86, to: 141 },
+                chapters: { from: 86, to: 116 },
                 episodes: [
                     {
                         title: () => 'The Strategy Meeting',
@@ -2374,30 +2376,36 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Ninja Tale',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 98, to: 100 },
+                        chapters: { from: 98, to: 101 },
                     },
                     {
                         title: () => 'Brave Child',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 101, to: 101 },
+                        chapters: { from: 101, to: 103 },
                     },
                     {
                         title: () => 'Immortal Bloodbath',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 102, to: 108 },
+                        chapters: { from: 104, to: 108 },
                     },
-                    // {
-                    //     title: () => 'Top Dragons',
-                    //     cover: episodeCover,
-                    //     offset: { x: 0, y: 0 },
-                    //     chapters: { from: 96, to: 98 },
-                    // },
+                    {
+                        title: () => 'Top Dragons',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 109, to: 112 },
+                    },
+                    {
+                        title: () => 'Ultimate Lifeform',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 113, to: 116 },
+                    },
                 ],
             },
             {
-                chapters: { from: 142, to: CHAPTERS_TOTAL },
+                chapters: { from: 117, to: CHAPTERS_TOTAL },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {
@@ -2413,6 +2421,7 @@ export const OPM_TIMELINE: Timeline = {
             92: 36,
             96: 91,
             98: 15,
+            101: 11,
         },
         wikiBase: 'https://onepunchman.fandom.com/wiki/',
         smallImages: {
