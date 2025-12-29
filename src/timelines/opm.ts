@@ -16,7 +16,7 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
-const SEASONS_TOTAL = 4;
+const SEASONS_TOTAL = 5;
 const CHAPTERS_TOTAL = 226;
 const VOLUMES_TOTAL = 42;
 const VOLUMES_EXTRA = 6;
@@ -2325,7 +2325,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: 'Season Three',
+                title: 'Season Three - Part 1',
                 cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
                 offset: { x: 0, y: 0 },
                 chapters: { from: 86, to: 116 },
@@ -2394,18 +2394,29 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Top Dragons',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 109, to: 112 },
+                        chapters: { from: 109, to: 111 },
                     },
                     {
                         title: () => 'Ultimate Lifeform',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 113, to: 116 },
+                        chapters: { from: 112, to: 116 },
                     },
                 ],
             },
             {
-                chapters: { from: 117, to: CHAPTERS_TOTAL },
+                // title: 'Season Three - Part 2',
+                // cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
+                // offset: { x: 0, y: 0 },
+                chapters: { from: 117, to: 161 },
+                // episodes: [],
+            },
+            {
+                // title: 'Season Three - Part 2',
+                // cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
+                // offset: { x: 0, y: 0 },
+                chapters: { from: 162, to: CHAPTERS_TOTAL },
+                // episodes: [],
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {
