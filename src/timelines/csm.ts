@@ -1587,6 +1587,12 @@ export const CSM_TIMELINE: Timeline = {
                         pages: 15,
                         cover: null,
                     },
+                    {
+                        title: () => 'Barf, Motorcycle, Hell',
+                        date: 'January 7, 2026',
+                        pages: 15,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
@@ -1779,7 +1785,7 @@ export const CSM_TIMELINE: Timeline = {
                 episodes: [],
             },
             {
-                title: 'Chainsaw Man – Assassins Arc',
+                title: 'Chainsaw Man: Assassins Arc',
                 cover: () => 'Chainsaw_Man_TV_Anime_Key_Visual_2',
                 offset: { x: 0, y: 5100 },
                 chapters: { from: 53, to: 97 },
