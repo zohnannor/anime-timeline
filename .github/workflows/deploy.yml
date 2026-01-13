@@ -57,7 +57,11 @@ jobs:
               id: cache-key
               run: |
                   # Generate a cache key based on the image files and script
-                  echo "key=webp-cache-$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | sort | xargs sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+                  if [ "$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)" -eq 0 ]; then
+                    echo "key=webp-cache-no-images" >> $GITHUB_OUTPUT
+                  else
+                    echo "key=webp-cache-$(find public \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+                  fi
 
             - name: Restore WebP cache
               uses: actions/cache/restore@v4
