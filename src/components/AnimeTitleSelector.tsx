@@ -79,7 +79,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
               pageCount(TIMELINE[titleA].data)
             : sorting === 'recently updated'
             ? recentlyUpdated(titleB) - recentlyUpdated(titleA)
-            : -1
+            : 0
     );
 
     const nextSorting = {
