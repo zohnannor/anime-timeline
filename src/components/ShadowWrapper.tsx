@@ -17,7 +17,7 @@ const Shadow = styled.div<ShadowProps>`
 `;
 
 export const withShadow = <P,>(
-    StyledComponent: React.ComponentType<P>
+    StyledComponent: React.ComponentType<P>,
 ): React.FC<P & ShadowProps> => {
     return ({
         children,

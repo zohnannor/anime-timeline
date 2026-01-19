@@ -62,16 +62,16 @@ const Day = styled.a<DayProps>`
     height: ${scale(200)};
 
     ${({ $isToday, $background, $isChapter, $isNextChapter }) =>
-        $isNextChapter
-            ? css`
-                  border: ${scale(15)} solid ${$isChapter ? `red` : $background};
-                  animation: ${hueGlow} 2s linear infinite;
-              `
-            : $isToday
-            ? css`
-                  border: ${scale(15)} solid ${$isChapter ? `red` : $background};
-              `
-            : null}
+        $isNextChapter ?
+            css`
+                border: ${scale(15)} solid ${$isChapter ? `red` : $background};
+                animation: ${hueGlow} 2s linear infinite;
+            `
+        : $isToday ?
+            css`
+                border: ${scale(15)} solid ${$isChapter ? `red` : $background};
+            `
+        :   null}
 
     &:focus {
         z-index: 1;
@@ -119,7 +119,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         const monthColor = interpolateColor(
             (monthNumber + 1) % 12,
             [0, 11],
-            MONTHS_GRADIENT
+            MONTHS_GRADIENT,
         ).toString(16);
 
         const days: React.JSX.Element[] = [];
@@ -190,13 +190,13 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                             >
                                 {day}
                             </DayName>
-                        )
+                        ),
                     )}
                     {days}
                 </CalendarGrid>
             </Month>
         );
-    }
+    },
 );
 
 export const CalendarModal: React.FC = () => {
@@ -253,15 +253,16 @@ export const CalendarModal: React.FC = () => {
         return months;
     };
 
-    const furthestDate = nextChapterDate
-        ? currentDate > nextChapterDate
-            ? currentDate
-            : nextChapterDate
-        : currentDate;
+    const furthestDate =
+        nextChapterDate ?
+            currentDate > nextChapterDate ?
+                currentDate
+            :   nextChapterDate
+        :   currentDate;
 
     const months = useMemo(
         () => getMonthsBetween(startDate, furthestDate),
-        [furthestDate, startDate]
+        [furthestDate, startDate],
     );
 
     const handleDayClick = useCallback(
@@ -281,7 +282,7 @@ export const CalendarModal: React.FC = () => {
                 (element as HTMLElement).focus({ preventScroll: false });
             }
         },
-        [setCalendarOpen]
+        [setCalendarOpen],
     );
 
     return (

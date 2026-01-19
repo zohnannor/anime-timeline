@@ -32,6 +32,7 @@ type DayProps = {
 
 const Timeframe = withCrossLines(
     withShadow(
+        // a comment to have a line break, otherwise syntax highlighting breaks
         styled.div.attrs<DayProps>(({ $width }) => {
             return {
                 style: {
@@ -51,8 +52,8 @@ const Timeframe = withCrossLines(
             transition: width 0.2s ease-in-out;
             cursor: ${({ $variant }) =>
                 $variant === 'days' ? 'pointer' : 'default'};
-        `
-    )
+        `,
+    ),
 );
 
 const TimeframeDate = styled.div`
@@ -99,14 +100,14 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             setCalendarOpen(true);
             lastClickedChapter.current = chapterNumber;
         },
-        [setCalendarOpen]
+        [setCalendarOpen],
     );
 
     useEffect(() => {
         if (lastClickedChapter.current === null) return;
 
         const element = document.querySelector(
-            `#day-${lastClickedChapter.current}`
+            `#day-${lastClickedChapter.current}`,
         );
         if (element) {
             element.scrollIntoView({
@@ -132,15 +133,15 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         getChapterWidth(
                             TIMELINE[animeTitle].data,
                             ci - 1,
-                            unboundedChapterWidth
-                        )
-                    )
+                            unboundedChapterWidth,
+                        ),
+                    ),
                 );
 
                 const color = interpolateColor(
                     colorValue,
                     inputRange,
-                    outputGradient
+                    outputGradient,
                 );
 
                 return (
@@ -152,9 +153,9 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         {...hoverHandlers(idx + 1)}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
-                            variant === 'days'
-                                ? e => handleDayClick(e, idx + 1)
-                                : undefined
+                            variant === 'days' ?
+                                e => handleDayClick(e, idx + 1)
+                            :   undefined
                         }
                         $variant={variant}
                     >

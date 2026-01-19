@@ -30,24 +30,24 @@ export type Settings = {
 
 // ☝🤓
 
-type Setter<T extends string> = T extends `${infer First}${infer Rest}`
-    ? `set${Uppercase<First>}${Rest}`
-    : never;
+type Setter<T extends string> =
+    T extends `${infer First}${infer Rest}` ? `set${Uppercase<First>}${Rest}`
+    :   never;
 
 export type SettingsValues = {
-    [Key in keyof Settings as Settings[Key] extends boolean
-        ? Setter<Key> extends keyof Settings
-            ? Key
-            : never
-        : never]: Settings[Key];
+    [Key in keyof Settings as Settings[Key] extends boolean ?
+        Setter<Key> extends keyof Settings ?
+            Key
+        :   never
+    :   never]: Settings[Key];
 };
 
 type SettingsValuesSetters = {
-    [Key in keyof Settings as Settings[Key] extends boolean
-        ? Setter<Key> extends keyof Settings
-            ? Key
-            : never
-        : never]: Setter<Key>;
+    [Key in keyof Settings as Settings[Key] extends boolean ?
+        Setter<Key> extends keyof Settings ?
+            Key
+        :   never
+    :   never]: Setter<Key>;
 };
 
 export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
@@ -96,7 +96,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         useState(false);
     const [showTitles, setShowTitlesRaw] = useState(
         // default to true if not set (first visit), otherwise get from storage
-        () => window.localStorage.getItem('showTitles') !== 'false'
+        () => window.localStorage.getItem('showTitles') !== 'false',
     );
     const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(document.location.search);

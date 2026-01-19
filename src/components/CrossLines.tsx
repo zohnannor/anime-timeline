@@ -37,13 +37,13 @@ const CrossLine = styled.div<CrossLineProps>`
         pointer-events: none;
 
         ${({ $side }) =>
-            $side === 'right'
-                ? css`
-                      left: 0;
-                  `
-                : css`
-                      right: 0;
-                  `}
+            $side === 'right' ?
+                css`
+                    left: 0;
+                `
+            :   css`
+                    right: 0;
+                `}
 
         top: 0;
         height: 200svh;
@@ -75,7 +75,7 @@ export const CrossLines: React.FC<CrossLinesProps> = ({
 };
 
 export const withCrossLines = <P,>(
-    StyledComponent: React.ComponentType<P>
+    StyledComponent: React.ComponentType<P>,
 ): React.FC<P & CrossLinesProps> => {
     return ({
         children,

@@ -24,12 +24,12 @@ const volumeTitleChapters = [0, 2, 6, 1, 0, 4, 6, 1, 0, 3, 0, 9];
 const volumeTitle = (timeline: TimelineData, idx: number) =>
     timeline.volumes[idx]!.chapters[volumeTitleChapters[idx]!]!.title(
         timeline,
-        idx
+        idx,
     );
 const volumeCover = (timeline: TimelineData, idx: number) =>
     `Volume_${idx + 1}.-_${timeline.volumes[idx]!.title(
         timeline,
-        idx
+        idx,
     ).replaceAll(' ', '_')}`;
 const chapterLinkExceptions = [
     'Matsuda',
@@ -44,15 +44,14 @@ const chapterLinkExceptions = [
     'Kindred Spirits',
 ];
 const chapterLink = (title: string, n: number): string =>
-    n <= 21
-        ? `Chapter_${n}`
-        : chapterLinkExceptions.includes(title)
-        ? `${title} (chapter)`
-        : title === 'Target' // first one is in 0..21 range
-        ? 'Target (chapter 63)'
-        : n === 62
-        ? 'The Decision'
-        : title;
+    n <= 21 ? `Chapter_${n}`
+    : chapterLinkExceptions.includes(title) ? `${title} (chapter)`
+    : (
+        title === 'Target' // first one is in 0..21
+    ) ?
+        'Target (chapter 63)'
+    : n === 62 ? 'The Decision'
+    : title;
 const episodeCover = (_: TimelineData, idx: number) => pad(idx + 1);
 const episodeLinkExceptions = ['Love', 'Decision', 'New World', 'Matsuda'];
 
@@ -77,9 +76,9 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 titleFontSize: 42,
                 sectionLink: 'Death Note (anime)',
                 wikiLink: title =>
-                    episodeLinkExceptions.includes(title)
-                        ? `${title} (episode)`
-                        : title,
+                    episodeLinkExceptions.includes(title) ?
+                        `${title} (episode)`
+                    :   title,
             },
         },
         saga: {
@@ -126,15 +125,11 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleFontSize: 100,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
             wikiLink: title =>
-                chapterLinkExceptions.includes(title)
-                    ? `${title} (volume)`
-                    : title === 'Target'
-                    ? 'Target (volume)'
-                    : title === 'Boredom'
-                    ? 'Boredom (volume)'
-                    : title === 'Finis'
-                    ? 'Finis (volume)'
-                    : title,
+                chapterLinkExceptions.includes(title) ? `${title} (volume)`
+                : title === 'Target' ? 'Target (volume)'
+                : title === 'Boredom' ? 'Boredom (volume)'
+                : title === 'Finis' ? 'Finis (volume)'
+                : title,
         },
     },
     data: {

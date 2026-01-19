@@ -55,7 +55,7 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
                 [OPPOSITE[$placement]]: `${scale(200)}`,
             },
         };
-    }
+    },
 )`
     pointer-events: none;
     position: absolute;
@@ -66,16 +66,16 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
     z-index: 100;
 
     ${({ $animation, $visible, $placement }) =>
-        $animation === 'fade'
-            ? css`
-                  opacity: ${$visible ? 1 : 0};
-                  transition: opacity 0.2s ease-in-out;
-              `
-            : css`
-                  transform: scale(${$visible ? 1 : 0});
-                  transform-origin: ${OPPOSITE[$placement]};
-                  transition: all 0.2s ease-in-out;
-              `}
+        $animation === 'fade' ?
+            css`
+                opacity: ${$visible ? 1 : 0};
+                transition: opacity 0.2s ease-in-out;
+            `
+        :   css`
+                transform: scale(${$visible ? 1 : 0});
+                transform-origin: ${OPPOSITE[$placement]};
+                transition: all 0.2s ease-in-out;
+            `}
 `;
 
 export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({

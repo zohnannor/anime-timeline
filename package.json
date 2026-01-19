@@ -1,37 +1,38 @@
 {
-  "name": "anime-timeline",
-  "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build"
-  },
-  "dependencies": {
-    "@hugocxl/react-to-image": "^0.0.9",
-    "html-to-image": "^1.11.13",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-scripts": "^5.0.1",
-    "styled-components": "^6.1.19",
-    "varint": "^6.0.0"
-  },
-  "packageManager": "yarn@4.6.0",
-  "devDependencies": {
-    "@types/node": "^24.7.0",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.1",
-    "@types/varint": "^6.0.3",
-    "typescript": "^5.9.3"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "homepage": "./"
+    "name": "anime-timeline",
+    "scripts": {
+        "dev": "react-scripts start",
+        "build": "react-scripts build"
+    },
+    "dependencies": {
+        "@hugocxl/react-to-image": "^0.0.9",
+        "html-to-image": "^1.11.13",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
+        "react-scripts": "^5.0.1",
+        "styled-components": "^6.3.8",
+        "varint": "^6.0.0"
+    },
+    "packageManager": "yarn@4.6.0",
+    "devDependencies": {
+        "@types/node": "^25.0.9",
+        "@types/react": "^19.2.8",
+        "@types/react-dom": "^19.2.3",
+        "@types/varint": "^6.0.3",
+        "csstype": "^3.2.3",
+        "typescript": "^5.9.3"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "homepage": "./"
 }

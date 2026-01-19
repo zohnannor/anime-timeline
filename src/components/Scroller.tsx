@@ -40,7 +40,7 @@ export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     return {
         style: {
             '--left': `${$offset * 100}%`,
-        } as React.CSSProperties,
+        },
     };
 })`
     transition: bottom 0.2s ease-in-out;
@@ -97,7 +97,7 @@ export const Scroller = () => {
 
     const handleDrag = useCallback(
         (e: MouseEvent) => dragging && updateScrollerHandle(e),
-        [dragging]
+        [dragging],
     );
 
     const stopDrag = useCallback(() => setDragging(false), []);

@@ -50,7 +50,7 @@ const App: React.FC = () => {
             calendarOpen,
             captureTimelineModalOpen,
             animeTitleSelectorOpen,
-        ]
+        ],
     );
 
     useEffect(() => {
@@ -72,12 +72,13 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${maxHeight(animeTitle)}`
+            `${maxHeight(animeTitle)}`,
         );
         document.title = `${timeline.title} Timeline`;
         document.head.querySelector<HTMLLinkElement>(
-            "link[rel~='icon']"
-        )!.href = `./${animeTitle}/${timeline.smallImages['scroller-or-favicon']}.webp`;
+            "link[rel~='icon']",
+        )!.href =
+            `./${animeTitle}/${timeline.smallImages['scroller-or-favicon']}.webp`;
     }, [animeTitle]);
 
     return (

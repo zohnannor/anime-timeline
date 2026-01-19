@@ -44,8 +44,8 @@ export const CaptureTimelineModal: React.FC = () => {
     const height = maxHeight(animeTitle);
     const width = sum(
         timeline.volumes.map((_, vi) =>
-            getVolumeWidth(timeline, vi, unboundedChapterWidth)
-        )
+            getVolumeWidth(timeline, vi, unboundedChapterWidth),
+        ),
     );
 
     const [_, captureTimeline, __] = useToPng({
@@ -55,7 +55,7 @@ export const CaptureTimelineModal: React.FC = () => {
         backgroundColor: '#000',
         filter: el =>
             ['floatingButtons', 'scrollerHoverArea'].every(
-                className => !el.classList?.contains(className)
+                className => !el.classList?.contains(className),
             ),
         onStart: () => {
             setLoading(false);
@@ -66,7 +66,7 @@ export const CaptureTimelineModal: React.FC = () => {
             const link = document.createElement('a');
             link.href = dataUrl;
             link.download = `${toTitleCase(
-                animeTitle
+                animeTitle,
             )}_Timeline_${new Date().toISOString()}.png`;
             link.click();
             setLoading(false);

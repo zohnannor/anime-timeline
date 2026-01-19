@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
-    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial,
-        sans-serif;
+    font-family:
+        'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 @media (hover: hover) and (pointer: fine) {

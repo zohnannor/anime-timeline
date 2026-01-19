@@ -31,7 +31,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
 
     const withGlobalIndex = <T, U>(
         xs: readonly T[],
-        inner: (x: T) => readonly U[]
+        inner: (x: T) => readonly U[],
     ) =>
         xs
             .flatMap((x, xi) => inner(x).map(el => [xi, el] as const))
@@ -48,7 +48,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         arc: withGlobalIndex(timeline.sagas, s => s.arcs),
         chapter: withGlobalIndex(
             timeline.volumes.flatMap(v => v.chapters),
-            c => [c]
+            c => [c],
         ),
         volume: withGlobalIndex(timeline.volumes, v => [v]),
     };
