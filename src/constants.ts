@@ -1,4 +1,4 @@
-import { CSS } from 'styled-components/dist/types';
+import CSS from 'csstype';
 
 import { WidthHelper } from './helpers';
 import { SettingsValues } from './providers/SettingsProvider';
@@ -180,15 +180,16 @@ export const FLOATING_BUTTONS: {
         title: 'Toggle unbounded chapter width',
         option: 'unboundedChapterWidth',
     },
-    ...(!isMobileDevice() // include cross-lines button only on desktop
-        ? [
-              {
-                  filename: 'toggle-cross-lines',
-                  title: 'Toggle cross-lines',
-                  option: 'showCrosslines',
-              } as const,
-          ]
-        : []),
+    // include cross-lines button only on desktop
+    ...(!isMobileDevice() ?
+        [
+            {
+                filename: 'toggle-cross-lines',
+                title: 'Toggle cross-lines',
+                option: 'showCrosslines',
+            } as const,
+        ]
+    :   []),
     {
         filename: 'open-chapter-calendar',
         title: 'Open chapter calendar',

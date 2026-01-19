@@ -21,9 +21,9 @@ const ARCS_TOTAL = 6;
 const VOLUMES_TOTAL = 14;
 
 const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 2
-        ? `Volume${idx + 1}Manga`
-        : `Sadamoto_${idx === 12 ? 'v' : 'V'}olume_${idx + 1}`;
+    idx === 2 ?
+        `Volume${idx + 1}Manga`
+    :   `Sadamoto_${idx === 12 ? 'v' : 'V'}olume_${idx + 1}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
 
@@ -57,7 +57,7 @@ export const EVA_TIMELINE: Timeline = {
                     getVolumeByChapter(EVA_TIMELINE.data, n - 1) + 1
                 }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(
                     ' ',
-                    '_'
+                    '_',
                 )}`,
         },
         saga: {

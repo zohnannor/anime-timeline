@@ -35,12 +35,12 @@ export const AOT_TIMELINE: Timeline = {
             titleFontSize: 100,
             sectionLink: 'Attack on Titan (Anime)',
             wikiLink: (title, n) =>
-                n === 1
-                    ? 'List of Attack on Titan episodes'
-                    : `List of Attack on Titan episodes/${title.replace(
-                          /Part.+/g,
-                          ''
-                      )}`,
+                n === 1 ?
+                    'List of Attack on Titan episodes'
+                :   `List of Attack on Titan episodes/${title.replace(
+                        /Part.+/g,
+                        '',
+                    )}`,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -1143,7 +1143,7 @@ export const AOT_TIMELINE: Timeline = {
                 title: (title, idx) =>
                     `${volumeTitle(
                         title,
-                        idx
+                        idx,
                     )}\n(Side Stories grouped together)`,
                 cover: volumeCover,
                 chapters: [

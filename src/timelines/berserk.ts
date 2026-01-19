@@ -48,15 +48,17 @@ export const BERSERK_TIMELINE: Timeline = {
                 scale: 1.2,
                 titleProcessor: (title, n) =>
                     `${title}\n(Episode ${
-                        n <= 25 ? n : n <= 25 + 12 ? n - 25 : n - 25 - 12
+                        n <= 25 ? n
+                        : n <= 25 + 12 ? n - 25
+                        : n - 25 - 12
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Berserk_(1997_Anime)#Episodes',
                 wikiLink: (_, n) =>
-                    n <= 25
-                        ? `Episode_${n}_(1997_Anime)`
-                        : `Episode_${n - 25}_(2016_Anime)`,
+                    n <= 25 ?
+                        `Episode_${n}_(1997_Anime)`
+                    :   `Episode_${n - 25}_(2016_Anime)`,
             },
         },
         saga: {

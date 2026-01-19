@@ -1,6 +1,6 @@
+import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
-import { CSS } from 'styled-components/dist/types';
 
 import { scale } from '../helpers';
 import {
@@ -67,9 +67,10 @@ export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
     const value = settings[option];
     const setter = settings[SETTINGS_FUNCTIONS[option]];
 
-    const filter = value
-        ? 'drop-shadow(0 0 3px white) drop-shadow(0 0 5px white)'
-        : undefined;
+    const filter =
+        value ?
+            'drop-shadow(0 0 3px white) drop-shadow(0 0 5px white)'
+        :   undefined;
 
     return (
         <Tooltip

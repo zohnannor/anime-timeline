@@ -64,7 +64,7 @@ type FieldDescriptor<T> = {
 const decodeMessage = <T>(
     reader: ProtobufReader,
     end: number,
-    descriptors: FieldDescriptor<T>[]
+    descriptors: FieldDescriptor<T>[],
 ): T => {
     const result: Partial<T> = {};
     end = end === 0 ? reader.len : reader.pos + end;
@@ -93,7 +93,7 @@ const decodeTitle = (reader: ProtobufReader, length: number): Title => {
 
 const decodeTitleDetailView = (
     reader: ProtobufReader,
-    length: number
+    length: number,
 ): TitleDetailView => {
     return decodeMessage(reader, length, [
         { tag: 1, property: 'title', decoder: r => decodeTitle(r, r.u32()) },
@@ -105,7 +105,7 @@ const decodeTitleDetailView = (
 
 const decodeSuccessResponse = (
     reader: ProtobufReader,
-    length: number
+    length: number,
 ): SuccessResponse => {
     return decodeMessage(reader, length, [
         {
@@ -118,7 +118,7 @@ const decodeSuccessResponse = (
 
 const decodeApiResponse = (
     reader: ProtobufReader,
-    length: number
+    length: number,
 ): ApiResponse => {
     return decodeMessage(reader, length, [
         {
@@ -132,7 +132,7 @@ const decodeApiResponse = (
 export default async (): Promise<Date | null> => {
     try {
         const response = await fetch(
-            `${PROXY_URL}${encodeURIComponent(MANGA_API_URL)}`
+            `${PROXY_URL}${encodeURIComponent(MANGA_API_URL)}`,
         );
         const buffer = new Uint8Array(await response.arrayBuffer());
         const reader = createProtobufReader(buffer);

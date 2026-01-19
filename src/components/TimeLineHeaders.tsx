@@ -16,6 +16,7 @@ type HeaderProps = {
 };
 
 const Header = withShadow(
+    // a comment to have a line break, otherwise syntax highlighting breaks
     styled.div<HeaderProps>`
         position: relative;
         display: flex;
@@ -39,7 +40,7 @@ const Header = withShadow(
             height: 100%;
             cursor: pointer;
         }
-    `
+    `,
 );
 
 const Headers = styled.div`
@@ -62,11 +63,11 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
             {Object.keys(layout)
                 .filter(
                     (
-                        section
+                        section,
                     ): section is Exclude<
                         keyof TimelineSectionLayout,
                         'timeline'
-                    > => section !== 'timeline' // TODO: add it correctly?
+                    > => section !== 'timeline', // TODO: add it correctly?
                 )
                 .map(
                     section =>
@@ -76,9 +77,10 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
                                 key={section}
                                 $height={
                                     layout[section].height +
-                                    (section === 'chapter' // TODO: see above
-                                        ? TIMELINE_HEIGHT
-                                        : 0)
+                                    (section === 'chapter' ?
+                                        // TODO: see above
+                                        TIMELINE_HEIGHT
+                                    :   0)
                                 }
                                 $invertBorder
                             >
@@ -88,7 +90,7 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
                                     {HEADER_TITLES[section]}
                                 </Link>
                             </Header>
-                        )
+                        ),
                 )}
         </Headers>
     );

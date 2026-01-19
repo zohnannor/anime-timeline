@@ -69,17 +69,15 @@ export const AnimeTitleSelectorModal: React.FC = () => {
     if (!animeTitleSelectorOpen) return null;
 
     const titles = TITLES.toSorted((titleA, titleB) =>
-        sorting === 'alphabetical'
-            ? titleA.localeCompare(titleB)
-            : sorting === 'chapter count'
-            ? chapterCount(TIMELINE[titleB].data) -
-              chapterCount(TIMELINE[titleA].data)
-            : sorting === 'page count'
-            ? pageCount(TIMELINE[titleB].data) -
-              pageCount(TIMELINE[titleA].data)
-            : sorting === 'recently updated'
-            ? recentlyUpdated(titleB) - recentlyUpdated(titleA)
-            : -1
+        sorting === 'alphabetical' ? titleA.localeCompare(titleB)
+        : sorting === 'chapter count' ?
+            chapterCount(TIMELINE[titleB].data) -
+            chapterCount(TIMELINE[titleA].data)
+        : sorting === 'page count' ?
+            pageCount(TIMELINE[titleB].data) - pageCount(TIMELINE[titleA].data)
+        : sorting === 'recently updated' ?
+            recentlyUpdated(titleB) - recentlyUpdated(titleA)
+        :   -1,
     );
 
     const nextSorting = {

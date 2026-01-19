@@ -13,7 +13,7 @@ export { default as fetchNextChapterDate } from './ProtobufReader';
 
 export const toTitleCase = (s: string) =>
     s.replace(/^_*(.)|_+(.)/g, (_, c, d) =>
-        c ? c.toUpperCase() : ' ' + d.toUpperCase()
+        c ? c.toUpperCase() : ' ' + d.toUpperCase(),
     );
 
 export const scale = (n: number) =>
@@ -26,7 +26,7 @@ export const maxHeight = (animeTitle: AnimeTitle) =>
     sum(
         Object.values(TIMELINE[animeTitle].layout)
             .filter(s => s.type !== 'timeline')
-            .map(s => s.height)
+            .map(s => s.height),
     ) + TIMELINE_HEIGHT;
 
 export const chapterDates = (animeTitle: AnimeTitle) =>
@@ -45,13 +45,13 @@ const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
             }
             return [groups, key];
         },
-        [[], null]
+        [[], null],
     )[0];
 
 export const chapterDatesByMonth = (animeTitle: AnimeTitle) =>
     groupBy(
         chapterDates(animeTitle),
-        date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12
+        date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12,
     );
 
 export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
@@ -65,26 +65,26 @@ export const chapters = (timeline: TimelineData) =>
 export type WidthHelper = (
     timeline: TimelineData,
     idx: number,
-    unboundedChapterWidth: boolean
+    unboundedChapterWidth: boolean,
 ) => number;
 
 export const getVolumeWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) =>
-    unboundedChapterWidth
-        ? sum(
-              chaptersVolumes(timeline)
-                  .map((vi, ci): [number, number] => [vi, ci])
-                  .filter(([vi, _]) => vi === idx)
-                  .map(([vi, ci]): [number, number] => [
-                      vi,
-                      getChapterWidth(timeline, ci, unboundedChapterWidth),
-                  ])
-                  .map(([_, cw]) => cw)
-          )
-        : 1000;
+    unboundedChapterWidth ?
+        sum(
+            chaptersVolumes(timeline)
+                .map((vi, ci): [number, number] => [vi, ci])
+                .filter(([vi, _]) => vi === idx)
+                .map(([vi, ci]): [number, number] => [
+                    vi,
+                    getChapterWidth(timeline, ci, unboundedChapterWidth),
+                ])
+                .map(([_, cw]) => cw),
+        )
+    :   1000;
 
 export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
     chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
@@ -94,45 +94,45 @@ const pagesPerVolume = (timeline: TimelineData, idx: number) =>
 export const getChapterWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) => {
     const pagesInChapter = chapters(timeline)[idx]!.pages;
     const volume = getVolumeByChapter(timeline, idx);
-    return unboundedChapterWidth
-        ? pagesInChapter * (1000 / 180) * 1.05
-        : pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
+    return unboundedChapterWidth ?
+            pagesInChapter * (1000 / 180) * 1.05
+        :   pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
 };
 
 export const getArcWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) => {
     const { from, to } = timeline.sagas.flatMap(s => s.arcs)[idx]!.chapters;
     return sum(
         range(from - 1, to ?? chapters(timeline).length).map(i =>
-            getChapterWidth(timeline, i, unboundedChapterWidth)
-        )
+            getChapterWidth(timeline, i, unboundedChapterWidth),
+        ),
     );
 };
 
 export const getSagaWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) =>
     sum(
         timeline.sagas
             .flatMap((s, si) => s.arcs.map(() => si))
             .map((si, ai) => [si, ai] as const)
             .filter(([si, _]) => si === idx)
-            .map(([_, ai]) => getArcWidth(timeline, ai, unboundedChapterWidth))
+            .map(([_, ai]) => getArcWidth(timeline, ai, unboundedChapterWidth)),
     );
 
 const getChapterPageWidth = (
     timeline: TimelineData,
     chapter: number,
-    unboundedChapterWidth: boolean
+    unboundedChapterWidth: boolean,
 ) => {
     const volume = getVolumeByChapter(timeline, chapter);
     return (
@@ -157,17 +157,15 @@ const getEpisodePages = (timeline: TimelineData, idx: number) => {
         .flatMap(season => season.episodes ?? [])
         .map(
             ({ chapters: { from, to } }) =>
-                [from - 1, to ?? chaptersTotal] as const
+                [from - 1, to ?? chaptersTotal] as const,
         )[idx]!;
 
     return range(start, end).map(ci => {
         const [_, [split, rest]] = chaptersSplit[ci]!;
         const pagesInEpisode =
-            split !== 0 && ci === end - 1
-                ? split
-                : rest !== 0 && ci === start
-                ? rest
-                : split + rest;
+            split !== 0 && ci === end - 1 ? split
+            : rest !== 0 && ci === start ? rest
+            : split + rest;
         return [pagesInEpisode, ci] as const;
     });
 };
@@ -175,7 +173,7 @@ const getEpisodePages = (timeline: TimelineData, idx: number) => {
 export const getEpisodeWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) => {
     return sum(
         getEpisodePages(timeline, idx).map(([pagesInEpisode, ci]) => {
@@ -183,14 +181,14 @@ export const getEpisodeWidth: WidthHelper = (
                 pagesInEpisode *
                 getChapterPageWidth(timeline, ci, unboundedChapterWidth)
             );
-        })
+        }),
     );
 };
 
 export const getSeasonWidth: WidthHelper = (
     timeline,
     idx,
-    unboundedChapterWidth
+    unboundedChapterWidth,
 ) => {
     const { from, to } = timeline.seasons[idx]!.chapters;
     const startIdx = from - 1;
@@ -201,14 +199,14 @@ export const getSeasonWidth: WidthHelper = (
         chaptersWithPagesSplit(timeline)
             .slice(startIdx, endIdx + 1)
             .map(([ci, [split, rest]]) =>
-                ci === startIdx && rest !== 0
-                    ? rest *
-                      getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-                    : ci === endIdx
-                    ? split *
-                      getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-                    : getChapterWidth(timeline, ci, unboundedChapterWidth)
-            )
+                ci === startIdx && rest !== 0 ?
+                    rest *
+                    getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+                : ci === endIdx ?
+                    split *
+                    getChapterPageWidth(timeline, ci, unboundedChapterWidth)
+                :   getChapterWidth(timeline, ci, unboundedChapterWidth),
+            ),
     );
 };
 
@@ -216,7 +214,7 @@ export const getSeasonWidth: WidthHelper = (
 export const interpolateColor = (
     value: number,
     inputRange: [number, number],
-    colorRange: number[]
+    colorRange: number[],
 ) => {
     const [inputMin, inputMax] = inputRange;
     const colorCount = colorRange.length;
@@ -236,7 +234,7 @@ export const interpolateColor = (
     const segmentCount = colorCount - 1;
     const segmentIndex = Math.min(
         Math.floor(tGlobal * segmentCount),
-        segmentCount - 1
+        segmentCount - 1,
     );
 
     // Calculate local t for this segment

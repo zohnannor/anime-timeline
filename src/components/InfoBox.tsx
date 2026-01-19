@@ -1,6 +1,6 @@
+import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
-import { CSS } from 'styled-components/dist/types';
 
 import { TIMELINE, TimelineData } from '../constants';
 import { scale } from '../helpers';

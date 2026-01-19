@@ -1,6 +1,6 @@
+import CSS from 'csstype';
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { CSS } from 'styled-components/dist/types';
 
 import {
     TIMELINE,
@@ -32,6 +32,7 @@ type SectionItemCoverProps = {
 };
 
 export const SectionItemCover = withShadow(
+    // a comment to have a line break, otherwise syntax highlighting breaks
     styled.div<SectionItemCoverProps>`
         position: relative;
         display: flex;
@@ -106,8 +107,11 @@ export const SectionItemCover = withShadow(
 
         @media not ((hover: hover) and (pointer: fine)) {
             &::after {
-                text-shadow: -1px -1px 0 black, 1px -1px 0 black,
-                    -1px 1px 0 black, 1px 1px 0 black;
+                text-shadow:
+                    -1px -1px 0 black,
+                    1px -1px 0 black,
+                    -1px 1px 0 black,
+                    1px 1px 0 black;
             }
 
             & > a > img {
@@ -137,8 +141,12 @@ export const SectionItemCover = withShadow(
             pointer-events: none;
             transition: opacity 0.2s ease-in-out;
             text-wrap: auto;
-            text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
-                1px 1px 0 black, 0 0 ${scale(10)} black,
+            text-shadow:
+                -1px -1px 0 black,
+                1px -1px 0 black,
+                -1px 1px 0 black,
+                1px 1px 0 black,
+                0 0 ${scale(10)} black,
                 0 0 ${scale(20)} rgba(0, 0, 0, 0.5),
                 0 0 ${scale(30)} rgba(0, 0, 0, 0.3);
 
@@ -148,7 +156,7 @@ export const SectionItemCover = withShadow(
                     opacity: 1;
                 `}
         }
-    `
+    `,
 );
 
 type SectionItemProps = {
@@ -158,6 +166,7 @@ type SectionItemProps = {
 };
 
 const SectionItem = withCrossLines(
+    // a comment to have a line break, otherwise syntax highlighting breaks
     styled.div.attrs<SectionItemProps>(({ $width }) => {
         return {
             style: {
@@ -180,7 +189,7 @@ const SectionItem = withCrossLines(
                     animation: ${hueGlow} 2s linear infinite;
                 }
             `}
-    `
+    `,
 );
 
 type TimelineSectionItemProps = {
@@ -225,13 +234,13 @@ export const TimelineSectionItemComponent: React.FC<
     const processedNumber = numberProcessor(itemNumber);
 
     const title =
-        (typeof entity.title === 'function'
-            ? entity.title(timeline, idx)
-            : entity.title) ?? processedNumber;
+        (typeof entity.title === 'function' ?
+            entity.title(timeline, idx)
+        :   entity.title) ?? processedNumber;
     const cover =
-        typeof entity.cover === 'function'
-            ? entity.cover(timeline, idx)
-            : entity.cover;
+        typeof entity.cover === 'function' ?
+            entity.cover(timeline, idx)
+        :   entity.cover;
     const offset = 'offset' in entity ? entity.offset : null;
 
     const link = `${timeline.wikiBase}${wikiLink(title, itemNumber)}`;
@@ -243,27 +252,23 @@ export const TimelineSectionItemComponent: React.FC<
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
-        type === 'season' && typeof cover !== 'string' ? (
+        type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
             `SEASON ${processedNumber}`
-        ) : (
-            <Link href={link}>
-                {cover ? (
+        :   <Link href={link}>
+                {cover ?
                     <ThumbnailImage
                         src={cover}
                         $offsetX={offset?.x}
                         $offsetY={offset?.y}
                         $defaultPosition={defaultCoverPosition}
                     />
-                ) : type === 'arc' || type === 'saga' ? (
+                : type === 'arc' || type === 'saga' ?
                     // for sagas/arcs without cover, just show the title
                     itemTitle
-                ) : (
                     // for everything else, show the number
-                    processedNumber
-                )}
-            </Link>
-        );
+                :   processedNumber}
+            </Link>;
 
     const itemCover = (
         <SectionItemCover
@@ -291,7 +296,7 @@ export const TimelineSectionItemComponent: React.FC<
     );
 
     const itemCoverTooltip =
-        type === 'chapter' ? (
+        type === 'chapter' ?
             <Tooltip
                 placement='top'
                 animation='grow'
@@ -300,9 +305,7 @@ export const TimelineSectionItemComponent: React.FC<
             >
                 {itemCover}
             </Tooltip>
-        ) : (
-            itemCover
-        );
+        :   itemCover;
 
     return (
         <SectionItem

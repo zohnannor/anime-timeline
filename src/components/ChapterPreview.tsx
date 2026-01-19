@@ -16,7 +16,7 @@ const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
     return {
         style: {
             '--left': `${scale($offsetX)}`,
-        } as React.CSSProperties,
+        },
     };
 })`
     display: flex;
@@ -69,11 +69,9 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
         const padding = scaleToPx(50);
 
         const adjustX =
-            left <= visibleLeft
-                ? visibleLeft - left + padding
-                : right >= visibleRight
-                ? visibleRight - right - padding
-                : 0;
+            left <= visibleLeft ? visibleLeft - left + padding
+            : right >= visibleRight ? visibleRight - right - padding
+            : 0;
 
         setOffset(pxToScale(adjustX));
     }, [scrollX]);

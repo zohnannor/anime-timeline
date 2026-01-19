@@ -1,7 +1,7 @@
+import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
-import { CSS } from 'styled-components/dist/types';
 
 import { scale } from '../helpers';
 
@@ -123,6 +123,6 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                 {children}
             </ModalContainer>
         </>,
-        document.querySelector('#modal')!
+        document.querySelector('#modal')!,
     );
 };

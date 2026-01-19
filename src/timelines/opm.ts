@@ -24,37 +24,24 @@ const SAGAS_TOTAL = 4;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
-    idx <= 19
-        ? `Volume_${idx + 1}`
-        : idx <= 26
-        ? `Volume_${idx + 1}_Cover`
-        : idx <= 27
-        ? `Vol.${idx + 1}`
-        : `Volume_${idx + 1}_Front_Cover`;
+    idx <= 19 ? `Volume_${idx + 1}`
+    : idx <= 26 ? `Volume_${idx + 1}_Cover`
+    : idx <= 27 ? `Vol.${idx + 1}`
+    : `Volume_${idx + 1}_Front_Cover`;
 const episodeCover = (_: TimelineData, idx: number) =>
-    idx <= 11
-        ? `Episode${idx + 1}_Pics`
-        : idx <= 23
-        ? `Season2Ep${idx - 11}pics`
-        : idx <= 28
-        ? `OPMS3Ep${idx - 11 - 11 - 1}`
-        : `One-Punch_Man_Episode_${idx + 1}`;
+    idx <= 11 ? `Episode${idx + 1}_Pics`
+    : idx <= 23 ? `Season2Ep${idx - 11}pics`
+    : idx <= 28 ? `OPMS3Ep${idx - 11 - 11 - 1}`
+    : `One-Punch_Man_Episode_${idx + 1}`;
 const chapterLink = (title: string, n: number): string =>
-    n <= 118
-        ? `Chapter_${n}`
-        : n <= 126
-        ? `Chapter_${n - 4}_(Online)`
-        : n <= 129
-        ? `Chapter_${n - 3}_(Online)`
-        : n <= 130
-        ? `Chapter_${n}`
-        : n <= 138
-        ? `Chapter_${n - 4}_(Online)`
-        : n <= 139
-        ? `Chapter_${n}`
-        : n <= CHAPTERS_TOTAL
-        ? `Chapter_${n - 5}_(Online)`
-        : title;
+    n <= 118 ? `Chapter_${n}`
+    : n <= 126 ? `Chapter_${n - 4}_(Online)`
+    : n <= 129 ? `Chapter_${n - 3}_(Online)`
+    : n <= 130 ? `Chapter_${n}`
+    : n <= 138 ? `Chapter_${n - 4}_(Online)`
+    : n <= 139 ? `Chapter_${n}`
+    : n <= CHAPTERS_TOTAL ? `Chapter_${n - 5}_(Online)`
+    : title;
 
 export const OPM_TIMELINE: Timeline = {
     layout: {
@@ -72,7 +59,9 @@ export const OPM_TIMELINE: Timeline = {
                 scale: 1.2,
                 titleProcessor: (title, n) =>
                     `${title}\n(Episode ${
-                        n <= 12 ? n : n <= 12 + 12 ? n - 12 : n - 12 - 12
+                        n <= 12 ? n
+                        : n <= 12 + 12 ? n - 12
+                        : n - 12 - 12
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
@@ -126,9 +115,9 @@ export const OPM_TIMELINE: Timeline = {
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL
-                    ? `Volume_${n}`
-                    : 'Chapters_and_Volumes#Volume_List',
+                n <= VOLUMES_TOTAL ?
+                    `Volume_${n}`
+                :   'Chapters_and_Volumes#Volume_List',
         },
     },
     data: {
