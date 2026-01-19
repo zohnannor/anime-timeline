@@ -17,7 +17,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 5;
-const CHAPTERS_TOTAL = 226;
+const CHAPTERS_TOTAL = 227;
 const VOLUMES_TOTAL = 42;
 const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
@@ -1737,9 +1737,15 @@ export const OPM_TIMELINE: Timeline = {
                         cover: null,
                     },
                     {
-                        title: () => 'New Faction',
+                        title: () => 'Emerging Power',
                         date: 'December 18, 2025',
                         pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Wavygyaza',
+                        date: 'January 15, 2026',
+                        pages: 16,
                         cover: null,
                     },
                 ],
