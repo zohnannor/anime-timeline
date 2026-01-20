@@ -1495,7 +1495,7 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: null,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'War, Panties, Chainsaw',
