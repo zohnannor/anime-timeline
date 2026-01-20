@@ -23,53 +23,22 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
+                  fetch-depth: 0 # Required for restore-mtime to find commit dates
 
             - name: Restore file modification times
               uses: chetan/git-restore-mtime-action@v2
 
-            - name: Check for force optimization
-              id: check_force
-              run: |
-                  if [[ "${{ github.event.head_commit.message }}" == *"[force-optimize]"* ]]; then
-                      echo "force_flag=--force" >> $GITHUB_OUTPUT
-                      echo "mode=forced" >> $GITHUB_OUTPUT
-                  else
-                      echo "force_flag=" >> $GITHUB_OUTPUT
-                      echo "mode=normal" >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Set up cache key
-              id: cache-key
-              run: |
-                  # Generate stable hash based on source images
-                  if [ "$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)" -eq 0 ]; then
-                      HASH="no-images"
-                  else
-                      HASH=$(find public \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)
-                  fi
-
-                  # Base key for prefix matching
-                  BASE="webp-cache-$HASH"
-                  echo "base_key=$BASE" >> $GITHUB_OUTPUT
-
-                  # Primary key is unique if forcing, ensuring 'Save WebP cache' always runs
-                  if [[ "${{ steps.check_force.outputs.mode }}" == "forced" ]]; then
-                      echo "primary_key=$BASE-force-${{ github.run_id }}" >> $GITHUB_OUTPUT
-                  else
-                      echo "primary_key=$BASE" >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Restore/Save WebP cache
+            - name: Cache WebP Images
               uses: actions/cache@v4
-              id: webp-cache
               with:
                   path: |
                       public/**/*.webp
                       public/*-thumbnails
-                  key: ${{ steps.cache-key.outputs.primary_key }}
+                  # If [force-optimize] is present, key is unique (forcing a save).
+                  # Otherwise, it uses a stable key for standard runs.
+                  key: webp-${{ contains(github.event.head_commit.message, '[force-optimize]') && github.run_id || 'v1' }}
                   restore-keys: |
-                      ${{ steps.cache-key.outputs.base_key }}
+                      webp-
 
             - name: Install Linux dependencies
               run: |
@@ -86,7 +55,11 @@ jobs:
 
             - name: Run image optimization
               run: |
-                  python ci/optimize-images.py --all ${{ steps.check_force.outputs.force_flag }} --cpu 2
+                  FORCE_FLAG=$([[ "${{ github.event.head_commit.message }}" == *"[force-optimize]"* ]] && echo "--force" || echo "")
+                  echo "Running image optimization..."
+                  python ci/optimize-images.py --all $FORCE_FLAG --cpu $CPU
+              env:
+                  CPU: 2
 
             - name: Enable Corepack
               run: corepack enable
@@ -113,9 +86,6 @@ jobs:
         runs-on: ubuntu-latest
         if: github.event_name == 'push'
         steps:
-            - name: Setup GitHub Pages
-              uses: actions/configure-pages@v5
-
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v4
