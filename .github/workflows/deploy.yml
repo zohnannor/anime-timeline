@@ -31,14 +31,45 @@ jobs:
             - name: Check for force optimization
               id: check_force
               run: |
-                  # Check commit message for [force-optimize]
                   if [[ "${{ github.event.head_commit.message }}" == *"[force-optimize]"* ]]; then
                       echo "force_flag=--force" >> $GITHUB_OUTPUT
-                      echo "Force optimization detected in commit message"
+                      echo "mode=forced" >> $GITHUB_OUTPUT
                   else
                       echo "force_flag=" >> $GITHUB_OUTPUT
-                      echo "Normal optimization mode"
+                      echo "mode=normal" >> $GITHUB_OUTPUT
                   fi
+
+            - name: Set up cache key
+              id: cache-key
+              run: |
+                  # Generate stable hash based on source images
+                  if [ "$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)" -eq 0 ]; then
+                      HASH="no-images"
+                  else
+                      HASH=$(find public \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)
+                  fi
+
+                  # Base key for prefix matching
+                  BASE="webp-cache-$HASH"
+                  echo "base_key=$BASE" >> $GITHUB_OUTPUT
+
+                  # Primary key is unique if forcing, ensuring 'Save WebP cache' always runs
+                  if [[ "${{ steps.check_force.outputs.mode }}" == "forced" ]]; then
+                      echo "primary_key=$BASE-force-${{ github.run_id }}" >> $GITHUB_OUTPUT
+                  else
+                      echo "primary_key=$BASE" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Restore/Save WebP cache
+              uses: actions/cache@v4
+              id: webp-cache
+              with:
+                  path: |
+                      public/**/*.webp
+                      public/*-thumbnails
+                  key: ${{ steps.cache-key.outputs.primary_key }}
+                  restore-keys: |
+                      ${{ steps.cache-key.outputs.base_key }}
 
             - name: Install Linux dependencies
               run: |
@@ -49,48 +80,13 @@ jobs:
               uses: mfinelli/setup-imagemagick@v6
 
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
                   python-version: "3.x"
 
-            - name: Set up cache key
-              id: cache-key
-              run: |
-                  # Generate a cache key based on the image files and script
-                  if [ "$(find public -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" | wc -l)" -eq 0 ]; then
-                    echo "key=webp-cache-no-images" >> $GITHUB_OUTPUT
-                  else
-                    echo "key=webp-cache-$(find public \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Restore WebP cache
-              uses: actions/cache/restore@v4
-              id: webp-cache
-              with:
-                  key: ${{ steps.cache-key.outputs.key }}
-                  path: |
-                      public/**/*.webp
-                      public/*-thumbnails
-                  restore-keys: |
-                      webp-cache-
-
             - name: Run image optimization
               run: |
-                  echo "Running image optimization..."
-                  echo "Cache hit: ${{ steps.webp-cache.outputs.cache-hit }}"
-                  echo "Force flag: ${{ steps.check_force.outputs.force_flag }}"
-                  python ci/optimize-images.py --all ${{ steps.check_force.outputs.force_flag }} --cpu $CPU
-              env:
-                  CPU: 2 # GitHub runners have 2 cores
-
-            - name: Save WebP cache
-              uses: actions/cache/save@v4
-              if: ${{ steps.webp-cache.outputs.cache-hit != 'true' }}
-              with:
-                  key: ${{ steps.cache-key.outputs.key }}
-                  path: |
-                      public/**/*.webp
-                      public/*-thumbnails
+                  python ci/optimize-images.py --all ${{ steps.check_force.outputs.force_flag }} --cpu 2
 
             - name: Enable Corepack
               run: corepack enable
@@ -117,11 +113,8 @@ jobs:
         runs-on: ubuntu-latest
         if: github.event_name == 'push'
         steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
-
             - name: Setup GitHub Pages
-              uses: actions/configure-pages@v4
+              uses: actions/configure-pages@v5
 
             - name: Deploy to GitHub Pages
               id: deployment
