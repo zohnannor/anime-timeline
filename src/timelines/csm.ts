@@ -1599,6 +1599,12 @@ export const CSM_TIMELINE: Timeline = {
                         pages: 14,
                         cover: null,
                     },
+                    {
+                        title: () => 'The Taste of Shrimp and Blood',
+                        date: 'January 21, 2026',
+                        pages: 15,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
