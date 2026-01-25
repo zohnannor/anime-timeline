@@ -1108,7 +1108,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                     },
                     {
                         title: 'Divine Revolte',
-                        cover: 'Chapter_74',
+                        cover: 'Volume_8_(clean)',
                         offset: { x: 50, y: 0 },
                         chapters: { from: 71, to: 76 },
                     },
