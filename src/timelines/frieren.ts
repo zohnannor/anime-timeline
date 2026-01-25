@@ -15,7 +15,7 @@ const VOLUME_HEIGHT = 1572;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.6;
 
-const SEASONS_TOTAL = 3;
+const SEASONS_TOTAL = 5;
 const ARCS_TOTAL = 10;
 const VOLUMES_TOTAL = 15;
 
@@ -1320,12 +1320,31 @@ export const FRIEREN_TIMELINE: Timeline = {
             {
                 title: "Frieren: Beyond Journey's End Season 2",
                 cover: (_, idx) => `Season_${idx + 1}_key_visual_3`,
-                offset: { x: 0, y: 2000 },
-                chapters: { from: 61, to: 119 },
-                episodes: [],
+                offset: { x: 0, y: 500 },
+                chapters: { from: 61, to: 80 },
+                episodes: [
+                    {
+                        title: () => 'Shall We Go, Then?',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 61, to: 62 },
+                    },
+                    {
+                        title: () => 'The Hero of the South',
+                        cover: episodeCover,
+                        offset: { x: -1, y: 0 },
+                        chapters: { from: 63, to: 64 },
+                    },
+                ],
             },
             {
-                chapters: { from: 120 },
+                chapters: { from: 81, to: 104 },
+            },
+            {
+                chapters: { from: 105, to: 125 },
+            },
+            {
+                chapters: { from: 126 },
             },
         ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
         splitChapters: {
