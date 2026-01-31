@@ -1335,6 +1335,12 @@ export const FRIEREN_TIMELINE: Timeline = {
                         offset: { x: -1, y: 0 },
                         chapters: { from: 63, to: 64 },
                     },
+                    {
+                        title: () => "Somewhere She'd Like",
+                        cover: episodeCover,
+                        offset: { x: 100, y: 0 },
+                        chapters: { from: 65, to: 66 },
+                    },
                 ],
             },
             {
@@ -1355,6 +1361,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             41: 7,
             43: 16,
             58: 5,
+            66: 18,
         } as const,
         wikiBase: 'https://frieren.fandom.com/wiki/',
         smallImages: {
