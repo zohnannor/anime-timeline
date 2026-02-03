@@ -17,7 +17,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 const SEASONS_TOTAL = 5;
-const CHAPTERS_TOTAL = 227;
+const CHAPTERS_TOTAL = 228;
 const VOLUMES_TOTAL = 42;
 const VOLUMES_EXTRA = 6;
 const SAGAS_TOTAL = 4;
@@ -1737,8 +1737,15 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 16,
                         cover: null,
                     },
+                    {
+                        title: () => 'New Blood',
+                        date: 'January 29, 2026',
+                        pages: 19,
+                        cover: null,
+                    },
                 ],
             },
+            // REMEMBER TO INCREMENT THE `CHAPTERS_TOTAL` CONSTANT
             {
                 title: () => 'Volume 1-5 Extras',
                 cover: () => 'Volume_1',
