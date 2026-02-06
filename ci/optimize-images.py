@@ -144,7 +144,11 @@ SPECIAL_IMAGES: Final[Dict[str, set[str]]] = {
         "Berserk_2016_Premier_visual_art_version_2.png",
         "Berserk_2017_Anime_Key_Visual.png",
     },
-    "frieren": {"Season_1_key_visual_3.png", "Season_2_key_visual_3.png"},
+    "frieren": {
+        "Season_1_key_visual_3.png",
+        "Season_2_key_visual_3.png",
+        "Chapter_87.png",
+    },
     "eva": {"End_of_Evangelion_poster.jpg", "Neon_Genesis_Evangelion_logo.jpg"},
     "aot": {
         "Attack_on_Titan_Season_1.png",
