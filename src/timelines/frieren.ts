@@ -1341,6 +1341,12 @@ export const FRIEREN_TIMELINE: Timeline = {
                         offset: { x: 100, y: 0 },
                         chapters: { from: 65, to: 66 },
                     },
+                    {
+                        title: () => "Other People's Homes",
+                        cover: episodeCover,
+                        offset: { x: -1, y: 0 },
+                        chapters: { from: 65, to: 66 },
+                    },
                 ],
             },
             {
