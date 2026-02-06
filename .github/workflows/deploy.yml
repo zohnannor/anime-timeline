@@ -57,7 +57,7 @@ jobs:
               run: |
                   FORCE_FLAG=$([[ "${{ github.event.head_commit.message }}" == *"[force-optimize]"* ]] && echo "--force" || echo "")
                   echo "Running image optimization..."
-                  python ci/optimize-images.py --all $FORCE_FLAG --cpu $CPU
+                  python ci/optimize-images.py --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
               env:
                   CPU: 2
 
