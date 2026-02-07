@@ -1345,7 +1345,13 @@ export const FRIEREN_TIMELINE: Timeline = {
                         title: () => "Other People's Homes",
                         cover: episodeCover,
                         offset: { x: -1, y: 0 },
-                        chapters: { from: 65, to: 66 },
+                        chapters: { from: 66, to: 68 },
+                    },
+                    {
+                        title: () => 'Logistics in the Northern Plateau',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 69, to: 70 },
                     },
                 ],
             },
@@ -1367,7 +1373,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             41: 7,
             43: 16,
             58: 5,
-            66: 18,
+            66: 16,
         } as const,
         wikiBase: 'https://frieren.fandom.com/wiki/',
         smallImages: {
