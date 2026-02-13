@@ -2,8 +2,8 @@ import CSS from 'csstype';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '../contexts/SettingsContext';
-import { scale } from '../lib/helpers';
+import useSettings from '@shared/contexts/SettingsContext';
+import { scale } from '@shared/lib/helpers';
 
 type Offset = {
     $offsetX?: number | undefined;

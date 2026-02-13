@@ -2,16 +2,16 @@ import CSS from 'csstype';
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '../../shared/contexts/SettingsContext';
-import { hueGlow, scale } from '../../shared/lib/helpers';
-import { useHover } from '../../shared/lib/hooks';
-import { Link, ThumbnailImage, Tooltip, withShadow } from '../../shared/ui';
-import TIMELINE from '../../timelines';
+import useSettings from '@shared/contexts/SettingsContext';
+import { hueGlow, scale } from '@shared/lib/helpers';
+import { useHover } from '@shared/lib/hooks';
+import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
+import TIMELINE from '@timelines';
 import {
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
-} from '../../timelines/types';
+} from '@timelines/types';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
 import { TimelineSection } from './TimelineSection';

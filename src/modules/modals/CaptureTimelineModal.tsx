@@ -2,17 +2,16 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
-
-import useSettings from '../../shared/contexts/SettingsContext';
+import useSettings from '@shared/contexts/SettingsContext';
 import {
     getVolumeWidth,
     maxHeight,
     scale,
     toTitleCase,
-} from '../../shared/lib/helpers';
-import { sum } from '../../shared/lib/util';
-import { Modal } from '../../shared/ui';
-import TIMELINE from '../../timelines';
+} from '@shared/lib/helpers';
+import { sum } from '@shared/lib/util';
+import { Modal } from '@shared/ui';
+import TIMELINE from '@timelines/index';
 
 const ConfirmButton = styled.button`
     cursor: pointer;

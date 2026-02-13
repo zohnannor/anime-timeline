@@ -6,12 +6,9 @@ import {
     useState,
 } from 'react';
 
-import {
-    Settings,
-    SettingsContext,
-} from '../../shared/contexts/SettingsContext';
-import { TITLES } from '../../timelines/constants';
-import { AnimeTitle } from '../../timelines/types';
+import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
+import { TITLES } from '@timelines/constants';
+import { AnimeTitle } from '@timelines/types';
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);

@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '../../shared/contexts/SettingsContext';
+import useSettings from '@shared/contexts/SettingsContext';
 import {
     chapterDates,
     DAYS_GRADIENT,
@@ -17,10 +17,10 @@ import {
     MONTHS,
     MONTHS_GRADIENT,
     scale,
-} from '../../shared/lib/helpers';
-import { Modal, Tooltip } from '../../shared/ui';
-import { HeaderButton } from '../../shared/ui/Modal';
-import TIMELINE from '../../timelines';
+} from '@shared/lib/helpers';
+import { Modal, Tooltip } from '@shared/ui';
+import { HeaderButton } from '@shared/ui/Modal';
+import TIMELINE from '@timelines';
 
 const CalendarGrid = styled.div`
     display: grid;

@@ -1,5 +1,5 @@
-import { SettingsValues } from '../shared/contexts/SettingsContext';
-import { isMobileDevice } from '../shared/lib/util';
+import { SettingsValues } from '@shared/contexts/SettingsContext';
+import { isMobileDevice } from '@shared/lib/util';
 import { AOT_TIMELINE } from './data/aot';
 import { BERSERK_TIMELINE } from './data/berserk';
 import { CSM_TIMELINE } from './data/csm';

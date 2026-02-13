@@ -1,10 +1,10 @@
-import useSettings from '../../shared/contexts/SettingsContext';
-import TIMELINE from '../../timelines';
+import useSettings from '@shared/contexts/SettingsContext';
+import TIMELINE from '@timelines';
 import {
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
-} from '../../timelines/types';
+} from '@timelines/types';
 import { Timeline } from './Timeline';
 import { TimelineContainer } from './TimelineContainer';
 import { TimelineSectionItemComponent } from './TimelineSectionItemComponent';

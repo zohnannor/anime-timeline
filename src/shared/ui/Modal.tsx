@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
-import { scale } from '../lib/helpers';
+import { scale } from '@shared/lib/helpers';
 
 const ShadowOverlay = styled.div`
     position: fixed;

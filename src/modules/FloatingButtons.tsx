@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import useSettings, {
     SETTINGS_FUNCTIONS,
     SettingsValues,
-} from '../shared/contexts/SettingsContext';
-import { scale } from '../shared/lib/helpers';
-import { ThumbnailImage, Tooltip } from '../shared/ui';
+} from '@shared/contexts/SettingsContext';
+import { scale } from '@shared/lib/helpers';
+import { ThumbnailImage, Tooltip } from '@shared/ui';
 
 const ButtonSection = styled.div`
     display: flex;

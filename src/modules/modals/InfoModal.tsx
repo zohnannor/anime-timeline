@@ -2,11 +2,11 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
-import useSettings from '../../shared/contexts/SettingsContext';
-import { scale } from '../../shared/lib/helpers';
-import { Link, Modal } from '../../shared/ui';
-import TIMELINE from '../../timelines';
-import { TimelineData } from '../../timelines/types';
+import useSettings from '@shared/contexts/SettingsContext';
+import { scale } from '@shared/lib/helpers';
+import { Link, Modal } from '@shared/ui';
+import TIMELINE from '@timelines/index';
+import { TimelineData } from '@timelines/types';
 
 type BoxProps = {
     $dir?: 'row' | 'column';

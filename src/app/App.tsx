@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { FloatingButton, FloatingButtons } from '../modules/FloatingButtons';
+import { FloatingButton, FloatingButtons } from '@modules/FloatingButtons';
 import {
     AnimeTitleSelectorModal,
     CalendarModal,
     CaptureTimelineModal,
     InfoModal,
-} from '../modules/modals';
-import { Scroller } from '../modules/Scroller';
-import { TimeLineHeaders, TimelineSection } from '../modules/timeline';
-import useSettings from '../shared/contexts/SettingsContext';
-import { maxHeight } from '../shared/lib/helpers';
-import { useGlobalShortcuts, useWindowSize } from '../shared/lib/hooks';
-import TIMELINE, { FLOATING_BUTTONS } from '../timelines';
+} from '@modules/modals';
+import { Scroller } from '@modules/Scroller';
+import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
+import useSettings from '@shared/contexts/SettingsContext';
+import { maxHeight } from '@shared/lib/helpers';
+import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
+import TIMELINE, { FLOATING_BUTTONS } from '@timelines/index';
 
 const AppContainer = styled.div`
     display: flex;

@@ -5,8 +5,8 @@ import {
     getSagaWidth,
     getSeasonWidth,
     getVolumeWidth,
-} from '../../shared/lib/helpers';
-import { pad, Tuple } from '../../shared/lib/util';
+} from '@shared/lib/helpers';
+import { pad, Tuple } from '@shared/lib/util';
 import { Saga, Season, Timeline, TimelineData, Volume } from '../types';
 
 const SEASON_HEIGHT = 742;

@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '../../shared/contexts/SettingsContext';
-import { chapterDates, chapters, scale } from '../../shared/lib/helpers';
-import { sum } from '../../shared/lib/util';
-import { Modal, ThumbnailImage, Tooltip } from '../../shared/ui';
+import useSettings from '@shared/contexts/SettingsContext';
+import { chapterDates, chapters, scale } from '@shared/lib/helpers';
+import { sum } from '@shared/lib/util';
+import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
 import {
     ShuffleIcon,
     Sort91Icon,
     SortAzIcon,
     SortLinesIcon,
-} from '../../shared/ui/icons';
-import { RefreshIcon } from '../../shared/ui/icons/refresh';
-import { HeaderButton } from '../../shared/ui/Modal';
-import TIMELINE from '../../timelines';
-import { TITLES } from '../../timelines/constants';
-import { AnimeTitle, TimelineData } from '../../timelines/types';
+} from '@shared/ui/icons';
+import { RefreshIcon } from '@shared/ui/icons/refresh';
+import { HeaderButton } from '@shared/ui/Modal';
+import TIMELINE from '@timelines';
+import { TITLES } from '@timelines/constants';
+import { AnimeTitle, TimelineData } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
