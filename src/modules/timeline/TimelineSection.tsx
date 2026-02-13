@@ -1,12 +1,10 @@
-import React from 'react';
-
+import useSettings from '../../shared/contexts/SettingsContext';
 import {
     TIMELINE,
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
 } from '../../timelines';
-import useSettings from '../../shared/contexts/SettingsContext';
 import { Timeline } from './Timeline';
 import { TimelineContainer } from './TimelineContainer';
 import { TimelineSectionItemComponent } from './TimelineSectionItemComponent';

@@ -1,7 +1,8 @@
 import CSS from 'csstype';
 
-import { WidthHelper } from '../shared/lib/helpers';
 import { SettingsValues } from '../shared/contexts/SettingsContext';
+import { WidthHelper } from '../shared/lib/helpers';
+import { ExactUnion, isMobileDevice } from '../shared/lib/util';
 import { AOT_TIMELINE } from './aot';
 import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';
@@ -10,7 +11,6 @@ import { EVA_TIMELINE } from './eva';
 import { FP_TIMELINE } from './fp';
 import { FRIEREN_TIMELINE } from './frieren';
 import { OPM_TIMELINE } from './opm';
-import { ExactUnion, isMobileDevice } from '../shared/lib/util';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 
-import { TIMELINE } from '../../timelines';
+import useSettings from '../../shared/contexts/SettingsContext';
 import {
     getVolumeWidth,
     maxHeight,
     scale,
     toTitleCase,
 } from '../../shared/lib/helpers';
-import useSettings from '../../shared/contexts/SettingsContext';
 import { sum } from '../../shared/lib/util';
-import { Modal } from '../../shared/ui/Modal';
+import { Modal } from '../../shared/ui';
+import { TIMELINE } from '../../timelines';
 
 const ConfirmButton = styled.button`
     cursor: pointer;

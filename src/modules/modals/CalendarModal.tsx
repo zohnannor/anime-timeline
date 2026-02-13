@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
+import useSettings from '../../shared/contexts/SettingsContext';
 import {
     chapterDates,
     DAYS_GRADIENT,
@@ -17,9 +18,8 @@ import {
     MONTHS_GRADIENT,
     scale,
 } from '../../shared/lib/helpers';
-import useSettings from '../../shared/contexts/SettingsContext';
-import { HeaderButton, Modal } from '../../shared/ui/Modal';
-import { Tooltip } from '../../shared/ui/Tooltip';
+import { Modal, Tooltip } from '../../shared/ui';
+import { HeaderButton } from '../../shared/ui/Modal';
 
 const CalendarGrid = styled.div`
     display: grid;

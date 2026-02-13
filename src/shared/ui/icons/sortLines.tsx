@@ -1,4 +1,3 @@
-import React from 'react';
 export const SortLinesIcon: React.FC = () => (
     <svg
         width='24px'

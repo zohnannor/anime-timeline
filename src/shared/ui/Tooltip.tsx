@@ -1,8 +1,8 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale } from '../lib/helpers';
-import useHover from '../lib/hooks/useHover';
+import { useHover } from '../lib/hooks';
 
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 type TooltipAnimation = 'fade' | 'grow';

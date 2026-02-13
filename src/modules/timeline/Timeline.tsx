@@ -1,12 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 
-import {
-    AnimeTitle,
-    SMALL_FONT_SIZE,
-    TIMELINE,
-    TIMELINE_HEIGHT,
-} from '../../timelines';
+import useSettings from '../../shared/contexts/SettingsContext';
 import {
     chapterDates,
     chapterDatesByMonth,
@@ -18,11 +13,16 @@ import {
     MONTHS_GRADIENT,
     scale,
 } from '../../shared/lib/helpers';
-import useHover from '../../shared/lib/hooks/useHover';
-import useSettings from '../../shared/contexts/SettingsContext';
+import { useHover } from '../../shared/lib/hooks';
 import { sum } from '../../shared/lib/util';
+import { withShadow } from '../../shared/ui';
+import {
+    AnimeTitle,
+    SMALL_FONT_SIZE,
+    TIMELINE,
+    TIMELINE_HEIGHT,
+} from '../../timelines';
 import { withCrossLines } from './CrossLines';
-import { withShadow } from '../../shared/ui/ShadowWrapper';
 
 type DayProps = {
     $width: number;

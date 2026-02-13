@@ -1,6 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 
+import { HEADER_TITLES, scale } from '../../shared/lib/helpers';
+import { Link, withShadow } from '../../shared/ui';
 import {
     AnimeTitle,
     HEADERS_WIDTH,
@@ -8,9 +9,6 @@ import {
     TIMELINE_HEIGHT,
     TimelineSectionLayout,
 } from '../../timelines';
-import { HEADER_TITLES, scale } from '../../shared/lib/helpers';
-import { Link } from '../../shared/ui/Link';
-import { withShadow } from '../../shared/ui/ShadowWrapper';
 
 type HeaderProps = {
     $height: number;

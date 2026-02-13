@@ -1,9 +1,9 @@
 import CSS from 'csstype';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '../lib/helpers';
 import useSettings from '../contexts/SettingsContext';
+import { scale } from '../lib/helpers';
 
 type Offset = {
     $offsetX?: number | undefined;
@@ -36,7 +36,7 @@ type ImageProps = {
     $loading: boolean;
 };
 
-export const Image = styled.img<ImageProps & Offset>`
+const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY, $defaultPosition = 'center' }) =>

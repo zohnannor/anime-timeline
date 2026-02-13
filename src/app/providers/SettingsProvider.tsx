@@ -5,11 +5,12 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { AnimeTitle, TITLES } from '../../timelines';
+
 import {
     Settings,
     SettingsContext,
 } from '../../shared/contexts/SettingsContext';
+import { AnimeTitle, TITLES } from '../../timelines';
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);

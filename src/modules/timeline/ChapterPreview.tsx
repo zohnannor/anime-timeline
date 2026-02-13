@@ -1,11 +1,11 @@
-import React, { PropsWithChildren, useEffect, useState, useRef } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { HEADERS_WIDTH } from '../../timelines';
-import { maxHeight, scale } from '../../shared/lib/helpers';
-import useWindowScroll from '../../shared/lib/hooks/useWindowScroll';
 import useSettings from '../../shared/contexts/SettingsContext';
+import { maxHeight, scale } from '../../shared/lib/helpers';
+import { useWindowScroll } from '../../shared/lib/hooks';
 import { getDocumentPosition } from '../../shared/lib/util';
+import { HEADERS_WIDTH } from '../../timelines';
 
 type PreviewProps = {
     $hasPicture: boolean;

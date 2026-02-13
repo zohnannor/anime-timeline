@@ -1,5 +1,5 @@
 import CSS from 'csstype';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 

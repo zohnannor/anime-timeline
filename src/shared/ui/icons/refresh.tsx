@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const RefreshIcon: React.FC = () => (
     <svg
         width='24px'

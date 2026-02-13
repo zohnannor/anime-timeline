@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitle, TIMELINE, TimelineData, TITLES } from '../../timelines';
-import { chapterDates, chapters, scale } from '../../shared/lib/helpers';
 import useSettings from '../../shared/contexts/SettingsContext';
+import { chapterDates, chapters, scale } from '../../shared/lib/helpers';
 import { sum } from '../../shared/lib/util';
+import { Modal, ThumbnailImage, Tooltip } from '../../shared/ui';
+import {
+    ShuffleIcon,
+    Sort91Icon,
+    SortAzIcon,
+    SortLinesIcon,
+} from '../../shared/ui/icons';
 import { RefreshIcon } from '../../shared/ui/icons/refresh';
-import { ShuffleIcon } from '../../shared/ui/icons/shuffle';
-import { Sort91Icon } from '../../shared/ui/icons/sort91';
-import { SortAzIcon } from '../../shared/ui/icons/sortAZ';
-import { SortLinesIcon } from '../../shared/ui/icons/sortLines';
-import { HeaderButton, Modal } from '../../shared/ui/Modal';
-import { ThumbnailImage } from '../../shared/ui/ThumbnailImage';
-import { Tooltip } from '../../shared/ui/Tooltip';
+import { HeaderButton } from '../../shared/ui/Modal';
+import { AnimeTitle, TIMELINE, TimelineData, TITLES } from '../../timelines';
 
 const TooltipContent = styled.div`
     display: flex;

@@ -1,4 +1,3 @@
-import { Arc, Season, Timeline, TimelineData, Volume } from '.';
 import {
     getArcWidth,
     getChapterWidth,
@@ -9,6 +8,7 @@ import {
     getVolumeWidth,
 } from '../shared/lib/helpers';
 import { pad, Tuple } from '../shared/lib/util';
+import { Arc, Season, Timeline, TimelineData, Volume } from './';
 
 const SEASON_HEIGHT = 1500;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;

@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitleSelectorModal } from '../modules/modals/AnimeTitleSelector';
-import { CalendarModal } from '../modules/modals/CalendarModal';
-import { CaptureTimelineModal } from '../modules/modals/CaptureTimelineModal';
 import { FloatingButton, FloatingButtons } from '../modules/FloatingButtons';
-import { InfoModal } from '../modules/modals/InfoModal';
+import {
+    AnimeTitleSelectorModal,
+    CalendarModal,
+    CaptureTimelineModal,
+    InfoModal,
+} from '../modules/modals';
 import { Scroller } from '../modules/Scroller';
-import { TimeLineHeaders } from '../modules/timeline/TimeLineHeaders';
-import { TimelineSection } from '../modules/timeline/TimelineSection';
-import { FLOATING_BUTTONS, TIMELINE } from '../timelines';
-import { maxHeight } from '../shared/lib/helpers';
-import useWindowSize from '../shared/lib/hooks/useWindowSize';
+import { TimeLineHeaders, TimelineSection } from '../modules/timeline';
 import useSettings from '../shared/contexts/SettingsContext';
-import useGlobalShortcuts from '../shared/lib/hooks/useGlobalShortcuts';
+import { maxHeight } from '../shared/lib/helpers';
+import { useGlobalShortcuts, useWindowSize } from '../shared/lib/hooks';
+import { FLOATING_BUTTONS, TIMELINE } from '../timelines';
 
 const AppContainer = styled.div`
     display: flex;
