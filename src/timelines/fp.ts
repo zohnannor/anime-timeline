@@ -1,11 +1,11 @@
-import { Arc, Season, Timeline, TimelineData, Volume } from '../constants';
+import { Arc, Season, Timeline, TimelineData, Volume } from '.';
 import {
     getArcWidth,
     getChapterWidth,
     getSagaWidth,
     getVolumeWidth,
-} from '../helpers';
-import { pad, Tuple } from '../util';
+} from '../shared/lib/helpers';
+import { pad, Tuple } from '../shared/lib/util';
 
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
