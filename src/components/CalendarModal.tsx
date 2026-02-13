@@ -17,7 +17,7 @@ import {
     MONTHS_GRADIENT,
     scale,
 } from '../helpers';
-import { useSettings } from '../providers/SettingsProvider';
+import useSettings from '../providers/SettingsProvider';
 import { HeaderButton, Modal } from './Modal';
 import { Tooltip } from './Tooltip';
 

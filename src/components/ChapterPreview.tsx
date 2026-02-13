@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { HEADERS_WIDTH } from '../constants';
 import { maxHeight, scale } from '../helpers';
 import useWindowScroll from '../hooks/useWindowScroll';
-import { useSettings } from '../providers/SettingsProvider';
+import useSettings from '../providers/SettingsProvider';
 import { getDocumentPosition } from '../util';
 
 type PreviewProps = {
