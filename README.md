@@ -109,6 +109,7 @@ On Arch Linux, install `imagemagick` and `libwebp-utils` packages.
     - Keep pull requests focused and describe what/why.
     - Call out any new tools, dependencies, or scripts.
     - Use prettier for formatting (`yarn fmt`).
+    - Use GitHub issue forms (Bug report / Feature request) when opening issues.
 
 ### License
 

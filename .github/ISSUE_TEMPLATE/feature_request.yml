@@ -1,0 +1,62 @@
+name: Feature request
+
+description: Suggest an improvement to the app or timelines
+
+labels:
+    - enhancement
+
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for suggesting an improvement.
+              Please keep one feature per issue.
+
+    - type: textarea
+      id: what
+      attributes:
+          label: What would you like to see?
+          description: Describe the feature or improvement you're proposing.
+          placeholder: >
+              Example: Add support for showing anime-only episodes in a
+              different color...
+      validations:
+          required: true
+
+    - type: textarea
+      id: why
+      attributes:
+          label: Why is this useful?
+          description: Who benefits, and how?
+          placeholder: >
+              Example: This helps distinguish anime-original content from manga
+              canon...
+      validations:
+          required: true
+
+    - type: checkboxes
+      id: scope
+      attributes:
+          label: Scope
+          description: Check all that apply.
+          options:
+              - label: New anime/manga title
+              - label: Changes to an existing title's timeline
+              - label: UI / UX improvement
+              - label: Performance / image optimizations
+              - label: Other (describe below)
+      validations:
+          required: true
+
+    - type: textarea
+      id: details
+      attributes:
+          label: Details
+          description: >
+              Extra context, links (e.g. wiki pages), or rough sketches of the
+              timeline / UI you have in mind.
+          placeholder: >
+              Links to wiki pages, notes about arcs/seasons, or rough mockups go
+              here.
+      validations:
+          required: false
