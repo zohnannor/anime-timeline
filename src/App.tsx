@@ -11,8 +11,9 @@ import { TimeLineHeaders } from './components/TimeLineHeaders';
 import { TimelineSection } from './components/TimelineSection';
 import { FLOATING_BUTTONS, TIMELINE } from './constants';
 import { maxHeight } from './helpers';
+import useGlobalShortcuts from './hooks/useGlobalShortcuts';
 import useWindowSize from './hooks/useWindowSize';
-import { useSettings } from './providers/SettingsProvider';
+import useSettings from './providers/SettingsProvider';
 
 const AppContainer = styled.div`
     display: flex;
@@ -54,8 +55,8 @@ const App: React.FC = () => {
     );
 
     useEffect(() => {
-        window.addEventListener('wheel', handleScroll);
-        return () => window.removeEventListener('wheel', handleScroll);
+        globalThis.addEventListener('wheel', handleScroll);
+        return () => globalThis.removeEventListener('wheel', handleScroll);
     }, [handleScroll]);
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -67,7 +68,9 @@ const App: React.FC = () => {
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [handleKeyDown]);
+    }, []);
+
+    useGlobalShortcuts();
 
     useEffect(() => {
         document.documentElement.style.setProperty(

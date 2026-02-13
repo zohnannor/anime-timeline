@@ -10,7 +10,7 @@ import {
 } from '../constants';
 import { hueGlow, scale } from '../helpers';
 import useHover from '../hooks/useHover';
-import { useSettings } from '../providers/SettingsProvider';
+import useSettings from '../providers/SettingsProvider';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
 import { Link } from './Link';

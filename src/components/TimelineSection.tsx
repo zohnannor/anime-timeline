@@ -6,7 +6,7 @@ import {
     TimelineSectionItem,
     TimelineSectionType,
 } from '../constants';
-import { useSettings } from '../providers/SettingsProvider';
+import useSettings from '../providers/SettingsProvider';
 import { Timeline } from './Timeline';
 import { TimelineContainer } from './TimelineContainer';
 import { TimelineSectionItemComponent } from './TimelineSectionItemComponent';

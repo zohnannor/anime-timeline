@@ -4,6 +4,7 @@ import {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from 'react';
 
@@ -79,14 +80,15 @@ const SettingsContext = createContext<Settings>({
     setAnimeTitleSelectorOpen: () => {},
 });
 
-export const useSettings = () => useContext(SettingsContext);
+const useSettings = () => useContext(SettingsContext);
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
-        const firstVisit = window.localStorage.getItem('firstVisit') === null;
+        const firstVisit =
+            globalThis.localStorage.getItem('firstVisit') === null;
         if (firstVisit) {
-            window.localStorage.setItem('firstVisit', 'false');
+            globalThis.localStorage.setItem('firstVisit', 'false');
         }
         return firstVisit;
     });
@@ -96,15 +98,15 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         useState(false);
     const [showTitles, setShowTitlesRaw] = useState(
         // default to true if not set (first visit), otherwise get from storage
-        () => window.localStorage.getItem('showTitles') !== 'false',
+        () => globalThis.localStorage.getItem('showTitles') !== 'false',
     );
     const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
-        const params = new URLSearchParams(document.location.search);
+        const params = new URLSearchParams(globalThis.location.search);
         const animeTitle = params.get('title');
         if (animeTitle && TITLES.includes(animeTitle as AnimeTitle)) {
             return animeTitle as AnimeTitle;
         }
-        window.history.replaceState({}, '', `?title=csm`);
+        globalThis.history.replaceState({}, '', `?title=csm`);
         return 'csm';
     });
     const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
@@ -113,115 +115,125 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         if (typeof show === 'function') {
             show = show(showTitles);
         }
-        window.localStorage.setItem('showTitles', show.toString());
+        globalThis.localStorage.setItem('showTitles', show.toString());
         setShowTitlesRaw(show);
     };
 
-    const openInfoBox = (open: React.SetStateAction<boolean>) => {
-        if (open) {
-            window.history.pushState({ infoBoxOpen: true }, '');
-        } else {
-            if (window.history.state?.infoBoxOpen) {
-                window.history.back();
-            }
-        }
-        setInfoBoxOpen(open);
-    };
+    const createModalHandler = useCallback(
+        (
+            stateKey: keyof Settings,
+            setter: React.Dispatch<React.SetStateAction<boolean>>,
+        ) => {
+            return (open: React.SetStateAction<boolean>) => {
+                if (open) {
+                    globalThis.history.pushState({ [stateKey]: true }, '');
+                } else if (globalThis.history.state?.[stateKey]) {
+                    globalThis.history.back();
+                }
+                setter(open);
+            };
+        },
+        [],
+    );
 
-    const openCalendar = (open: React.SetStateAction<boolean>) => {
-        if (open) {
-            window.history.pushState({ calendarOpen: true }, '');
-        } else {
-            if (window.history.state?.calendarOpen) {
-                window.history.back();
-            }
-        }
-        setCalendarOpen(open);
-    };
-
-    const openCaptureTimelineModal = (open: React.SetStateAction<boolean>) => {
-        if (open) {
-            window.history.pushState({ captureTimelineModal: true }, '');
-        } else {
-            if (window.history.state?.captureTimelineModal) {
-                window.history.back();
-            }
-        }
-        setCaptureTimelineModalOpen(open);
-    };
-
-    const openAnimeTitleSelector = (open: React.SetStateAction<boolean>) => {
-        if (open) {
-            window.history.pushState({ animeTitleSelector: true }, '');
-        } else {
-            if (window.history.state?.animeTitleSelector) {
-                window.history.back();
-            }
-        }
-        setAnimeTitleSelectorOpen(open);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.ctrlKey && e.code == 'KeyC') {
-            setShowCrosslines(p => !p);
-        }
-
-        if (e.code === 'Escape' && infoBoxOpen) {
-            openInfoBox(false);
-            openCalendar(false);
-            openCaptureTimelineModal(false);
-        }
-    };
+    const openInfoBox = useMemo(
+        () => createModalHandler('infoBoxOpen', setInfoBoxOpen),
+        [createModalHandler],
+    );
+    const openCalendar = useMemo(
+        () => createModalHandler('calendarOpen', setCalendarOpen),
+        [createModalHandler],
+    );
+    const openCaptureTimelineModal = useMemo(
+        () =>
+            createModalHandler(
+                'captureTimelineModalOpen',
+                setCaptureTimelineModalOpen,
+            ),
+        [createModalHandler],
+    );
+    const openAnimeTitleSelector = useMemo(
+        () =>
+            createModalHandler(
+                'animeTitleSelectorOpen',
+                setAnimeTitleSelectorOpen,
+            ),
+        [createModalHandler],
+    );
 
     const handlePopState = useCallback((e: PopStateEvent) => {
-        setInfoBoxOpen(!!e.state?.infoBoxOpen);
-        setCalendarOpen(!!e.state?.calendarOpen);
-        setCaptureTimelineModalOpen(!!e.state?.captureTimelineModal);
-        setAnimeTitleSelectorOpen(!!e.state?.animeTitleSelectorOpen);
+        const state = e.state || {};
+        const modalStates: {
+            key: keyof Settings;
+            setter: React.Dispatch<React.SetStateAction<boolean>>;
+        }[] = [
+            { key: 'infoBoxOpen', setter: setInfoBoxOpen },
+            { key: 'calendarOpen', setter: setCalendarOpen },
+            {
+                key: 'captureTimelineModalOpen',
+                setter: setCaptureTimelineModalOpen,
+            },
+            {
+                key: 'animeTitleSelectorOpen',
+                setter: setAnimeTitleSelectorOpen,
+            },
+        ];
+
+        modalStates.forEach(({ key, setter }) => {
+            setter(!!state[key]);
+        });
     }, []);
 
     useEffect(() => {
-        window.addEventListener('popstate', handlePopState);
-        return () => window.removeEventListener('popstate', handlePopState);
+        globalThis.addEventListener('popstate', handlePopState);
+        return () => globalThis.removeEventListener('popstate', handlePopState);
     }, [handlePopState]);
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [
-        infoBoxOpen,
-        calendarOpen,
-        captureTimelineModalOpen,
-        animeTitleSelectorOpen,
-    ]);
 
     const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
         setAnimeTitleRaw(title);
-        window.history.replaceState({}, '', `?title=${title}`);
+        globalThis.history.replaceState({}, '', `?title=${title}`);
     };
 
+    const contextValue = useMemo<Settings>(
+        () => ({
+            showCrosslines,
+            setShowCrosslines,
+            infoBoxOpen,
+            setInfoBoxOpen: openInfoBox,
+            unboundedChapterWidth,
+            setUnboundedChapterWidth,
+            calendarOpen,
+            setCalendarOpen: openCalendar,
+            showTitles,
+            setShowTitles,
+            captureTimelineModalOpen,
+            setCaptureTimelineModalOpen: openCaptureTimelineModal,
+            animeTitle,
+            setAnimeTitle,
+            animeTitleSelectorOpen,
+            setAnimeTitleSelectorOpen: openAnimeTitleSelector,
+        }),
+        [
+            showCrosslines,
+            infoBoxOpen,
+            openInfoBox,
+            unboundedChapterWidth,
+            calendarOpen,
+            openCalendar,
+            showTitles,
+            captureTimelineModalOpen,
+            openCaptureTimelineModal,
+            animeTitle,
+            animeTitleSelectorOpen,
+            openAnimeTitleSelector,
+        ],
+    );
+
     return (
-        <SettingsContext.Provider
-            value={{
-                showCrosslines,
-                setShowCrosslines,
-                infoBoxOpen,
-                setInfoBoxOpen: openInfoBox,
-                unboundedChapterWidth,
-                setUnboundedChapterWidth,
-                calendarOpen,
-                setCalendarOpen: openCalendar,
-                showTitles,
-                setShowTitles,
-                captureTimelineModalOpen,
-                setCaptureTimelineModalOpen: openCaptureTimelineModal,
-                animeTitle,
-                setAnimeTitle,
-                animeTitleSelectorOpen,
-                setAnimeTitleSelectorOpen: openAnimeTitleSelector,
-            }}
-        >
+        <SettingsContext.Provider value={contextValue}>
             {children}
         </SettingsContext.Provider>
     );
 };
+
+export default useSettings;

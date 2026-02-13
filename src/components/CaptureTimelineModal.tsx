@@ -5,7 +5,7 @@ import { useToPng } from '@hugocxl/react-to-image';
 
 import { TIMELINE } from '../constants';
 import { getVolumeWidth, maxHeight, scale, toTitleCase } from '../helpers';
-import { useSettings } from '../providers/SettingsProvider';
+import useSettings from '../providers/SettingsProvider';
 import { sum } from '../util';
 import { Modal } from './Modal';
 
