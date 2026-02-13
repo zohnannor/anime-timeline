@@ -1,0 +1,92 @@
+name: Bug report
+
+description: Something is broken or looks wrong in an existing timeline
+
+labels:
+    - bug
+
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to report a bug.
+              Please fill in as much as you can.
+
+    - type: textarea
+      id: what-happened
+      attributes:
+          label: What happened?
+          description: What did you see, and what did you expect instead?
+          placeholder: >
+              Example: X is broken; clicking Y does nothing, etc.
+      validations:
+          required: true
+
+    - type: textarea
+      id: steps-to-reproduce
+      attributes:
+          label: Steps to reproduce
+          description: Be as specific as you can so the bug can be reproduced.
+          placeholder: |
+              1. Go to …
+              2. Choose title:
+              3. Do this:
+              4. See this:
+      validations:
+          required: true
+
+    - type: input
+      id: titles
+      attributes:
+          label: Affected title(s)
+          description: >
+              Examples: csm, berserk, all of them, etc.
+          placeholder: csm, berserk
+      validations:
+          required: true
+
+    - type: textarea
+      id: screenshots
+      attributes:
+          label: Screenshots / screen records / captures
+          description: >
+              If possible, add screenshots or a screen record.
+              If relevant, also attach an exported timeline image
+              (via the capture tool).
+          placeholder: >
+              Drag and drop, Ctrl-V images/videos here, or paste links.
+      validations:
+          required: false
+
+    - type: input
+      id: browser
+      attributes:
+          label: Browser and version
+          placeholder: Firefox 147.0.3 (64-bit)
+      validations:
+          required: true
+
+    - type: input
+      id: os
+      attributes:
+          label: OS
+          placeholder: Arch Linux
+      validations:
+          required: true
+
+    - type: input
+      id: screen
+      attributes:
+          label: Screen size / zoom level
+          description: Only if it might be relevant.
+          placeholder: 2560x1440, 100%
+      validations:
+          required: false
+
+    - type: textarea
+      id: additional-context
+      attributes:
+          label: Additional context
+          description: Add any other context about the problem here.
+      validations:
+          required: false
