@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -19,7 +19,7 @@ import {
     scale,
 } from '../../shared/lib/helpers';
 import useHover from '../../shared/lib/hooks/useHover';
-import { useSettings } from '../../app/providers/SettingsProvider';
+import useSettings from '../../app/providers/SettingsProvider';
 import { sum } from '../../shared/lib/util';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from '../../shared/ui/ShadowWrapper';
@@ -79,7 +79,7 @@ type TimelineSegmentProps = {
         inputRange: [number, number];
         outputGradient: number[];
     };
-    variant: string;
+    variant: 'years' | 'months' | 'days';
 };
 
 const TimelineSegment: React.FC<TimelineSegmentProps> = ({
@@ -158,6 +158,19 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                             :   undefined
                         }
                         $variant={variant}
+                        role={variant === 'days' ? 'button' : undefined}
+                        tabIndex={variant === 'days' ? 0 : -1}
+                        onKeyDown={
+                            variant === 'days' ?
+                                e =>
+                                    // a11y: allow focusing with space or enter
+                                    (e.key === 'Enter' || e.key === ' ') &&
+                                    handleDayClick(
+                                        e as unknown as React.MouseEvent,
+                                        idx + 1,
+                                    )
+                            :   undefined
+                        }
                     >
                         <TimeframeDate className={`date-${variant}`}>
                             {label}
@@ -172,29 +185,41 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
-    const daysSegments = chapterDates($animeTitle).map((date, idx) => ({
-        chapterNumbers: [idx + 1],
-        colorValue: date.getDate(),
-        label: date.getDate().toString(),
-    }));
+    const daysSegments = useMemo(
+        () =>
+            chapterDates($animeTitle).map((date, idx) => ({
+                chapterNumbers: [idx + 1],
+                colorValue: date.getDate(),
+                label: date.getDate().toString(),
+            })),
+        [$animeTitle],
+    );
 
-    const monthsSegments = chapterDatesByMonth($animeTitle).map(dates => {
-        const month = dates[0]![1].getMonth();
-        return {
-            chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
-            colorValue: (month + 1) % 12,
-            label: MONTHS[month]!,
-        };
-    });
+    const monthsSegments = useMemo(
+        () =>
+            chapterDatesByMonth($animeTitle).map(dates => {
+                const month = dates[0]![1].getMonth();
+                return {
+                    chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
+                    colorValue: (month + 1) % 12,
+                    label: MONTHS[month]!,
+                };
+            }),
+        [$animeTitle],
+    );
 
-    const yearsSegments = chapterDatesByYear($animeTitle).map(dates => {
-        const yearDate = dates[0]![1];
-        return {
-            chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
-            colorValue: yearDate.getFullYear(),
-            label: yearDate.getFullYear().toString(),
-        };
-    });
+    const yearsSegments = useMemo(
+        () =>
+            chapterDatesByYear($animeTitle).map(dates => {
+                const yearDate = dates[0]![1];
+                return {
+                    chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
+                    colorValue: yearDate.getFullYear(),
+                    label: yearDate.getFullYear().toString(),
+                };
+            }),
+        [$animeTitle],
+    );
 
     return (
         <>

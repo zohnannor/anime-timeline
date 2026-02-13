@@ -4,10 +4,9 @@ import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import { scale } from '../shared/lib/helpers';
-import {
+import useSettings, {
     SETTINGS_FUNCTIONS,
     SettingsValues,
-    useSettings,
 } from '../app/providers/SettingsProvider';
 import { ThumbnailImage } from '../shared/ui/ThumbnailImage';
 import { Tooltip } from '../shared/ui/Tooltip';

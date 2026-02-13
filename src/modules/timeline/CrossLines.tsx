@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
 import { scale } from '../../shared/lib/helpers';
-import { useSettings } from '../../app/providers/SettingsProvider';
+import useSettings from '../../app/providers/SettingsProvider';
 
 type CrossLinesProps = {
     $crossLinesVisible?: boolean | undefined;

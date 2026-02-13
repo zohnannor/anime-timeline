@@ -10,7 +10,6 @@ import {
 } from '../../timelines';
 import { hueGlow, scale } from '../../shared/lib/helpers';
 import useHover from '../../shared/lib/hooks/useHover';
-import { useSettings } from '../../app/providers/SettingsProvider';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
 import { Link } from '../../shared/ui/Link';
@@ -18,6 +17,7 @@ import { withShadow } from '../../shared/ui/ShadowWrapper';
 import { ThumbnailImage } from '../../shared/ui/ThumbnailImage';
 import { TimelineSection } from './TimelineSection';
 import { Tooltip } from '../../shared/ui/Tooltip';
+import useSettings from '../../app/providers/SettingsProvider';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;

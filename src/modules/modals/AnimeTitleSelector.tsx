@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { AnimeTitle, TIMELINE, TimelineData, TITLES } from '../../timelines';
 import { chapterDates, chapters, scale } from '../../shared/lib/helpers';
-import { useSettings } from '../../app/providers/SettingsProvider';
+import useSettings from '../../app/providers/SettingsProvider';
 import { sum } from '../../shared/lib/util';
 import { RefreshIcon } from '../../shared/ui/icons/refresh';
 import { ShuffleIcon } from '../../shared/ui/icons/shuffle';

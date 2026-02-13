@@ -6,7 +6,7 @@ import { SCROLLER_WIDTH, TIMELINE } from '../timelines';
 import { scale } from '../shared/lib/helpers';
 import useMousePosition from '../shared/lib/hooks/useMousePosition';
 import useWindowScroll from '../shared/lib/hooks/useWindowScroll';
-import { useSettings } from '../app/providers/SettingsProvider';
+import useSettings from '../app/providers/SettingsProvider';
 import { clamp } from '../shared/lib/util';
 import { ThumbnailImage } from '../shared/ui/ThumbnailImage';
 
