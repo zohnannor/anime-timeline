@@ -19,7 +19,7 @@ import {
     scale,
 } from '../../shared/lib/helpers';
 import useHover from '../../shared/lib/hooks/useHover';
-import useSettings from '../../app/providers/SettingsProvider';
+import useSettings from '../../shared/contexts/SettingsContext';
 import { sum } from '../../shared/lib/util';
 import { withCrossLines } from './CrossLines';
 import { withShadow } from '../../shared/ui/ShadowWrapper';

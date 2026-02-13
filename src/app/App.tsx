@@ -12,7 +12,7 @@ import { TimelineSection } from '../modules/timeline/TimelineSection';
 import { FLOATING_BUTTONS, TIMELINE } from '../timelines';
 import { maxHeight } from '../shared/lib/helpers';
 import useWindowSize from '../shared/lib/hooks/useWindowSize';
-import useSettings from './providers/SettingsProvider';
+import useSettings from '../shared/contexts/SettingsContext';
 import useGlobalShortcuts from '../shared/lib/hooks/useGlobalShortcuts';
 
 const AppContainer = styled.div`

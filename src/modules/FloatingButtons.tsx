@@ -7,7 +7,7 @@ import { scale } from '../shared/lib/helpers';
 import useSettings, {
     SETTINGS_FUNCTIONS,
     SettingsValues,
-} from '../app/providers/SettingsProvider';
+} from '../shared/contexts/SettingsContext';
 import { ThumbnailImage } from '../shared/ui/ThumbnailImage';
 import { Tooltip } from '../shared/ui/Tooltip';
 

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { scale } from '../lib/helpers';
-import useSettings from '../../app/providers/SettingsProvider';
+import useSettings from '../contexts/SettingsContext';
 
 type Offset = {
     $offsetX?: number | undefined;

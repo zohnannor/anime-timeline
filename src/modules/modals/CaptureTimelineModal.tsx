@@ -10,7 +10,7 @@ import {
     scale,
     toTitleCase,
 } from '../../shared/lib/helpers';
-import useSettings from '../../app/providers/SettingsProvider';
+import useSettings from '../../shared/contexts/SettingsContext';
 import { sum } from '../../shared/lib/util';
 import { Modal } from '../../shared/ui/Modal';
 

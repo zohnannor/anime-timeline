@@ -1,7 +1,7 @@
 import CSS from 'csstype';
 
 import { WidthHelper } from '../shared/lib/helpers';
-import { SettingsValues } from '../app/providers/SettingsProvider';
+import { SettingsValues } from '../shared/contexts/SettingsContext';
 import { AOT_TIMELINE } from './aot';
 import { BERSERK_TIMELINE } from './berserk';
 import { CSM_TIMELINE } from './csm';

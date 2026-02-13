@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { TIMELINE, TimelineData } from '../../timelines';
 import { scale } from '../../shared/lib/helpers';
-import useSettings from '../../app/providers/SettingsProvider';
+import useSettings from '../../shared/contexts/SettingsContext';
 import { Link } from '../../shared/ui/Link';
 import { Modal } from '../../shared/ui/Modal';
 

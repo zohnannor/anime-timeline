@@ -17,7 +17,7 @@ import { withShadow } from '../../shared/ui/ShadowWrapper';
 import { ThumbnailImage } from '../../shared/ui/ThumbnailImage';
 import { TimelineSection } from './TimelineSection';
 import { Tooltip } from '../../shared/ui/Tooltip';
-import useSettings from '../../app/providers/SettingsProvider';
+import useSettings from '../../shared/contexts/SettingsContext';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;

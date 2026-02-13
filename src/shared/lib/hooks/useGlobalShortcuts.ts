@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useSettings from '../../../app/providers/SettingsProvider';
+import useSettings from '../../contexts/SettingsContext';
 
 const useGlobalShortcuts = () => {
     const {
