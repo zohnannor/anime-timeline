@@ -16,12 +16,9 @@ import {
 import { useHover } from '../../shared/lib/hooks';
 import { sum } from '../../shared/lib/util';
 import { withShadow } from '../../shared/ui';
-import {
-    AnimeTitle,
-    SMALL_FONT_SIZE,
-    TIMELINE,
-    TIMELINE_HEIGHT,
-} from '../../timelines';
+import TIMELINE from '../../timelines';
+import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '../../timelines/constants';
+import { AnimeTitle } from '../../timelines/types';
 import { withCrossLines } from './CrossLines';
 
 type DayProps = {
@@ -187,7 +184,7 @@ export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
 }) => {
     const daysSegments = useMemo(
         () =>
-            chapterDates($animeTitle).map((date, idx) => ({
+            chapterDates(TIMELINE[$animeTitle]).map((date, idx) => ({
                 chapterNumbers: [idx + 1],
                 colorValue: date.getDate(),
                 label: date.getDate().toString(),
@@ -197,7 +194,7 @@ export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
 
     const monthsSegments = useMemo(
         () =>
-            chapterDatesByMonth($animeTitle).map(dates => {
+            chapterDatesByMonth(TIMELINE[$animeTitle]).map(dates => {
                 const month = dates[0]![1].getMonth();
                 return {
                     chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
@@ -210,7 +207,7 @@ export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
 
     const yearsSegments = useMemo(
         () =>
-            chapterDatesByYear($animeTitle).map(dates => {
+            chapterDatesByYear(TIMELINE[$animeTitle]).map(dates => {
                 const yearDate = dates[0]![1];
                 return {
                     chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),

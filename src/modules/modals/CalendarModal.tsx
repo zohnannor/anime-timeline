@@ -20,6 +20,7 @@ import {
 } from '../../shared/lib/helpers';
 import { Modal, Tooltip } from '../../shared/ui';
 import { HeaderButton } from '../../shared/ui/Modal';
+import TIMELINE from '../../timelines';
 
 const CalendarGrid = styled.div`
     display: grid;
@@ -224,7 +225,7 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const allChapterDates = chapterDates(animeTitle);
+    const allChapterDates = chapterDates(TIMELINE[animeTitle]);
     const currentDate = new Date();
     const startDate = allChapterDates[0]!;
 

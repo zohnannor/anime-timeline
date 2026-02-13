@@ -6,12 +6,12 @@ import useSettings from '../../shared/contexts/SettingsContext';
 import { hueGlow, scale } from '../../shared/lib/helpers';
 import { useHover } from '../../shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '../../shared/ui';
+import TIMELINE from '../../timelines';
 import {
-    TIMELINE,
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
-} from '../../timelines';
+} from '../../timelines/types';
 import { ChapterPreview } from './ChapterPreview';
 import { withCrossLines } from './CrossLines';
 import { TimelineSection } from './TimelineSection';

@@ -1,12 +1,11 @@
 import { keyframes } from 'styled-components';
 
+import { TIMELINE_HEIGHT } from '../../timelines/constants';
 import {
-    AnimeTitle,
-    TIMELINE,
-    TIMELINE_HEIGHT,
+    Timeline,
     TimelineData,
     TimelineSectionType,
-} from '../../timelines';
+} from '../../timelines/types';
 import { range, sum } from './util';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
@@ -22,17 +21,15 @@ export const scale = (n: number) =>
 export const tokyoDate = (d: string) =>
     new Date(`${d.replaceAll(/(st|nd|rd|th)/g, '')} GMT+9`); // Tokyo timezone
 
-export const maxHeight = (animeTitle: AnimeTitle) =>
+export const maxHeight = (timeline: Timeline) =>
     sum(
-        Object.values(TIMELINE[animeTitle].layout)
+        Object.values(timeline.layout)
             .filter(s => s.type !== 'timeline')
             .map(s => s.height),
     ) + TIMELINE_HEIGHT;
 
-export const chapterDates = (animeTitle: AnimeTitle) =>
-    TIMELINE[animeTitle].data.volumes
-        .flatMap(v => v.chapters)
-        .map(c => tokyoDate(c.date));
+export const chapterDates = (timeline: Timeline) =>
+    timeline.data.volumes.flatMap(v => v.chapters).map(c => tokyoDate(c.date));
 
 const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
     array.reduce<[[number, T][][], number | null]>(
@@ -48,14 +45,14 @@ const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
         [[], null],
     )[0];
 
-export const chapterDatesByMonth = (animeTitle: AnimeTitle) =>
+export const chapterDatesByMonth = (timeline: Timeline) =>
     groupBy(
-        chapterDates(animeTitle),
+        chapterDates(timeline),
         date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12,
     );
 
-export const chapterDatesByYear = (animeTitle: AnimeTitle) =>
-    groupBy(chapterDates(animeTitle), date => date.getFullYear() + 1);
+export const chapterDatesByYear = (timeline: Timeline) =>
+    groupBy(chapterDates(timeline), date => date.getFullYear() + 1);
 
 const chaptersVolumes = (timeline: TimelineData) =>
     timeline.volumes.flatMap((v, vi) => v.chapters.map(() => vi));

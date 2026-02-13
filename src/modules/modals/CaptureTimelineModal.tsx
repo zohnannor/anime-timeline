@@ -12,7 +12,7 @@ import {
 } from '../../shared/lib/helpers';
 import { sum } from '../../shared/lib/util';
 import { Modal } from '../../shared/ui';
-import { TIMELINE } from '../../timelines';
+import TIMELINE from '../../timelines';
 
 const ConfirmButton = styled.button`
     cursor: pointer;
@@ -46,7 +46,7 @@ export const CaptureTimelineModal: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const timeline = TIMELINE[animeTitle].data;
-    const height = maxHeight(animeTitle);
+    const height = maxHeight(TIMELINE[animeTitle]);
     const width = sum(
         timeline.volumes.map((_, vi) =>
             getVolumeWidth(timeline, vi, unboundedChapterWidth),

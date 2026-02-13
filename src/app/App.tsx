@@ -13,7 +13,7 @@ import { TimeLineHeaders, TimelineSection } from '../modules/timeline';
 import useSettings from '../shared/contexts/SettingsContext';
 import { maxHeight } from '../shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '../shared/lib/hooks';
-import { FLOATING_BUTTONS, TIMELINE } from '../timelines';
+import TIMELINE, { FLOATING_BUTTONS } from '../timelines';
 
 const AppContainer = styled.div`
     display: flex;
@@ -75,7 +75,7 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${maxHeight(animeTitle)}`,
+            `${maxHeight(TIMELINE[animeTitle])}`,
         );
         document.title = `${timeline.title} Timeline`;
         document.head.querySelector<HTMLLinkElement>(

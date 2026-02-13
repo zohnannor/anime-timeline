@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { AnimeTitle } from '../../timelines';
+import { AnimeTitle } from '../../timelines/types';
 
 export type Settings = {
     showCrosslines: boolean;

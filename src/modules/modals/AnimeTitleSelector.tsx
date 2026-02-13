@@ -13,7 +13,9 @@ import {
 } from '../../shared/ui/icons';
 import { RefreshIcon } from '../../shared/ui/icons/refresh';
 import { HeaderButton } from '../../shared/ui/Modal';
-import { AnimeTitle, TIMELINE, TimelineData, TITLES } from '../../timelines';
+import TIMELINE from '../../timelines';
+import { TITLES } from '../../timelines/constants';
+import { AnimeTitle, TimelineData } from '../../timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -54,7 +56,7 @@ const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
 const pageCount = (timeline: TimelineData) =>
     sum(chapters(timeline).map(c => c.pages));
 const recentlyUpdated = (title: AnimeTitle) =>
-    Math.max(...chapterDates(title).map(date => date.getTime()));
+    Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
 
 export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =
