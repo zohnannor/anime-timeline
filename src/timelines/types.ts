@@ -2,7 +2,7 @@ import CSS from 'csstype';
 
 import { WidthHelper } from '@shared/lib/helpers';
 import { ExactUnion } from '@shared/lib/util';
-import { TITLES } from './constants';
+import { TITLES } from '@timelines/constants';
 
 export type Offset = { x: number; y: number };
 

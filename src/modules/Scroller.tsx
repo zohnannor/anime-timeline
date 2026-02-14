@@ -7,8 +7,8 @@ import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
 import { ThumbnailImage } from '@shared/ui';
-import TIMELINE from '@timelines';
 import { SCROLLER_WIDTH } from '@timelines/constants';
+import TIMELINE from '@timelines/index';
 
 type ScrollHoverAreaProps = {
     $visible: boolean;

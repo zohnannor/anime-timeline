@@ -42,8 +42,9 @@ const App: React.FC = () => {
                 calendarOpen ||
                 captureTimelineModalOpen ||
                 animeTitleSelectorOpen
-            )
+            ) {
                 return;
+            }
             document.body.scrollLeft += e.deltaY;
         },
         [

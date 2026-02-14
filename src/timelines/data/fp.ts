@@ -5,7 +5,7 @@ import {
     getVolumeWidth,
 } from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '../types';
+import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;

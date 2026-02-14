@@ -11,9 +11,13 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "jsx": "react-jsx",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "module": "node16",
-        "moduleResolution": "node16",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "noEmit": true,
         // "noEmitOnError": true,
         "noFallthroughCasesInSwitch": true,
@@ -25,6 +29,23 @@
         "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "paths": {
+            "@app/*": [
+                "./src/app/*"
+            ],
+            "@modules/*": [
+                "./src/modules/*"
+            ],
+            "@shared/*": [
+                "./src/shared/*"
+            ],
+            "@timelines/*": [
+                "./src/timelines/*"
+            ],
+            "@timelines": [
+                "./src/timelines"
+            ]
+        },
         "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
@@ -32,16 +53,13 @@
         "strictFunctionTypes": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
-        "target": "ESNext",
-        "useUnknownInCatchVariables": true,
-        "baseUrl": ".",
-        "paths": {
-            "@app/*": ["src/app/*"],
-            "@modules/*": ["src/modules/*"],
-            "@shared/*": ["src/shared/*"],
-            "@timelines/*": ["src/timelines/*"],
-            "@timelines": ["src/timelines"]
-        }
+        "target": "esnext",
+        "useUnknownInCatchVariables": true
     },
-    "include": ["src"]
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

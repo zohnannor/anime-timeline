@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { isMobileDevice } from '../util';
+import { isMobileDevice } from '@shared/lib/util';
 
 type Comparator = (item?: number) => boolean;
 

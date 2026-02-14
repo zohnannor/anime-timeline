@@ -1,14 +1,14 @@
 import { SettingsValues } from '@shared/contexts/SettingsContext';
 import { isMobileDevice } from '@shared/lib/util';
-import { AOT_TIMELINE } from './data/aot';
-import { BERSERK_TIMELINE } from './data/berserk';
-import { CSM_TIMELINE } from './data/csm';
-import { DEATHNOTE_TIMELINE } from './data/deathnote';
-import { EVA_TIMELINE } from './data/eva';
-import { FP_TIMELINE } from './data/fp';
-import { FRIEREN_TIMELINE } from './data/frieren';
-import { OPM_TIMELINE } from './data/opm';
-import { AnimeTitle, SmallImages, Timeline } from './types';
+import { AOT_TIMELINE } from '@timelines/data/aot';
+import { BERSERK_TIMELINE } from '@timelines/data/berserk';
+import { CSM_TIMELINE } from '@timelines/data/csm';
+import { DEATHNOTE_TIMELINE } from '@timelines/data/deathnote';
+import { EVA_TIMELINE } from '@timelines/data/eva';
+import { FP_TIMELINE } from '@timelines/data/fp';
+import { FRIEREN_TIMELINE } from '@timelines/data/frieren';
+import { OPM_TIMELINE } from '@timelines/data/opm';
+import { AnimeTitle, SmallImages, Timeline } from '@timelines/types';
 
 const TIMELINE: Record<AnimeTitle, Timeline> = {
     csm: CSM_TIMELINE,
