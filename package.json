@@ -1,7 +1,7 @@
 {
     "name": "anime-timeline",
     "scripts": {
-        "dev": "vite --port 3000",
+        "dev": "vite",
         "build": "tsc && vite build",
         "fmt": "prettier --write src"
     },

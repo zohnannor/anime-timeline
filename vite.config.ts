@@ -5,6 +5,12 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
     plugins: [react()],
+    build: {
+        outDir: 'build',
+    },
+    server: {
+        port: 3000,
+    },
     resolve: {
         alias: {
             '@app': path.resolve(__dirname, './src/app'),
