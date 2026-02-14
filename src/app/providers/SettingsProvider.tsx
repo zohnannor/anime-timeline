@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
-import { TITLES } from '@timelines/constants';
+import { TITLES } from '@timelines/registry';
 import { AnimeTitle } from '@timelines/types';
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {

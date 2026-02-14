@@ -1,7 +1,7 @@
 import { keyframes } from 'styled-components';
 
 import { range, sum } from '@shared/lib/util';
-import { TIMELINE_HEIGHT } from '@timelines/constants';
+import { TIMELINE_HEIGHT } from '@timelines/index';
 import { Timeline, TimelineData, TimelineSectionType } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';

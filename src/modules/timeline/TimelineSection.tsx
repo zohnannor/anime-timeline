@@ -2,7 +2,7 @@ import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineContainer } from '@modules/timeline/TimelineContainer';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
 import useSettings from '@shared/contexts/SettingsContext';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
 import {
     TimelineEntity,
     TimelineSectionItem,

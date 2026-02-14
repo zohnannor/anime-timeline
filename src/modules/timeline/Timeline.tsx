@@ -17,8 +17,8 @@ import {
 import { useHover } from '@shared/lib/hooks';
 import { sum } from '@shared/lib/util';
 import { withShadow } from '@shared/ui';
-import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/constants';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
+import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
 import { AnimeTitle } from '@timelines/types';
 
 type DayProps = {

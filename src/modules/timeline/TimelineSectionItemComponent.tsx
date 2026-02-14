@@ -1,3 +1,4 @@
+import CSS from 'csstype';
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -8,7 +9,7 @@ import useSettings from '@shared/contexts/SettingsContext';
 import { hueGlow, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
 import {
     TimelineEntity,
     TimelineSectionItem,

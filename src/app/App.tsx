@@ -13,7 +13,8 @@ import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
 import useSettings from '@shared/contexts/SettingsContext';
 import { maxHeight } from '@shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
-import TIMELINE, { FLOATING_BUTTONS } from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
+import { FLOATING_BUTTONS } from '@timelines/index';
 
 const AppContainer = styled.div`
     display: flex;

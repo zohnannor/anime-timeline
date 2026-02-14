@@ -1,25 +1,14 @@
 import { SettingsValues } from '@shared/contexts/SettingsContext';
 import { isMobileDevice } from '@shared/lib/util';
-import { AOT_TIMELINE } from '@timelines/data/aot';
-import { BERSERK_TIMELINE } from '@timelines/data/berserk';
-import { CSM_TIMELINE } from '@timelines/data/csm';
-import { DEATHNOTE_TIMELINE } from '@timelines/data/deathnote';
-import { EVA_TIMELINE } from '@timelines/data/eva';
-import { FP_TIMELINE } from '@timelines/data/fp';
-import { FRIEREN_TIMELINE } from '@timelines/data/frieren';
-import { OPM_TIMELINE } from '@timelines/data/opm';
-import { AnimeTitle, SmallImages, Timeline } from '@timelines/types';
+import { SmallImages } from '@timelines/types';
 
-const TIMELINE: Record<AnimeTitle, Timeline> = {
-    csm: CSM_TIMELINE,
-    berserk: BERSERK_TIMELINE,
-    fp: FP_TIMELINE,
-    frieren: FRIEREN_TIMELINE,
-    eva: EVA_TIMELINE,
-    aot: AOT_TIMELINE,
-    opm: OPM_TIMELINE,
-    deathnote: DEATHNOTE_TIMELINE,
-};
+export const SCROLLER_WIDTH = 1300;
+export const HEADERS_WIDTH = 150;
+
+export const LARGE_FONT_SIZE = 500;
+export const SMALL_FONT_SIZE = 45;
+
+export const TIMELINE_HEIGHT = 200;
 
 export const FLOATING_BUTTONS: {
     filename: Exclude<keyof SmallImages, 'scroller-or-favicon'>;
@@ -58,5 +47,3 @@ export const FLOATING_BUTTONS: {
         option: 'captureTimelineModalOpen',
     },
 ];
-
-export default TIMELINE;

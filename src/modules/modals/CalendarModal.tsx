@@ -20,7 +20,7 @@ import {
 } from '@shared/lib/helpers';
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
 
 const CalendarGrid = styled.div`
     display: grid;

@@ -5,8 +5,8 @@ import useSettings from '@shared/contexts/SettingsContext';
 import { maxHeight, scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
-import { HEADERS_WIDTH } from '@timelines/constants';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
+import { HEADERS_WIDTH } from '@timelines/index';
 
 type PreviewProps = {
     $hasPicture: boolean;

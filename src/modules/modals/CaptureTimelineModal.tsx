@@ -11,7 +11,7 @@ import {
 } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal } from '@shared/ui';
-import TIMELINE from '@timelines/index';
+import { TIMELINE } from '@timelines/registry';
 
 const ConfirmButton = styled.button`
     cursor: pointer;

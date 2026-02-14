@@ -13,8 +13,7 @@ import {
 } from '@shared/ui/icons';
 import { RefreshIcon } from '@shared/ui/icons/refresh';
 import { HeaderButton } from '@shared/ui/Modal';
-import { TITLES } from '@timelines/constants';
-import TIMELINE from '@timelines/index';
+import { TIMELINE, TITLES } from '@timelines/registry';
 import { AnimeTitle, TimelineData } from '@timelines/types';
 
 const TooltipContent = styled.div`
