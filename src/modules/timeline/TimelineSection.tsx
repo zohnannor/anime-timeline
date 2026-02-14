@@ -6,8 +6,20 @@ import {
     TimelineSectionType,
 } from '@timelines/types';
 import { Timeline } from './Timeline';
-import { TimelineContainer } from './TimelineContainer';
 import { TimelineSectionItemComponent } from './TimelineSectionItemComponent';
+import styled from 'styled-components';
+
+type ContainerProps = {
+    $dir?: 'row' | 'column';
+};
+
+export const TimelineContainer = styled.div.attrs<ContainerProps>({
+    className: 'timelineContainer',
+})`
+    display: flex;
+    flex-direction: ${({ $dir: dir }) => dir ?? 'row'};
+    position: relative;
+`;
 
 type TimelineSections = (
     | {
