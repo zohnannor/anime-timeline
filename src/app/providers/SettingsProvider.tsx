@@ -13,6 +13,10 @@ import {
 import { TITLES } from '../../timelines/registry';
 import { AnimeTitle } from '../../timelines/types';
 
+const title = (animeTitle: string | null): animeTitle is AnimeTitle => {
+    return TITLES.includes(animeTitle as AnimeTitle);
+};
+
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
@@ -34,8 +38,8 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(globalThis.location.search);
         const animeTitle = params.get('title');
-        if (animeTitle && TITLES.includes(animeTitle as AnimeTitle)) {
-            return animeTitle as AnimeTitle;
+        if (title(animeTitle)) {
+            return animeTitle;
         }
         globalThis.history.replaceState({}, '', `?title=csm`);
         return 'csm';
