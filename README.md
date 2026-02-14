@@ -90,8 +90,9 @@ On Arch Linux, install `imagemagick` and `libwebp-utils` packages.
     - Use `yarn` rather than `npm` for installing and running scripts (see
       [`package.json`](package.json)).
     - **To add a timeline for a new title**, see how other titles are described
-      in [`src/constants.ts`](src/constants.ts). Use one of the existing titles
-      (e.g. [`src/timelines/csm.ts`](src/timelines/csm.ts)) as a template.
+      in [`src/timelines/registry.ts`](src/timelines/registry.ts). Use one of
+      the existing titles (e.g. [`src/timelines/csm.ts`](src/timelines/csm.ts))
+      as a template.
     - For wiki links, use a well-maintained wiki that's recognized by the
       community as the "official" one. Refer to [Wiki Buddy's list of
       wikis](https://getindie.wiki/listings/) if unsure.
@@ -101,9 +102,10 @@ On Arch Linux, install `imagemagick` and `libwebp-utils` packages.
 
 - Structure
     - Timelines and data live under [`src/timelines`](src/timelines).
-    - UI pieces live under [`src/components`](src/components).
-    - Shared state/settings live under [`src/providers`](src/providers).
-    - Hooks live under [`src/hooks`](src/hooks).
+    - UI pieces live under [`src/modules`](src/modules) and
+      [`src/shared/ui`](src/shared/ui).
+    - Shared state/settings live under [`src/app/providers`](src/app/providers).
+    - Hooks live under [`src/shared/lib/hooks`](src/shared/lib/hooks).
 
 - Changes
     - Keep pull requests focused and describe what/why.
