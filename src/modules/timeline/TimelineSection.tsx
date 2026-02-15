@@ -1,13 +1,13 @@
-import useSettings from '../../shared/contexts/SettingsContext';
-import { TIMELINE } from '../../timelines/registry';
+import { Timeline } from '@modules/timeline/Timeline';
+import { TimelineContainer } from '@modules/timeline/TimelineContainer';
+import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
+import useSettings from '@shared/contexts/SettingsContext';
+import { TIMELINE } from '@timelines/registry';
 import {
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
-} from '../../timelines/types';
-import { Timeline } from './Timeline';
-import { TimelineContainer } from './TimelineContainer';
-import { TimelineSectionItemComponent } from './TimelineSectionItemComponent';
+} from '@timelines/types';
 
 type TimelineSections = (
     | {

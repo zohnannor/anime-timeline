@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '../lib/helpers';
+import { scale } from '@shared/lib/helpers';
 
 type ShadowProps = {
     $invertBorder?: boolean | undefined;

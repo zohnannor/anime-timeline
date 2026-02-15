@@ -6,12 +6,9 @@ import {
     useState,
 } from 'react';
 
-import {
-    Settings,
-    SettingsContext,
-} from '../../shared/contexts/SettingsContext';
-import { TITLES } from '../../timelines/registry';
-import { AnimeTitle } from '../../timelines/types';
+import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
+import { TITLES } from '@timelines/registry';
+import { AnimeTitle } from '@timelines/types';
 
 const title = (animeTitle: string | null): animeTitle is AnimeTitle => {
     return TITLES.includes(animeTitle as AnimeTitle);
