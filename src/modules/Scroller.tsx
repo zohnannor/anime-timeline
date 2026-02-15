@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { SCROLLER_WIDTH, TIMELINE } from '../constants';
-import { scale } from '../helpers';
-import useMousePosition from '../hooks/useMousePosition';
-import useWindowScroll from '../hooks/useWindowScroll';
-import useSettings from '../providers/SettingsProvider';
-import { clamp } from '../util';
-import { ThumbnailImage } from './ThumbnailImage';
+import useSettings from '../shared/contexts/SettingsContext';
+import { scale } from '../shared/lib/helpers';
+import { useWindowScroll } from '../shared/lib/hooks';
+import useMousePosition from '../shared/lib/hooks/useMousePosition';
+import { clamp } from '../shared/lib/util';
+import { ThumbnailImage } from '../shared/ui';
+import { SCROLLER_WIDTH } from '../timelines';
+import { TIMELINE } from '../timelines/registry';
 
 type ScrollHoverAreaProps = {
     $visible: boolean;

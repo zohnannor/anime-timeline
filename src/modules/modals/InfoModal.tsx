@@ -2,11 +2,11 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
-import { TIMELINE, TimelineData } from '../constants';
-import { scale } from '../helpers';
-import useSettings from '../providers/SettingsProvider';
-import { Link } from './Link';
-import { Modal } from './Modal';
+import useSettings from '../../shared/contexts/SettingsContext';
+import { scale } from '../../shared/lib/helpers';
+import { Link, Modal } from '../../shared/ui';
+import { TIMELINE } from '../../timelines/registry';
+import { TimelineData } from '../../timelines/types';
 
 type BoxProps = {
     $dir?: 'row' | 'column';
@@ -84,7 +84,7 @@ const SpoilerWarning = styled.div`
     line-height: 1;
 `;
 
-export const InfoBoxContent = (timeline: TimelineData) => (
+export const InfoModalContent = (timeline: TimelineData) => (
     <Box $dir='column'>
         <Box $align='flex-start'>
             <Box $wrap>
@@ -198,7 +198,7 @@ const InfoBoxContainer = styled.div`
     height: 80svh;
 `;
 
-export const InfoBox: React.FC = () => {
+export const InfoModal: React.FC = () => {
     const { infoBoxOpen, setInfoBoxOpen, animeTitle } = useSettings();
 
     return (
@@ -209,7 +209,7 @@ export const InfoBox: React.FC = () => {
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
             <InfoBoxContainer>
-                {InfoBoxContent(TIMELINE[animeTitle].data)}
+                {InfoModalContent(TIMELINE[animeTitle].data)}
             </InfoBoxContainer>
         </Modal>
     );
