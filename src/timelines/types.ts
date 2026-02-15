@@ -1,8 +1,8 @@
 import CSS from 'csstype';
 
-import { WidthHelper } from '../shared/lib/helpers';
-import { ExactUnion } from '../shared/lib/util';
-import { TITLES } from './registry';
+import { WidthHelper } from '@shared/lib/helpers';
+import { ExactUnion } from '@shared/lib/util';
+import { TITLES } from '@timelines/registry';
 
 export type Offset = { x: number; y: number };
 

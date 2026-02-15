@@ -1,6 +1,6 @@
-import { SettingsValues } from '../shared/contexts/SettingsContext';
-import { isMobileDevice } from '../shared/lib/util';
-import { SmallImages } from './types';
+import { SettingsValues } from '@shared/contexts/SettingsContext';
+import { isMobileDevice } from '@shared/lib/util';
+import { SmallImages } from '@timelines/types';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
