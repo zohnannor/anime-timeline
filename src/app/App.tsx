@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitleSelectorModal } from './components/AnimeTitleSelector';
-import { CalendarModal } from './components/CalendarModal';
-import { CaptureTimelineModal } from './components/CaptureTimelineModal';
-import { FloatingButton, FloatingButtons } from './components/FloatingButtons';
-import { InfoBox } from './components/InfoBox';
-import { Scroller } from './components/Scroller';
-import { TimeLineHeaders } from './components/TimeLineHeaders';
-import { TimelineSection } from './components/TimelineSection';
-import { FLOATING_BUTTONS, TIMELINE } from './constants';
-import { maxHeight } from './helpers';
-import useGlobalShortcuts from './hooks/useGlobalShortcuts';
-import useWindowSize from './hooks/useWindowSize';
-import useSettings from './providers/SettingsProvider';
+import { FloatingButton, FloatingButtons } from '../modules/FloatingButtons';
+import {
+    AnimeTitleSelectorModal,
+    CalendarModal,
+    CaptureTimelineModal,
+    InfoModal,
+} from '../modules/modals';
+import { Scroller } from '../modules/Scroller';
+import { TimeLineHeaders, TimelineSection } from '../modules/timeline';
+import useSettings from '../shared/contexts/SettingsContext';
+import { maxHeight } from '../shared/lib/helpers';
+import { useGlobalShortcuts, useWindowSize } from '../shared/lib/hooks';
+import { FLOATING_BUTTONS } from '../timelines';
+import { TIMELINE } from '../timelines/registry';
 
 const AppContainer = styled.div`
     display: flex;
@@ -75,7 +76,7 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${maxHeight(animeTitle)}`,
+            `${maxHeight(TIMELINE[animeTitle])}`,
         );
         document.title = `${timeline.title} Timeline`;
         document.head.querySelector<HTMLLinkElement>(
@@ -90,7 +91,7 @@ const App: React.FC = () => {
             <AnimeTitleSelectorModal />
             <CalendarModal />
             <CaptureTimelineModal />
-            <InfoBox />
+            <InfoModal />
             <AppContainer className='appContainer'>
                 {renderUi && (
                     <FloatingButtons>

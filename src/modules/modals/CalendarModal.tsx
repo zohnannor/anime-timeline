@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
+import useSettings from '../../shared/contexts/SettingsContext';
 import {
     chapterDates,
     DAYS_GRADIENT,
@@ -16,10 +17,10 @@ import {
     MONTHS,
     MONTHS_GRADIENT,
     scale,
-} from '../helpers';
-import useSettings from '../providers/SettingsProvider';
-import { HeaderButton, Modal } from './Modal';
-import { Tooltip } from './Tooltip';
+} from '../../shared/lib/helpers';
+import { Modal, Tooltip } from '../../shared/ui';
+import { HeaderButton } from '../../shared/ui/Modal';
+import { TIMELINE } from '../../timelines/registry';
 
 const CalendarGrid = styled.div`
     display: grid;
@@ -224,7 +225,7 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const allChapterDates = chapterDates(animeTitle);
+    const allChapterDates = chapterDates(TIMELINE[animeTitle]);
     const currentDate = new Date();
     const startDate = allChapterDates[0]!;
 

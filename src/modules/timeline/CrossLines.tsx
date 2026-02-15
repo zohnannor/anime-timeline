@@ -1,8 +1,8 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { scale } from '../helpers';
-import useSettings from '../providers/SettingsProvider';
+import useSettings from '../../shared/contexts/SettingsContext';
+import { scale } from '../../shared/lib/helpers';
 
 type CrossLinesProps = {
     $crossLinesVisible?: boolean | undefined;

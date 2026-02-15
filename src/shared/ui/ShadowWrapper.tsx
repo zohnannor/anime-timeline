@@ -1,18 +1,22 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '../helpers';
+import { scale } from '../lib/helpers';
 
 type ShadowProps = {
     $invertBorder?: boolean | undefined;
 };
 
+// vscode-styled-components (ts-styled-plugin) extension formats this
+// incorrectly and complains afterwards when this function is inlined
+const getShadowColor = ({ $invertBorder }: ShadowProps) =>
+    $invertBorder ? '#fff' : '#000';
+
 const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
-    box-shadow: inset 0 0 0 ${scale(5)}
-        ${({ $invertBorder }) => ($invertBorder ? '#ffffff' : '#000000')};
+    box-shadow: inset 0 0 0 ${scale(5)} ${getShadowColor};
     pointer-events: none;
 `;
 
