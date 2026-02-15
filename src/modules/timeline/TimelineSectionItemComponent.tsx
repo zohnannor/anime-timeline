@@ -2,19 +2,19 @@ import CSS from 'csstype';
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '../../shared/contexts/SettingsContext';
-import { hueGlow, scale } from '../../shared/lib/helpers';
-import { useHover } from '../../shared/lib/hooks';
-import { Link, ThumbnailImage, Tooltip, withShadow } from '../../shared/ui';
-import { TIMELINE } from '../../timelines/registry';
+import { ChapterPreview } from '@modules/timeline/ChapterPreview';
+import { withCrossLines } from '@modules/timeline/CrossLines';
+import { TimelineSection } from '@modules/timeline/TimelineSection';
+import useSettings from '@shared/contexts/SettingsContext';
+import { hueGlow, scale } from '@shared/lib/helpers';
+import { useHover } from '@shared/lib/hooks';
+import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
+import { TIMELINE } from '@timelines/registry';
 import {
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
-} from '../../timelines/types';
-import { ChapterPreview } from './ChapterPreview';
-import { withCrossLines } from './CrossLines';
-import { TimelineSection } from './TimelineSection';
+} from '@timelines/types';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;

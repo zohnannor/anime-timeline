@@ -1,12 +1,12 @@
-import { AOT_TIMELINE } from './aot';
-import { BERSERK_TIMELINE } from './berserk';
-import { CSM_TIMELINE } from './csm';
-import { DEATHNOTE_TIMELINE } from './deathnote';
-import { EVA_TIMELINE } from './eva';
-import { FP_TIMELINE } from './fp';
-import { FRIEREN_TIMELINE } from './frieren';
-import { OPM_TIMELINE } from './opm';
-import { AnimeTitle, Timeline } from './types';
+import { AOT_TIMELINE } from '@timelines/aot';
+import { BERSERK_TIMELINE } from '@timelines/berserk';
+import { CSM_TIMELINE } from '@timelines/csm';
+import { DEATHNOTE_TIMELINE } from '@timelines/deathnote';
+import { EVA_TIMELINE } from '@timelines/eva';
+import { FP_TIMELINE } from '@timelines/fp';
+import { FRIEREN_TIMELINE } from '@timelines/frieren';
+import { OPM_TIMELINE } from '@timelines/opm';
+import { AnimeTitle, Timeline } from '@timelines/types';
 
 export const TITLES = [
     'csm',
