@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { AnimeTitle, TIMELINE, TimelineData, TITLES } from '../constants';
-import { chapterDates, chapters, scale } from '../helpers';
-import useSettings from '../providers/SettingsProvider';
-import { sum } from '../util';
-import { RefreshIcon } from './icons/refresh';
-import { ShuffleIcon } from './icons/shuffle';
-import { Sort91Icon } from './icons/sort91';
-import { SortAzIcon } from './icons/sortAZ';
-import { SortLinesIcon } from './icons/sortLines';
-import { HeaderButton, Modal } from './Modal';
-import { ThumbnailImage } from './ThumbnailImage';
-import { Tooltip } from './Tooltip';
+import useSettings from '../../shared/contexts/SettingsContext';
+import { chapterDates, chapters, scale } from '../../shared/lib/helpers';
+import { sum } from '../../shared/lib/util';
+import { Modal, ThumbnailImage, Tooltip } from '../../shared/ui';
+import {
+    ShuffleIcon,
+    Sort91Icon,
+    SortAzIcon,
+    SortLinesIcon,
+} from '../../shared/ui/icons';
+import { RefreshIcon } from '../../shared/ui/icons/refresh';
+import { HeaderButton } from '../../shared/ui/Modal';
+import { TIMELINE, TITLES } from '../../timelines/registry';
+import { AnimeTitle, TimelineData } from '../../timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -53,7 +55,7 @@ const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
 const pageCount = (timeline: TimelineData) =>
     sum(chapters(timeline).map(c => c.pages));
 const recentlyUpdated = (title: AnimeTitle) =>
-    Math.max(...chapterDates(title).map(date => date.getTime()));
+    Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
 
 export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =

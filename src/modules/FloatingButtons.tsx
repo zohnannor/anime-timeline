@@ -2,13 +2,12 @@ import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '../helpers';
 import useSettings, {
     SETTINGS_FUNCTIONS,
     SettingsValues,
-} from '../providers/SettingsProvider';
-import { ThumbnailImage } from './ThumbnailImage';
-import { Tooltip } from './Tooltip';
+} from '../shared/contexts/SettingsContext';
+import { scale } from '../shared/lib/helpers';
+import { ThumbnailImage, Tooltip } from '../shared/ui';
 
 const ButtonSection = styled.div`
     display: flex;

@@ -1,15 +1,10 @@
 import styled from 'styled-components';
 
-import {
-    AnimeTitle,
-    HEADERS_WIDTH,
-    TIMELINE,
-    TIMELINE_HEIGHT,
-    TimelineSectionLayout,
-} from '../constants';
-import { HEADER_TITLES, scale } from '../helpers';
-import { Link } from './Link';
-import { withShadow } from './ShadowWrapper';
+import { HEADER_TITLES, scale } from '../../shared/lib/helpers';
+import { Link, withShadow } from '../../shared/ui';
+import { HEADERS_WIDTH, TIMELINE_HEIGHT } from '../../timelines';
+import { TIMELINE } from '../../timelines/registry';
+import { AnimeTitle, TimelineSectionLayout } from '../../timelines/types';
 
 type HeaderProps = {
     $height: number;
