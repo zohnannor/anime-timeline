@@ -11,6 +11,7 @@ export default defineConfig({
     server: {
         port: 3000,
     },
+    base: '/anime-timeline/',
     resolve: {
         alias: {
             '@app': path.resolve(__dirname, './src/app'),
