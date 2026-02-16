@@ -53,7 +53,7 @@ const TitleContainer = styled.div`
 
 const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
 const pageCount = (timeline: TimelineData) =>
-    sum(chapters(timeline).map(c => c.pages));
+    sum(chapters(timeline).map(ch => ch.pages));
 const recentlyUpdated = (title: AnimeTitle) =>
     Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
 
@@ -68,7 +68,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         | 'recently updated'
     >('unsorted');
 
-    if (!animeTitleSelectorOpen) return null;
+    if (!animeTitleSelectorOpen) {
+        return null;
+    }
 
     const titles = TITLES.toSorted((titleA, titleB) =>
         sorting === 'alphabetical' ? titleA.localeCompare(titleB)
@@ -84,6 +86,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
 
     const nextSorting = {
         unsorted: 'alphabetical',
+        // eslint-disable-next-line sort-keys
         alphabetical: 'chapter count',
         'chapter count': 'page count',
         'page count': 'recently updated',
@@ -92,6 +95,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
 
     const sortingIcon = {
         unsorted: <ShuffleIcon />,
+        // eslint-disable-next-line sort-keys
         alphabetical: <SortAzIcon />,
         'chapter count': <Sort91Icon />,
         'page count': <SortLinesIcon />,
@@ -104,7 +108,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             onClose={() => setAnimeTitleSelectorOpen(false)}
             title='Select a manga/anime title'
             additionalButtons={
-                <HeaderButton onClick={() => setSorting(s => nextSorting[s])}>
+                <HeaderButton
+                    onClick={() => setSorting(cur => nextSorting[cur])}
+                >
                     <Tooltip
                         placement='bottom'
                         content={<TooltipContent>{sorting}</TooltipContent>}

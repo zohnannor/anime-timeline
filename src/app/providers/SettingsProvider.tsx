@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */ // context object
 import {
     PropsWithChildren,
     useCallback,
@@ -10,10 +11,10 @@ import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
 import { TITLES } from '@timelines/registry';
 import { AnimeTitle } from '@timelines/types';
 
-const title = (animeTitle: string | null): animeTitle is AnimeTitle => {
-    return TITLES.includes(animeTitle as AnimeTitle);
-};
+const title = (animeTitle: string | null): animeTitle is AnimeTitle =>
+    TITLES.includes(animeTitle as AnimeTitle);
 
+// eslint-disable-next-line max-lines-per-function, max-statements
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
@@ -43,28 +44,21 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     });
     const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
 
-    const setShowTitles = (show: React.SetStateAction<boolean>) => {
-        if (typeof show === 'function') {
-            show = show(showTitles);
-        }
-        globalThis.localStorage.setItem('showTitles', show.toString());
-        setShowTitlesRaw(show);
-    };
-
+    // complains about it not being a callback and changing every render
+    // eslint-disable-next-line react-x/no-unnecessary-use-callback
     const createModalHandler = useCallback(
         (
             stateKey: keyof Settings,
             setter: React.Dispatch<React.SetStateAction<boolean>>,
-        ) => {
-            return (open: React.SetStateAction<boolean>) => {
+        ) =>
+            (open: React.SetStateAction<boolean>) => {
                 if (open) {
                     globalThis.history.pushState({ [stateKey]: true }, '');
                 } else if (globalThis.history.state?.[stateKey]) {
                     globalThis.history.back();
                 }
                 setter(open);
-            };
-        },
+            },
         [],
     );
 
@@ -93,41 +87,50 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         [createModalHandler],
     );
 
-    const handlePopState = useCallback((e: PopStateEvent) => {
-        const state = e.state || {};
-        const modalStates: {
-            key: keyof Settings;
-            setter: React.Dispatch<React.SetStateAction<boolean>>;
-        }[] = [
-            { key: 'infoBoxOpen', setter: setInfoBoxOpen },
-            { key: 'calendarOpen', setter: setCalendarOpen },
-            {
-                key: 'captureTimelineModalOpen',
-                setter: setCaptureTimelineModalOpen,
-            },
-            {
-                key: 'animeTitleSelectorOpen',
-                setter: setAnimeTitleSelectorOpen,
-            },
-        ];
-
-        modalStates.forEach(({ key, setter }) => {
-            setter(!!state[key]);
-        });
-    }, []);
-
     useEffect(() => {
+        const handlePopState = (ev: PopStateEvent) => {
+            const state =
+                (ev.state as Record<string, boolean> | undefined | null) ?? {};
+            const modalStates: {
+                key: keyof Settings;
+                setter: React.Dispatch<React.SetStateAction<boolean>>;
+            }[] = [
+                { key: 'infoBoxOpen', setter: setInfoBoxOpen },
+                { key: 'calendarOpen', setter: setCalendarOpen },
+                {
+                    key: 'captureTimelineModalOpen',
+                    setter: setCaptureTimelineModalOpen,
+                },
+                {
+                    key: 'animeTitleSelectorOpen',
+                    setter: setAnimeTitleSelectorOpen,
+                },
+            ];
+
+            for (const { key, setter } of modalStates) {
+                setter(state[key] ?? false);
+            }
+        };
+
         globalThis.addEventListener('popstate', handlePopState);
         return () => globalThis.removeEventListener('popstate', handlePopState);
-    }, [handlePopState]);
+    }, []);
 
-    const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
-        setAnimeTitleRaw(title);
-        globalThis.history.replaceState({}, '', `?title=${title}`);
-    };
+    const context = useMemo(() => {
+        const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
+            const theTitle =
+                typeof title === 'function' ? title(animeTitle) : title;
+            setAnimeTitleRaw(theTitle);
+            globalThis.history.replaceState({}, '', `?title=${theTitle}`);
+        };
 
-    const contextValue = useMemo<Settings>(
-        () => ({
+        const setShowTitles = (show: React.SetStateAction<boolean>) => {
+            const doShow = typeof show === 'function' ? show(showTitles) : show;
+            setShowTitlesRaw(doShow);
+            globalThis.localStorage.setItem('showTitles', doShow.toString());
+        };
+
+        return {
             showCrosslines,
             setShowCrosslines,
             infoBoxOpen,
@@ -144,26 +147,21 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             setAnimeTitle,
             animeTitleSelectorOpen,
             setAnimeTitleSelectorOpen: openAnimeTitleSelector,
-        }),
-        [
-            showCrosslines,
-            infoBoxOpen,
-            openInfoBox,
-            unboundedChapterWidth,
-            calendarOpen,
-            openCalendar,
-            showTitles,
-            captureTimelineModalOpen,
-            openCaptureTimelineModal,
-            animeTitle,
-            animeTitleSelectorOpen,
-            openAnimeTitleSelector,
-        ],
-    );
+        };
+    }, [
+        showCrosslines,
+        infoBoxOpen,
+        openInfoBox,
+        unboundedChapterWidth,
+        calendarOpen,
+        openCalendar,
+        showTitles,
+        captureTimelineModalOpen,
+        openCaptureTimelineModal,
+        animeTitle,
+        animeTitleSelectorOpen,
+        openAnimeTitleSelector,
+    ]);
 
-    return (
-        <SettingsContext.Provider value={contextValue}>
-            {children}
-        </SettingsContext.Provider>
-    );
+    return <SettingsContext value={context}>{children}</SettingsContext>;
 };

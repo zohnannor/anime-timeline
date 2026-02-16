@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import useSettings from '@shared/contexts/SettingsContext';
@@ -13,10 +13,12 @@ type PreviewProps = {
     $offsetX: number;
 };
 
+// breaks syntax highlighting
+// eslint-disable-next-line arrow-body-style
 const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
     return {
         style: {
-            '--left': `${scale($offsetX)}`,
+            '--left': scale($offsetX),
         },
     };
 })`
@@ -53,14 +55,16 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
     const [offset, setOffset] = useState(0);
     const { scrollX } = useWindowScroll();
 
-    const scaleToPx = (n: number) =>
-        n * (window.innerHeight / maxHeight(TIMELINE[animeTitle]));
-    const pxToScale = (n: number) =>
-        n * (maxHeight(TIMELINE[animeTitle]) / window.innerHeight);
+    useLayoutEffect(() => {
+        const scaleToPx = (n: number) =>
+            n * (window.innerHeight / maxHeight(TIMELINE[animeTitle]));
+        const pxToScale = (n: number) =>
+            n * (maxHeight(TIMELINE[animeTitle]) / window.innerHeight);
 
-    useEffect(() => {
         const element = previewRef.current;
-        if (!element) return;
+        if (!element) {
+            return;
+        }
 
         const { x: left, width } = getDocumentPosition(element);
         const right = left + width;
@@ -75,7 +79,7 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
             : 0;
 
         setOffset(pxToScale(adjustX));
-    }, [scrollX]);
+    }, [animeTitle, scrollX]);
 
     return <Preview ref={previewRef} $offsetX={offset} {...props} />;
 };

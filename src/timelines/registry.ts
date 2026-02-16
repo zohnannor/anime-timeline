@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */ // keep the opinionated order of titles
 import { AOT_TIMELINE } from '@timelines/aot';
 import { BERSERK_TIMELINE } from '@timelines/berserk';
 import { CSM_TIMELINE } from '@timelines/csm';

@@ -101,11 +101,19 @@ type MonthComponentProps = {
     currentDate: Date;
     chapterDateMap: Map<string, number>;
     nextChapterDate: Date | null;
-    onDayClick: (e: React.MouseEvent, chapterNumber: number | null) => void;
+    onDayClick: (_e: React.MouseEvent, _chapterNumber: number | null) => void;
 };
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
-    ({ month, currentDate, chapterDateMap, nextChapterDate, onDayClick }) => {
+    // so that react/display-name doesn't complain
+    // eslint-disable-next-line prefer-arrow-callback, max-statements
+    function MonthComponent({
+        month,
+        currentDate,
+        chapterDateMap,
+        nextChapterDate,
+        onDayClick,
+    }) {
         const monthStart = new Date(month);
         monthStart.setDate(1);
         const monthEnd = new Date(month);
@@ -132,6 +140,8 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
             date.setDate(dayN);
+            // the date is valid
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const dateStr = date.toISOString().split('T')[0]!;
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
             const isChapter = chapterNumber !== null;
@@ -143,7 +153,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 .toString(16)
                 .padStart(6, '0');
 
-            const dayKey = `day-${dateStr}-${chapterNumber || 'no-chapter'}`;
+            const dayKey = `day-${dateStr}-${chapterNumber ?? 'no-chapter'}`;
 
             let day = (
                 <Day
@@ -154,11 +164,11 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     $isToday={isToday}
                     $isNextChapter={isNextChapter}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
-                    onClick={e => onDayClick(e, chapterNumber)}
+                    onClick={ev => onDayClick(ev, chapterNumber)}
                     tabIndex={isChapter ? -1 : undefined}
                 >
                     <span>{dayN}</span>
-                    {chapterNumber && <span>#{chapterNumber}</span>}
+                    {chapterNumber !== null && <span>#{chapterNumber}</span>}
                 </Day>
             );
 
@@ -200,6 +210,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     },
 );
 
+// eslint-disable-next-line max-lines-per-function
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
@@ -207,36 +218,47 @@ export const CalendarModal: React.FC = () => {
     const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
 
     useEffect(() => {
+        // `useEffect` awaits the promise
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         (async () => {
-            if (!calendarOpen) return;
+            if (!calendarOpen) {
+                return;
+            }
             // fetch from Manga Plus only for csm
-            if (animeTitle !== 'csm') return setNextChapterDate(null);
+            if (animeTitle !== 'csm') {
+                setNextChapterDate(null);
+                return;
+            }
             setNextChapterDate(await fetchNextChapterDate());
         })();
     }, [calendarOpen, animeTitle]);
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
-            if (!scrolledToBottom) {
-                modalRef.current.scrollTop = modalRef.current.scrollHeight;
-            } else {
+            if (scrolledToBottom) {
                 modalRef.current.scrollTop = 0;
+            } else {
+                modalRef.current.scrollTop = modalRef.current.scrollHeight;
             }
         }
     }, [calendarOpen, scrolledToBottom]);
 
     const allChapterDates = chapterDates(TIMELINE[animeTitle]);
     const currentDate = new Date();
+    // non-empty
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const startDate = allChapterDates[0]!;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
         allChapterDates.forEach((date, index) => {
+            // ISO formatted date has a T in it
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const dateStr = date.toISOString().split('T')[0]!;
             map.set(dateStr, index + 1);
         });
         return map;
-    }, [animeTitle]);
+    }, [allChapterDates]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];
@@ -246,6 +268,8 @@ export const CalendarModal: React.FC = () => {
         const endDate = new Date(end);
         endDate.setHours(23, 59, 59, 999);
 
+        // false positive
+        // eslint-disable-next-line no-unmodified-loop-condition
         while (current <= endDate) {
             months.push(new Date(current));
             current.setMonth(current.getMonth() + 1);
@@ -267,9 +291,11 @@ export const CalendarModal: React.FC = () => {
     );
 
     const handleDayClick = useCallback(
-        (e: React.MouseEvent, chapterNumber: number | null) => {
-            e.preventDefault();
-            if (!chapterNumber) return;
+        (ev: React.MouseEvent, chapterNumber: number | null) => {
+            ev.preventDefault();
+            if (!chapterNumber) {
+                return;
+            }
 
             setCalendarOpen(false);
 
@@ -293,7 +319,9 @@ export const CalendarModal: React.FC = () => {
             title='Chapter Calendar'
             modalRef={modalRef}
             additionalButtons={
-                <HeaderButton onClick={() => setScrolledToBottom(p => !p)}>
+                <HeaderButton
+                    onClick={() => setScrolledToBottom(state => !state)}
+                >
                     <Tooltip
                         placement='bottom'
                         content={
@@ -311,9 +339,9 @@ export const CalendarModal: React.FC = () => {
             $mobileFullscreen
         >
             <CalendarContainer>
-                {months.map((month, monthIdx) => (
+                {months.map(month => (
                     <MonthComponent
-                        key={`month-${monthIdx}`}
+                        key={`month-${month.toISOString()}`}
                         month={month}
                         currentDate={currentDate}
                         nextChapterDate={nextChapterDate}
