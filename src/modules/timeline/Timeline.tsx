@@ -29,7 +29,7 @@ type DayProps = {
 
 const Timeframe = withCrossLines(
     withShadow(
-        // a comment to have a line break, otherwise syntax highlighting breaks
+        // a pretty long comment with a lot of words to force good formatting
         // eslint-disable-next-line arrow-body-style
         styled.div.attrs<DayProps>(({ $width }) => {
             return {
@@ -203,13 +203,13 @@ export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
     const monthsSegments = useMemo(
         () =>
             chapterDatesByMonth(TIMELINE[animeTitle]).map(dates => {
-                // each month has at least one day
+                // each month in the array has at least one day
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const month = dates[0]![1].getMonth();
                 return {
                     chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
                     colorValue: (month + 1) % 12,
-                    // can't be out of bounds
+                    // can't be out of bounds, obtained from `getMonth`
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     label: MONTHS[month]!,
                 };

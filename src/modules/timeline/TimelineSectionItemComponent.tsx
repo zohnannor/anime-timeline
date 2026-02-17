@@ -164,7 +164,7 @@ type SectionItemProps = {
 };
 
 const SectionItem = withCrossLines(
-    // a comment to have a line break, otherwise syntax highlighting breaks
+    // a pretty long comment with a lot of words to force good code formatting
     // eslint-disable-next-line arrow-body-style
     styled.div.attrs<SectionItemProps>(({ $width }) => {
         return {

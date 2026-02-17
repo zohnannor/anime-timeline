@@ -37,7 +37,7 @@ type ScrollProps = {
     $offset: number;
 };
 
-// a comment to have a line break, otherwise syntax highlighting breaks
+// otherwise syntax highlighting breaks
 // eslint-disable-next-line arrow-body-style
 const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     return {

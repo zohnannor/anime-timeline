@@ -51,7 +51,7 @@ export default defineConfig([
                 'error',
                 { max: 150, skipBlankLines: true, skipComments: true },
             ],
-            'max-statements': ['error', 25, { ignoreTopLevelFunctions: true }],
+            'max-statements': ['error', 30, { ignoreTopLevelFunctions: true }],
             complexity: ['error', 30],
             'max-lines': ['error', 1000],
             'capitalized-comments': 'off',

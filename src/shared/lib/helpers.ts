@@ -1,4 +1,4 @@
-// all indeces passed to these functions are obtained from iterating over arrays
+// all indices passed to these functions are obtained from iterating over arrays
 // themselves
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-bitwise */

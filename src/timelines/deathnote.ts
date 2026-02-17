@@ -23,7 +23,7 @@ type SeasonsTotal = 1;
 
 const volumeTitleChapters = [0, 2, 6, 1, 0, 4, 6, 1, 0, 3, 0, 9];
 const volumeTitle = (timeline: TimelineData, idx: number) =>
-    // volumes/chapters are not empty, `volumeTitleChapters` is volume indeces
+    // volumes/chapters are not empty, `volumeTitleChapters` is volume indices
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     timeline.volumes[idx]!.chapters[volumeTitleChapters[idx]!]!.title(
         timeline,

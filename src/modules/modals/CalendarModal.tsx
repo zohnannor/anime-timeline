@@ -106,7 +106,7 @@ type MonthComponentProps = {
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     // so that react/display-name doesn't complain
-    // eslint-disable-next-line prefer-arrow-callback, max-statements
+    // eslint-disable-next-line prefer-arrow-callback
     function MonthComponent({
         month,
         currentDate,
@@ -140,7 +140,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
             date.setDate(dayN);
-            // the date is valid
+            // ISO formatted date has a T in it
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const dateStr = date.toISOString().split('T')[0]!;
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
@@ -267,7 +267,7 @@ export const CalendarModal: React.FC = () => {
         const endDate = new Date(end);
         endDate.setHours(23, 59, 59, 999);
 
-        // false positive
+        // false positive: mutated by `setMonth`
         // eslint-disable-next-line no-unmodified-loop-condition
         while (current <= endDate) {
             months.push(new Date(current));
