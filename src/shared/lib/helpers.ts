@@ -1,3 +1,7 @@
+// all indeces passed to these functions are obtained from iterating over arrays
+// themselves
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-bitwise */
 import { keyframes } from 'styled-components';
 
 import { range, sum } from '@shared/lib/util';
@@ -6,28 +10,31 @@ import { Timeline, TimelineData, TimelineSectionType } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
 
-export const toTitleCase = (s: string) =>
-    s.replace(/^_*(.)|_+(.)/g, (_, c, d) =>
-        c ? c.toUpperCase() : ' ' + d.toUpperCase(),
+export const toTitleCase = (string: string) =>
+    string.replace(
+        /^(?<first>.)(?<rest>.*)$/u,
+        (_, first: string, rest: string) => first.toUpperCase() + rest,
     );
 
 export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
-export const tokyoDate = (d: string) =>
-    new Date(`${d.replaceAll(/(st|nd|rd|th)/g, '')} GMT+9`); // Tokyo timezone
+export const tokyoDate = (date: string) =>
+    new Date(`${date.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
 
 export const maxHeight = (timeline: Timeline) =>
     sum(
         Object.values(timeline.layout)
-            .filter(s => s.type !== 'timeline')
-            .map(s => s.height),
+            .filter(sec => sec.type !== 'timeline')
+            .map(sec => sec.height),
     ) + TIMELINE_HEIGHT;
 
 export const chapterDates = (timeline: Timeline) =>
-    timeline.data.volumes.flatMap(v => v.chapters).map(c => tokyoDate(c.date));
+    timeline.data.volumes
+        .flatMap(vol => vol.chapters)
+        .map(ch => tokyoDate(ch.date));
 
-const groupBy = <T>(array: T[], getKey: (el: T) => number) =>
+const groupBy = <T>(array: T[], getKey: (_el: T) => number) =>
     array.reduce<[[number, T][][], number | null]>(
         ([groups, previous], date, idx) => {
             const key = getKey(date);
@@ -51,15 +58,32 @@ export const chapterDatesByYear = (timeline: Timeline) =>
     groupBy(chapterDates(timeline), date => date.getFullYear() + 1);
 
 const chaptersVolumes = (timeline: TimelineData) =>
-    timeline.volumes.flatMap((v, vi) => v.chapters.map(() => vi));
+    timeline.volumes.flatMap((vol, vi) => vol.chapters.map(() => vi));
 export const chapters = (timeline: TimelineData) =>
-    timeline.volumes.flatMap(v => v.chapters);
+    timeline.volumes.flatMap(vol => vol.chapters);
 
 export type WidthHelper = (
-    timeline: TimelineData,
-    idx: number,
-    unboundedChapterWidth: boolean,
+    _timeline: TimelineData,
+    _idx: number,
+    _unboundedChapterWidth: boolean,
 ) => number;
+
+export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
+    chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
+const pagesPerVolume = (timeline: TimelineData, idx: number) =>
+    sum(timeline.volumes[idx]!.chapters.map(ch => ch.pages));
+
+export const getChapterWidth: WidthHelper = (
+    timeline,
+    idx,
+    unboundedChapterWidth,
+) => {
+    const pagesInChapter = chapters(timeline)[idx]!.pages;
+    const volume = getVolumeByChapter(timeline, idx);
+    return unboundedChapterWidth ?
+            pagesInChapter * (1000 / 180) * 1.05
+        :   pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
+};
 
 export const getVolumeWidth: WidthHelper = (
     timeline,
@@ -79,29 +103,13 @@ export const getVolumeWidth: WidthHelper = (
         )
     :   1000;
 
-export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
-    chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
-const pagesPerVolume = (timeline: TimelineData, idx: number) =>
-    sum(timeline.volumes[idx]!.chapters.map(c => c.pages));
-
-export const getChapterWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) => {
-    const pagesInChapter = chapters(timeline)[idx]!.pages;
-    const volume = getVolumeByChapter(timeline, idx);
-    return unboundedChapterWidth ?
-            pagesInChapter * (1000 / 180) * 1.05
-        :   pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
-};
-
 export const getArcWidth: WidthHelper = (
     timeline,
     idx,
     unboundedChapterWidth,
 ) => {
-    const { from, to } = timeline.sagas.flatMap(s => s.arcs)[idx]!.chapters;
+    const { from, to } = timeline.sagas.flatMap(saga => saga.arcs)[idx]!
+        .chapters;
     return sum(
         range(from - 1, to ?? chapters(timeline).length).map(i =>
             getChapterWidth(timeline, i, unboundedChapterWidth),
@@ -116,7 +124,7 @@ export const getSagaWidth: WidthHelper = (
 ) =>
     sum(
         timeline.sagas
-            .flatMap((s, si) => s.arcs.map(() => si))
+            .flatMap((saga, si) => saga.arcs.map(() => si))
             .map((si, ai) => [si, ai] as const)
             .filter(([si, _]) => si === idx)
             .map(([_, ai]) => getArcWidth(timeline, ai, unboundedChapterWidth)),
@@ -136,10 +144,10 @@ const getChapterPageWidth = (
 
 const chaptersWithPagesSplit = (timeline: TimelineData) =>
     timeline.volumes
-        .flatMap(v => v.chapters)
-        .map((c, ci) => {
-            const split = timeline.splitChapters[ci + 1] ?? c.pages;
-            return [ci, [split, c.pages - split]] as const;
+        .flatMap(vol => vol.chapters)
+        .map((ch, ci) => {
+            const split = timeline.splitChapters[ci + 1] ?? ch.pages;
+            return [ci, [split, ch.pages - split]] as const;
         });
 
 const getEpisodePages = (timeline: TimelineData, idx: number) => {
@@ -167,16 +175,14 @@ export const getEpisodeWidth: WidthHelper = (
     timeline,
     idx,
     unboundedChapterWidth,
-) => {
-    return sum(
-        getEpisodePages(timeline, idx).map(([pagesInEpisode, ci]) => {
-            return (
+) =>
+    sum(
+        getEpisodePages(timeline, idx).map(
+            ([pagesInEpisode, ci]) =>
                 pagesInEpisode *
-                getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-            );
-        }),
+                getChapterPageWidth(timeline, ci, unboundedChapterWidth),
+        ),
     );
-};
 
 export const getSeasonWidth: WidthHelper = (
     timeline,
@@ -217,7 +223,10 @@ export const interpolateColor = (
     }
 
     // Handle single-value input range
-    if (inputMin === inputMax) return colorRange[0]!;
+    if (inputMin === inputMax) {
+        // validated above
+        return colorRange[0]!;
+    }
 
     // Calculate global interpolation factor (0-1)
     let tGlobal = (value - inputMin) / (inputMax - inputMin);

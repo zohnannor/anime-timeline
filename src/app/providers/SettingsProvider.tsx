@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */ // context object
 import {
     PropsWithChildren,
     useCallback,
@@ -14,7 +13,6 @@ import { AnimeTitle } from '@timelines/types';
 const title = (animeTitle: string | null): animeTitle is AnimeTitle =>
     TITLES.includes(animeTitle as AnimeTitle);
 
-// eslint-disable-next-line max-lines-per-function, max-statements
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {

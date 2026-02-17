@@ -1,9 +1,8 @@
-/* eslint-disable sort-keys */ // `useToPng` object keys
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import {
     getVolumeWidth,
     maxHeight,

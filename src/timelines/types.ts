@@ -8,7 +8,7 @@ export type Offset = { x: number; y: number };
 
 type Range = { from: number; to?: number };
 
-type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
+export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
 
 export type Chapter = {
     title: Callback<string>;

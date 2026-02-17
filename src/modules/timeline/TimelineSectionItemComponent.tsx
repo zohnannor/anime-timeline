@@ -5,12 +5,13 @@ import styled, { css } from 'styled-components';
 import { ChapterPreview } from '@modules/timeline/ChapterPreview';
 import { withCrossLines } from '@modules/timeline/CrossLines';
 import { TimelineSection } from '@modules/timeline/TimelineSection';
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { hueGlow, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
 import {
+    Callback,
     TimelineEntity,
     TimelineSectionItem,
     TimelineSectionType,
@@ -28,7 +29,7 @@ type SectionItemCoverProps = {
     $sidewaysText: boolean;
 };
 
-export const SectionItemCover = withShadow(
+const SectionItemCover = withShadow(
     // a comment to have a line break, otherwise syntax highlighting breaks
     styled.div<SectionItemCoverProps>`
         position: relative;
@@ -164,6 +165,7 @@ type SectionItemProps = {
 
 const SectionItem = withCrossLines(
     // a comment to have a line break, otherwise syntax highlighting breaks
+    // eslint-disable-next-line arrow-body-style
     styled.div.attrs<SectionItemProps>(({ $width }) => {
         return {
             style: {
@@ -197,15 +199,8 @@ type TimelineSectionItemProps = {
 
 export const TimelineSectionItemComponent: React.FC<
     TimelineSectionItemProps
-> = ({ timelineSection, entity, idx }) => {
-    const [hoveredItem, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
-        useSettings();
-    const [itemWidth, setItemWidth] = useState(0);
-
-    const timeline = TIMELINE[animeTitle].data;
-
-    const {
+> = ({
+    timelineSection: {
         type,
         fit = 'cover',
         defaultCoverPosition = 'center',
@@ -215,32 +210,36 @@ export const TimelineSectionItemComponent: React.FC<
         width,
         wikiLink,
         height,
-        titleProcessor = a => a,
-        numberProcessor = a => a.toString(),
+        titleProcessor = title => title,
+        numberProcessor = num => num.toString(),
         blankfontSize,
         titleFontSize,
         focusable = false,
         subTimeline: nestedTimeline,
-    } = timelineSection;
+    },
+    entity,
+    idx,
+}) => {
+    const [hoveredItem, hoverHandlers] = useHover();
+    const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
+        useSettings();
+    const [itemWidth, setItemWidth] = useState(0);
+
+    const timeline = TIMELINE[animeTitle].data;
 
     useEffect(() => {
         setItemWidth(width(timeline, idx, unboundedChapterWidth));
-    }, [unboundedChapterWidth, animeTitle]);
+    }, [unboundedChapterWidth, animeTitle, width, timeline, idx]);
 
     const itemNumber = idx + 1;
     const processedNumber = numberProcessor(itemNumber);
 
-    const title =
-        (typeof entity.title === 'function' ?
-            entity.title(timeline, idx)
-        :   entity.title) ?? processedNumber;
-    const cover =
-        typeof entity.cover === 'function' ?
-            entity.cover(timeline, idx)
-        :   entity.cover;
+    const maybeFunction = <T,>(fn: Callback<T> | T): T =>
+        typeof fn === 'function' ? (fn as Callback<T>)(timeline, idx) : fn;
+    const title = maybeFunction(entity.title) ?? processedNumber;
+    const cover = maybeFunction(entity.cover);
     const offset = 'offset' in entity ? entity.offset : null;
 
-    const link = `${timeline.wikiBase}${wikiLink(title, itemNumber)}`;
     const processedTitle = titleProcessor(title, itemNumber);
     const itemTitle = type === 'chapter' ? processedNumber : processedTitle;
 
@@ -252,7 +251,7 @@ export const TimelineSectionItemComponent: React.FC<
         type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
             `SEASON ${processedNumber}`
-        :   <Link href={link}>
+        :   <Link href={`${timeline.wikiBase}${wikiLink(title, itemNumber)}`}>
                 {cover ?
                     <ThumbnailImage
                         src={cover}
@@ -272,7 +271,7 @@ export const TimelineSectionItemComponent: React.FC<
             className={`${type}Cover`}
             data-title={itemTitle}
             $invertBorder={!cover && backgroundColor === 'black'}
-            $titleVisible={(!!cover || textColor === 'black') && titleVisible}
+            $titleVisible={!cover && textColor !== 'black' && titleVisible}
             $blankFontSize={blankfontSize}
             $titleFontSize={titleFontSize}
             $fit={fit}
@@ -310,7 +309,7 @@ export const TimelineSectionItemComponent: React.FC<
             className={type}
             $width={itemWidth}
             $height={height}
-            key={cover || itemNumber}
+            key={cover ?? itemNumber}
             $crossLinesVisible={hovered}
             {...hoverHandlers(itemNumber)}
             $focusable={focusable}

@@ -22,15 +22,16 @@ const Shadow = styled.div<ShadowProps>`
 
 export const withShadow = <P,>(
     StyledComponent: React.ComponentType<P>,
-): React.FC<P & ShadowProps> => {
-    return ({
+): React.FC<P & ShadowProps> =>
+    function withShadow({
         children,
         $invertBorder,
         ...rest
-    }: PropsWithChildren<P & ShadowProps>) => (
-        <StyledComponent {...(rest as P)}>
-            {children}
-            <Shadow className='shadow' $invertBorder={$invertBorder} />
-        </StyledComponent>
-    );
-};
+    }: PropsWithChildren<P & ShadowProps>) {
+        return (
+            <StyledComponent {...(rest as P)}>
+                {children}
+                <Shadow className='shadow' $invertBorder={$invertBorder} />
+            </StyledComponent>
+        );
+    };

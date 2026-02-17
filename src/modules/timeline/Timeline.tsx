@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 
 import { withCrossLines } from '@modules/timeline/CrossLines';
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import {
     chapterDates,
     chapterDatesByMonth,
@@ -30,6 +30,7 @@ type DayProps = {
 const Timeframe = withCrossLines(
     withShadow(
         // a comment to have a line break, otherwise syntax highlighting breaks
+        // eslint-disable-next-line arrow-body-style
         styled.div.attrs<DayProps>(({ $width }) => {
             return {
                 style: {
@@ -90,9 +91,11 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
-        (e: React.MouseEvent, chapterNumber: number | null) => {
-            e.preventDefault();
-            if (!chapterNumber) return;
+        (ev: React.MouseEvent, chapterNumber: number | null) => {
+            ev.preventDefault();
+            if (!chapterNumber) {
+                return;
+            }
 
             setCalendarOpen(true);
             lastClickedChapter.current = chapterNumber;
@@ -101,7 +104,9 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 
     useEffect(() => {
-        if (lastClickedChapter.current === null) return;
+        if (lastClickedChapter.current === null) {
+            return;
+        }
 
         const element = document.querySelector(
             `#day-${lastClickedChapter.current}`,
@@ -141,17 +146,18 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                     outputGradient,
                 );
 
+                const chapter = idx + 1;
                 return (
                     <Timeframe
-                        key={idx}
+                        key={chapter}
                         className={`frame-${variant}`}
                         $width={totalWidth}
-                        $crossLinesVisible={hoveredSegment(idx + 1)}
-                        {...hoverHandlers(idx + 1)}
+                        $crossLinesVisible={hoveredSegment(chapter)}
+                        {...hoverHandlers(chapter)}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
                             variant === 'days' ?
-                                e => handleDayClick(e, idx + 1)
+                                ev => handleDayClick(ev, chapter)
                             :   undefined
                         }
                         $variant={variant}
@@ -159,12 +165,12 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         tabIndex={variant === 'days' ? 0 : -1}
                         onKeyDown={
                             variant === 'days' ?
-                                e =>
+                                ev =>
                                     // a11y: allow focusing with space or enter
-                                    (e.key === 'Enter' || e.key === ' ') &&
+                                    (ev.key === 'Enter' || ev.key === ' ') &&
                                     handleDayClick(
-                                        e as unknown as React.MouseEvent,
-                                        idx + 1,
+                                        ev as unknown as React.MouseEvent,
+                                        chapter,
                                     )
                             :   undefined
                         }
@@ -179,43 +185,51 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 };
 
-export const Timeline: React.FC<{ $animeTitle: AnimeTitle }> = ({
-    $animeTitle,
-}) => {
+type TimelineProps = {
+    animeTitle: AnimeTitle;
+};
+
+export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
     const daysSegments = useMemo(
         () =>
-            chapterDates(TIMELINE[$animeTitle]).map((date, idx) => ({
+            chapterDates(TIMELINE[animeTitle]).map((date, idx) => ({
                 chapterNumbers: [idx + 1],
                 colorValue: date.getDate(),
                 label: date.getDate().toString(),
             })),
-        [$animeTitle],
+        [animeTitle],
     );
 
     const monthsSegments = useMemo(
         () =>
-            chapterDatesByMonth(TIMELINE[$animeTitle]).map(dates => {
+            chapterDatesByMonth(TIMELINE[animeTitle]).map(dates => {
+                // each month has at least one day
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const month = dates[0]![1].getMonth();
                 return {
                     chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
                     colorValue: (month + 1) % 12,
+                    // can't be out of bounds
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     label: MONTHS[month]!,
                 };
             }),
-        [$animeTitle],
+        [animeTitle],
     );
 
     const yearsSegments = useMemo(
         () =>
-            chapterDatesByYear(TIMELINE[$animeTitle]).map(dates => {
-                const yearDate = dates[0]![1];
+            chapterDatesByYear(TIMELINE[animeTitle]).map(dates => {
+                // each month has at least one day
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                const [, yearDate] = dates[0]!;
                 return {
                     chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
                     colorValue: yearDate.getFullYear(),
                     label: yearDate.getFullYear().toString(),
                 };
             }),
-        [$animeTitle],
+        [animeTitle],
     );
 
     return (

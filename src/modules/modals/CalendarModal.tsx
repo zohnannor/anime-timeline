@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import {
     chapterDates,
     DAYS_GRADIENT,
@@ -101,7 +101,7 @@ type MonthComponentProps = {
     currentDate: Date;
     chapterDateMap: Map<string, number>;
     nextChapterDate: Date | null;
-    onDayClick: (_e: React.MouseEvent, _chapterNumber: number | null) => void;
+    onDayClick: (_ev: React.MouseEvent, _chapterNumber: number | null) => void;
 };
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
@@ -210,7 +210,6 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     },
 );
 
-// eslint-disable-next-line max-lines-per-function
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);

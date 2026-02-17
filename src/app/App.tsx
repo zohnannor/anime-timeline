@@ -10,7 +10,7 @@ import {
 } from '@modules/modals';
 import { Scroller } from '@modules/Scroller';
 import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { maxHeight } from '@shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { FLOATING_BUTTONS } from '@timelines/index';

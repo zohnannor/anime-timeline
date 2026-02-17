@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { chapterDates, chapters, scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
@@ -86,7 +86,6 @@ export const AnimeTitleSelectorModal: React.FC = () => {
 
     const nextSorting = {
         unsorted: 'alphabetical',
-        // eslint-disable-next-line sort-keys
         alphabetical: 'chapter count',
         'chapter count': 'page count',
         'page count': 'recently updated',
@@ -95,7 +94,6 @@ export const AnimeTitleSelectorModal: React.FC = () => {
 
     const sortingIcon = {
         unsorted: <ShuffleIcon />,
-        // eslint-disable-next-line sort-keys
         alphabetical: <SortAzIcon />,
         'chapter count': <Sort91Icon />,
         'page count': <SortLinesIcon />,

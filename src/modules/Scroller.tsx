@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
@@ -37,7 +37,7 @@ type ScrollProps = {
     $offset: number;
 };
 
-// breaks syntax highlighting
+// a comment to have a line break, otherwise syntax highlighting breaks
 // eslint-disable-next-line arrow-body-style
 const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     return {

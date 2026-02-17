@@ -51,8 +51,11 @@ const Headers = styled.div`
 export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
     $animeTitle,
 }) => {
-    const wikiBase = TIMELINE[$animeTitle].data.wikiBase;
-    const layout = TIMELINE[$animeTitle].layout;
+    const {
+        data: { wikiBase },
+        layout,
+    } = TIMELINE[$animeTitle];
+
     return (
         <Headers className='headers'>
             {Object.keys(layout)

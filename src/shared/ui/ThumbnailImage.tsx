@@ -2,7 +2,7 @@ import CSS from 'csstype';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 
 type Offset = {
@@ -41,8 +41,8 @@ const Image = styled.img<ImageProps & Offset>`
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY, $defaultPosition = 'center' }) =>
         $offsetX || $offsetY ?
-            `${scale($offsetX !== undefined ? -$offsetX : 0)}
-               ${scale($offsetY !== undefined ? -$offsetY : 0)}`
+            `${scale($offsetX === undefined ? 0 : -$offsetX)}
+               ${scale($offsetY === undefined ? 0 : -$offsetY)}`
         :   $defaultPosition}; // TODO: refactor?
 `;
 

@@ -1,7 +1,7 @@
 import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineContainer } from '@modules/timeline/TimelineContainer';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { TIMELINE } from '@timelines/registry';
 import {
     TimelineEntity,
@@ -23,32 +23,35 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
 
     const { type, specificIndex } = timelineItem;
 
-    if (type === 'timeline') return <Timeline $animeTitle={animeTitle} />;
+    if (type === 'timeline') {
+        return <Timeline animeTitle={animeTitle} />;
+    }
 
     const timeline = TIMELINE[animeTitle].data;
 
+    // maps every nested element's (local) index to the global index
     const withGlobalIndex = <T, U>(
         xs: readonly T[],
-        inner: (x: T) => readonly U[],
+        inner: (_x: T) => readonly U[],
     ) =>
         xs
             .flatMap((x, xi) => inner(x).map(el => [xi, el] as const))
             .map(([xi, el], gi) => [xi, gi, el] as const)
             .filter(([xi]) => xi === (specificIndex ?? xi))
-            .map(([_, ei, e]) => [ei, e] as const);
+            .map(([_, ei, el]) => [ei, el] as const);
 
     const entities: {
         [K in keyof TimelineEntity]: (readonly [number, TimelineEntity[K]])[];
     } = {
-        episode: withGlobalIndex(timeline.seasons, s => s.episodes ?? []),
-        season: withGlobalIndex(timeline.seasons, s => [s]),
-        saga: withGlobalIndex(timeline.sagas, s => [s]),
-        arc: withGlobalIndex(timeline.sagas, s => s.arcs),
+        episode: withGlobalIndex(timeline.seasons, se => se.episodes ?? []),
+        season: withGlobalIndex(timeline.seasons, se => [se]),
+        saga: withGlobalIndex(timeline.sagas, saga => [saga]),
+        arc: withGlobalIndex(timeline.sagas, saga => saga.arcs),
         chapter: withGlobalIndex(
-            timeline.volumes.flatMap(v => v.chapters),
-            c => [c],
+            timeline.volumes.flatMap(vol => vol.chapters),
+            ch => [ch],
         ),
-        volume: withGlobalIndex(timeline.volumes, v => [v]),
+        volume: withGlobalIndex(timeline.volumes, vol => [vol]),
     };
 
     return (

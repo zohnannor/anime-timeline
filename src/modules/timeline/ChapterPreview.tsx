@@ -1,7 +1,7 @@
-import { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react';
+import { PropsWithChildren, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { maxHeight, scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
@@ -10,18 +10,9 @@ import { TIMELINE } from '@timelines/registry';
 
 type PreviewProps = {
     $hasPicture: boolean;
-    $offsetX: number;
 };
 
-// breaks syntax highlighting
-// eslint-disable-next-line arrow-body-style
-const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
-    return {
-        style: {
-            '--left': scale($offsetX),
-        },
-    };
-})`
+const Preview = styled.div<PreviewProps>`
     display: flex;
     height: ${({ $hasPicture }) => scale($hasPicture ? 600 : 250)};
     width: ${scale(600)};
@@ -37,7 +28,7 @@ const Preview = styled.div.attrs<PreviewProps>(({ $offsetX }) => {
     color: black;
     border-radius: ${scale(40)};
 
-    transform: translateX(var(--left));
+    transform: translateX(var(--left, 0));
 
     & > img {
         object-fit: contain;
@@ -52,19 +43,18 @@ type ChapterPreviewProps = React.ComponentProps<'div'> &
 export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
     const { animeTitle } = useSettings();
     const previewRef = useRef<HTMLDivElement>(null);
-    const [offset, setOffset] = useState(0);
     const { scrollX } = useWindowScroll();
 
     useLayoutEffect(() => {
-        const scaleToPx = (n: number) =>
-            n * (window.innerHeight / maxHeight(TIMELINE[animeTitle]));
-        const pxToScale = (n: number) =>
-            n * (maxHeight(TIMELINE[animeTitle]) / window.innerHeight);
-
         const element = previewRef.current;
         if (!element) {
             return;
         }
+
+        const scaleToPx = (n: number) =>
+            n * (window.innerHeight / maxHeight(TIMELINE[animeTitle]));
+        const pxToScale = (n: number) =>
+            n * (maxHeight(TIMELINE[animeTitle]) / window.innerHeight);
 
         const { x: left, width } = getDocumentPosition(element);
         const right = left + width;
@@ -78,8 +68,8 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
             : right >= visibleRight ? visibleRight - right - padding
             : 0;
 
-        setOffset(pxToScale(adjustX));
+        element.style.setProperty('--left', scale(pxToScale(adjustX)));
     }, [animeTitle, scrollX]);
 
-    return <Preview ref={previewRef} $offsetX={offset} {...props} />;
+    return <Preview ref={previewRef} {...props} />;
 };

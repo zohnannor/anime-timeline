@@ -9,9 +9,9 @@ export const SortLinesIcon: React.FC = () => (
         <path
             d='M7 3V21M7 21L3 17M7 21L11 17M14 3H21M14 9H19M14 15H17M14 21H15'
             stroke='#ffffff'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
         />
     </svg>
 );

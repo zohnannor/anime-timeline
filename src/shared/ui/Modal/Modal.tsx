@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
 import { scale } from '@shared/lib/helpers';
+import { HeaderButton } from '@shared/ui/Modal';
 
 const ShadowOverlay = styled.div`
     position: fixed;
@@ -62,18 +63,6 @@ const Title = styled.h2`
     margin: 0;
 `;
 
-export const HeaderButton = styled.span`
-    position: sticky;
-    inset: 0;
-    cursor: pointer;
-    font-size: ${scale(100)};
-    top: ${scale(100)};
-    right: ${scale(100)};
-    z-index: 101;
-    float: left;
-    margin-left: ${scale(100)};
-`;
-
 const HeaderButtonContainer = styled.div`
     display: flex;
     align-items: center;
@@ -98,7 +87,9 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
     $bgColor,
     $mobileFullscreen,
 }) => {
-    if (!isOpen) return null;
+    if (!isOpen) {
+        return null;
+    }
 
     return ReactDOM.createPortal(
         <>
@@ -123,6 +114,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                 {children}
             </ModalContainer>
         </>,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         document.querySelector('#modal')!,
     );
 };

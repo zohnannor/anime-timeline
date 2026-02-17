@@ -2,7 +2,7 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { Link, Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
@@ -84,7 +84,6 @@ const SpoilerWarning = styled.div`
     line-height: 1;
 `;
 
-// eslint-disable-next-line max-lines-per-function
 const infoModalContent = ({ title, wikiBase, socialLinks }: TimelineData) => (
     <Box $dir='column'>
         <Box $align='flex-start'>

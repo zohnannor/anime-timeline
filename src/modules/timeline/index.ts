@@ -1,5 +1,5 @@
 export { ChapterPreview } from './ChapterPreview';
-export { CrossLines } from './CrossLines';
+export { withCrossLines } from './CrossLines';
 export { Timeline } from './Timeline';
 export { TimelineContainer } from './TimelineContainer';
 export { TimeLineHeaders } from './TimeLineHeaders';

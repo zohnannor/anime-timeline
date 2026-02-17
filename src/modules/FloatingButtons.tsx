@@ -2,9 +2,10 @@ import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import useSettings, {
+import {
     SETTINGS_FUNCTIONS,
     SettingsValues,
+    useSettings,
 } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { ThumbnailImage, Tooltip } from '@shared/ui';
