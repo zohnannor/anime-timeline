@@ -1611,6 +1611,12 @@ export const CSM_TIMELINE: Timeline = {
                         pages: 15,
                         cover: null,
                     },
+                    {
+                        title: () => 'Nightjar and Asa',
+                        date: 'February 18, 2026',
+                        pages: 15,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
