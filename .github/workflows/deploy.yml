@@ -40,6 +40,21 @@ jobs:
                   restore-keys: |
                       webp-
 
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: "yarn"
+
+            - name: Install Dependencies
+              run: yarn install --immutable
+
+            - name: Lint Project
+              run: yarn lint --max-warnings 0 # disallow warnings for prod
+
             - name: Install Linux dependencies
               run: |
                   sudo apt-get update
@@ -60,21 +75,6 @@ jobs:
                   python ci/optimize-images.py --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
               env:
                   CPU: 2
-
-            - name: Enable Corepack
-              run: corepack enable
-
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22
-                  cache: "yarn"
-
-            - name: Install Dependencies
-              run: yarn install --immutable
-
-            - name: Lint Project
-              run: yarn lint --max-warnings 0 # disallow warnings for prod
 
             - name: Build Project
               run: yarn build
