@@ -271,7 +271,7 @@ export const TimelineSectionItemComponent: React.FC<
             className={`${type}Cover`}
             data-title={itemTitle}
             $invertBorder={!cover && backgroundColor === 'black'}
-            $titleVisible={!cover && textColor !== 'black' && titleVisible}
+            $titleVisible={(!!cover || textColor === 'black') && titleVisible}
             $blankFontSize={blankfontSize}
             $titleFontSize={titleFontSize}
             $fit={fit}
