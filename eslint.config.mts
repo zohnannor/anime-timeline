@@ -45,7 +45,7 @@ export default defineConfig([
         },
         rules: {
             'no-undef': 'off', // enfored by typescript
-            'sort-imports': 'off', // import/internal-regex does this
+            'sort-imports': 'off', // import/internal-regex does this better
             'one-var': ['error', 'never'],
             'max-lines-per-function': [
                 'error',
@@ -56,8 +56,9 @@ export default defineConfig([
             'max-lines': ['error', 1000],
             'capitalized-comments': 'off',
             'no-inline-comments': 'off',
-            // 'sort-keys': ['error', 'asc', { natural: true }],
-            'sort-keys': 'off', // TODO: setup something to sort them like in the definition
+            // unfortunately, it can't enforce sorting the keys like in the
+            // type's definition, and alphabetical sorting is useless
+            'sort-keys': 'off',
             'no-ternary': 'off',
             'no-shadow': 'off',
             'no-undefined': 'off',
