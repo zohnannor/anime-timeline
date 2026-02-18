@@ -47,7 +47,7 @@ const Image = styled.img<ImageProps & Offset>`
 `;
 
 export const ThumbnailImage: React.FC<
-    React.ComponentProps<'img'> & Offset & { animeTitle?: string }
+    React.ComponentProps<'img'> & Offset & { animeTitle?: string; src: string }
 > = props => {
     const { animeTitle: currentAnimeTitle } = useSettings();
     const [loading, setLoading] = useState(true);
