@@ -82,7 +82,8 @@ const App: React.FC = () => {
         const favicon =
             document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
         if (favicon) {
-            favicon.href = `./${animeTitle}/${timeline.smallImages['scroller-or-favicon']}.webp`;
+            const icon = timeline.smallImages['scroller-or-favicon'];
+            favicon.href = `./${animeTitle}/${icon}.webp`;
         }
     }, [animeTitle, timeline.smallImages, timeline.title]);
 

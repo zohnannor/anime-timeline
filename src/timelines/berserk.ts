@@ -777,7 +777,9 @@ export const BERSERK_TIMELINE: Timeline = {
                         cover: null,
                     },
                     {
-                        title: () => 'God of the Abyss (2)', // This episode was intentionally excluded from volume format at the request of Kentarou Miura.[1]
+                        // This episode was intentionally excluded from volume
+                        // format at the request of Kentarou Miura.[1]
+                        title: () => 'God of the Abyss (2)',
                         date: '12 July 1996',
                         pages: 17,
                         cover: null,

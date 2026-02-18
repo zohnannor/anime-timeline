@@ -157,7 +157,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
 
             let day = (
                 <Day
-                    id={`day-${chapterNumber}`}
+                    id={dayKey}
                     key={dayKey}
                     className='day'
                     $isChapter={isChapter}

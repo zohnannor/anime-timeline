@@ -46,7 +46,7 @@ export default defineConfig([
         rules: {
             'no-undef': 'off', // enfored by typescript
             'sort-imports': 'off', // import/internal-regex does this better
-            'one-var': ['error', 'never'],
+            'one-var': ['error', 'never'], // invert it: disallow one-var style
             'max-lines-per-function': [
                 'error',
                 { max: 150, skipBlankLines: true, skipComments: true },
@@ -54,18 +54,22 @@ export default defineConfig([
             'max-statements': ['error', 30, { ignoreTopLevelFunctions: true }],
             complexity: ['error', 30],
             'max-lines': ['error', 1000],
-            'capitalized-comments': 'off',
-            'no-inline-comments': 'off',
+            'capitalized-comments': 'off', // not important, style preference
+            'no-inline-comments': 'off', // useful
             // unfortunately, it can't enforce sorting the keys like in the
             // type's definition, and alphabetical sorting is useless
             'sort-keys': 'off',
-            'no-ternary': 'off',
-            'no-shadow': 'off',
-            'no-undefined': 'off',
-            'no-nested-ternary': 'off',
-            'no-plusplus': 'off',
-            'no-implicit-coercion': 'off',
-            'no-magic-numbers': 'off', // TODO: we have a bunch of `scale(N)` calls
+            'no-ternary': 'off', // we love ternaries
+            'no-shadow': 'off', // shadowing is useful
+            'no-undefined': 'off', // no-shadow-restricted-names covers reassign
+            'no-nested-ternary': 'off', // we LOVE ternaries
+            // allow only in for loops
+            'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+            // `Boolean(x)` looks ugly
+            'no-implicit-coercion': ['error', { allow: ['!!'] }],
+            // TODO: we have a bunch of `scale(N)` calls
+            'no-magic-numbers': 'off',
+            // common abbreviations
             'id-length': [
                 'error',
                 {
@@ -83,11 +87,13 @@ export default defineConfig([
                     ],
                 },
             ],
+            // `console.log` should be used only in development
             'no-console': ['error', { allow: ['warn', 'error', 'debug'] }],
             'no-warning-comments': 'off',
 
             'react/prop-types': 'off', // enfored by typescript and `React.FC`
 
+            // prepending `_` to unused variables is a common pattern
             'no-unused-vars': [
                 'error',
                 {
@@ -105,24 +111,28 @@ export default defineConfig([
                 },
             ],
 
+            // allow returning `void` in arrow functions: `=> foo.bar()`
             '@typescript-eslint/no-confusing-void-expression': [
                 'error',
                 {
                     ignoreArrowShorthand: true,
                 },
             ],
+            // booleans and numbers are ok to not require `.toString()`
             '@typescript-eslint/restrict-template-expressions': [
                 'error',
                 {
                     allowAny: false,
                     allowBoolean: true,
                     allowNever: false,
-                    allowNullish: true,
+                    allowNullish: false,
                     allowNumber: true,
                     allowRegExp: false,
                 },
             ],
+            // prefer `type` over `interface`
             '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+            // `?` is there for that exact reason
             '@typescript-eslint/no-unsafe-member-access': [
                 'error',
                 { allowOptionalChaining: true },
