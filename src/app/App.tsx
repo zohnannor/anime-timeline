@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { FloatingButton, FloatingButtons } from '@modules/FloatingButtons';
@@ -10,7 +10,8 @@ import {
 } from '@modules/modals';
 import { Scroller } from '@modules/Scroller';
 import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
-import useSettings from '@shared/contexts/SettingsContext';
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { maxHeight } from '@shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { FLOATING_BUTTONS } from '@timelines/index';
@@ -36,8 +37,8 @@ const App: React.FC = () => {
 
     const timeline = TIMELINE[animeTitle].data;
 
-    const handleScroll = useCallback(
-        (e: WheelEvent) => {
+    useEffect(() => {
+        const handleScroll = (ev: WheelEvent) => {
             if (
                 infoBoxOpen ||
                 calendarOpen ||
@@ -46,24 +47,21 @@ const App: React.FC = () => {
             ) {
                 return;
             }
-            document.body.scrollLeft += e.deltaY;
-        },
-        [
-            infoBoxOpen,
-            calendarOpen,
-            captureTimelineModalOpen,
-            animeTitleSelectorOpen,
-        ],
-    );
+            document.body.scrollLeft += ev.deltaY;
+        };
 
-    useEffect(() => {
         globalThis.addEventListener('wheel', handleScroll);
         return () => globalThis.removeEventListener('wheel', handleScroll);
-    }, [handleScroll]);
+    }, [
+        infoBoxOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        animeTitleSelectorOpen,
+    ]);
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.ctrlKey && e.code == 'KeyV') {
-            setRenderUi(p => !p);
+    const handleKeyDown = (ev: KeyboardEvent) => {
+        if (ev.ctrlKey && ev.code === 'KeyV') {
+            setRenderUi(state => !state);
         }
     };
 
@@ -80,11 +78,13 @@ const App: React.FC = () => {
             `${maxHeight(TIMELINE[animeTitle])}`,
         );
         document.title = `${timeline.title} Timeline`;
-        document.head.querySelector<HTMLLinkElement>(
-            "link[rel~='icon']",
-        )!.href =
-            `./${animeTitle}/${timeline.smallImages['scroller-or-favicon']}.webp`;
-    }, [animeTitle]);
+        const favicon =
+            document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
+        if (favicon) {
+            const icon = timeline.smallImages['scroller-or-favicon'];
+            favicon.href = `./${animeTitle}/${icon}.webp`;
+        }
+    }, [animeTitle, timeline.smallImages, timeline.title]);
 
     return (
         <>
@@ -117,7 +117,7 @@ const App: React.FC = () => {
                 {Object.values(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
-                {renderUi && width > 768 && <Scroller />}
+                {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}
             </AppContainer>
         </>
     );

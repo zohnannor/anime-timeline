@@ -22,15 +22,15 @@ export const FLOATING_BUTTONS: {
         option: 'unboundedChapterWidth',
     },
     // include cross-lines button only on desktop
-    ...(!isMobileDevice() ?
-        [
+    ...(isMobileDevice() ?
+        []
+    :   [
             {
                 filename: 'toggle-cross-lines',
                 title: 'Toggle cross-lines',
                 option: 'showCrosslines',
             } as const,
-        ]
-    :   []),
+        ]),
     {
         filename: 'open-chapter-calendar',
         title: 'Open chapter calendar',

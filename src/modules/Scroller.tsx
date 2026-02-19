@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
@@ -14,7 +14,7 @@ type ScrollHoverAreaProps = {
     $visible: boolean;
 };
 
-export const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
+const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
     position: fixed;
     z-index: 10;
@@ -37,7 +37,9 @@ type ScrollProps = {
     $offset: number;
 };
 
-export const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
+// otherwise syntax highlighting breaks
+// eslint-disable-next-line arrow-body-style
+const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     return {
         style: {
             '--left': `${$offset * 100}%`,
@@ -85,35 +87,37 @@ export const Scroller = () => {
     const { y: mouseY } = useMousePosition();
     const { animeTitle } = useSettings();
 
-    const body = document.body;
+    const { body } = document;
     const totalX = body.scrollWidth - body.clientWidth;
     const offset = scrollX / totalX;
 
-    const updateScrollerHandle = (e: MouseEvent) => {
-        if (!scrollerRef.current) return;
-        const { left, width } = scrollerRef.current.getBoundingClientRect();
-        const percent = clamp((e.clientX - left) / width, 0, 1);
-        setScrollX(percent * totalX);
-    };
-
-    const handleDrag = useCallback(
-        (e: MouseEvent) => dragging && updateScrollerHandle(e),
-        [dragging],
+    const updateScrollerHandle = useCallback(
+        (ev: MouseEvent) => {
+            if (!scrollerRef.current) {
+                return;
+            }
+            const { left, width } = scrollerRef.current.getBoundingClientRect();
+            const percent = clamp((ev.clientX - left) / width, 0, 1);
+            setScrollX(percent * totalX);
+        },
+        [setScrollX, totalX],
     );
 
-    const stopDrag = useCallback(() => setDragging(false), []);
-
     useEffect(() => {
+        const handleDrag = (ev: MouseEvent) =>
+            dragging && updateScrollerHandle(ev);
+        const stopDrag = () => setDragging(false);
+
         body.addEventListener('mousemove', handleDrag);
         window.addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
             window.removeEventListener('mouseup', stopDrag);
         };
-    }, [handleDrag, stopDrag]);
+    }, [body, dragging, updateScrollerHandle]);
 
-    const handleScrollerClick = (e: React.MouseEvent) =>
-        updateScrollerHandle(e.nativeEvent);
+    const handleScrollerClick = (ev: React.MouseEvent) =>
+        updateScrollerHandle(ev.nativeEvent);
 
     const scrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;

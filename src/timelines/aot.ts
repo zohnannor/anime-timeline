@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -15,9 +16,9 @@ const VOLUME_HEIGHT = 1511;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 
-const VOLUMES_TOTAL = 35;
-const ARCS_TOTAL = 9;
-const SEASONS_TOTAL = 8;
+type VolumesTotal = 35;
+type ArcsTotal = 9;
+type SeasonsTotal = 8;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
@@ -38,7 +39,7 @@ export const AOT_TIMELINE: Timeline = {
                 n === 1 ?
                     'List of Attack on Titan episodes'
                 :   `List of Attack on Titan episodes/${title.replace(
-                        /Part.+/g,
+                        /Part.+/gu,
                         '',
                     )}`,
             subTimeline: {
@@ -1167,7 +1168,7 @@ export const AOT_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         sagas: [
             {
                 title: '',
@@ -1229,7 +1230,7 @@ export const AOT_TIMELINE: Timeline = {
                         offset: { x: 0, y: 2200 },
                         chapters: { from: 107, to: 139 },
                     },
-                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+                ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
         seasons: [
@@ -1885,7 +1886,7 @@ export const AOT_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             2: 22,
             8: 14,

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -15,9 +16,9 @@ const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.75;
 
-const SEASONS_TOTAL = 4;
-const ARCS_TOTAL = 5;
-const VOLUMES_TOTAL = 43;
+type SeasonsTotal = 4;
+type ArcsTotal = 5;
+type VolumesTotal = 43;
 
 const chapterNumber = (n: number): string =>
     n <= 16 ? `0-${n}` : (n - 16).toString();
@@ -776,7 +777,9 @@ export const BERSERK_TIMELINE: Timeline = {
                         cover: null,
                     },
                     {
-                        title: () => 'God of the Abyss (2)', // This episode was intentionally excluded from volume format at the request of Kentarou Miura.[1]
+                        // This episode was intentionally excluded from volume
+                        // format at the request of Kentarou Miura.[1]
+                        title: () => 'God of the Abyss (2)',
                         date: '12 July 1996',
                         pages: 17,
                         cover: null,
@@ -2768,7 +2771,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         sagas: [
             {
                 title: '',
@@ -2806,7 +2809,7 @@ export const BERSERK_TIMELINE: Timeline = {
                         offset: { x: 0, y: 2310 },
                         chapters: { from: 16 + 308 },
                     },
-                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+                ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
         seasons: [
@@ -3131,7 +3134,7 @@ export const BERSERK_TIMELINE: Timeline = {
             {
                 chapters: { from: 16 + 250 },
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {},
         wikiBase: 'https://berserk.fandom.com/wiki/',
         smallImages: {

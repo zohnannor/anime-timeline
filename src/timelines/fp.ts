@@ -11,8 +11,8 @@ const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
-const ARCS_TOTAL = 5;
-const VOLUMES_TOTAL = 8;
+type ArcsTotal = 5;
+type VolumesTotal = 8;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
@@ -616,7 +616,7 @@ export const FP_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         sagas: [
             {
                 title: '',
@@ -649,7 +649,7 @@ export const FP_TIMELINE: Timeline = {
                         cover: null,
                         chapters: { from: 81, to: 83 },
                     },
-                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+                ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
         seasons: [] as const satisfies Tuple<Season, 0>,

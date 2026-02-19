@@ -8,7 +8,7 @@ export type Offset = { x: number; y: number };
 
 type Range = { from: number; to?: number };
 
-type Callback<T> = (timeline: TimelineData, idx: number) => T;
+export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
 
 export type Chapter = {
     title: Callback<string>;
@@ -112,12 +112,12 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (title: string, n: number) => string;
-    numberProcessor?: (number: number) => string;
+    titleProcessor?: (_title: string, _n: number) => string;
+    numberProcessor?: (_number: number) => string;
     height: number;
     width: WidthHelper;
     sectionLink: string;
-    wikiLink: (title: string, n: number) => string;
+    wikiLink: (_title: string, _n: number) => string;
     focusable?: boolean;
     subTimeline?: TimelineSectionItem<TimelineSectionType>;
 };

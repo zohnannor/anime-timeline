@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 
 const useGlobalShortcuts = () => {
     const {
@@ -15,23 +15,23 @@ const useGlobalShortcuts = () => {
         setAnimeTitleSelectorOpen,
     } = useSettings();
 
-    const openModals: [
-        boolean,
-        React.Dispatch<React.SetStateAction<boolean>>,
-    ][] = [
-        [infoBoxOpen, setInfoBoxOpen],
-        [calendarOpen, setCalendarOpen],
-        [captureTimelineModalOpen, setCaptureTimelineModalOpen],
-        [animeTitleSelectorOpen, setAnimeTitleSelectorOpen],
-    ];
-
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.code === 'KeyC') {
-                setShowCrosslines(p => !p);
+        const openModals: [
+            boolean,
+            React.Dispatch<React.SetStateAction<boolean>>,
+        ][] = [
+            [infoBoxOpen, setInfoBoxOpen],
+            [calendarOpen, setCalendarOpen],
+            [captureTimelineModalOpen, setCaptureTimelineModalOpen],
+            [animeTitleSelectorOpen, setAnimeTitleSelectorOpen],
+        ];
+
+        const handleKeyDown = (ev: KeyboardEvent) => {
+            if (ev.ctrlKey && ev.code === 'KeyC') {
+                setShowCrosslines(state => !state);
             }
 
-            if (e.code === 'Escape') {
+            if (ev.code === 'Escape') {
                 for (const [isOpen, close] of openModals) {
                     if (isOpen) {
                         close(false);
@@ -44,14 +44,14 @@ const useGlobalShortcuts = () => {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [
         infoBoxOpen,
-        calendarOpen,
-        captureTimelineModalOpen,
-        animeTitleSelectorOpen,
-        setShowCrosslines,
         setInfoBoxOpen,
+        calendarOpen,
         setCalendarOpen,
+        captureTimelineModalOpen,
         setCaptureTimelineModalOpen,
+        animeTitleSelectorOpen,
         setAnimeTitleSelectorOpen,
+        setShowCrosslines,
     ]);
 };
 

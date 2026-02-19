@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { chapterDates, chapters, scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
@@ -53,7 +53,7 @@ const TitleContainer = styled.div`
 
 const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
 const pageCount = (timeline: TimelineData) =>
-    sum(chapters(timeline).map(c => c.pages));
+    sum(chapters(timeline).map(ch => ch.pages));
 const recentlyUpdated = (title: AnimeTitle) =>
     Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
 
@@ -68,7 +68,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         | 'recently updated'
     >('unsorted');
 
-    if (!animeTitleSelectorOpen) return null;
+    if (!animeTitleSelectorOpen) {
+        return null;
+    }
 
     const titles = TITLES.toSorted((titleA, titleB) =>
         sorting === 'alphabetical' ? titleA.localeCompare(titleB)
@@ -104,7 +106,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             onClose={() => setAnimeTitleSelectorOpen(false)}
             title='Select a manga/anime title'
             additionalButtons={
-                <HeaderButton onClick={() => setSorting(s => nextSorting[s])}>
+                <HeaderButton
+                    onClick={() => setSorting(cur => nextSorting[cur])}
+                >
                     <Tooltip
                         placement='bottom'
                         content={<TooltipContent>{sorting}</TooltipContent>}

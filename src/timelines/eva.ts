@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -16,9 +17,9 @@ const VOLUME_HEIGHT = 1417;
 const CHAPTER_HEIGHT = 75;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.25;
 
-const SEASONS_TOTAL = 2;
-const ARCS_TOTAL = 6;
-const VOLUMES_TOTAL = 14;
+type SeasonsTotal = 2;
+type ArcsTotal = 6;
+type VolumesTotal = 14;
 
 const volumeCover = (_: TimelineData, idx: number) =>
     idx === 2 ?
@@ -292,7 +293,7 @@ export const EVA_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         sagas: [
             {
                 title: '',
@@ -330,7 +331,7 @@ export const EVA_TIMELINE: Timeline = {
                         cover: null,
                         chapters: { from: 75 },
                     },
-                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+                ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
         volumes: [
@@ -1039,7 +1040,7 @@ export const EVA_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         splitChapters: {
             3: 24,
             7: 9,

@@ -2,7 +2,7 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { Link, Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
@@ -16,10 +16,10 @@ type BoxProps = {
 
 const Box = styled.div<BoxProps>`
     display: flex;
-    flex-direction: ${({ $dir }) => $dir || 'row'};
+    flex-direction: ${({ $dir }) => $dir ?? 'row'};
     flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
     gap: 1ch;
-    align-items: ${({ $align }) => $align || 'center'};
+    align-items: ${({ $align }) => $align ?? 'center'};
     justify-content: center;
     width: 90vw;
     max-width: 90vw;
@@ -84,7 +84,7 @@ const SpoilerWarning = styled.div`
     line-height: 1;
 `;
 
-export const InfoModalContent = (timeline: TimelineData) => (
+const infoModalContent = ({ title, wikiBase, socialLinks }: TimelineData) => (
     <Box $dir='column'>
         <Box $align='flex-start'>
             <Box $wrap>
@@ -103,9 +103,8 @@ export const InfoModalContent = (timeline: TimelineData) => (
         </Box>
         <SpoilerWarning>
             <h1>SPOILER WARNING</h1>
-            This site contains spoilers for the {timeline.title} manga and
-            anime. I would suggest leaving the page if you are interested in the
-            story.
+            This site contains spoilers for the {title} manga and anime. I would
+            suggest leaving the page if you are interested in the story.
         </SpoilerWarning>
 
         <Box $dir='column'>
@@ -115,7 +114,7 @@ export const InfoModalContent = (timeline: TimelineData) => (
                     <InlineLinkGroup $gap>
                         Click any image (season, episode, arc, chapter, volume)
                         to go to the corresponding
-                        <Link href={timeline.wikiBase}>wiki</Link>
+                        <Link href={wikiBase}>wiki</Link>
                         page
                     </InlineLinkGroup>
                 </li>
@@ -128,15 +127,15 @@ export const InfoModalContent = (timeline: TimelineData) => (
                     navigation (desktop only ☹️)
                 </li>
                 <li>
-                    Save the page as a huge PNG file (warning: it's about 50 MB
-                    in size). Might not work properly in some browsers, try
-                    Chrome if you have any issues
+                    Save the page as a huge PNG file (warning: it&apos;s about
+                    50 MB in size). Might not work properly in some browsers,
+                    try Chrome if you have any issues
                 </li>
                 <li>
                     Seasons and volumes without images are not officially
                     confirmed and may be incorrect. Not every manga has chapter
-                    sketches (and even ones that do, don't have them for every
-                    chapter), so some are just numbers
+                    sketches (and even ones that do, don&apos;t have them for
+                    every chapter), so some are just numbers
                 </li>
                 <li>
                     Chapter release dates in the timeline are displayed in your
@@ -161,13 +160,13 @@ export const InfoModalContent = (timeline: TimelineData) => (
                     navigate to the chapter date
                 </li>
                 <li>
-                    If the title's adaptation closely follows the source, widths
-                    are accurate down to the chapter page
+                    If the title&apos;s adaptation closely follows the source,
+                    widths are accurate down to the chapter page
                 </li>
                 <li>
                     I will personally update this site whenever new chapter
-                    releases. There can be a slight delay if I'm busy, but also
-                    your browser might use cached version of the page. On
+                    releases. There can be a slight delay if I&apos;m busy, but
+                    also your browser might use cached version of the page. On
                     desktop browsers, you can press
                     <KeyboardShortcut keys={['Ctrl', 'R']} />
                     to refresh
@@ -177,15 +176,15 @@ export const InfoModalContent = (timeline: TimelineData) => (
 
         <Box>
             This is a non-profit, unofficial fan site. We are not affiliated
-            with any publishers or the authors of {timeline.title}. All images
-            are copyrighted by their respective owners and are used for
-            illustration purposes only. We do not own any artwork, characters,
-            or intellectual property on this site.
+            with any publishers or the authors of {title}. All images are
+            copyrighted by their respective owners and are used for illustration
+            purposes only. We do not own any artwork, characters, or
+            intellectual property on this site.
         </Box>
 
         <Box $dir='column'>
             <h3>Official Links:</h3>
-            {timeline.socialLinks.map(({ name, url }) => (
+            {socialLinks.map(({ name, url }) => (
                 <Link key={name} href={url}>
                     {name}
                 </Link>
@@ -209,7 +208,7 @@ export const InfoModal: React.FC = () => {
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
             <InfoBoxContainer>
-                {InfoModalContent(TIMELINE[animeTitle].data)}
+                {infoModalContent(TIMELINE[animeTitle].data)}
             </InfoBoxContainer>
         </Modal>
     );

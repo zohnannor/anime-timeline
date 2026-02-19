@@ -1,10 +1,9 @@
-import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import useSettings from '@shared/contexts/SettingsContext';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 
-type CrossLinesProps = {
+export type CrossLinesProps = {
     $crossLinesVisible?: boolean | undefined;
 };
 
@@ -71,20 +70,5 @@ export const CrossLines: React.FC<CrossLinesProps> = ({
                 </>
             )}
         </CrossLinesWrapper>
-    );
-};
-
-export const withCrossLines = <P,>(
-    StyledComponent: React.ComponentType<P>,
-): React.FC<P & CrossLinesProps> => {
-    return ({
-        children,
-        $crossLinesVisible,
-        ...rest
-    }: PropsWithChildren<P & CrossLinesProps>) => (
-        <StyledComponent {...(rest as P)}>
-            {children}
-            <CrossLines $crossLinesVisible={$crossLinesVisible} />
-        </StyledComponent>
     );
 };

@@ -49,13 +49,11 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 `;
 
 const TooltipContent = styled.div.attrs<TooltipContentProps>(
-    ({ $placement }) => {
-        return {
-            style: {
-                [OPPOSITE[$placement]]: `${scale(200)}`,
-            },
-        };
-    },
+    ({ $placement }) => ({
+        style: {
+            [OPPOSITE[$placement]]: scale(200),
+        },
+    }),
 )`
     pointer-events: none;
     position: absolute;
@@ -91,7 +89,7 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
         <TooltipWrapper
             className='tooltipWrapper'
             $placement={placement}
-            {...(visible !== undefined ? {} : handlers())}
+            {...(visible === undefined ? handlers() : {})}
         >
             <TooltipContent
                 className='tooltipContent'
