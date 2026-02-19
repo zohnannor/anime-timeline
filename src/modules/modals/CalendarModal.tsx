@@ -22,6 +22,11 @@ import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE } from '@timelines/registry';
 
+const getISODate = (date: Date): string => {
+    const iso = date.toISOString();
+    return iso.substring(0, 10);
+};
+
 const CalendarGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -140,9 +145,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
             const date = new Date(month);
             date.setDate(dayN);
-            // ISO formatted date has a T in it
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const dateStr = date.toISOString().split('T')[0]!;
+            const dateStr = getISODate(date);
             const chapterNumber = chapterDateMap.get(dateStr) ?? null;
             const isChapter = chapterNumber !== null;
             const isToday = date.toDateString() === currentDate.toDateString();
@@ -251,9 +254,7 @@ export const CalendarModal: React.FC = () => {
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();
         allChapterDates.forEach((date, index) => {
-            // ISO formatted date has a T in it
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const dateStr = date.toISOString().split('T')[0]!;
+            const dateStr = getISODate(date);
             map.set(dateStr, index + 1);
         });
         return map;

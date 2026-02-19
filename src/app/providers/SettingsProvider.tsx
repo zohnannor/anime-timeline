@@ -1,10 +1,4 @@
-import {
-    PropsWithChildren,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
 import { TITLES } from '@timelines/registry';
@@ -12,6 +6,20 @@ import { AnimeTitle } from '@timelines/types';
 
 const title = (animeTitle: string | null): animeTitle is AnimeTitle =>
     TITLES.includes(animeTitle as AnimeTitle);
+
+const createModalHandler =
+    (
+        stateKey: keyof Settings,
+        setter: React.Dispatch<React.SetStateAction<boolean>>,
+    ) =>
+    (open: React.SetStateAction<boolean>) => {
+        if (open) {
+            globalThis.history.pushState({ [stateKey]: true }, '');
+        } else if (globalThis.history.state?.[stateKey]) {
+            globalThis.history.back();
+        }
+        setter(open);
+    };
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
@@ -41,49 +49,6 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         return 'csm';
     });
     const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
-
-    // complains about it not being a callback and changing every render
-    // eslint-disable-next-line react-x/no-unnecessary-use-callback
-    const createModalHandler = useCallback(
-        (
-            stateKey: keyof Settings,
-            setter: React.Dispatch<React.SetStateAction<boolean>>,
-        ) =>
-            (open: React.SetStateAction<boolean>) => {
-                if (open) {
-                    globalThis.history.pushState({ [stateKey]: true }, '');
-                } else if (globalThis.history.state?.[stateKey]) {
-                    globalThis.history.back();
-                }
-                setter(open);
-            },
-        [],
-    );
-
-    const openInfoBox = useMemo(
-        () => createModalHandler('infoBoxOpen', setInfoBoxOpen),
-        [createModalHandler],
-    );
-    const openCalendar = useMemo(
-        () => createModalHandler('calendarOpen', setCalendarOpen),
-        [createModalHandler],
-    );
-    const openCaptureTimelineModal = useMemo(
-        () =>
-            createModalHandler(
-                'captureTimelineModalOpen',
-                setCaptureTimelineModalOpen,
-            ),
-        [createModalHandler],
-    );
-    const openAnimeTitleSelector = useMemo(
-        () =>
-            createModalHandler(
-                'animeTitleSelectorOpen',
-                setAnimeTitleSelectorOpen,
-            ),
-        [createModalHandler],
-    );
 
     useEffect(() => {
         const handlePopState = (ev: PopStateEvent) => {
@@ -132,33 +97,42 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             showCrosslines,
             setShowCrosslines,
             infoBoxOpen,
-            setInfoBoxOpen: openInfoBox,
+            setInfoBoxOpen: createModalHandler('infoBoxOpen', setInfoBoxOpen),
             unboundedChapterWidth,
             setUnboundedChapterWidth,
             calendarOpen,
-            setCalendarOpen: openCalendar,
+            setCalendarOpen: createModalHandler(
+                'calendarOpen',
+                setCalendarOpen,
+            ),
             showTitles,
             setShowTitles,
             captureTimelineModalOpen,
-            setCaptureTimelineModalOpen: openCaptureTimelineModal,
+            setCaptureTimelineModalOpen: createModalHandler(
+                'captureTimelineModalOpen',
+                setCaptureTimelineModalOpen,
+            ),
             animeTitle,
             setAnimeTitle,
             animeTitleSelectorOpen,
-            setAnimeTitleSelectorOpen: openAnimeTitleSelector,
+            setAnimeTitleSelectorOpen: createModalHandler(
+                'animeTitleSelectorOpen',
+                setAnimeTitleSelectorOpen,
+            ),
         };
     }, [
         showCrosslines,
         infoBoxOpen,
-        openInfoBox,
+        setInfoBoxOpen,
         unboundedChapterWidth,
         calendarOpen,
-        openCalendar,
+        setCalendarOpen,
         showTitles,
         captureTimelineModalOpen,
-        openCaptureTimelineModal,
+        setCaptureTimelineModalOpen,
         animeTitle,
         animeTitleSelectorOpen,
-        openAnimeTitleSelector,
+        setAnimeTitleSelectorOpen,
     ]);
 
     return <SettingsContext value={context}>{children}</SettingsContext>;

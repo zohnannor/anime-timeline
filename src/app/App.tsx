@@ -10,13 +10,12 @@ import {
 } from '@modules/modals';
 import { Scroller } from '@modules/Scroller';
 import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { maxHeight } from '@shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { FLOATING_BUTTONS } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
-
-const MOBILE_WIDTH = 768;
 
 const AppContainer = styled.div`
     display: flex;
@@ -118,7 +117,7 @@ const App: React.FC = () => {
                 {Object.values(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
-                {renderUi && width > MOBILE_WIDTH && <Scroller />}
+                {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}
             </AppContainer>
         </>
     );
