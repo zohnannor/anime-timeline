@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -16,11 +17,12 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
-const SEASONS_TOTAL = 5;
+type SeasonsTotal = 5;
 const CHAPTERS_TOTAL = 228;
 const VOLUMES_TOTAL = 42;
-const VOLUMES_EXTRA = 6;
-const SAGAS_TOTAL = 4;
+type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumexExtra = 6;
+type SagasTotal = 4;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) =>
@@ -2005,10 +2007,7 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<
-            Volume,
-            Add<typeof VOLUMES_TOTAL, typeof VOLUMES_EXTRA>
-        >,
+        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumexExtra>>,
         sagas: [
             {
                 title: 'Introduction',
@@ -2164,7 +2163,7 @@ export const OPM_TIMELINE: Timeline = {
                     // },
                 ],
             },
-        ] as const satisfies Tuple<Saga, typeof SAGAS_TOTAL>,
+        ] as const satisfies Tuple<Saga, SagasTotal>,
         seasons: [
             {
                 title: 'Season One',
@@ -2420,7 +2419,7 @@ export const OPM_TIMELINE: Timeline = {
                 chapters: { from: 162, to: CHAPTERS_TOTAL },
                 // episodes: [],
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             18: 5,
             26: 10,

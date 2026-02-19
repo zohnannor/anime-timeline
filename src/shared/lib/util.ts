@@ -17,12 +17,9 @@ export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
 
 export type ExactUnion<
     T,
-    AllKeys extends keyof any = T extends any ? keyof T : never,
+    AllKeys extends PropertyKey = T extends unknown ? keyof T : never,
 > =
-    T extends any ?
-        T & {
-            [K in Exclude<AllKeys, keyof T>]?: never;
-        }
+    T extends unknown ? T & Partial<Record<Exclude<AllKeys, keyof T>, never>>
     :   never;
 
 export type Add<A extends number, B extends number> = [
@@ -30,24 +27,21 @@ export type Add<A extends number, B extends number> = [
     ...Tuple<number, B>,
 ]['length'];
 
-export const range = <Start extends number, End extends number>(
-    start: Start,
-    end: End,
-) => Array.from({ length: end - start }, (_, k) => k + start);
+export const range = (start: number, end: number) =>
+    Array.from({ length: end - start }, (_, idx) => idx + start);
 
 export const map = <T extends readonly unknown[], U>(
     arr: T,
-    fn: (item: T[number], index: number) => U,
+    fn: (_item: T[number], _itx: number) => U,
 ) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
 
 export const pad = (n: number) => String(n).padStart(2, '0');
 
-export const sum = <T extends readonly number[]>(arr: T) =>
-    arr.reduce((a, b) => a + b, 0);
+export const sum = (arr: readonly number[]) =>
+    arr.reduce((acc, x) => acc + x, 0);
 
-export const clamp = (val: number, min: number, max: number) => {
-    return Math.min(Math.max(val, min), max);
-};
+export const clamp = (val: number, min: number, max: number) =>
+    Math.min(Math.max(val, min), max);
 
 export const isMobileDevice = () =>
     ('ontouchstart' in window || navigator.maxTouchPoints > 0) &&
@@ -56,12 +50,12 @@ export const isMobileDevice = () =>
 export const getDocumentPosition = (element: HTMLElement) => {
     let x = 0;
     let y = 0;
-    let current = element;
+    let current: HTMLElement | null = element;
 
     while (current) {
         x += current.offsetLeft + current.clientLeft;
         y += current.offsetTop + current.clientTop;
-        current = current.offsetParent as HTMLElement;
+        current = current.offsetParent as HTMLElement | null;
     }
 
     return { x, y, width: element.offsetWidth };

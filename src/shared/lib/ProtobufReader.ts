@@ -41,7 +41,7 @@ const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
     len: buffer.length,
     u32() {
         const value = varint.decode(this.buf, this.pos);
-        this.pos += varint.decode.bytes || 0;
+        this.pos += varint.decode.bytes ?? 0;
         return value;
     },
     string() {
@@ -53,7 +53,7 @@ const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
     },
 });
 
-type FieldDecoder<T> = (reader: ProtobufReader) => T[keyof T];
+type FieldDecoder<T> = (_reader: ProtobufReader) => T[keyof T];
 
 type FieldDescriptor<T> = {
     tag: number;
@@ -67,10 +67,11 @@ const decodeMessage = <T>(
     descriptors: FieldDescriptor<T>[],
 ): T => {
     const result: Partial<T> = {};
-    end = end === 0 ? reader.len : reader.pos + end;
-    while (reader.pos < end) {
+    const endPos = end === 0 ? reader.len : reader.pos + end;
+    while (reader.pos < endPos) {
+        // eslint-disable-next-line no-bitwise
         const tag = reader.u32() >>> 3;
-        const descriptor = descriptors.find(d => d.tag === tag);
+        const descriptor = descriptors.find(fd => fd.tag === tag);
         if (descriptor) {
             result[descriptor.property] = descriptor.decoder(reader);
         } else {
@@ -81,53 +82,49 @@ const decodeMessage = <T>(
     return result as T;
 };
 
-const decodeTitle = (reader: ProtobufReader, length: number): Title => {
-    return decodeMessage(reader, length, [
+const decodeTitle = (reader: ProtobufReader, length: number): Title =>
+    decodeMessage(reader, length, [
         { tag: 1, property: 'titleId', decoder: r => r.u32() },
         { tag: 2, property: 'name', decoder: r => r.string() },
         { tag: 3, property: 'author', decoder: r => r.string() },
         { tag: 4, property: 'portraitImageUrl', decoder: r => r.string() },
         { tag: 8, property: 'titleUpdateStatus', decoder: r => r.u32() },
     ]);
-};
 
 const decodeTitleDetailView = (
     reader: ProtobufReader,
     length: number,
-): TitleDetailView => {
-    return decodeMessage(reader, length, [
+): TitleDetailView =>
+    decodeMessage(reader, length, [
         { tag: 1, property: 'title', decoder: r => decodeTitle(r, r.u32()) },
         { tag: 2, property: 'titleImageUrl', decoder: r => r.string() },
         { tag: 3, property: 'overview', decoder: r => r.string() },
         { tag: 5, property: 'nextTimeStamp', decoder: r => r.u32() },
     ]);
-};
 
 const decodeSuccessResponse = (
     reader: ProtobufReader,
     length: number,
-): SuccessResponse => {
-    return decodeMessage(reader, length, [
+): SuccessResponse =>
+    decodeMessage(reader, length, [
         {
             tag: 8,
             property: 'titleDetailView',
             decoder: r => decodeTitleDetailView(r, r.u32()),
         },
     ]);
-};
 
 const decodeApiResponse = (
     reader: ProtobufReader,
     length: number,
-): ApiResponse => {
-    return decodeMessage(reader, length, [
+): ApiResponse =>
+    decodeMessage(reader, length, [
         {
             tag: 1,
             property: 'Ok',
             decoder: r => decodeSuccessResponse(r, r.u32()),
         },
     ]);
-};
 
 export default async (): Promise<Date | null> => {
     try {

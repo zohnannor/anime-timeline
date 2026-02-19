@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -15,9 +16,9 @@ const VOLUME_HEIGHT = 1572;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.6;
 
-const SEASONS_TOTAL = 5;
-const ARCS_TOTAL = 10;
-const VOLUMES_TOTAL = 15;
+type SeasonsTotal = 5;
+type ArcsTotal = 10;
+type VolumesTotal = 15;
 
 const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
 const volumeCover = (_: TimelineData, idx: number) => `Volume_${idx + 1}`;
@@ -1068,7 +1069,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         sagas: [
             {
                 title: '',
@@ -1136,7 +1137,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                         offset: { x: 0, y: 1040 },
                         chapters: { from: 126 },
                     },
-                ] as const satisfies Tuple<Arc, typeof ARCS_TOTAL>,
+                ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
         seasons: [
@@ -1370,7 +1371,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             {
                 chapters: { from: 126 },
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             2: 13,
             8: 13,

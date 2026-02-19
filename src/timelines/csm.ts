@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */ // a lot of data for a title
 import {
     getArcWidth,
     getChapterWidth,
@@ -16,15 +17,19 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
-const VOLUMES_TOTAL = 24;
-const SAGAS_TOTAL = 2;
-const SEASONS_TOTAL = 4;
+type VolumesTotal = 24;
+type SagasTotal = 2;
+type SeasonsTotal = 4;
 
 const volumeTitle = (timeline: TimelineData, idx: number) =>
+    // volumes/chapters are not empty
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     timeline.volumes[idx]!.chapters[0]!.title(timeline, idx);
 const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
 const episodeTitle = (idx: number) => (timeline: TimelineData) =>
-    timeline.volumes.flatMap(v => v.chapters)[idx]!.title(timeline, idx);
+    // chapters are not empty
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    timeline.volumes.flatMap(vol => vol.chapters)[idx]!.title(timeline, idx);
 const episodeCover = (_: TimelineData, idx: number) => (idx + 1).toString();
 
 export const CSM_TIMELINE: Timeline = {
@@ -1619,7 +1624,7 @@ export const CSM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, typeof VOLUMES_TOTAL>,
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
         sagas: [
             {
                 title: 'Public Safety',
@@ -1719,7 +1724,7 @@ export const CSM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Saga, typeof SAGAS_TOTAL>,
+        ] as const satisfies Tuple<Saga, SagasTotal>,
         seasons: [
             {
                 title: 'Chainsaw Man (Anime)',
@@ -1818,7 +1823,7 @@ export const CSM_TIMELINE: Timeline = {
             {
                 chapters: { from: 98 },
             },
-        ] as const satisfies Tuple<Season, typeof SEASONS_TOTAL>,
+        ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             5: 10,
             12: 1,

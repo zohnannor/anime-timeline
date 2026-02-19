@@ -2,9 +2,10 @@ import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import useSettings, {
+import {
     SETTINGS_FUNCTIONS,
     SettingsValues,
+    useSettings,
 } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { ThumbnailImage, Tooltip } from '@shared/ui';
@@ -42,11 +43,9 @@ const FloatingButtonTooltip = styled.div`
     gap: ${scale(40)};
 `;
 
-export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => {
-    return (
-        <ButtonSection className='floatingButtons'>{children}</ButtonSection>
-    );
-};
+export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (
+    <ButtonSection className='floatingButtons'>{children}</ButtonSection>
+);
 
 type ButtonProps = {
     filename: string;
@@ -81,7 +80,7 @@ export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
         >
             <ThumbnailImage
                 src={filename}
-                onClick={() => setter(p => !p)}
+                onClick={() => setter(state => !state)}
                 title={title}
                 style={{ cursor, filter }}
             />

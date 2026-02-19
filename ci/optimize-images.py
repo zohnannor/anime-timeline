@@ -84,7 +84,9 @@ class ColorFormatter(logging.Formatter):
         logging.CRITICAL: f"{Color.BRIGHT_RED}{Color.BOLD}",
     }
 
-    def __init__(self, fmt: Optional[str] = None, datefmt: Optional[str] = None):
+    def __init__(
+        self, fmt: Optional[str] = None, datefmt: Optional[str] = None
+    ):
         # Default format if none provided
         fmt = fmt or "%(asctime)s - %(levelname)s - %(message)s"
         super().__init__(fmt, datefmt)
@@ -202,7 +204,9 @@ class ImageProcessor:
         for cmd in ["magick", "cwebp"]:
             if not shutil.which(cmd):
                 raise RuntimeError(
-                    colored(f"Required command not found: {cmd}", Color.BRIGHT_RED)
+                    colored(
+                        f"Required command not found: {cmd}", Color.BRIGHT_RED
+                    )
                 )
 
     def is_special_image(self, path: Path) -> bool:
@@ -212,7 +216,9 @@ class ImageProcessor:
     def run_command(self, cmd: List[str]) -> bool:
         """Run a shell command and handle errors"""
         try:
-            result = subprocess.run(cmd, text=True, capture_output=True, check=False)
+            result = subprocess.run(
+                cmd, text=True, capture_output=True, check=False
+            )
             return result.returncode == 0
         except Exception as e:
             logging.error(f"Error running command `{' '.join(cmd)}`: {e}")
@@ -221,7 +227,13 @@ class ImageProcessor:
     def find_files(self, patterns: List[str]) -> List[Path]:
         """Find files matching patterns in main directory"""
         return sorted(
-            list({file for ext in patterns for file in self.main_dir.rglob(f"*.{ext}")})
+            list(
+                {
+                    file
+                    for ext in patterns
+                    for file in self.main_dir.rglob(f"*.{ext}")
+                }
+            )
         )
 
     def process_files(
@@ -249,7 +261,9 @@ class ImageProcessor:
 
         successful = sum(1 for r in results if r)
         status_color = (
-            Color.BRIGHT_GREEN if successful == len(files) else Color.BRIGHT_YELLOW
+            Color.BRIGHT_GREEN
+            if successful == len(files)
+            else Color.BRIGHT_YELLOW
         )
         logging.info(
             colored(
@@ -275,7 +289,9 @@ class ImageProcessor:
 
         if should_skip():
             logging.debug(
-                colored(f"Skipping {skip_reason}: {path.name}", Color.BRIGHT_BLACK)
+                colored(
+                    f"Skipping {skip_reason}: {path.name}", Color.BRIGHT_BLACK
+                )
             )
             return True
 
@@ -287,7 +303,9 @@ class ImageProcessor:
                     break
         except Exception as e:
             logging.error(
-                colored(f"{error_message or 'Error'} {path}: {e}", Color.BRIGHT_RED)
+                colored(
+                    f"{error_message or 'Error'} {path}: {e}", Color.BRIGHT_RED
+                )
             )
             success = False
 
@@ -297,13 +315,17 @@ class ImageProcessor:
             )
             return True
         else:
-            logging.error(f"{colored(fail_message, Color.BRIGHT_RED)}: {path.name}")
+            logging.error(
+                f"{colored(fail_message, Color.BRIGHT_RED)}: {path.name}"
+            )
             if on_failure and dest.exists():
                 on_failure()
             return False
 
     def convert_orphan_images(self):
-        """Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)"""
+        """
+        Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)
+        """
 
         def _convert_orphan_single(path: Path) -> bool:
             dest = path.with_suffix(".png")
@@ -312,7 +334,8 @@ class ImageProcessor:
                 dest=dest,
                 # Skip if already converted or has original
                 should_skip=lambda: any(
-                    path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]
+                    path.with_suffix(ext).exists()
+                    for ext in [".png", ".jpg", ".jpeg"]
                 ),
                 skip_reason="(has original)",
                 commands=[["magick", f"{path}[0]", "-strip", str(dest)]],
@@ -332,7 +355,9 @@ class ImageProcessor:
         """Generate thumbnails from originals"""
 
         def _generate_thumbnail_single(path: Path) -> bool:
-            dest = self.thumb_dir / path.relative_to(self.main_dir).with_suffix(".webp")
+            dest = self.thumb_dir / path.relative_to(self.main_dir).with_suffix(
+                ".webp"
+            )
             return self.process_single_file(
                 path=path,
                 dest=dest,
@@ -371,7 +396,8 @@ class ImageProcessor:
         if not self.special_images:
             logging.info(
                 colored(
-                    f"No special images for title: {self.title}", Color.BRIGHT_YELLOW
+                    f"No special images for title: {self.title}",
+                    Color.BRIGHT_YELLOW,
                 )
             )
             return
@@ -388,7 +414,14 @@ class ImageProcessor:
                 and dest.stat().st_mtime > path.stat().st_mtime,
                 skip_reason="special (up to date)",
                 commands=[
-                    ["magick", str(path), "-strip", "-quality", "80", f"WEBP:{dest}"]
+                    [
+                        "magick",
+                        str(path),
+                        "-strip",
+                        "-quality",
+                        "80",
+                        f"WEBP:{dest}",
+                    ]
                 ],
                 success_message="✨ Processed special image",
                 fail_message="❌ Failed to process special image",
@@ -502,7 +535,9 @@ class ImageProcessor:
         logging.info(colored("=" * 80, style))
 
         logging.info(f"📂 Title: {colored(self.title, Color.BRIGHT_CYAN)}")
-        logging.info(f"⚡ Force: {colored(str(self.force_mode), Color.BRIGHT_YELLOW)}")
+        logging.info(
+            f"⚡ Force: {colored(str(self.force_mode), Color.BRIGHT_YELLOW)}"
+        )
         logging.info(
             f"📁 Main directory: {colored(str(self.main_dir), Color.BRIGHT_BLUE)}"
         )
@@ -552,7 +587,9 @@ def find_all_titles() -> List[str]:
     )
 
 
-def process_single_title(title: str, config: Config, force_mode: bool = False) -> bool:
+def process_single_title(
+    title: str, config: Config, force_mode: bool = False
+) -> bool:
     """Process a single title"""
 
     style = f"{Color.BRIGHT_CYAN}{Color.BOLD}"
@@ -564,7 +601,9 @@ def process_single_title(title: str, config: Config, force_mode: bool = False) -
         processor.process_all()
         return True
     except Exception as e:
-        logging.error(colored(f'❌ Error processing "{title}": {e}', Color.BRIGHT_RED))
+        logging.error(
+            colored(f'❌ Error processing "{title}": {e}', Color.BRIGHT_RED)
+        )
         return False
 
 
@@ -620,7 +659,10 @@ def main():
         titles = find_all_titles()
         if not titles:
             logging.error(
-                colored("No anime titles found in ./public directory", Color.BRIGHT_RED)
+                colored(
+                    "No anime titles found in ./public directory",
+                    Color.BRIGHT_RED,
+                )
             )
             sys.exit(1)
 
@@ -642,22 +684,28 @@ def main():
                 )
                 webp_count += len(list(main_dir.rglob("*.webp")))
 
-        logging.info(colored(f"Source images found: {source_count}", Color.BRIGHT_CYAN))
-        logging.info(colored(f"Existing WebP files: {webp_count}", Color.BRIGHT_CYAN))
+        logging.info(
+            colored(f"Source images found: {source_count}", Color.BRIGHT_CYAN)
+        )
+        logging.info(
+            colored(f"Existing WebP files: {webp_count}", Color.BRIGHT_CYAN)
+        )
         logging.info("")
 
-        success_count = 0
+        successes = 0
         for title in titles:
             if process_single_title(title, config, args.force):
-                success_count += 1
+                successes += 1
             logging.info("")
 
         final_color = (
-            Color.BRIGHT_GREEN if success_count == len(titles) else Color.BRIGHT_YELLOW
+            Color.BRIGHT_GREEN
+            if successes == len(titles)
+            else Color.BRIGHT_YELLOW
         )
         logging.info(
             colored(
-                f"✅ Successfully processed {success_count}/{len(titles)} titles!",
+                f"✅ Successfully processed {successes}/{len(titles)} titles!",
                 final_color,
             )
         )

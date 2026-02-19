@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 import { AnimeTitle } from '@timelines/types';
 
@@ -53,25 +53,27 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     animeTitleSelectorOpen: 'setAnimeTitleSelectorOpen',
 };
 
+const dummy = () => {
+    /* empty */
+};
+
 export const SettingsContext = createContext<Settings>({
     showCrosslines: false,
-    setShowCrosslines: () => {},
+    setShowCrosslines: dummy,
     infoBoxOpen: false,
-    setInfoBoxOpen: () => {},
+    setInfoBoxOpen: dummy,
     unboundedChapterWidth: false,
-    setUnboundedChapterWidth: () => {},
+    setUnboundedChapterWidth: dummy,
     calendarOpen: false,
-    setCalendarOpen: () => {},
+    setCalendarOpen: dummy,
     showTitles: true,
-    setShowTitles: () => {},
+    setShowTitles: dummy,
     captureTimelineModalOpen: false,
-    setCaptureTimelineModalOpen: () => {},
+    setCaptureTimelineModalOpen: dummy,
     animeTitle: 'csm',
-    setAnimeTitle: () => {},
+    setAnimeTitle: dummy,
     animeTitleSelectorOpen: false,
-    setAnimeTitleSelectorOpen: () => {},
+    setAnimeTitleSelectorOpen: dummy,
 });
 
-const useSettings = () => useContext(SettingsContext);
-
-export default useSettings;
+export const useSettings = () => use(SettingsContext);
