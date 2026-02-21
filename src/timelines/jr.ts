@@ -1126,23 +1126,25 @@ export const JR_TIMELINE: Timeline = {
         socialLinks: [
             {
                 name: 'Manga Plus',
-                url: 'https://mangaplus.shueisha.co.jp/titles/100037',
+                url: 'https://mangaplus.shueisha.co.jp/titles/100040',
             },
             {
                 name: 'VIZ Media',
-                url: 'https://www.viz.com/shonenjump/chapters/chainsaw-man',
+                url: 'https://www.viz.com/shonenjump/chapters/hells-paradise-jigokuraku',
+            },
+            { name: "Author's Twitter", url: 'https://x.com/ug_kaku' },
+            {
+                name: 'Shōnen Jump+',
+                url: 'https://shonenjumpplus.com/episode/13932016480029295972',
             },
             {
-                name: "Author's Twitter",
-                url: 'https://x.com/nagayama_koharu',
+                name: 'Official Anime Twitter',
+                url: 'https://x.com/jplus_jigokurak',
             },
+            { name: 'Anime Website', url: 'https://www.jigokuraku.com/' },
             {
-                name: 'Official Site',
-                url: 'https://www.shonenjump.com/j/rensai/chainsaw.html',
-            },
-            {
-                name: 'Anime Website',
-                url: 'https://chainsawman.dog/',
+                name: 'Crunchyroll ',
+                url: 'https://www.crunchyroll.com/series/GJ0H7Q5ZJ/hells-paradise',
             },
         ],
     },
