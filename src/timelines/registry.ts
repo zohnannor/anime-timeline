@@ -5,6 +5,7 @@ import { DEATHNOTE_TIMELINE } from '@timelines/deathnote';
 import { EVA_TIMELINE } from '@timelines/eva';
 import { FP_TIMELINE } from '@timelines/fp';
 import { FRIEREN_TIMELINE } from '@timelines/frieren';
+import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
 import { AnimeTitle, Timeline } from '@timelines/types';
 
@@ -17,6 +18,7 @@ export const TITLES = [
     'aot',
     'opm',
     'deathnote',
+    'jr',
 ] as const;
 
 export const TIMELINE: Record<AnimeTitle, Timeline> = {
@@ -28,4 +30,5 @@ export const TIMELINE: Record<AnimeTitle, Timeline> = {
     aot: AOT_TIMELINE,
     opm: OPM_TIMELINE,
     deathnote: DEATHNOTE_TIMELINE,
+    jr: JR_TIMELINE,
 };
