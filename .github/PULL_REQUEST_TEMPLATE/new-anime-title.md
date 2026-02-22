@@ -22,4 +22,5 @@ Add a new timeline for: **[TITLE HERE]**
   remasters, out-of-order releases etc.).
 - Call out any compromises or TODOs (e.g. seasons speculation, approximate ordering, or missing artwork).
 - Mention if this PR requires re-running the GitHub Pages deployment with `[force-optimize]` in the commit message.
+- Delete this section if not needed.
 -->
