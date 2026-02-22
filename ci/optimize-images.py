@@ -175,6 +175,14 @@ SPECIAL_IMAGES: Final[Dict[str, set[str]]] = {
         "One-Punch_Man_Season_3_Key_Visual_2.png",
     },
     "deathnote": {"DEATH_NOTE_anime.png"},
+    "jr": {
+        "Jigokuraku_Key_Visual.png",
+        "Jigokuraku_Season_2_Key_Visual_2.png",
+        "The_vanguard_sailing_to_Kotaku.png",
+        "Lord_Tensen_Arc_Infobox.png",
+        "Horai_flower_setting.png",
+        "The_Survivors_on_Rien's_ship.png",
+    },
 }
 
 
