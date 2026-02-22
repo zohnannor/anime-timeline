@@ -55,6 +55,9 @@ jobs:
             - name: Lint Project
               run: yarn lint --max-warnings 0 # disallow warnings for prod
 
+            - name: Check formatting
+              run: yarn prettylint src # TODO: replace with biome?
+
             - name: Install Linux dependencies
               run: |
                   sudo apt-get update
