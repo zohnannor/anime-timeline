@@ -1512,7 +1512,7 @@ export const CSM_TIMELINE: Timeline = {
                         title: () => 'Really Good Girl',
                         date: 'August 20, 2025',
                         pages: 15,
-                        cover: null,
+                        cover: 'Volume_23_Pochita_Sketch_1',
                     },
                     {
                         title: () => 'Role',
@@ -1572,7 +1572,7 @@ export const CSM_TIMELINE: Timeline = {
                         title: () => 'Denji Man',
                         date: 'December 3, 2025',
                         pages: 15,
-                        cover: null,
+                        cover: 'Volume_23_Pochita_Sketch_2',
                     },
                 ],
             },
@@ -1619,6 +1619,12 @@ export const CSM_TIMELINE: Timeline = {
                     {
                         title: () => 'Nightjar and Asa',
                         date: 'February 18, 2026',
+                        pages: 15,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Sex and Selection',
+                        date: 'February 25, 2026',
                         pages: 15,
                         cover: null,
                     },
