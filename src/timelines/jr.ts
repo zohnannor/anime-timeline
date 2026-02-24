@@ -1100,6 +1100,12 @@ export const JR_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 63, to: 67 },
                     },
+                    {
+                        title: () => 'Two People and One Person',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 67, to: 74 },
+                    },
                 ],
             },
             {
