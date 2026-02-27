@@ -1357,8 +1357,14 @@ export const FRIEREN_TIMELINE: Timeline = {
                     {
                         title: () => 'A Demon-Slaying Request',
                         cover: episodeCover,
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 150, y: 0 },
                         chapters: { from: 71, to: 72 },
+                    },
+                    {
+                        title: () => 'Divine Revolte',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 72, to: 74 },
                     },
                 ],
             },
@@ -1381,6 +1387,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             43: 16,
             58: 5,
             66: 16,
+            72: 12,
         } as const,
         wikiBase: 'https://frieren.fandom.com/wiki/',
         smallImages: {
