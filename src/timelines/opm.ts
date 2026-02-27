@@ -18,8 +18,8 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 229;
-const VOLUMES_TOTAL = 42;
+const CHAPTERS_TOTAL = 230;
+const VOLUMES_TOTAL = 43;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
 type SagasTotal = 4;
@@ -1425,7 +1425,7 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: null,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'The Supernatural and Risks',
@@ -1745,10 +1745,22 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 19,
                         cover: null,
                     },
+                ],
+            },
+            {
+                title: volumeTitle,
+                cover: null,
+                chapters: [
                     {
                         title: () => 'New Blood 2',
                         date: 'February 12, 2026',
                         pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'New Blood 3',
+                        date: 'February 26, 2026',
+                        pages: 16,
                         cover: null,
                     },
                 ],
