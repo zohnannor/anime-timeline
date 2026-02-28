@@ -27,9 +27,10 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         return <Timeline animeTitle={animeTitle} />;
     }
 
-    const timeline = TIMELINE[animeTitle].data;
+    const { seasons, sagas, volumes } = TIMELINE[animeTitle].data;
 
     // maps every nested element's (local) index to the global index
+    // selects the element with the specific index if specified
     const withGlobalIndex = <T, U>(
         xs: readonly T[],
         inner: (_x: T) => readonly U[],
@@ -43,15 +44,15 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const entities: {
         [K in keyof TimelineEntity]: (readonly [number, TimelineEntity[K]])[];
     } = {
-        episode: withGlobalIndex(timeline.seasons, se => se.episodes ?? []),
-        season: withGlobalIndex(timeline.seasons, se => [se]),
-        saga: withGlobalIndex(timeline.sagas, saga => [saga]),
-        arc: withGlobalIndex(timeline.sagas, saga => saga.arcs),
+        episode: withGlobalIndex(seasons ?? [], se => se.episodes ?? []),
+        season: withGlobalIndex(seasons ?? [], se => [se]),
+        saga: withGlobalIndex(sagas, saga => [saga]),
+        arc: withGlobalIndex(sagas, saga => saga.arcs),
         chapter: withGlobalIndex(
-            timeline.volumes.flatMap(vol => vol.chapters),
+            volumes.flatMap(vol => vol.chapters),
             ch => [ch],
         ),
-        volume: withGlobalIndex(timeline.volumes, vol => [vol]),
+        volume: withGlobalIndex(volumes, vol => [vol]),
     };
 
     return (

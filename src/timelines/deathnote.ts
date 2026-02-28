@@ -888,7 +888,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'unused',
-                cover: null,
                 chapters: { from: 1, to: 108 },
                 arcs: [
                     {

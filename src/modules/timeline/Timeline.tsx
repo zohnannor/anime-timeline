@@ -237,6 +237,7 @@ export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
             <TimelineSegment
                 segments={yearsSegments}
                 colorInterpolation={{
+                    // TODO: get start/end from timeline
                     inputRange: [2018, 2025],
                     outputGradient: [0xaaaaaa, 0xffffff],
                 }}

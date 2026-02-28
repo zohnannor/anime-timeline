@@ -52,7 +52,7 @@ export default defineConfig([
                 { max: 150, skipBlankLines: true, skipComments: true },
             ],
             'max-statements': ['error', 30, { ignoreTopLevelFunctions: true }],
-            complexity: ['error', 30],
+            complexity: ['error', 35],
             'max-lines': ['error', 1000],
             'capitalized-comments': 'off', // not important, style preference
             'no-inline-comments': 'off', // useful
@@ -89,7 +89,10 @@ export default defineConfig([
             ],
             // `console.log` should be used only in development
             'no-console': ['error', { allow: ['warn', 'error', 'debug'] }],
+            // to leave `TODO` comments in the code
             'no-warning-comments': 'off',
+            // if-guards are useful
+            'no-continue': 'off',
 
             'react/prop-types': 'off', // enfored by typescript and `React.FC`
 

@@ -2029,7 +2029,6 @@ export const OPM_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'Introduction',
-                cover: null,
                 chapters: { from: 1, to: 15 },
                 arcs: [
                     {
@@ -2054,7 +2053,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Hero Association',
-                cover: null,
                 chapters: { from: 16, to: 39 },
                 arcs: [
                     {
@@ -2097,7 +2095,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Human Monster',
-                cover: null,
                 chapters: { from: 40, to: 175 },
                 arcs: [
                     {
@@ -2140,7 +2137,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Neo Heroes',
-                cover: null,
                 chapters: { from: 171 + 5 },
                 arcs: [
                     {

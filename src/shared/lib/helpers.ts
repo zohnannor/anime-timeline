@@ -38,8 +38,9 @@ const groupBy = <T>(array: T[], getKey: (_el: T) => number) =>
     array.reduce<[[number, T][][], number | null]>(
         ([groups, previous], date, idx) => {
             const key = getKey(date);
-            if (key === previous) {
-                groups[groups.length - 1]!.push([idx, date]);
+            const lastGroup = groups.at(-1);
+            if (key === previous && lastGroup) {
+                lastGroup.push([idx, date]);
             } else {
                 groups.push([[idx, date]]);
             }
@@ -154,7 +155,7 @@ const getEpisodePages = (timeline: TimelineData, idx: number) => {
     const chaptersSplit = chaptersWithPagesSplit(timeline);
     const chaptersTotal = chapters(timeline).length;
 
-    const [start, end] = timeline.seasons
+    const [start, end] = (timeline.seasons ?? [])
         .flatMap(season => season.episodes ?? [])
         .map(
             ({ chapters: { from, to } }) =>
@@ -189,7 +190,7 @@ export const getSeasonWidth: WidthHelper = (
     idx,
     unboundedChapterWidth,
 ) => {
-    const { from, to } = timeline.seasons[idx]!.chapters;
+    const { from, to } = timeline.seasons![idx]!.chapters;
     const startIdx = from - 1;
     const endIdx = (to ?? chapters(timeline).length) - 1;
 

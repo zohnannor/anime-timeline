@@ -5,7 +5,7 @@ import {
     getVolumeWidth,
 } from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Timeline, TimelineData, Volume } from '@timelines/types';
 
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
@@ -620,8 +620,6 @@ export const FP_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
                 chapters: { from: 1 },
                 arcs: [
                     {
@@ -652,7 +650,6 @@ export const FP_TIMELINE: Timeline = {
                 ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
-        seasons: [] as const satisfies Tuple<Season, 0>,
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',
         smallImages: {

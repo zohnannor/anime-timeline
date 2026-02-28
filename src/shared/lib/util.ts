@@ -15,6 +15,8 @@ export type Map<
 
 export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
 
+export type NonEmptyArray<T> = readonly [T, ...T[]];
+
 export type ExactUnion<
     T,
     AllKeys extends PropertyKey = T extends unknown ? keyof T : never,

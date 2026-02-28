@@ -237,7 +237,7 @@ export const TimelineSectionItemComponent: React.FC<
     const maybeFunction = <T,>(fn: Callback<T> | T): T =>
         typeof fn === 'function' ? (fn as Callback<T>)(timeline, idx) : fn;
     const title = maybeFunction(entity.title) ?? processedNumber;
-    const cover = maybeFunction(entity.cover);
+    const cover = 'cover' in entity ? maybeFunction(entity.cover) : null;
     const offset = 'offset' in entity ? entity.offset : null;
 
     const processedTitle = titleProcessor(title, itemNumber);

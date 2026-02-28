@@ -1073,8 +1073,6 @@ export const FRIEREN_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
                 chapters: { from: 1 },
                 arcs: [
                     {
