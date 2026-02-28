@@ -10,6 +10,9 @@ type Range = { from: number; to?: number };
 
 export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
 
+type OffsetWhenCover<T> = T &
+    ({ cover: string; offset: Offset } | { cover: null });
+
 export type Chapter = {
     title: Callback<string>;
     date: string;
@@ -23,23 +26,22 @@ export type Volume = {
     chapters: readonly Chapter[];
 };
 
-export type Saga = {
+export type Saga = OffsetWhenCover<{
     title: string;
-} & ({ cover: string; offset: Offset } | { cover: null }) & {
-        chapters: Range;
-        arcs: readonly Arc[];
-    };
+    chapters: Range;
+    arcs: readonly Arc[];
+}>;
 
-export type Arc = {
+export type Arc = OffsetWhenCover<{
     title: string;
-} & ({ cover: string; offset: Offset } | { cover: null }) & {
-        chapters: Range;
-    };
+    chapters: Range;
+}>;
 
 export type Episode = {
     title: Callback<string>;
     cover: Callback<string>;
     offset: Offset;
+    date: string;
     chapters: Range;
 };
 
