@@ -1,12 +1,11 @@
 import CSS from 'csstype';
 
-import { WidthHelper } from '@shared/lib/helpers';
 import { ExactUnion, NonEmptyArray } from '@shared/lib/util';
 import { TITLES } from '@timelines/registry';
 
 export type Offset = { x: number; y: number };
 
-type Range = { from: number; to?: number };
+export type Range = { from: number; to?: number };
 
 export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
 
@@ -58,7 +57,7 @@ export type Season = ExactUnion<
 export type SmallImages = {
     'scroller-or-favicon': string;
     'read-info': string;
-    'toggle-unbounded-chapter-width': string;
+    'toggle-unbound-chapter-width': string;
     'toggle-cross-lines': string;
     'open-chapter-calendar': string;
     'toggle-always-show-titles': string;
@@ -85,14 +84,6 @@ export type Timeline = { layout: TimelineSectionLayout; data: TimelineData };
 
 export type AnimeTitle = (typeof TITLES)[number];
 
-export type TimelineSectionType =
-    | 'season'
-    | 'episode'
-    | 'saga'
-    | 'arc'
-    | 'chapter'
-    | 'volume';
-
 export type TimelineEntity = {
     season: Season;
     episode: Episode;
@@ -101,6 +92,8 @@ export type TimelineEntity = {
     chapter: Chapter;
     volume: Volume;
 };
+
+export type TimelineSectionType = keyof TimelineEntity;
 
 export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
@@ -114,7 +107,6 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     titleProcessor?: (_title: string, _n: number) => string;
     numberProcessor?: (_number: number) => string;
     height: number;
-    width: WidthHelper;
     sectionLink: string;
     wikiLink: (_title: string, _n: number) => string;
     focusable?: boolean;

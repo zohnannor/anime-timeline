@@ -1,9 +1,3 @@
-import {
-    getArcWidth,
-    getChapterWidth,
-    getSagaWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import { Arc, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -25,7 +19,6 @@ export const FP_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: () => 'unused',
             subTimeline: {
@@ -34,7 +27,6 @@ export const FP_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title =>
                     `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
@@ -50,7 +42,6 @@ export const FP_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
@@ -60,7 +51,6 @@ export const FP_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
@@ -655,7 +645,7 @@ export const FP_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

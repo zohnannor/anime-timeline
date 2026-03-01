@@ -8,7 +8,6 @@ import {
     chapterDatesByMonth,
     chapterDatesByYear,
     DAYS_GRADIENT,
-    getChapterWidth,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
@@ -86,8 +85,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, setCalendarOpen, animeTitle } =
-        useSettings();
+    const { unboundChapterWidth, setCalendarOpen, animeTitle } = useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -130,13 +128,14 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             {segments.map((segment, idx) => {
                 const { chapterNumbers, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
+
                 const totalWidth = sum(
-                    chapterNumbers.map(ci =>
-                        getChapterWidth(
-                            TIMELINE[animeTitle].data,
-                            ci - 1,
-                            unboundedChapterWidth,
-                        ),
+                    chapterNumbers.map(
+                        ci =>
+                            // TODO: fix this! refactor `Segment`.
+                            TIMELINE[animeTitle].data.chapters[ci - 1]?.width(
+                                unboundChapterWidth,
+                            ) ?? 0,
                     ),
                 );
 

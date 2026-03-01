@@ -2,7 +2,7 @@ import { PropsWithChildren, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { maxHeight, scale } from '@shared/lib/helpers';
+import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
 import { HEADERS_WIDTH } from '@timelines/index';
@@ -52,9 +52,9 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
         }
 
         const scaleToPx = (n: number) =>
-            n * (window.innerHeight / maxHeight(TIMELINE[animeTitle]));
+            n * (window.innerHeight / TIMELINE[animeTitle].data.maxHeight);
         const pxToScale = (n: number) =>
-            n * (maxHeight(TIMELINE[animeTitle]) / window.innerHeight);
+            n * (TIMELINE[animeTitle].data.maxHeight / window.innerHeight);
 
         const { x: left, width } = getDocumentPosition(element);
         const right = left + width;

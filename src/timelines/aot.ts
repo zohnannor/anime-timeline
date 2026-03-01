@@ -1,12 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -31,7 +23,6 @@ export const AOT_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Attack on Titan (Anime)',
@@ -45,7 +36,6 @@ export const AOT_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
@@ -57,7 +47,6 @@ export const AOT_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: ARC_HEIGHT,
-            width: getSagaWidth,
             blankfontSize: 0,
             titleFontSize: 0,
             sectionLink: 'Story Arcs',
@@ -65,7 +54,6 @@ export const AOT_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -79,7 +67,6 @@ export const AOT_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -91,7 +78,6 @@ export const AOT_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
@@ -1921,7 +1907,7 @@ export const AOT_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

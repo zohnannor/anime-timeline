@@ -3,12 +3,7 @@ import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
 import { useSettings } from '@shared/contexts/SettingsContext';
-import {
-    getVolumeWidth,
-    maxHeight,
-    scale,
-    toTitleCase,
-} from '@shared/lib/helpers';
+import { scale, toTitleCase } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
@@ -38,18 +33,16 @@ export const CaptureTimelineModal: React.FC = () => {
     const {
         captureTimelineModalOpen,
         setCaptureTimelineModalOpen,
-        unboundedChapterWidth,
+        unboundChapterWidth,
         animeTitle,
     } = useSettings();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const timeline = TIMELINE[animeTitle].data;
-    const height = maxHeight(TIMELINE[animeTitle]);
+    const height = TIMELINE[animeTitle].data.maxHeight;
     const width = sum(
-        timeline.volumes.map((_, vi) =>
-            getVolumeWidth(timeline, vi, unboundedChapterWidth),
-        ),
+        timeline.volumes.map(vol => vol.width(unboundChapterWidth)),
     );
 
     const [_, captureTimeline, __] = useToPng({

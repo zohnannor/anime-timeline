@@ -1,12 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -65,7 +57,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
@@ -74,7 +65,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
@@ -89,7 +79,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: SAGA_HEIGHT,
-            width: getSagaWidth,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Part I',
@@ -97,7 +86,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: title => title,
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -111,7 +99,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -123,7 +110,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
@@ -1142,7 +1128,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

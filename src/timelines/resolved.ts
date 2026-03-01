@@ -1,22 +1,24 @@
+import { maxHeight, tokyoDate } from '@shared/lib/helpers';
 import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-    tokyoDate,
-} from '@shared/lib/helpers';
-import { ExactUnion, NonEmptyArray } from '@shared/lib/util';
+    ExactUnion,
+    NonEmptyArray,
+    sum,
+    typedEntries,
+    typedFromEntries,
+} from '@shared/lib/util';
 import {
+    AnimeTitle,
+    Callback,
     Offset,
     OffsetWhenCover,
+    Range,
     SmallImages,
     SocialLink,
-    TimelineData,
+    Timeline,
+    TimelineSectionLayout,
 } from '@timelines/types';
 
-type WidthResolver = (_unboundedChapterWidth: boolean) => number;
+type WidthResolver = (_unboundChapterWidth: boolean) => number;
 
 type ResolvedChapter = {
     title: string;
@@ -35,6 +37,7 @@ type ResolvedVolume = {
 type ResolvedArc = OffsetWhenCover<{
     title: string;
     width: WidthResolver;
+    saga: number;
 }>;
 
 type ResolvedSaga = {
@@ -47,6 +50,7 @@ export type ResolvedEpisode = {
     cover: string;
     offset: Offset;
     width: WidthResolver;
+    season: number;
 };
 
 type ResolvedSeason = ExactUnion<
@@ -61,16 +65,32 @@ type ResolvedSeason = ExactUnion<
       }
 >;
 
-type ResolvedTimelineData = {
+export type ResolvedTimelineEntity = {
+    season: ResolvedSeason;
+    episode: ResolvedEpisode;
+    saga: ResolvedSaga;
+    arc: ResolvedArc;
+    chapter: ResolvedChapter;
+    volume: ResolvedVolume;
+};
+
+export type ResolvedTimelineData = {
     title: string;
     chapters: NonEmptyArray<ResolvedChapter>;
     volumes: NonEmptyArray<ResolvedVolume>;
     arcs: NonEmptyArray<ResolvedArc>;
     sagas: NonEmptyArray<ResolvedSaga>;
-    seasons?: NonEmptyArray<ResolvedSeason>;
+    episodes: ResolvedEpisode[];
+    seasons?: ResolvedSeason[];
     wikiBase: string;
     smallImages: SmallImages;
     socialLinks: SocialLink[];
+    maxHeight: number;
+};
+
+export type ResolvedTimeline = {
+    layout: TimelineSectionLayout;
+    data: ResolvedTimelineData;
 };
 
 const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
@@ -80,11 +100,15 @@ const throwError = (message: string): never => {
     throw new Error(message);
 };
 
-const asNonEmpty = <T>(arr: readonly T[]): NonEmptyArray<T> =>
-    notEmpty(arr) ? arr : throwError('Expected non-empty array');
+const asNonEmpty = <T>(arr: readonly T[], name: string): NonEmptyArray<T> =>
+    notEmpty(arr) ? arr : throwError(`Expected non-empty array ${name}`);
 
-// eslint-disable-next-line max-statements
-const resolveTimeline = (raw: TimelineData): ResolvedTimelineData => {
+const DEFAULT_VOLUME_WIDTH = 1000;
+const DEFAULT_VOLUME_PAGES = 180;
+
+// eslint-disable-next-line max-statements, max-lines-per-function
+const resolve = (raw: Timeline): ResolvedTimeline => {
+    const { layout, data } = raw;
     const {
         title,
         volumes: volumesRaw,
@@ -94,7 +118,10 @@ const resolveTimeline = (raw: TimelineData): ResolvedTimelineData => {
         wikiBase,
         smallImages,
         socialLinks,
-    } = raw;
+    } = data;
+
+    const maybeFunction = <T>(fn: Callback<T> | T, idx: number): T =>
+        typeof fn === 'function' ? (fn as Callback<T>)(data, idx) : fn;
 
     const chapters: ResolvedChapter[] = [];
     const volumes: ResolvedVolume[] = [];
@@ -103,27 +130,18 @@ const resolveTimeline = (raw: TimelineData): ResolvedTimelineData => {
     const seasons: ResolvedSeason[] = [];
     const episodes: ResolvedEpisode[] = [];
 
-    for (const [vi, volume] of volumesRaw.entries()) {
-        const {
-            title: titleRaw,
-            cover: coverRaw,
-            chapters: chaptersRaw,
-        } = volume;
+    let globalChapterIdx = 0;
 
-        const title =
-            typeof titleRaw === 'function' ? titleRaw(raw, vi) : titleRaw;
-        const cover =
-            typeof coverRaw === 'function' ? coverRaw(raw, vi) : coverRaw;
-        const width = (unboundedChapterWidth: boolean) =>
-            getVolumeWidth(raw, vi, unboundedChapterWidth);
+    for (const [
+        volumeIdx,
+        { title: titleRaw, cover: coverRaw, chapters: chaptersRaw },
+    ] of volumesRaw.entries()) {
+        const pagesInVolume = sum(chaptersRaw.map(ch => ch.pages));
 
-        volumes.push({
-            title,
-            cover,
-            width,
-        });
-
-        for (const [ci, chapter] of chaptersRaw.entries()) {
+        const volumeChapters: ResolvedChapter[] = [];
+        for (const chapter of chaptersRaw) {
+            // eslint-disable-next-line no-plusplus
+            const chapterIdx = globalChapterIdx++;
             const {
                 title: titleRaw,
                 date: dateRaw,
@@ -131,78 +149,124 @@ const resolveTimeline = (raw: TimelineData): ResolvedTimelineData => {
                 cover: coverRaw,
             } = chapter;
 
-            const title =
-                typeof titleRaw === 'function' ? titleRaw(raw, ci) : titleRaw;
-            const width = (unboundedChapterWidth: boolean) =>
-                getChapterWidth(raw, ci, unboundedChapterWidth);
+            const title = maybeFunction(titleRaw, chapterIdx);
 
-            chapters.push({
+            const pagesInChapter = pages;
+            const chapterWidthUnbound =
+                pagesInChapter *
+                (DEFAULT_VOLUME_WIDTH / DEFAULT_VOLUME_PAGES) *
+                1.05;
+            const chapterWidthBounded =
+                pagesInChapter * (DEFAULT_VOLUME_WIDTH / pagesInVolume);
+
+            volumeChapters.push({
                 title,
                 date: tokyoDate(dateRaw),
                 pages,
                 cover: coverRaw,
-                width,
+                width: unboundChapterWidth =>
+                    unboundChapterWidth ? chapterWidthUnbound : (
+                        chapterWidthBounded
+                    ),
             });
         }
+        chapters.push(...volumeChapters);
+
+        const unboundVolumeWidth = sum(
+            volumeChapters.map(ch => ch.width(true)),
+        );
+        volumes.push({
+            title: maybeFunction(titleRaw, volumeIdx),
+            cover: maybeFunction(coverRaw, volumeIdx),
+            width: unboundChapterWidth =>
+                unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
+        });
     }
 
-    for (const [si, saga] of sagasRaw.entries()) {
-        const { arcs: arcsRaw, chapters, title } = saga;
-        const width = (unboundedChapterWidth: boolean) =>
-            getSagaWidth(raw, si, unboundedChapterWidth);
+    const chaptersTotal = globalChapterIdx;
 
-        sagas.push({
+    for (const [
+        sagaIdx,
+        // TODO: saga.chapters is not used, remove it?
+        { arcs: arcsRaw, chapters: _, title },
+    ] of sagasRaw.entries()) {
+        const sagaArcs: ResolvedArc[] = [];
+        for (const {
+            chapters: { from, to },
+            cover,
             title,
-            width,
-        });
-
-        for (const [ai, arc] of arcsRaw.entries()) {
-            const { chapters, cover, title, offset } = arc;
-
-            const width = (unboundedChapterWidth: boolean) =>
-                getArcWidth(raw, ai, unboundedChapterWidth);
+            offset,
+        } of arcsRaw) {
+            const width: WidthResolver = unboundChapterWidth =>
+                sum(
+                    chapters
+                        .slice(from - 1, to ?? chaptersTotal)
+                        .map(ch => ch.width(unboundChapterWidth)),
+                );
 
             if (cover === null) {
-                arcs.push({
+                sagaArcs.push({
                     title,
-                    width,
                     cover: null,
+                    width,
+                    saga: sagaIdx,
                 });
             } else {
-                arcs.push({
+                sagaArcs.push({
                     title,
                     cover,
                     offset,
                     width,
+                    saga: sagaIdx,
                 });
             }
         }
+        arcs.push(...sagaArcs);
+
+        sagas.push({
+            title,
+            width: unboundChapterWidth =>
+                sum(sagaArcs.map(arc => arc.width(unboundChapterWidth))),
+        });
     }
 
+    let globalEpisodeIdx = 0;
+
+    const widthBasedOnPages = ({ from, to }: Range): WidthResolver => {
+        const [start, end] = [from - 1, to ?? chaptersTotal];
+        return unboundChapterWidth =>
+            sum(
+                chapters.slice(start, end).map(({ pages, width }, idx) => {
+                    const chapterIdx = start + idx;
+                    const pageWidth = width(unboundChapterWidth) / pages;
+                    const split = splitChapters[chapterIdx + 1] ?? pages;
+                    const rest = pages - split;
+                    const pagesInSeason =
+                        pages !== split && chapterIdx === start ? rest
+                        : chapterIdx === end - 1 ? split
+                        : pages;
+
+                    return pagesInSeason * pageWidth;
+                }),
+            );
+    };
+
     if (seasonsRaw !== undefined) {
-        for (const [si, season] of seasonsRaw.entries()) {
-            const {
-                title,
-                cover: coverRaw,
-                offset,
-                chapters,
-                episodes: episodesRaw,
-            } = season;
+        for (const [
+            seasonIdx,
+            { title, cover: coverRaw, offset, chapters, episodes: episodesRaw },
+        ] of seasonsRaw.entries()) {
+            const width = widthBasedOnPages(chapters);
 
-            const cover =
-                typeof coverRaw === 'function' ? coverRaw(raw, si) : coverRaw;
-            const width = (unboundedChapterWidth: boolean) =>
-                getSeasonWidth(raw, si, unboundedChapterWidth);
-
-            if (title !== undefined && cover !== undefined) {
+            if (title === undefined) {
                 seasons.push({
-                    title,
-                    cover,
-                    offset,
                     width,
                 });
             } else {
                 seasons.push({
+                    title,
+                    cover: maybeFunction(coverRaw, seasonIdx),
+                    offset,
                     width,
                 });
             }
@@ -211,48 +275,52 @@ const resolveTimeline = (raw: TimelineData): ResolvedTimelineData => {
                 continue;
             }
 
-            for (const [ei, episode] of episodesRaw.entries()) {
-                const {
-                    title: titleRaw,
-                    cover: coverRaw,
-                    offset,
-                    chapters,
-                } = episode;
-
-                const title =
-                    typeof titleRaw === 'function' ?
-                        titleRaw(raw, ei)
-                    :   titleRaw;
-                const cover =
-                    typeof coverRaw === 'function' ?
-                        coverRaw(raw, ei)
-                    :   coverRaw;
-                const width = (unboundedChapterWidth: boolean) =>
-                    getEpisodeWidth(raw, ei, unboundedChapterWidth);
+            for (const {
+                title: titleRaw,
+                cover: coverRaw,
+                offset,
+                chapters,
+            } of episodesRaw) {
+                // eslint-disable-next-line no-plusplus
+                const episodeIdx = globalEpisodeIdx++;
 
                 episodes.push({
-                    title,
-                    cover,
+                    title: maybeFunction(titleRaw, episodeIdx),
+                    cover: maybeFunction(coverRaw, episodeIdx),
                     offset,
-                    width,
+                    width: widthBasedOnPages(chapters),
+                    season: seasonIdx,
                 });
             }
         }
     }
 
-    const timeline: ResolvedTimelineData = {
-        title,
-        chapters: asNonEmpty(chapters),
-        volumes: asNonEmpty(volumes),
-        arcs: asNonEmpty(arcs),
-        sagas: asNonEmpty(sagas),
-        seasons: asNonEmpty(seasons),
-        wikiBase,
-        smallImages,
-        socialLinks,
+    return {
+        layout,
+        data: {
+            title,
+            chapters: asNonEmpty(chapters, 'chapters'),
+            volumes: asNonEmpty(volumes, 'volumes'),
+            arcs: asNonEmpty(arcs, 'arcs'),
+            sagas: asNonEmpty(sagas, 'sagas'),
+            episodes,
+            seasons,
+            wikiBase,
+            smallImages,
+            socialLinks,
+            maxHeight: maxHeight(layout),
+        },
     };
-
-    return timeline;
 };
+
+const resolveTimeline = (
+    raw: Record<AnimeTitle, Timeline>,
+): Record<AnimeTitle, ResolvedTimeline> =>
+    typedFromEntries(
+        typedEntries(raw).map(([title, timeline]) => [
+            title,
+            resolve(timeline),
+        ]),
+    );
 
 export default resolveTimeline;

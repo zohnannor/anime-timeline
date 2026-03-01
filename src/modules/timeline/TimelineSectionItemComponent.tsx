@@ -10,12 +10,8 @@ import { hueGlow, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
-import {
-    Callback,
-    TimelineEntity,
-    TimelineSectionItem,
-    TimelineSectionType,
-} from '@timelines/types';
+import { ResolvedTimelineEntity } from '@timelines/resolved';
+import { TimelineSectionItem, TimelineSectionType } from '@timelines/types';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;
@@ -193,7 +189,7 @@ const SectionItem = withCrossLines(
 
 type TimelineSectionItemProps = {
     timelineSection: TimelineSectionItem<TimelineSectionType>;
-    entity: TimelineEntity[TimelineSectionType];
+    entity: ResolvedTimelineEntity[TimelineSectionType];
     idx: number;
 };
 
@@ -207,7 +203,6 @@ export const TimelineSectionItemComponent: React.FC<
         backgroundColor = 'black',
         scale = 1.05,
         sidewaysText = false,
-        width,
         wikiLink,
         height,
         titleProcessor = title => title,
@@ -221,23 +216,21 @@ export const TimelineSectionItemComponent: React.FC<
     idx,
 }) => {
     const [hoveredItem, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
+    const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
     const [itemWidth, setItemWidth] = useState(0);
 
     const timeline = TIMELINE[animeTitle].data;
 
     useEffect(() => {
-        setItemWidth(width(timeline, idx, unboundedChapterWidth));
-    }, [unboundedChapterWidth, animeTitle, width, timeline, idx]);
+        setItemWidth(entity.width(unboundChapterWidth));
+    }, [entity, unboundChapterWidth]);
 
     const itemNumber = idx + 1;
     const processedNumber = numberProcessor(itemNumber);
 
-    const maybeFunction = <T,>(fn: Callback<T> | T): T =>
-        typeof fn === 'function' ? (fn as Callback<T>)(timeline, idx) : fn;
-    const title = maybeFunction(entity.title) ?? processedNumber;
-    const cover = 'cover' in entity ? maybeFunction(entity.cover) : null;
+    const title = entity.title ?? processedNumber;
+    const cover = 'cover' in entity ? entity.cover : null;
     const offset = 'offset' in entity ? entity.offset : null;
 
     const processedTitle = titleProcessor(title, itemNumber);
@@ -317,7 +310,7 @@ export const TimelineSectionItemComponent: React.FC<
         >
             {itemCoverTooltip}
             {nestedTimeline && (
-                <TimelineSection specificIndex={idx} {...nestedTimeline} />
+                <TimelineSection parentIndex={idx} {...nestedTimeline} />
             )}
         </SectionItem>
     );

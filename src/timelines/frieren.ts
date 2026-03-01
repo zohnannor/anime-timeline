@@ -1,12 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -31,7 +23,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            width: getSeasonWidth,
             sectionLink: "Frieren: Beyond Journey's End (Anime)",
             wikiLink: title => title,
             subTimeline: {
@@ -41,7 +32,6 @@ export const FRIEREN_TIMELINE: Timeline = {
                 titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
                 blankfontSize: 42,
                 titleFontSize: 35,
-                width: getEpisodeWidth,
                 sectionLink: "Frieren:_Beyond_Journey's_End_(Anime)#Episodes",
                 wikiLink: (_, n) => `Episode_${n}`,
             },
@@ -51,7 +41,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: () => 'unused',
             subTimeline: {
@@ -61,7 +50,6 @@ export const FRIEREN_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title => `${title}_Arc`,
             },
@@ -76,7 +64,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
@@ -86,7 +73,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
@@ -1391,7 +1377,7 @@ export const FRIEREN_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

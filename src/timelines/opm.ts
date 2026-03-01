@@ -1,12 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Add, Tuple } from '@shared/lib/util';
 import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -52,7 +44,6 @@ export const OPM_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            width: getSeasonWidth,
             sectionLink: 'One-Punch Man (anime)',
             wikiLink: title => `Animated_Media#${title.replaceAll(' ', '_')}`,
             subTimeline: {
@@ -67,7 +58,6 @@ export const OPM_TIMELINE: Timeline = {
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                width: getEpisodeWidth,
                 sectionLink: 'Episodes',
                 wikiLink: (_, n) => `Episode_${n}`,
             },
@@ -78,7 +68,6 @@ export const OPM_TIMELINE: Timeline = {
             titleProcessor: title => `${title} Saga`,
             blankfontSize: 100,
             titleFontSize: 100,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: title => `${title} Saga`,
             subTimeline: {
@@ -88,7 +77,6 @@ export const OPM_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title => `${title} Arc`,
             },
@@ -103,7 +91,6 @@ export const OPM_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
@@ -113,7 +100,6 @@ export const OPM_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: (_, n) =>
@@ -2453,7 +2439,7 @@ export const OPM_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

@@ -1,12 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -37,7 +29,6 @@ export const CSM_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
@@ -46,7 +37,6 @@ export const CSM_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
@@ -58,7 +48,6 @@ export const CSM_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: SAGA_HEIGHT,
-            width: getSagaWidth,
             titleProcessor: title => `${title} saga`,
             blankfontSize: 100,
             titleFontSize: 100,
@@ -67,7 +56,6 @@ export const CSM_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -81,7 +69,6 @@ export const CSM_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -93,7 +80,6 @@ export const CSM_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
@@ -1842,7 +1828,7 @@ export const CSM_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'pochita',
             'read-info': 'pochita2',
-            'toggle-unbounded-chapter-width': 'pochita3',
+            'toggle-unbound-chapter-width': 'pochita3',
             'toggle-cross-lines': 'pochita6',
             'open-chapter-calendar': 'pochita4',
             'toggle-always-show-titles': 'pochita5',

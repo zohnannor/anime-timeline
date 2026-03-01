@@ -12,7 +12,6 @@ import { Scroller } from '@modules/Scroller';
 import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
 import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { maxHeight } from '@shared/lib/helpers';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { FLOATING_BUTTONS } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
@@ -75,7 +74,7 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${maxHeight(TIMELINE[animeTitle])}`,
+            `${TIMELINE[animeTitle].data.maxHeight}`,
         );
         document.title = `${timeline.title} Timeline`;
         const favicon =

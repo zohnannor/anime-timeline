@@ -29,6 +29,10 @@ export type Add<A extends number, B extends number> = [
     ...Tuple<number, B>,
 ]['length'];
 
+export type StructOfArrays<T> = {
+    [K in keyof T]: readonly T[K][];
+};
+
 export const range = (start: number, end: number) =>
     Array.from({ length: end - start }, (_, idx) => idx + start);
 
@@ -62,3 +66,13 @@ export const getDocumentPosition = (element: HTMLElement) => {
 
     return { x, y, width: element.offsetWidth };
 };
+
+export const typedEntries = <T extends object>(obj: T) =>
+    Object.entries(obj) as [keyof T, T[keyof T]][];
+
+export const typedFromEntries = <K extends PropertyKey, T>(
+    obj: Iterable<readonly [K, T]>,
+) => Object.fromEntries(obj) as Record<K, T>;
+
+export const typedKeys = <T extends object>(obj: T) =>
+    Object.keys(obj) as (keyof T)[];

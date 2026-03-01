@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { chapterDates, chapters, scale } from '@shared/lib/helpers';
+import { chapterDates, scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
 import {
@@ -14,7 +14,8 @@ import {
 import { RefreshIcon } from '@shared/ui/icons/refresh';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE, TITLES } from '@timelines/registry';
-import { AnimeTitle, TimelineData } from '@timelines/types';
+import { ResolvedTimelineData } from '@timelines/resolved';
+import { AnimeTitle } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -51,9 +52,10 @@ const TitleContainer = styled.div`
     font-size: ${scale(75)};
 `;
 
-const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
-const pageCount = (timeline: TimelineData) =>
-    sum(chapters(timeline).map(ch => ch.pages));
+const totalChapterCount = (timeline: ResolvedTimelineData) =>
+    timeline.chapters.length;
+const totalPageCount = (timeline: ResolvedTimelineData) =>
+    sum(timeline.chapters.map(ch => ch.pages));
 const recentlyUpdated = (title: AnimeTitle) =>
     Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
 
@@ -75,10 +77,11 @@ export const AnimeTitleSelectorModal: React.FC = () => {
     const titles = TITLES.toSorted((titleA, titleB) =>
         sorting === 'alphabetical' ? titleA.localeCompare(titleB)
         : sorting === 'chapter count' ?
-            chapterCount(TIMELINE[titleB].data) -
-            chapterCount(TIMELINE[titleA].data)
+            totalChapterCount(TIMELINE[titleB].data) -
+            totalChapterCount(TIMELINE[titleA].data)
         : sorting === 'page count' ?
-            pageCount(TIMELINE[titleB].data) - pageCount(TIMELINE[titleA].data)
+            totalPageCount(TIMELINE[titleB].data) -
+            totalPageCount(TIMELINE[titleA].data)
         : sorting === 'recently updated' ?
             recentlyUpdated(titleB) - recentlyUpdated(titleA)
         :   0,
