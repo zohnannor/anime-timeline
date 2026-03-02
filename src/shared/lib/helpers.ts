@@ -4,14 +4,8 @@
 /* eslint-disable no-bitwise */
 import { keyframes } from 'styled-components';
 
-import { sum } from '@shared/lib/util';
-import { TIMELINE_HEIGHT } from '@timelines/index';
 import { ResolvedTimeline } from '@timelines/resolved';
-import {
-    TimelineData,
-    TimelineSectionLayout,
-    TimelineSectionType,
-} from '@timelines/types';
+import { TimelineData, TimelineSectionType } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
 
@@ -26,13 +20,6 @@ export const scale = (n: number) =>
 
 export const tokyoDate = (date: string) =>
     new Date(`${date.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
-
-export const maxHeight = (layout: TimelineSectionLayout) =>
-    sum(
-        Object.values(layout)
-            .filter(sec => sec.type !== 'timeline')
-            .map(sec => sec.height),
-    ) + TIMELINE_HEIGHT;
 
 export const chapterDates = (timeline: ResolvedTimeline) =>
     timeline.data.chapters.map(ch => ch.date);

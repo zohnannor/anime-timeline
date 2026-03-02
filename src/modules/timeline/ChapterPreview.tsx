@@ -52,9 +52,9 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
         }
 
         const scaleToPx = (n: number) =>
-            n * (window.innerHeight / TIMELINE[animeTitle].data.maxHeight);
+            n * (window.innerHeight / TIMELINE[animeTitle].maxHeight);
         const pxToScale = (n: number) =>
-            n * (TIMELINE[animeTitle].data.maxHeight / window.innerHeight);
+            n * (TIMELINE[animeTitle].maxHeight / window.innerHeight);
 
         const { x: left, width } = getDocumentPosition(element);
         const right = left + width;

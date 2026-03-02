@@ -15,8 +15,6 @@ export type Map<
 
 export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
 
-export type NonEmptyArray<T> = readonly [T, ...T[]];
-
 export type ExactUnion<
     T,
     AllKeys extends PropertyKey = T extends unknown ? keyof T : never,
@@ -32,6 +30,21 @@ export type Add<A extends number, B extends number> = [
 export type StructOfArrays<T> = {
     [K in keyof T]: readonly T[K][];
 };
+
+export type NonEmptyArray<T> = readonly [T, ...T[]];
+
+const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
+    arr.length > 0;
+
+const throwError = (message: string): never => {
+    throw new Error(message);
+};
+
+export const asNonEmpty = <T>(
+    arr: readonly T[],
+    name: string,
+): NonEmptyArray<T> =>
+    notEmpty(arr) ? arr : throwError(`Expected non-empty array ${name}`);
 
 export const range = (start: number, end: number) =>
     Array.from({ length: end - start }, (_, idx) => idx + start);
@@ -68,11 +81,14 @@ export const getDocumentPosition = (element: HTMLElement) => {
 };
 
 export const typedEntries = <T extends object>(obj: T) =>
-    Object.entries(obj) as [keyof T, T[keyof T]][];
+    Object.entries(obj) as [keyof T, NonNullable<T[keyof T]>][];
 
 export const typedFromEntries = <K extends PropertyKey, T>(
     obj: Iterable<readonly [K, T]>,
 ) => Object.fromEntries(obj) as Record<K, T>;
+
+export const typedValues = <T extends object>(obj: T) =>
+    Object.values(obj) as NonNullable<T[keyof T]>[];
 
 export const typedKeys = <T extends object>(obj: T) =>
     Object.keys(obj) as (keyof T)[];

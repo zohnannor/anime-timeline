@@ -13,6 +13,7 @@ import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
 import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
+import { typedValues } from '@shared/lib/util';
 import { FLOATING_BUTTONS } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
 
@@ -74,7 +75,7 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${TIMELINE[animeTitle].data.maxHeight}`,
+            `${TIMELINE[animeTitle].maxHeight}`,
         );
         document.title = `${timeline.title} Timeline`;
         const favicon =
@@ -113,7 +114,7 @@ const App: React.FC = () => {
                         ))}
                     </FloatingButtons>
                 )}
-                {Object.values(TIMELINE[animeTitle].layout).map(item => (
+                {typedValues(TIMELINE[animeTitle].layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
                 {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}

@@ -2,19 +2,19 @@ import { useState } from 'react';
 
 import { isMobileDevice } from '@shared/lib/util';
 
-type Comparator = (_item?: number) => boolean;
+type Comparator<T> = (_item?: T) => boolean;
 
-type Handlers = (_item?: number) => {
+type Handlers<T> = (_item?: T) => {
     onMouseOver: (_ev: React.MouseEvent) => void;
     onMouseOut: () => void;
 };
 
-type UseHover = [Comparator, Handlers];
+type UseHover<T> = [Comparator<T>, Handlers<T>];
 
-const useHover = (): UseHover => {
-    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+const useHover = <T extends string | number>(): UseHover<T> => {
+    const [hoveredItem, setHoveredItem] = useState<T | null>(null);
 
-    const hovered = (item?: number) => hoveredItem === (item ?? 1);
+    const hovered = (item?: T) => hoveredItem === (item ?? 1);
 
     if (isMobileDevice()) {
         const dummy = () => {
@@ -29,9 +29,12 @@ const useHover = (): UseHover => {
         ];
     }
 
-    const handlers = (item?: number) => ({
+    const handlers = (item?: T) => ({
         onMouseOver: (ev: React.MouseEvent) => {
-            setHoveredItem(item ?? 1);
+            // TODO: TEST THIS
+            if (item) {
+                setHoveredItem(item);
+            }
             ev.stopPropagation();
         },
         onMouseOut: () => setHoveredItem(null),

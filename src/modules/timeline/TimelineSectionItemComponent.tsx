@@ -4,14 +4,17 @@ import styled, { css } from 'styled-components';
 
 import { ChapterPreview } from '@modules/timeline/ChapterPreview';
 import { withCrossLines } from '@modules/timeline/CrossLines';
-import { TimelineSection } from '@modules/timeline/TimelineSection';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { hueGlow, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
-import { ResolvedTimelineEntity } from '@timelines/resolved';
-import { TimelineSectionItem, TimelineSectionType } from '@timelines/types';
+import {
+    ResolvedSectionItem,
+    ResolvedTimelineEntity,
+} from '@timelines/resolved';
+import { TimelineSectionType } from '@timelines/types';
+import { TimelineSection } from '@modules/timeline/TimelineSection';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;
@@ -188,7 +191,7 @@ const SectionItem = withCrossLines(
 );
 
 type TimelineSectionItemProps = {
-    timelineSection: TimelineSectionItem<TimelineSectionType>;
+    timelineSection: ResolvedSectionItem<TimelineSectionType>;
     entity: ResolvedTimelineEntity[TimelineSectionType];
     idx: number;
 };
@@ -203,10 +206,7 @@ export const TimelineSectionItemComponent: React.FC<
         backgroundColor = 'black',
         scale = 1.05,
         sidewaysText = false,
-        wikiLink,
         height,
-        titleProcessor = title => title,
-        numberProcessor = num => num.toString(),
         blankfontSize,
         titleFontSize,
         focusable = false,
@@ -226,15 +226,13 @@ export const TimelineSectionItemComponent: React.FC<
         setItemWidth(entity.width(unboundChapterWidth));
     }, [entity, unboundChapterWidth]);
 
-    const itemNumber = idx + 1;
-    const processedNumber = numberProcessor(itemNumber);
+    const itemNumber = entity.number;
 
-    const title = entity.title ?? processedNumber;
+    const { title } = entity;
     const cover = 'cover' in entity ? entity.cover : null;
     const offset = 'offset' in entity ? entity.offset : null;
 
-    const processedTitle = titleProcessor(title, itemNumber);
-    const itemTitle = type === 'chapter' ? processedNumber : processedTitle;
+    const itemTitle = type === 'chapter' ? itemNumber : title;
 
     const hovered = hoveredItem(itemNumber);
     const titleVisible = showTitles || hovered;
@@ -243,8 +241,8 @@ export const TimelineSectionItemComponent: React.FC<
     const linkImage =
         type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
-            `SEASON ${processedNumber}`
-        :   <Link href={`${timeline.wikiBase}${wikiLink(title, itemNumber)}`}>
+            `SEASON ${itemNumber}`
+        :   <Link href={`${timeline.wikiBase}${entity.wikiLink}`}>
                 {cover ?
                     <ThumbnailImage
                         src={cover}
@@ -256,7 +254,7 @@ export const TimelineSectionItemComponent: React.FC<
                     // for sagas/arcs without cover, just show the title
                     itemTitle
                     // for everything else, show the number
-                :   processedNumber}
+                :   itemNumber}
             </Link>;
 
     const itemCover = (
@@ -280,7 +278,7 @@ export const TimelineSectionItemComponent: React.FC<
     const chapterPreview = (
         <ChapterPreview className='preview' $hasPicture={!!cover}>
             {cover && <ThumbnailImage src={cover} />}
-            {processedTitle}
+            {title}
         </ChapterPreview>
     );
 

@@ -9,9 +9,6 @@ export type Range = { from: number; to?: number };
 
 export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
 
-export type OffsetWhenCover<T> = T &
-    ExactUnion<{ cover: string; offset: Offset } | { cover: null }>;
-
 export type Chapter = {
     title: Callback<string>;
     date: string;
@@ -25,10 +22,10 @@ export type Volume = {
     chapters: NonEmptyArray<Chapter>;
 };
 
-export type Arc = OffsetWhenCover<{
+export type Arc = {
     title: string;
     chapters: Range;
-}>;
+} & ExactUnion<{ cover: string; offset: Offset } | { cover: null }>;
 
 export type Saga = {
     title: string;
@@ -95,6 +92,11 @@ export type TimelineEntity = {
 
 export type TimelineSectionType = keyof TimelineEntity;
 
+export type SubtimelinesMap = {
+    season: 'episode';
+    saga: 'arc';
+};
+
 export type TimelineSectionItem<T extends TimelineSectionType> = {
     type: T;
     fit?: CSS.Property.ObjectFit;
@@ -110,7 +112,9 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     sectionLink: string;
     wikiLink: (_title: string, _n: number) => string;
     focusable?: boolean;
-    subTimeline?: TimelineSectionItem<TimelineSectionType>;
+    subTimeline?: T extends keyof SubtimelinesMap ?
+        TimelineSectionItem<SubtimelinesMap[T]>
+    :   never;
 };
 
 export type TimelineSectionLayout = {

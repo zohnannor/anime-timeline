@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useToPng } from '@hugocxl/react-to-image';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale, toTitleCase } from '@shared/lib/helpers';
-import { sum } from '@shared/lib/util';
 import { Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
 
@@ -39,15 +38,12 @@ export const CaptureTimelineModal: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const timeline = TIMELINE[animeTitle].data;
-    const height = TIMELINE[animeTitle].data.maxHeight;
-    const width = sum(
-        timeline.volumes.map(vol => vol.width(unboundChapterWidth)),
-    );
+    const { maxHeight, maxWidth } = TIMELINE[animeTitle];
+    const width = maxWidth(unboundChapterWidth);
 
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: height,
+        canvasHeight: maxHeight,
         canvasWidth: width,
         backgroundColor: '#000',
         filter: el =>
@@ -57,7 +53,7 @@ export const CaptureTimelineModal: React.FC = () => {
         onStart: () => {
             setLoading(false);
             setError(null);
-            console.debug(`Real dimensions: ${width}x${height}`);
+            console.debug(`Real dimensions: ${width}x${maxHeight}`);
         },
         onSuccess: dataUrl => {
             const link = document.createElement('a');
