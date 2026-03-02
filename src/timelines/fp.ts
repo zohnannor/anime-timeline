@@ -8,9 +8,9 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 type ArcsTotal = 5;
 type VolumesTotal = 8;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
-const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx + 1}`;
+const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx}`;
+const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx)}`;
+const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx}`;
 
 export const FP_TIMELINE: Timeline = {
     layout: {
@@ -610,7 +610,6 @@ export const FP_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Behemdorg',

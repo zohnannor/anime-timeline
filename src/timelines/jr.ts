@@ -12,10 +12,10 @@ type VolumesTotal = 13;
 type SagasTotal = 1;
 type SeasonsTotal = 3;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
-const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx + 1}`;
-const episodeCover = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
+const volumeTitle = (_: TimelineData, n: number) => `Volume ${n}`;
+const volumeCover = (_: TimelineData, n: number) => `Volume_${pad(n)}`;
+const chapterTitle = (_: TimelineData, n: number) => `Chapter ${n}`;
+const episodeCover = (_: TimelineData, n: number) => `Episode_${n}`;
 
 export const JR_TIMELINE: Timeline = {
     layout: {
@@ -925,7 +925,6 @@ export const JR_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Island',

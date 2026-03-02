@@ -29,7 +29,6 @@ export type Arc = {
 
 export type Saga = {
     title: string;
-    chapters: Range;
     arcs: NonEmptyArray<Arc>;
 };
 

@@ -17,17 +17,17 @@ const volumeTitleChapters = [0, 2, 6, 1, 0, 4, 6, 1, 0, 3, 0, 9];
 const volumeTitle = (timeline: TimelineData, idx: number) =>
     // volumes/chapters are not empty, `volumeTitleChapters` is volume indices
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    timeline.volumes[idx]!.chapters[volumeTitleChapters[idx]!]!.title(
+    timeline.volumes[idx - 1]!.chapters[volumeTitleChapters[idx - 1]!]!.title(
         timeline,
         idx,
     );
 const volumeCover = (timeline: TimelineData, idx: number) =>
     // volumes are not empty
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    `Volume_${idx + 1}.-_${timeline.volumes[idx]!.title(
-        timeline,
-        idx,
-    ).replaceAll(' ', '_')}`;
+    `Volume_${idx}.-_${timeline.volumes[idx]!.title(timeline, idx).replaceAll(
+        ' ',
+        '_',
+    )}`;
 const chapterLinkExceptions = [
     'Matsuda',
     'Give-and-Take',
@@ -49,7 +49,7 @@ const chapterLink = (title: string, n: number): string =>
         'Target (chapter 63)'
     : n === 62 ? 'The Decision'
     : title;
-const episodeCover = (_: TimelineData, idx: number) => pad(idx + 1);
+const episodeCover = (_: TimelineData, idx: number) => pad(idx);
 const episodeLinkExceptions = ['Love', 'Decision', 'New World', 'Matsuda'];
 
 export const DEATHNOTE_TIMELINE: Timeline = {
@@ -874,7 +874,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'unused',
-                chapters: { from: 1, to: 108 },
                 arcs: [
                     {
                         title: 'Part I',

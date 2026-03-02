@@ -122,6 +122,8 @@ export const Scroller = () => {
     const scrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;
 
+    const { smallImages } = TIMELINE[animeTitle].data;
+
     return (
         <ScrollerHoverArea
             className='scrollerHoverArea'
@@ -134,11 +136,7 @@ export const Scroller = () => {
                 onClick={handleScrollerClick}
             >
                 <ThumbnailImage
-                    src={
-                        TIMELINE[animeTitle].data.smallImages[
-                            'scroller-or-favicon'
-                        ]
-                    }
+                    src={smallImages['scroller-or-favicon']}
                     onMouseDown={() => setDragging(true)}
                 />
             </ScrollerWrapper>

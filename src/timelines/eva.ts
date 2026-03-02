@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { getVolumeByChapter } from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
 
@@ -13,10 +12,8 @@ type SeasonsTotal = 2;
 type ArcsTotal = 6;
 type VolumesTotal = 14;
 
-const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 2 ?
-        `Volume${idx + 1}Manga`
-    :   `Sadamoto_${idx === 12 ? 'v' : 'V'}olume_${idx + 1}`;
+const volumeCover = (_: TimelineData, n: number) =>
+    n === 3 ? `Volume${n}Manga` : `Sadamoto_${n === 13 ? 'v' : 'V'}olume_${n}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
 
@@ -45,8 +42,20 @@ export const EVA_TIMELINE: Timeline = {
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
             wikiLink: (title, n) =>
                 `Volume_${
-                    // TODO: wtf
-                    getVolumeByChapter(EVA_TIMELINE.data, n - 1) + 1
+                    n <= 6 ? '1'
+                    : n <= 12 ? '2'
+                    : n <= 19 ? '3'
+                    : n <= 26 ? '4'
+                    : n <= 33 ? '5'
+                    : n <= 40 ? '6'
+                    : n <= 48 ? '7'
+                    : n <= 56 ? '8'
+                    : n <= 63 ? '9'
+                    : n <= 70 ? '10'
+                    : n <= 76 ? '11'
+                    : n <= 83 ? '12'
+                    : n <= 90 ? '13'
+                    : '14'
                 }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(
                     ' ',
                     '_',
@@ -284,7 +293,6 @@ export const EVA_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Intro',

@@ -9,7 +9,6 @@ import styled, { css } from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
 import {
-    chapterDates,
     DAYS_GRADIENT,
     fetchNextChapterDate,
     hueGlow,
@@ -18,6 +17,7 @@ import {
     MONTHS_GRADIENT,
     scale,
 } from '@shared/lib/helpers';
+import { map } from '@shared/lib/util';
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE } from '@timelines/registry';
@@ -245,11 +245,12 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const allChapterDates = chapterDates(TIMELINE[animeTitle]);
+    const allChapterDates = map(
+        TIMELINE[animeTitle].data.chapters,
+        ch => ch.date,
+    );
     const currentDate = new Date();
-    // non-empty
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const startDate = allChapterDates[0]!;
+    const [startDate] = allChapterDates;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, number>();

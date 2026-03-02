@@ -40,7 +40,7 @@ const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
     transition: filter 0.4s ease-in-out;
     object-position: ${({ $offsetX, $offsetY, $defaultPosition = 'center' }) =>
-        $offsetX || $offsetY ?
+        $offsetX !== undefined || $offsetY !== undefined ?
             `${scale($offsetX === undefined ? 0 : -$offsetX)}
                ${scale($offsetY === undefined ? 0 : -$offsetY)}`
         :   $defaultPosition}; // TODO: refactor?

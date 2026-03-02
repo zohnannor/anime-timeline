@@ -37,9 +37,10 @@ type ResolvedTemplates = {
     wikiLink: string;
 };
 
-type ResolvedChapter = Omit<Chapter, 'title' | 'date'> & {
+export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> & {
     date: Date;
     width: WidthResolver;
+    volume: number;
 } & ResolvedTemplates;
 
 type ResolvedVolume = Omit<Volume, 'title' | 'cover' | 'chapters'> & {
@@ -148,6 +149,7 @@ const resolveTimelineData = (
         volumeIdx,
         { title: titleRaw, cover: coverRaw, chapters: chaptersRaw },
     ] of volumesRaw.entries()) {
+        const volumeNumber = volumeIdx + 1;
         const pagesInVolume = sum(chaptersRaw.map(ch => ch.pages));
 
         const volumeChapters: ResolvedChapter[] = [];
@@ -159,8 +161,9 @@ const resolveTimelineData = (
         } of chaptersRaw) {
             // eslint-disable-next-line no-plusplus
             const chapterIdx = globalChapterIdx++;
+            const chapterNumber = chapterIdx + 1;
 
-            const title = maybeFunction(titleRaw, chapterIdx);
+            const title = maybeFunction(titleRaw, chapterNumber);
 
             const pagesInChapter = pages;
             const chapterWidthUnbound =
@@ -178,9 +181,10 @@ const resolveTimelineData = (
                     unboundChapterWidth ? chapterWidthUnbound : (
                         chapterWidthBounded
                     ),
-                title: templates.chapter.titleProcessor(title, chapterIdx + 1),
-                number: templates.chapter.numberProcessor(chapterIdx + 1),
-                wikiLink: templates.chapter.wikiLink(title, chapterIdx + 1),
+                volume: volumeIdx,
+                title: templates.chapter.titleProcessor(title, chapterNumber),
+                number: templates.chapter.numberProcessor(chapterNumber),
+                wikiLink: templates.chapter.wikiLink(title, chapterNumber),
             });
         }
         chapters.push(...volumeChapters);
@@ -188,24 +192,22 @@ const resolveTimelineData = (
         const unboundVolumeWidth = sum(
             volumeChapters.map(ch => ch.width(true)),
         );
-        const title = maybeFunction(titleRaw, volumeIdx);
+        const title = maybeFunction(titleRaw, volumeNumber);
         volumes.push({
-            cover: maybeFunction(coverRaw, volumeIdx),
+            cover: maybeFunction(coverRaw, volumeNumber),
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
-            title: templates.volume.titleProcessor(title, volumeIdx + 1),
-            number: templates.volume.numberProcessor(volumeIdx + 1),
-            wikiLink: templates.volume.wikiLink(title, volumeIdx + 1),
+            title: templates.volume.titleProcessor(title, volumeNumber),
+            number: templates.volume.numberProcessor(volumeNumber),
+            wikiLink: templates.volume.wikiLink(title, volumeNumber),
         });
     }
 
     const chaptersTotal = globalChapterIdx;
 
-    for (const [
-        sagaIdx,
-        // TODO: saga.chapters is not used, remove it?
-        { arcs: arcsRaw, chapters: _, title },
-    ] of sagasRaw.entries()) {
+    for (const [sagaIdx, { arcs: arcsRaw, title }] of sagasRaw.entries()) {
+        const sagaNumber = sagaIdx + 1;
+
         const sagaArcs: ResolvedArc[] = [];
         for (const [
             arcIdx,
@@ -216,6 +218,7 @@ const resolveTimelineData = (
                 offset,
             },
         ] of arcsRaw.entries()) {
+            const arcNumber = arcIdx + 1;
             const width: WidthResolver = unboundChapterWidth =>
                 sum(
                     chapters
@@ -228,9 +231,9 @@ const resolveTimelineData = (
                     cover: null,
                     width,
                     saga: sagaIdx,
-                    title: templates.arc.titleProcessor(title, arcIdx + 1),
-                    number: templates.arc.numberProcessor(arcIdx + 1),
-                    wikiLink: templates.arc.wikiLink(title, arcIdx + 1),
+                    title: templates.arc.titleProcessor(title, arcNumber),
+                    number: templates.arc.numberProcessor(arcNumber),
+                    wikiLink: templates.arc.wikiLink(title, arcNumber),
                 });
             } else {
                 sagaArcs.push({
@@ -238,9 +241,9 @@ const resolveTimelineData = (
                     offset,
                     width,
                     saga: sagaIdx,
-                    title: templates.arc.titleProcessor(title, arcIdx + 1),
-                    number: templates.arc.numberProcessor(arcIdx + 1),
-                    wikiLink: templates.arc.wikiLink(title, arcIdx + 1),
+                    title: templates.arc.titleProcessor(title, arcNumber),
+                    number: templates.arc.numberProcessor(arcNumber),
+                    wikiLink: templates.arc.wikiLink(title, arcNumber),
                 });
             }
         }
@@ -249,9 +252,9 @@ const resolveTimelineData = (
         sagas.push({
             width: unboundChapterWidth =>
                 sum(sagaArcs.map(arc => arc.width(unboundChapterWidth))),
-            title: templates.saga.titleProcessor(title, sagaIdx + 1),
-            number: templates.saga.numberProcessor(sagaIdx + 1),
-            wikiLink: templates.saga.wikiLink(title, sagaIdx + 1),
+            title: templates.saga.titleProcessor(title, sagaNumber),
+            number: templates.saga.numberProcessor(sagaNumber),
+            wikiLink: templates.saga.wikiLink(title, sagaNumber),
         });
     }
 
@@ -281,32 +284,31 @@ const resolveTimelineData = (
             seasonIdx,
             { title, cover: coverRaw, offset, chapters, episodes: episodesRaw },
         ] of seasonsRaw.entries()) {
+            const seasonNumber = seasonIdx + 1;
+
             const width = widthBasedOnPages(chapters);
 
             if (title === undefined) {
                 seasons.push({
                     width,
                     title: templates.season.titleProcessor(
-                        (seasonIdx + 1).toString(),
-                        seasonIdx + 1,
+                        seasonNumber.toString(),
+                        seasonNumber,
                     ),
-                    number: templates.season.numberProcessor(seasonIdx + 1),
+                    number: templates.season.numberProcessor(seasonNumber),
                     wikiLink: templates.season.wikiLink(
-                        (seasonIdx + 1).toString(),
-                        seasonIdx + 1,
+                        seasonNumber.toString(),
+                        seasonNumber,
                     ),
                 });
             } else {
                 seasons.push({
-                    cover: maybeFunction(coverRaw, seasonIdx),
+                    cover: maybeFunction(coverRaw, seasonNumber),
                     offset,
                     width,
-                    title: templates.season.titleProcessor(
-                        title,
-                        seasonIdx + 1,
-                    ),
-                    number: templates.season.numberProcessor(seasonIdx + 1),
-                    wikiLink: templates.season.wikiLink(title, seasonIdx + 1),
+                    title: templates.season.titleProcessor(title, seasonNumber),
+                    number: templates.season.numberProcessor(seasonNumber),
+                    wikiLink: templates.season.wikiLink(title, seasonNumber),
                 });
             }
 
@@ -322,19 +324,20 @@ const resolveTimelineData = (
             } of episodesRaw) {
                 // eslint-disable-next-line no-plusplus
                 const episodeIdx = globalEpisodeIdx++;
+                const episodeNumber = episodeIdx + 1;
 
-                const title = maybeFunction(titleRaw, episodeIdx);
+                const title = maybeFunction(titleRaw, episodeNumber);
                 episodes.push({
-                    cover: maybeFunction(coverRaw, episodeIdx),
+                    cover: maybeFunction(coverRaw, episodeNumber),
                     offset,
                     width: widthBasedOnPages(chapters),
                     season: seasonIdx,
                     title: templates.episode.titleProcessor(
                         title,
-                        episodeIdx + 1,
+                        episodeNumber,
                     ),
-                    number: templates.episode.numberProcessor(episodeIdx + 1),
-                    wikiLink: templates.episode.wikiLink(title, episodeIdx + 1),
+                    number: templates.episode.numberProcessor(episodeNumber),
+                    wikiLink: templates.episode.wikiLink(title, episodeNumber),
                 });
             }
         }

@@ -16,13 +16,13 @@ type SeasonsTotal = 4;
 const volumeTitle = (timeline: TimelineData, idx: number) =>
     // volumes/chapters are not empty
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    timeline.volumes[idx]!.chapters[0].title(timeline, idx);
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
+    timeline.volumes[idx - 1]!.chapters[0].title(timeline, idx);
+const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx)}`;
 const episodeTitle = (idx: number) => (timeline: TimelineData) =>
     // chapters are not empty
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     timeline.volumes.flatMap(vol => vol.chapters)[idx]!.title(timeline, idx);
-const episodeCover = (_: TimelineData, idx: number) => (idx + 1).toString();
+const episodeCover = (_: TimelineData, idx: number) => idx.toString();
 
 export const CSM_TIMELINE: Timeline = {
     layout: {
@@ -1620,7 +1620,6 @@ export const CSM_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'Public Safety',
-                chapters: { from: 1, to: 97 },
                 arcs: [
                     {
                         title: 'Introduction',
@@ -1674,7 +1673,6 @@ export const CSM_TIMELINE: Timeline = {
             },
             {
                 title: 'Academy',
-                chapters: { from: 98 },
                 arcs: [
                     {
                         title: 'Justice Devil',

@@ -12,11 +12,12 @@ type VolumesTotal = 35;
 type ArcsTotal = 9;
 type SeasonsTotal = 8;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 0 ? `Volume_${idx + 1}_Cover` : `SnK_-_Manga_Volume_${idx + 1}`;
-const episodeCover = (_: TimelineData, idx: number) =>
-    `Attack_on_Titan_-_Episode_${idx + 1}_Title_Card`;
+const volumeTitle = (_: TimelineData, n: number) =>
+    `Volume ${n}${n <= 34 ? '' : '\n(Side Stories)'}`;
+const volumeCover = (_: TimelineData, n: number) =>
+    n === 1 ? `Volume_${n}_Cover` : `SnK_-_Manga_Volume_${n}`;
+const episodeCover = (_: TimelineData, n: number) =>
+    `Attack_on_Titan_-_Episode_${n}_Title_Card`;
 
 export const AOT_TIMELINE: Timeline = {
     layout: {
@@ -1127,11 +1128,7 @@ export const AOT_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (title, idx) =>
-                    `${volumeTitle(
-                        title,
-                        idx,
-                    )}\n(Side Stories grouped together)`,
+                title: volumeTitle,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1158,7 +1155,6 @@ export const AOT_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Prologue',

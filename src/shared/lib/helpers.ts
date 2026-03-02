@@ -1,11 +1,9 @@
-// all indices passed to these functions are obtained from iterating over arrays
-// themselves
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-bitwise */
 import { keyframes } from 'styled-components';
 
+import { asNonEmpty, Mutable, NonEmptyArray } from '@shared/lib/util';
 import { ResolvedTimeline } from '@timelines/resolved';
-import { TimelineData, TimelineSectionType } from '@timelines/types';
+import { TimelineSectionType } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
 
@@ -21,50 +19,52 @@ export const scale = (n: number) =>
 export const tokyoDate = (date: string) =>
     new Date(`${date.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
 
-export const chapterDates = (timeline: ResolvedTimeline) =>
-    timeline.data.chapters.map(ch => ch.date);
+export type Chunk<T> = NonEmptyArray<T>;
 
-const groupBy = <T>(array: T[], getKey: (_el: T) => number) =>
-    array.reduce<[[number, T][][], number | null]>(
-        ([groups, previous], date, idx) => {
-            const key = getKey(date);
-            const lastGroup = groups.at(-1);
-            if (key === previous && lastGroup) {
-                lastGroup.push([idx, date]);
-            } else {
-                groups.push([[idx, date]]);
-            }
-            return [groups, key];
-        },
-        [[], null],
-    )[0];
+const sentinel = Symbol('sentinel');
+
+const chunks = <T>(
+    array: readonly T[],
+    getKey: (_el: T) => number,
+): NonEmptyArray<Chunk<T>> =>
+    asNonEmpty(
+        array.reduce<{
+            list: Mutable<Chunk<T>>[];
+            prev: number | typeof sentinel;
+        }>(
+            (acc, el) => {
+                const key = getKey(el);
+                const lastGroup = acc.list.at(-1);
+
+                if (lastGroup && key === acc.prev) {
+                    lastGroup.push(el);
+                } else {
+                    acc.list.push([el]);
+                    acc.prev = key;
+                }
+
+                return acc;
+            },
+            { list: [], prev: sentinel },
+        ).list,
+        'chunk',
+    );
 
 export const chapterDatesByMonth = (timeline: ResolvedTimeline) =>
-    groupBy(
-        chapterDates(timeline),
-        date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12,
+    chunks(
+        timeline.data.chapters,
+        chapter =>
+            chapter.date.getFullYear() + 1 + (chapter.date.getMonth() + 1) * 12,
     );
 
 export const chapterDatesByYear = (timeline: ResolvedTimeline) =>
-    groupBy(chapterDates(timeline), date => date.getFullYear() + 1);
-
-const chaptersVolumes = (timeline: TimelineData) =>
-    timeline.volumes.flatMap((vol, vi) => vol.chapters.map(() => vi));
-
-export type WidthHelper = (
-    _timeline: TimelineData,
-    _idx: number,
-    _unboundChapterWidth: boolean,
-) => number;
-
-export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
-    chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
+    chunks(timeline.data.chapters, chapter => chapter.date.getFullYear() + 1);
 
 // thanks deepseek-r1 (he thought for 245+150+92 = 487 seconds in total)
 export const interpolateColor = (
     value: number,
-    inputRange: [number, number],
-    colorRange: number[],
+    inputRange: readonly [number, number],
+    colorRange: NonEmptyArray<number>,
 ) => {
     const [inputMin, inputMax] = inputRange;
     const colorCount = colorRange.length;
@@ -75,8 +75,7 @@ export const interpolateColor = (
 
     // Handle single-value input range
     if (inputMin === inputMax) {
-        // validated above
-        return colorRange[0]!;
+        return colorRange[0];
     }
 
     // Calculate global interpolation factor (0-1)
@@ -94,7 +93,9 @@ export const interpolateColor = (
     const tLocal = tGlobal * segmentCount - segmentIndex;
 
     // Get colors for this segment
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const colorStart = colorRange[segmentIndex]!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const colorEnd = colorRange[segmentIndex + 1]!;
 
     // Extract RGB components
@@ -115,8 +116,10 @@ export const interpolateColor = (
     return (r << 16) | (g << 8) | b;
 };
 
-export const MONTHS_GRADIENT = [0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a];
-export const DAYS_GRADIENT = [0xed8581, 0x9df697];
+export const MONTHS_GRADIENT = [
+    0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a,
+] as const;
+export const DAYS_GRADIENT = [0xed8581, 0x9df697] as const;
 
 export const MONTHS = [
     'January',

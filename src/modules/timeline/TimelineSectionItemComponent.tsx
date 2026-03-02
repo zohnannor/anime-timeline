@@ -123,7 +123,9 @@ const SectionItemCover = withShadow(
 
         &::after {
             content: attr(data-title);
-            white-space: pre;
+            white-space: pre-wrap;
+            line-break: strict;
+            hyphens: auto;
             position: absolute;
             display: flex;
             align-items: center;
@@ -136,7 +138,6 @@ const SectionItemCover = withShadow(
             inset: 0;
             pointer-events: none;
             transition: opacity 0.2s ease-in-out;
-            text-wrap: auto;
             text-shadow:
                 -1px -1px 0 black,
                 1px -1px 0 black,
@@ -192,7 +193,7 @@ const SectionItem = withCrossLines(
 type TimelineSectionItemProps = {
     timelineSection: ResolvedSectionItem<TimelineSectionType>;
     entity: ResolvedTimelineEntity[TimelineSectionType];
-    idx: number;
+    num: number;
 };
 
 export const TimelineSectionItemComponent: React.FC<
@@ -212,13 +213,15 @@ export const TimelineSectionItemComponent: React.FC<
         subTimeline: nestedTimeline,
     },
     entity,
-    idx,
+    num,
 }) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
 
-    const timeline = TIMELINE[animeTitle].data;
+    const {
+        data: { wikiBase },
+    } = TIMELINE[animeTitle];
 
     const itemWidth = entity.width(unboundChapterWidth);
     const itemNumber = entity.number;
@@ -237,7 +240,7 @@ export const TimelineSectionItemComponent: React.FC<
         type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
             `SEASON ${itemNumber}`
-        :   <Link href={`${timeline.wikiBase}${entity.wikiLink}`}>
+        :   <Link href={`${wikiBase}${entity.wikiLink}`}>
                 {cover ?
                     <ThumbnailImage
                         src={cover}
@@ -303,7 +306,7 @@ export const TimelineSectionItemComponent: React.FC<
         >
             {itemCoverTooltip}
             {nestedTimeline && (
-                <TimelineSection parentIndex={idx} {...nestedTimeline} />
+                <TimelineSection parentNumber={num} {...nestedTimeline} />
             )}
         </SectionItem>
     );

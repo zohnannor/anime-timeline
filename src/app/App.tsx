@@ -35,7 +35,11 @@ const App: React.FC = () => {
     } = useSettings();
     const [renderUi, setRenderUi] = useState(true);
 
-    const timeline = TIMELINE[animeTitle].data;
+    const {
+        data: { smallImages, title },
+        layout,
+        maxHeight,
+    } = TIMELINE[animeTitle];
 
     useEffect(() => {
         const handleScroll = (ev: WheelEvent) => {
@@ -75,16 +79,16 @@ const App: React.FC = () => {
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--max-height',
-            `${TIMELINE[animeTitle].maxHeight}`,
+            `${maxHeight}`,
         );
-        document.title = `${timeline.title} Timeline`;
+        document.title = `${title} Timeline`;
         const favicon =
             document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
         if (favicon) {
-            const icon = timeline.smallImages['scroller-or-favicon'];
+            const icon = smallImages['scroller-or-favicon'];
             favicon.href = `./${animeTitle}/${icon}.webp`;
         }
-    }, [animeTitle, timeline.smallImages, timeline.title]);
+    }, [animeTitle, maxHeight, smallImages, title]);
 
     return (
         <>
@@ -98,23 +102,21 @@ const App: React.FC = () => {
                     <FloatingButtons>
                         <FloatingButton
                             key='animeTitleSelectorOpen'
-                            filename={
-                                timeline.smallImages['scroller-or-favicon']
-                            }
+                            filename={smallImages['scroller-or-favicon']}
                             title='Select Manga/Anime Title'
                             option='animeTitleSelectorOpen'
                         />
                         {FLOATING_BUTTONS.map(({ filename, title, option }) => (
                             <FloatingButton
                                 key={filename}
-                                filename={timeline.smallImages[filename]}
+                                filename={smallImages[filename]}
                                 title={title}
                                 option={option}
                             />
                         ))}
                     </FloatingButtons>
                 )}
-                {typedValues(TIMELINE[animeTitle].layout).map(item => (
+                {typedValues(layout).map(item => (
                     <TimelineSection key={item.type} {...item} />
                 ))}
                 {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}

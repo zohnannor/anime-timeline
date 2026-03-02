@@ -91,8 +91,7 @@ export default defineConfig([
             'no-console': ['error', { allow: ['warn', 'error', 'debug'] }],
             // to leave `TODO` comments in the code
             'no-warning-comments': 'off',
-            // if-guards are useful
-            'no-continue': 'off',
+            'no-continue': 'off', // if-guards are useful
 
             'react/prop-types': 'off', // enfored by typescript and `React.FC`
 

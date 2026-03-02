@@ -5,13 +5,11 @@ export type Enumerate<
     Acc extends readonly number[] = readonly [],
 > = Acc['length'] extends N ? Acc : Enumerate<N, readonly [...Acc, number]>;
 
-export type Map<
-    Arr extends readonly unknown[],
-    Ty,
-    Acc extends readonly unknown[] = readonly [],
-> =
-    Acc['length'] extends Arr['length'] ? Acc
-    :   Map<Arr, Ty, readonly [...Acc, Ty]>;
+type Map<Arr extends readonly unknown[], Ty> =
+    Arr extends readonly [infer _Head, ...infer Tail] ?
+        readonly [Ty, ...Map<Tail, Ty>]
+    : Arr extends readonly [] ? readonly []
+    : readonly Ty[];
 
 export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
 
@@ -33,6 +31,10 @@ export type StructOfArrays<T> = {
 
 export type NonEmptyArray<T> = readonly [T, ...T[]];
 
+export type Mutable<T> = {
+    -readonly [K in keyof T]: T[K];
+};
+
 const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
     arr.length > 0;
 
@@ -51,8 +53,8 @@ export const range = (start: number, end: number) =>
 
 export const map = <T extends readonly unknown[], U>(
     arr: T,
-    fn: (_item: T[number], _itx: number) => U,
-) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
+    fn: (_item: T[number], _idx: number) => U,
+) => arr.map(fn) as unknown as Map<T, U>;
 
 export const pad = (n: number) => String(n).padStart(2, '0');
 

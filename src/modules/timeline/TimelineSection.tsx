@@ -17,25 +17,26 @@ type TimelineSections = (
     | {
           type: 'timeline';
       }
-) & { parentIndex?: number };
+) & { parentNumber?: number };
 
 export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const { animeTitle } = useSettings();
 
-    const { type, parentIndex } = timelineItem;
+    const { type, parentNumber } = timelineItem;
 
     if (type === 'timeline') {
         return <Timeline animeTitle={animeTitle} />;
     }
 
-    const { episodes, seasons, sagas, arcs, chapters, volumes } =
-        TIMELINE[animeTitle].data;
+    const {
+        data: { episodes, seasons, sagas, arcs, chapters, volumes },
+    } = TIMELINE[animeTitle];
 
     const entities: StructOfArrays<ResolvedTimelineEntity> = {
-        episode: episodes.filter(ep => ep.season === parentIndex),
+        episode: episodes.filter(ep => ep.season === parentNumber),
         season: seasons ?? [],
         saga: sagas,
-        arc: arcs.filter(arc => arc.saga === parentIndex),
+        arc: arcs.filter(arc => arc.saga === parentNumber),
         chapter: chapters,
         volume: volumes,
     };
@@ -46,7 +47,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
                 <TimelineSectionItemComponent
                     timelineSection={timelineItem}
                     entity={entity}
-                    idx={idx}
+                    num={idx}
                     key={`${entity.title}-${idx + 1}`}
                 />
             ))}
