@@ -16,6 +16,8 @@ const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
+    // TODO: replace with:
+    /* border: ${scale(5)} solid ${getShadowColor}; */
     box-shadow: inset 0 0 0 ${scale(5)} ${getShadowColor};
     pointer-events: none;
 `;

@@ -1,9 +1,9 @@
 import CSS from 'csstype';
-import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { ChapterPreview } from '@modules/timeline/ChapterPreview';
 import { withCrossLines } from '@modules/timeline/CrossLines';
+import { TimelineSection } from '@modules/timeline/TimelineSection';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { hueGlow, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
@@ -14,7 +14,6 @@ import {
     ResolvedTimelineEntity,
 } from '@timelines/resolved';
 import { TimelineSectionType } from '@timelines/types';
-import { TimelineSection } from '@modules/timeline/TimelineSection';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;
@@ -215,17 +214,13 @@ export const TimelineSectionItemComponent: React.FC<
     entity,
     idx,
 }) => {
-    const [hoveredItem, hoverHandlers] = useHover();
+    const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
-    const [itemWidth, setItemWidth] = useState(0);
 
     const timeline = TIMELINE[animeTitle].data;
 
-    useEffect(() => {
-        setItemWidth(entity.width(unboundChapterWidth));
-    }, [entity, unboundChapterWidth]);
-
+    const itemWidth = entity.width(unboundChapterWidth);
     const itemNumber = entity.number;
 
     const { title } = entity;

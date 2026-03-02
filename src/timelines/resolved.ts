@@ -67,8 +67,6 @@ type ResolvedSeason = Omit<Season, 'cover' | 'chapters' | 'episodes'> & {
     width: WidthResolver;
 } & ResolvedTemplates;
 
-// type _S = Simplify<ResolvedSeason>;
-
 export type ResolvedTimelineEntity = {
     season: ResolvedSeason;
     episode: ResolvedEpisode;
@@ -153,15 +151,14 @@ const resolveTimelineData = (
         const pagesInVolume = sum(chaptersRaw.map(ch => ch.pages));
 
         const volumeChapters: ResolvedChapter[] = [];
-        for (const chapter of chaptersRaw) {
+        for (const {
+            title: titleRaw,
+            date: dateRaw,
+            pages,
+            cover,
+        } of chaptersRaw) {
             // eslint-disable-next-line no-plusplus
             const chapterIdx = globalChapterIdx++;
-            const {
-                title: titleRaw,
-                date: dateRaw,
-                pages,
-                cover: coverRaw,
-            } = chapter;
 
             const title = maybeFunction(titleRaw, chapterIdx);
 
@@ -176,7 +173,7 @@ const resolveTimelineData = (
             volumeChapters.push({
                 date: tokyoDate(dateRaw),
                 pages,
-                cover: coverRaw,
+                cover,
                 width: unboundChapterWidth =>
                     unboundChapterWidth ? chapterWidthUnbound : (
                         chapterWidthBounded
@@ -288,8 +285,6 @@ const resolveTimelineData = (
 
             if (title === undefined) {
                 seasons.push({
-                    // cover: maybeFunction(coverRaw, seasonIdx),
-                    // offset,
                     width,
                     title: templates.season.titleProcessor(
                         (seasonIdx + 1).toString(),
@@ -416,6 +411,7 @@ const resolveTimelineSectionLayout = (
 
     const layout = {} as ResolvedTimelineSectionLayout;
 
+    // TODO: introduce the odering for sections
     typedKeys(rawLayout).forEach(key => {
         if (key === 'timeline') {
             layout.timeline = rawLayout.timeline;
