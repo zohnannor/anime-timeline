@@ -1086,7 +1086,7 @@ export const JR_TIMELINE: Timeline = {
                         title: () => 'The Samurai Code and Carnage',
                         cover: () => 'Shugen_angry_(Anime)',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 56, to: 59 },
+                        chapters: { from: 57, to: 59 },
                     },
                     {
                         title: () => 'Humans and Sages',
@@ -1106,6 +1106,12 @@ export const JR_TIMELINE: Timeline = {
                         offset: { x: 0, y: 0 },
                         chapters: { from: 67, to: 74 },
                     },
+                    {
+                        title: () => 'Chrysanthemum and Peach',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        chapters: { from: 75, to: 77 },
+                    },
                 ],
             },
             {
@@ -1121,7 +1127,6 @@ export const JR_TIMELINE: Timeline = {
             30: 20,
             40: 19,
             45: 9,
-            56: 12,
             63: 14,
             67: 22,
         },
