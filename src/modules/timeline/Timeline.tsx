@@ -66,7 +66,7 @@ const TimelineWrapper = styled.div`
 `;
 
 type Segment = {
-    chapters: NonEmptyArray<ResolvedChapter>;
+    width: number;
     colorValue: number;
     label: string;
 };
@@ -86,7 +86,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     variant,
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover<number>();
-    const { unboundChapterWidth, setCalendarOpen } = useSettings();
+    const { setCalendarOpen } = useSettings();
     const lastClickedChapter = useRef<number | null>(null);
 
     const handleDayClick = useCallback(
@@ -127,12 +127,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     return (
         <TimelineWrapper className={`wrapper-${variant}`}>
             {segments.map((segment, idx) => {
-                const { chapters, colorValue, label } = segment;
+                const { width, colorValue, label } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
-
-                const totalWidth = sum(
-                    chapters.map(ch => ch.width(unboundChapterWidth)),
-                );
 
                 const color = interpolateColor(
                     colorValue,
@@ -140,18 +136,18 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                     outputGradient,
                 );
 
-                const chapter = idx + 1;
+                const chapterNumber = idx + 1;
                 return (
                     <Timeframe
-                        key={chapter}
+                        key={chapterNumber}
                         className={`frame-${variant}`}
-                        $width={totalWidth}
-                        $crossLinesVisible={hoveredSegment(chapter)}
-                        {...hoverHandlers(chapter)}
+                        $width={width}
+                        $crossLinesVisible={hoveredSegment(chapterNumber)}
+                        {...hoverHandlers(chapterNumber)}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
                             variant === 'days' ?
-                                ev => handleDayClick(ev, chapter)
+                                ev => handleDayClick(ev, chapterNumber)
                             :   undefined
                         }
                         $variant={variant}
@@ -164,7 +160,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                                     (ev.key === 'Enter' || ev.key === ' ') &&
                                     handleDayClick(
                                         ev as unknown as React.MouseEvent,
-                                        chapter,
+                                        chapterNumber,
                                     )
                             :   undefined
                         }
@@ -185,51 +181,61 @@ type TimelineProps = {
 
 const toSegments = <T extends ResolvedChapter>(
     chunks: NonEmptyArray<Chunk<T>>,
-    getMeta: (_first: T) => Omit<Segment, 'chapters'>,
+    getMeta: (_first: T) => Omit<Segment, 'width'>,
+    unboundChapterWidth: boolean,
 ): NonEmptyArray<Segment> =>
     map(chunks, group => {
         const [first] = group;
         const { colorValue, label } = getMeta(first);
 
         return {
-            chapters: map(group, ch => ch),
+            width: sum(group.map(ch => ch.width(unboundChapterWidth))),
             colorValue,
             label,
         };
     });
 
 export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
+    const { unboundChapterWidth } = useSettings();
     const timeline = TIMELINE[animeTitle];
 
-    const daysSegments = useMemo(
+    const daysSegments: NonEmptyArray<Segment> = useMemo(
         () =>
             map(timeline.data.chapters, ch => ({
-                chapters: [ch] as const,
+                width: ch.width(unboundChapterWidth),
                 colorValue: ch.date.getDate(),
                 label: ch.date.getDate().toString(),
             })),
-        [timeline],
+        [timeline.data.chapters, unboundChapterWidth],
     );
 
-    const monthsSegments = useMemo(
+    const monthsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            toSegments(chapterDatesByMonth(timeline), ch => {
-                const month = ch.date.getMonth();
-                return {
-                    colorValue: (month + 1) % 12,
-                    label: MONTHS[month] ?? 'Invalid month',
-                };
-            }),
-        [timeline],
+            toSegments(
+                chapterDatesByMonth(timeline),
+                ch => {
+                    const month = ch.date.getMonth();
+                    return {
+                        colorValue: (month + 1) % 12,
+                        label: MONTHS[month] ?? 'Invalid month',
+                    };
+                },
+                unboundChapterWidth,
+            ),
+        [timeline, unboundChapterWidth],
     );
 
-    const yearsSegments = useMemo(
+    const yearsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            toSegments(chapterDatesByYear(timeline), ch => {
-                const year = ch.date.getFullYear();
-                return { colorValue: year, label: year.toString() };
-            }),
-        [timeline],
+            toSegments(
+                chapterDatesByYear(timeline),
+                ch => {
+                    const year = ch.date.getFullYear();
+                    return { colorValue: year, label: year.toString() };
+                },
+                unboundChapterWidth,
+            ),
+        [timeline, unboundChapterWidth],
     );
     const yearRange = useMemo(() => {
         const start = yearsSegments[0].colorValue;
