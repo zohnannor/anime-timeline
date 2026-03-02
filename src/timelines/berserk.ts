@@ -18,7 +18,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.75;
 
 type SeasonsTotal = 4;
 type ArcsTotal = 5;
-type VolumesTotal = 43;
+type VolumesTotal = 44;
 
 const chapterNumber = (n: number): string =>
     n <= 16 ? `0-${n}` : (n - 16).toString();
@@ -2763,6 +2763,12 @@ export const BERSERK_TIMELINE: Timeline = {
                         pages: 23,
                         cover: null,
                     },
+                ],
+            },
+            {
+                title: volumeTitle,
+                cover: null,
+                chapters: [
                     {
                         title: () => 'Anādi Avidyā',
                         date: '12 September 2025',
