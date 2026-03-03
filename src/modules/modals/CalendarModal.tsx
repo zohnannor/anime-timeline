@@ -21,6 +21,7 @@ import {
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE } from '@timelines/registry';
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 
 const getISODate = (date: Date): string => {
     const iso = date.toISOString();
@@ -47,6 +48,7 @@ const Month = styled.div<MonthProps>`
 
 type DayProps = {
     $isChapter: boolean;
+    $isEpisode: boolean;
     $isToday: boolean;
     $isNextChapter: boolean;
     $background: string;
@@ -55,7 +57,6 @@ type DayProps = {
 const Day = styled.a<DayProps>`
     display: flex;
     flex-direction: column;
-    padding: ${scale(66)};
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -63,19 +64,27 @@ const Day = styled.a<DayProps>`
         $isChapter ? 'black' : $background};
     background-color: ${({ $isChapter, $background }) =>
         $isChapter ? $background : 'black'};
-    cursor: ${({ $isChapter }) => ($isChapter ? 'pointer' : 'default')};
+    cursor: ${({ $isChapter, $isEpisode }) =>
+        $isChapter || $isEpisode ? 'pointer' : 'default'};
     width: ${scale(200)};
     height: ${scale(200)};
 
-    ${({ $isToday, $background, $isChapter, $isNextChapter }) =>
+    ${({ $isToday, $background, $isChapter, $isEpisode, $isNextChapter }) =>
         $isNextChapter ?
             css`
-                border: ${scale(15)} solid ${$isChapter ? `red` : $background};
+                border: ${scale(15)} solid ${$isChapter ? 'red' : $background};
                 animation: ${hueGlow} 2s linear infinite;
             `
         : $isToday ?
             css`
-                border: ${scale(15)} solid ${$isChapter ? `red` : $background};
+                border: ${scale(15)} solid ${$isChapter ? 'red' : $background};
+            `
+        : $isEpisode ?
+            css`
+                outline: ${scale(7)} dashed
+                    ${$isChapter ? 'black' : $background};
+                outline-offset: ${scale(-13)};
+                font-size: ${scale(45)};
             `
         :   null}
 
@@ -83,6 +92,10 @@ const Day = styled.a<DayProps>`
         z-index: 1;
         outline: ${scale(20)} solid red;
         animation: ${hueGlow} 2s linear infinite;
+    }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: ${scale(50)};
     }
 `;
 
@@ -101,17 +114,27 @@ const TooltipContent = styled.div`
     gap: ${scale(40)};
 `;
 
+type EventMap = Map<
+    string,
+    | { chapter: string }
+    | { episode: [string, number] }
+    | { chapter: string; episode: [string, number] }
+>;
+
 type MonthComponentProps = {
     month: Date;
     currentDate: Date;
-    chapterDateMap: Map<string, string>;
+    chapterDateMap: EventMap;
     nextChapterDate: Date | null;
-    onDayClick: (_ev: React.MouseEvent, _chapterNumber: string | null) => void;
+    onDayClick: (
+        _ev: React.MouseEvent,
+        _event: { chapter: string } | { episode: [string, number] } | null,
+    ) => void;
 };
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     // so that react/display-name doesn't complain
-    // eslint-disable-next-line prefer-arrow-callback
+    // eslint-disable-next-line prefer-arrow-callback, max-statements
     function MonthComponent({
         month,
         currentDate,
@@ -146,8 +169,12 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             const date = new Date(month);
             date.setDate(dayN);
             const dateStr = getISODate(date);
-            const chapterNumber = chapterDateMap.get(dateStr) ?? null;
-            const isChapter = chapterNumber !== null;
+            const event = chapterDateMap.get(dateStr) ?? null;
+            const isChapter = event !== null && 'chapter' in event;
+            const isEpisode = event !== null && 'episode' in event;
+            const isEvent = isChapter || isEpisode;
+            const chapterNumber = isChapter ? event.chapter : null;
+            const episodeNumber = isEpisode ? event.episode : null;
             const isToday = date.toDateString() === currentDate.toDateString();
             const isNextChapter =
                 date.toDateString() === nextChapterDate?.toDateString();
@@ -164,14 +191,20 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     key={dayKey}
                     className='day'
                     $isChapter={isChapter}
+                    $isEpisode={isEpisode}
                     $isToday={isToday}
                     $isNextChapter={isNextChapter}
                     $background={isChapter ? `#${dayColor}` : `#${monthColor}`}
-                    onClick={ev => onDayClick(ev, chapterNumber)}
-                    tabIndex={isChapter ? -1 : undefined}
+                    onClick={ev => onDayClick(ev, event)}
+                    tabIndex={isEvent ? -1 : undefined}
                 >
                     <span>{dayN}</span>
                     {chapterNumber !== null && <span>#{chapterNumber}</span>}
+                    {episodeNumber !== null && (
+                        <span>
+                            E{episodeNumber[0]} (S{episodeNumber[1]})
+                        </span>
+                    )}
                 </Day>
             );
 
@@ -246,18 +279,25 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
-    const { chapters } = TIMELINE[animeTitle].data;
+    const { chapters, episodes } = TIMELINE[animeTitle].data;
     const [first] = chapters;
     const startDate = first.date;
 
-    const chapterDateMap = useMemo(() => {
-        const map = new Map<string, string>();
+    const eventMap = useMemo(() => {
+        const map: EventMap = new Map();
         chapters.forEach(({ date, number }) => {
             const dateStr = getISODate(date);
-            map.set(dateStr, number);
+            map.set(dateStr, { ...map.get(dateStr), chapter: number });
+        });
+        episodes.forEach(({ date, number, season }) => {
+            const dateStr = getISODate(date);
+            map.set(dateStr, {
+                ...map.get(dateStr),
+                episode: [number, season],
+            });
         });
         return map;
-    }, [chapters]);
+    }, [chapters, episodes]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];
@@ -290,15 +330,22 @@ export const CalendarModal: React.FC = () => {
     );
 
     const handleDayClick = useCallback(
-        (ev: React.MouseEvent, chapterNumber: string | null) => {
+        (
+            ev: React.MouseEvent,
+            event: { chapter: string } | { episode: [string, number] } | null,
+        ) => {
             ev.preventDefault();
-            if (chapterNumber === null) {
+            if (event === null) {
                 return;
             }
 
             setCalendarOpen(false);
-
-            scrollToId(`chapter-${chapterNumber}`);
+            if ('chapter' in event) {
+                scrollToId(`chapter-${event.chapter}`);
+            } else {
+                const [episodeNumber, _season] = event.episode;
+                scrollToId(`episode-${episodeNumber}`);
+            }
         },
         [setCalendarOpen],
     );
@@ -336,7 +383,7 @@ export const CalendarModal: React.FC = () => {
                         month={month}
                         currentDate={currentDate}
                         nextChapterDate={nextChapterDate}
-                        chapterDateMap={chapterDateMap}
+                        chapterDateMap={eventMap}
                         onDayClick={handleDayClick}
                     />
                 ))}

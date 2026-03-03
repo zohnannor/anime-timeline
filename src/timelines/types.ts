@@ -37,6 +37,7 @@ export type Episode = {
     title: Callback<string> | number;
     cover: Callback<string>;
     offset: Offset;
+    date: string;
     chapters: Range;
 };
 

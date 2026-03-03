@@ -6,6 +6,7 @@ import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale, toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 
 const ConfirmButton = styled.button`
     cursor: pointer;
@@ -23,7 +24,7 @@ const Container = styled.div`
     width: 50svw;
     font-size: ${scale(75)};
 
-    @media (max-width: 768px) {
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
         width: 80svw;
     }
 `;
