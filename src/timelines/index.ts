@@ -17,9 +17,9 @@ export const FLOATING_BUTTONS: {
 }[] = [
     { filename: 'read-info', title: 'Read info', option: 'infoBoxOpen' },
     {
-        filename: 'toggle-unbounded-chapter-width',
-        title: 'Toggle unbounded chapter width',
-        option: 'unboundedChapterWidth',
+        filename: 'toggle-unbound-chapter-width',
+        title: 'Toggle unbound chapter width',
+        option: 'unboundChapterWidth',
     },
     // include cross-lines button only on desktop
     ...(isMobileDevice() ?

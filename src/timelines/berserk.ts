@@ -1,14 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -18,26 +10,23 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.75;
 
 type SeasonsTotal = 4;
 type ArcsTotal = 5;
-type VolumesTotal = 43;
+type VolumesTotal = 44;
 
 const chapterNumber = (n: number): string =>
     n <= 16 ? `0-${n}` : (n - 16).toString();
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover1 = (_: TimelineData, idx: number) =>
-    `V${idx + 1}-Cover-Manga`;
-const volumeCover2 = (_: TimelineData, idx: number) =>
-    `Manga_V${idx + 1}_Cover`;
-const episodeCover1 = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
-const episodeCover2 = (_: TimelineData, idx: number) => `Episode${idx + 1}`;
-const episodeCover3 = (_: TimelineData, idx: number) =>
-    `Episode_${idx + 1 - 25}_(2016)`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) =>
+    n <= 40 ? `V${n}-Cover-Manga` : `Manga_V${n}_Cover`;
+const episodeCover = (n: number) =>
+    n <= 2 ? `Episode_${n}`
+    : n <= 23 ? `Episode${n}`
+    : `Episode_${n - 25}_(2016)`;
 
 export const BERSERK_TIMELINE: Timeline = {
     layout: {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Category:Anime',
@@ -45,7 +34,6 @@ export const BERSERK_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) =>
                     `${title}\n(Episode ${
@@ -65,7 +53,6 @@ export const BERSERK_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: ARC_HEIGHT,
-            width: getSagaWidth,
             blankfontSize: 0,
             titleFontSize: 0,
             sectionLink: 'Releases_(Manga)#Arcs',
@@ -73,7 +60,6 @@ export const BERSERK_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 sidewaysText: true,
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
@@ -88,7 +74,6 @@ export const BERSERK_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             numberProcessor: chapterNumber,
@@ -101,7 +86,6 @@ export const BERSERK_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
@@ -114,7 +98,7 @@ export const BERSERK_TIMELINE: Timeline = {
         volumes: [
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Black Swordsman',
@@ -138,7 +122,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Guardian Angels of Desire (2)',
@@ -156,7 +140,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Guardian Angels of Desire (4)',
@@ -186,7 +170,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Golden Age (2)',
@@ -222,7 +206,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Golden Age (7)',
@@ -276,7 +260,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Sword Master (2)',
@@ -342,7 +326,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Casca (3)',
@@ -408,7 +392,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Battle to Capture Doldrey (5)',
@@ -474,7 +458,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Skull Knight',
@@ -546,7 +530,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Sparks from a Sword Tip',
@@ -618,7 +602,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Demon Dog (1)',
@@ -690,7 +674,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Requiem of the Wind',
@@ -756,7 +740,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Storm of Death (1)',
@@ -836,7 +820,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Demon Child',
@@ -890,7 +874,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Queen',
@@ -962,7 +946,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Monster',
@@ -1034,7 +1018,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'The Unseen',
@@ -1106,7 +1090,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Kushan Scouts (1)',
@@ -1178,7 +1162,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Black Swordsman on the Holy Ground',
@@ -1250,7 +1234,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => "Spider's Thread",
@@ -1323,7 +1307,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Jumping Fish',
@@ -1395,7 +1379,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Ruptured World',
@@ -1461,7 +1445,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Winter Journey (1)',
@@ -1527,7 +1511,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Trolls',
@@ -1593,7 +1577,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Magic Sword',
@@ -1659,7 +1643,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Retribution',
@@ -1725,7 +1709,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Fire Dragon',
@@ -1791,7 +1775,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Proclaimed Omen',
@@ -1857,7 +1841,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Bloodshed',
@@ -1923,7 +1907,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Duel',
@@ -1989,7 +1973,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Blazing Bay',
@@ -2055,7 +2039,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Human Bullet',
@@ -2121,7 +2105,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Bubbles of Futility',
@@ -2187,7 +2171,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Giant God of Blindness',
@@ -2253,7 +2237,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Falconia',
@@ -2313,7 +2297,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Full Moon (1)',
@@ -2373,7 +2357,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Merrow (2)',
@@ -2433,7 +2417,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Capital City of Humanity',
@@ -2493,7 +2477,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Blazing Puppet',
@@ -2547,7 +2531,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Forest of Corpses and Thorny Cedars',
@@ -2595,7 +2579,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover2,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Dawn of an Empire',
@@ -2643,7 +2627,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover2,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Lull of the Waning Moon',
@@ -2703,7 +2687,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 title: volumeTitle,
-                cover: volumeCover2,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () =>
@@ -2763,6 +2747,12 @@ export const BERSERK_TIMELINE: Timeline = {
                         pages: 23,
                         cover: null,
                     },
+                ],
+            },
+            {
+                title: volumeTitle,
+                cover: null,
+                chapters: [
                     {
                         title: () => 'Anādi Avidyā',
                         date: '12 September 2025',
@@ -2775,9 +2765,6 @@ export const BERSERK_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Black Swordsman',
@@ -2821,175 +2808,175 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'Black Swordsman',
-                        cover: episodeCover1,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'October 7, 1997',
                         chapters: { from: 1, to: 5 },
                     },
                     {
                         title: () => 'Band of the Falcon',
-                        cover: episodeCover1,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'October 14, 1997',
                         chapters: { from: 11, to: 13 },
                     },
                     {
                         title: () => 'First Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'October 21, 1997',
                         chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'The Hand of God',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 330 },
                         date: 'October 28, 1997',
                         chapters: { from: 6, to: 11 },
                     },
                     {
                         title: () => 'Sword Wind',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'November 4, 1997',
                         chapters: { from: 16 + 1, to: 16 + 2 },
                     },
                     {
                         title: () => 'Zodd the Immortal',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'November 11, 1997',
                         chapters: { from: 16 + 2, to: 16 + 5 },
                     },
                     {
                         title: () => 'Sword Master',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'November 18, 1997',
                         chapters: { from: 16 + 6, to: 16 + 7 },
                     },
                     {
                         title: () => 'Conspiracy',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'November 25, 1997',
                         chapters: { from: 16 + 7, to: 16 + 7 },
                     },
                     {
                         title: () => 'Assassination',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'December 2, 1997',
                         chapters: { from: 16 + 8, to: 16 + 10 },
                     },
                     {
                         title: () => 'Precious Thing',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'December 9, 1997',
                         chapters: { from: 16 + 10, to: 16 + 12 },
                     },
                     {
                         title: () => 'The Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'December 16, 1997',
                         chapters: { from: 16 + 13, to: 16 + 15 },
                     },
                     {
                         title: () => 'Together',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'December 23, 1997',
                         chapters: { from: 16 + 15, to: 16 + 18 },
                     },
                     {
                         title: () => 'Ready to Die',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'January 6, 1998',
                         chapters: { from: 16 + 18, to: 16 + 20 },
                     },
                     {
                         title: () => 'Bonfire of Dreams',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'January 13, 1998',
                         chapters: { from: 16 + 20, to: 16 + 22 },
                     },
                     {
                         title: () => 'The Decisive Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'January 20, 1998',
                         chapters: { from: 16 + 22, to: 16 + 24 },
                     },
                     {
                         title: () => 'The Conqueror',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'January 27, 1998',
                         chapters: { from: 16 + 24, to: 16 + 29 },
                     },
                     {
                         title: () => 'Moment of Glory',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'February 3, 1998',
                         chapters: { from: 16 + 29, to: 16 + 31 },
                     },
                     {
                         title: () => 'Tombstone of Flames',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'February 10, 1998',
                         chapters: { from: 16 + 31, to: 16 + 33 },
                     },
                     {
                         title: () => 'Separation',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'February 17, 1998',
                         chapters: { from: 16 + 33, to: 16 + 39 },
                     },
                     {
                         title: () => 'Sparks',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'February 24, 1998',
                         chapters: { from: 16 + 40, to: 16 + 42 },
                     },
                     {
                         title: () => 'Confession',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'March 3, 1998',
                         chapters: { from: 16 + 43, to: 16 + 48 },
                     },
                     {
                         title: () => 'Infiltration',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 280 },
                         date: 'March 10, 1998',
                         chapters: { from: 16 + 49, to: 16 + 62 },
                     },
                     {
                         title: () => 'Eve of the Feast',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 180 },
                         date: 'March 17, 1998',
                         chapters: { from: 16 + 63, to: 16 + 72 },
                     },
                     {
                         title: () => 'Eclipse',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 60 },
                         date: 'March 24, 1998',
                         chapters: { from: 16 + 73, to: 16 + 78 },
                     },
                     {
                         title: () => 'Time of Eternity',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 300 },
                         date: 'March 31, 1998',
                         chapters: { from: 16 + 79, to: 16 + 94 },
@@ -3004,84 +2991,84 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'The Dragon Slayer',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'July 1, 2016',
                         chapters: { from: 16 + 95, to: 16 + 107 },
                     },
                     {
                         title: () => 'The Holy Iron Chain Knights',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'July 8, 2016',
                         chapters: { from: 16 + 108, to: 16 + 122 },
                     },
                     {
                         title: () => 'Night of Miracles',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'July 15, 2016',
                         chapters: { from: 16 + 123, to: 16 + 127 },
                     },
                     {
                         title: () => 'Revelations',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'July 22, 2016',
                         chapters: { from: 16 + 128, to: 16 + 132 },
                     },
                     {
                         title: () => 'Tower of Conviction',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'July 29, 2016',
                         chapters: { from: 16 + 133, to: 16 + 136 },
                     },
                     {
                         title: () => 'Night Banquet of Burning at the Stake',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'August 5, 2016',
                         chapters: { from: 16 + 137, to: 16 + 143 },
                     },
                     {
                         title: () => 'The Black Witch',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'August 12, 2016',
                         chapters: { from: 16 + 144, to: 16 + 148 },
                     },
                     {
                         title: () => 'Reunion in the Den of Evil',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'August 19, 2016',
                         chapters: { from: 16 + 148, to: 16 + 151 },
                     },
                     {
                         title: () => 'Blood Flow of the Dead',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'August 26, 2016',
                         chapters: { from: 16 + 152, to: 16 + 157 },
                     },
                     {
                         title: () => "Hell's Angels",
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'September 2, 2016',
                         chapters: { from: 16 + 158, to: 16 + 164 },
                     },
                     {
                         title: () => 'Shadows of Idea',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'September 9, 2016',
                         chapters: { from: 16 + 165, to: 16 + 171 },
                     },
                     {
                         title: () => 'Those Who Cling, Those Who Struggle',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'September 16, 2016',
                         chapters: { from: 16 + 171, to: 16 + 176 },
@@ -3096,84 +3083,84 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'The Rent World',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'April 7, 2017',
                         chapters: { from: 16 + 177, to: 16 + 183 },
                     },
                     {
                         title: () => 'Winter Journey',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'April 7, 2017',
                         chapters: { from: 16 + 184, to: 16 + 190 },
                     },
                     {
                         title: () => 'Banner of the Flying Sword',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'April 14, 2017',
                         chapters: { from: 16 + 191, to: 16 + 195 },
                     },
                     {
                         title: () => 'Forest of Demonic Beasts',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'April 21, 2017',
                         chapters: { from: 16 + 196, to: 16 + 200 },
                     },
                     {
                         title: () => 'The Astral World',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'April 28, 2017',
                         chapters: { from: 16 + 201, to: 16 + 204 },
                     },
                     {
                         title: () => 'Struggle Against the Demon Horde',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'May 5, 2017',
                         chapters: { from: 16 + 204, to: 16 + 210 },
                     },
                     {
                         title: () => 'The Arcana of Invocation',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'May 12, 2017',
                         chapters: { from: 16 + 210, to: 16 + 215 },
                     },
                     {
                         title: () => 'The Corruption of Qliphoth',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'May 19, 2017',
                         chapters: { from: 16 + 215, to: 16 + 221 },
                     },
                     {
                         title: () => 'The Berserker Armor',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'May 26, 2017',
                         chapters: { from: 16 + 222, to: 16 + 226 },
                     },
                     {
                         title: () => 'A Journey Begins in Flames',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'June 9, 2017',
                         chapters: { from: 16 + 226, to: 16 + 236 },
                     },
                     {
                         title: () => 'Proclaimed Omens',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'June 16, 2017',
                         chapters: { from: 16 + 237, to: 16 + 243 },
                     },
                     {
                         title: () => 'City of Humans',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'June 23, 2017',
                         chapters: { from: 16 + 243, to: 16 + 249 },
@@ -3189,7 +3176,7 @@ export const BERSERK_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { chapterDates, chapters, scale } from '@shared/lib/helpers';
+import { scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
 import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
 import {
@@ -14,7 +14,7 @@ import {
 import { RefreshIcon } from '@shared/ui/icons/refresh';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE, TITLES } from '@timelines/registry';
-import { AnimeTitle, TimelineData } from '@timelines/types';
+import { ResolvedChapter } from '@timelines/resolved';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -51,11 +51,12 @@ const TitleContainer = styled.div`
     font-size: ${scale(75)};
 `;
 
-const chapterCount = (timeline: TimelineData) => chapters(timeline).length;
-const pageCount = (timeline: TimelineData) =>
-    sum(chapters(timeline).map(ch => ch.pages));
-const recentlyUpdated = (title: AnimeTitle) =>
-    Math.max(...chapterDates(TIMELINE[title]).map(date => date.getTime()));
+const totalChapterCount = (chapters: readonly ResolvedChapter[]) =>
+    chapters.length;
+const totalPageCount = (chapters: readonly ResolvedChapter[]) =>
+    sum(chapters.map(ch => ch.pages));
+const recentlyUpdated = (chapters: readonly ResolvedChapter[]) =>
+    Math.max(...chapters.map(ch => ch.date.getTime()));
 
 export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =
@@ -72,17 +73,24 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         return null;
     }
 
-    const titles = TITLES.toSorted((titleA, titleB) =>
-        sorting === 'alphabetical' ? titleA.localeCompare(titleB)
-        : sorting === 'chapter count' ?
-            chapterCount(TIMELINE[titleB].data) -
-            chapterCount(TIMELINE[titleA].data)
-        : sorting === 'page count' ?
-            pageCount(TIMELINE[titleB].data) - pageCount(TIMELINE[titleA].data)
-        : sorting === 'recently updated' ?
-            recentlyUpdated(titleB) - recentlyUpdated(titleA)
-        :   0,
-    );
+    const titles = TITLES.toSorted((titleA, titleB) => {
+        const {
+            data: { chapters: chaptersA },
+        } = TIMELINE[titleA];
+        const {
+            data: { chapters: chaptersB },
+        } = TIMELINE[titleB];
+        return (
+            sorting === 'alphabetical' ? titleA.localeCompare(titleB)
+            : sorting === 'chapter count' ?
+                totalChapterCount(chaptersB) - totalChapterCount(chaptersA)
+            : sorting === 'page count' ?
+                totalPageCount(chaptersB) - totalPageCount(chaptersA)
+            : sorting === 'recently updated' ?
+                recentlyUpdated(chaptersB) - recentlyUpdated(chaptersA)
+            :   0
+        );
+    });
 
     const nextSorting = {
         unsorted: 'alphabetical',
@@ -120,26 +128,27 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
             <TitleContainer>
-                {titles.map(title => (
-                    <TitleButton
-                        key={title}
-                        onClick={() => {
-                            setAnimeTitle(title);
-                            setAnimeTitleSelectorOpen(false);
-                        }}
-                    >
-                        <ThumbnailImage
-                            className='animeTitleImage'
-                            animeTitle={title}
-                            src={
-                                TIMELINE[title].data.smallImages[
-                                    'scroller-or-favicon'
-                                ]
-                            }
-                        />
-                        {TIMELINE[title].data.title}
-                    </TitleButton>
-                ))}
+                {titles.map(animeTitle => {
+                    const {
+                        data: { title, smallImages },
+                    } = TIMELINE[animeTitle];
+                    return (
+                        <TitleButton
+                            key={animeTitle}
+                            onClick={() => {
+                                setAnimeTitle(animeTitle);
+                                setAnimeTitleSelectorOpen(false);
+                            }}
+                        >
+                            <ThumbnailImage
+                                className='animeTitleImage'
+                                animeTitle={animeTitle}
+                                src={smallImages['scroller-or-favicon']}
+                            />
+                            {title}
+                        </TitleButton>
+                    );
+                })}
             </TitleContainer>
         </Modal>
     );

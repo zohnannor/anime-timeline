@@ -6,7 +6,7 @@ import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { Link, Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
-import { TimelineData } from '@timelines/types';
+import { ResolvedTimelineData } from '@timelines/resolved';
 
 type BoxProps = {
     $dir?: 'row' | 'column';
@@ -84,7 +84,11 @@ const SpoilerWarning = styled.div`
     line-height: 1;
 `;
 
-const infoModalContent = ({ title, wikiBase, socialLinks }: TimelineData) => (
+const infoModalContent = ({
+    title,
+    wikiBase,
+    socialLinks,
+}: ResolvedTimelineData) => (
     <Box $dir='column'>
         <Box $align='flex-start'>
             <Box $wrap>
@@ -149,7 +153,7 @@ const infoModalContent = ({ title, wikiBase, socialLinks }: TimelineData) => (
                     to hide the UI elements (desktop only ☹️)
                 </li>
                 <li>
-                    The button below the info button toggles unbounded chapter
+                    The button below the info button toggles unbound chapter
                     width (volume width would not be constant but instead depend
                     on the number of pages in the chapters)
                 </li>

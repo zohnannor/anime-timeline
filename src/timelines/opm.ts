@@ -1,14 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Add, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -24,17 +16,17 @@ type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
 type SagasTotal = 4;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) =>
-    idx <= 19 ? `Volume_${idx + 1}`
-    : idx <= 26 ? `Volume_${idx + 1}_Cover`
-    : idx <= 27 ? `Vol.${idx + 1}`
-    : `Volume_${idx + 1}_Front_Cover`;
-const episodeCover = (_: TimelineData, idx: number) =>
-    idx <= 11 ? `Episode${idx + 1}_Pics`
-    : idx <= 23 ? `Season2Ep${idx - 11}pics`
-    : idx <= 28 ? `OPMS3Ep${idx - 11 - 11 - 1}`
-    : `One-Punch_Man_Episode_${idx + 1}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) =>
+    n <= 20 ? `Volume_${n}`
+    : n <= 27 ? `Volume_${n}_Cover`
+    : n <= 28 ? `Vol.${n}`
+    : `Volume_${n}_Front_Cover`;
+const episodeCover = (n: number) =>
+    n <= 12 ? `Episode${n}_Pics`
+    : n <= 24 ? `Season2Ep${n - 12}pics`
+    : n <= 29 ? `OPMS3Ep${n - 24}`
+    : `One-Punch_Man_Episode_${n}`;
 const chapterLink = (title: string, n: number): string =>
     n <= 118 ? `Chapter_${n}`
     : n <= 126 ? `Chapter_${n - 4}_(Online)`
@@ -52,7 +44,6 @@ export const OPM_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            width: getSeasonWidth,
             sectionLink: 'One-Punch Man (anime)',
             wikiLink: title => `Animated_Media#${title.replaceAll(' ', '_')}`,
             subTimeline: {
@@ -67,7 +58,6 @@ export const OPM_TIMELINE: Timeline = {
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                width: getEpisodeWidth,
                 sectionLink: 'Episodes',
                 wikiLink: (_, n) => `Episode_${n}`,
             },
@@ -78,7 +68,6 @@ export const OPM_TIMELINE: Timeline = {
             titleProcessor: title => `${title} Saga`,
             blankfontSize: 100,
             titleFontSize: 100,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: title => `${title} Saga`,
             subTimeline: {
@@ -88,7 +77,6 @@ export const OPM_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title => `${title} Arc`,
             },
@@ -103,7 +91,6 @@ export const OPM_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
@@ -113,7 +100,6 @@ export const OPM_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: (_, n) =>
@@ -2029,8 +2015,6 @@ export const OPM_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'Introduction',
-                cover: null,
-                chapters: { from: 1, to: 15 },
                 arcs: [
                     {
                         title: 'Saitama Introduction',
@@ -2054,8 +2038,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Hero Association',
-                cover: null,
-                chapters: { from: 16, to: 39 },
                 arcs: [
                     {
                         title: 'National Superhero Registry',
@@ -2097,8 +2079,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Human Monster',
-                cover: null,
-                chapters: { from: 40, to: 175 },
                 arcs: [
                     {
                         title: 'Garou Introduction',
@@ -2140,8 +2120,6 @@ export const OPM_TIMELINE: Timeline = {
             },
             {
                 title: 'Neo Heroes',
-                cover: null,
-                chapters: { from: 171 + 5 },
                 arcs: [
                     {
                         title: 'Psychic Sisters',
@@ -2493,7 +2471,7 @@ export const OPM_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

@@ -1,14 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1511;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -20,18 +12,17 @@ type VolumesTotal = 35;
 type ArcsTotal = 9;
 type SeasonsTotal = 8;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 0 ? `Volume_${idx + 1}_Cover` : `SnK_-_Manga_Volume_${idx + 1}`;
-const episodeCover = (_: TimelineData, idx: number) =>
-    `Attack_on_Titan_-_Episode_${idx + 1}_Title_Card`;
+const volumeTitle = (n: number) =>
+    `Volume ${n}${n <= 34 ? '' : '\n(Side Stories)'}`;
+const volumeCover = (n: number) =>
+    n === 1 ? `Volume_${n}_Cover` : `SnK_-_Manga_Volume_${n}`;
+const episodeCover = (n: number) => `Attack_on_Titan_-_Episode_${n}_Title_Card`;
 
 export const AOT_TIMELINE: Timeline = {
     layout: {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Attack on Titan (Anime)',
@@ -45,7 +36,6 @@ export const AOT_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
@@ -57,7 +47,6 @@ export const AOT_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: ARC_HEIGHT,
-            width: getSagaWidth,
             blankfontSize: 0,
             titleFontSize: 0,
             sectionLink: 'Story Arcs',
@@ -65,7 +54,6 @@ export const AOT_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -79,7 +67,6 @@ export const AOT_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -91,7 +78,6 @@ export const AOT_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
@@ -1141,11 +1127,7 @@ export const AOT_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: (title, idx) =>
-                    `${volumeTitle(
-                        title,
-                        idx,
-                    )}\n(Side Stories grouped together)`,
+                title: volumeTitle,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1172,9 +1154,6 @@ export const AOT_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Prologue',
@@ -2017,7 +1996,7 @@ export const AOT_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

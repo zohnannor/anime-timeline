@@ -1,12 +1,9 @@
-// all indices passed to these functions are obtained from iterating over arrays
-// themselves
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-bitwise */
 import { keyframes } from 'styled-components';
 
-import { range, sum } from '@shared/lib/util';
-import { TIMELINE_HEIGHT } from '@timelines/index';
-import { Timeline, TimelineData, TimelineSectionType } from '@timelines/types';
+import { asNonEmpty, Mutable, NonEmptyArray } from '@shared/lib/util';
+import { ResolvedChapter } from '@timelines/resolved';
+import { TimelineSection } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
 
@@ -22,198 +19,69 @@ export const scale = (n: number) =>
 export const tokyoDate = (date: string) =>
     new Date(`${date.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
 
-export const maxHeight = (timeline: Timeline) =>
-    sum(
-        Object.values(timeline.layout)
-            .filter(sec => sec.type !== 'timeline')
-            .map(sec => sec.height),
-    ) + TIMELINE_HEIGHT;
+export type Chunk<T> = NonEmptyArray<T>;
 
-export const chapterDates = (timeline: Timeline) =>
-    timeline.data.volumes
-        .flatMap(vol => vol.chapters)
-        .map(ch => tokyoDate(ch.date));
+const INIT_SENTINEL = Symbol('init-sentinel');
 
-const groupBy = <T>(array: T[], getKey: (_el: T) => number) =>
-    array.reduce<[[number, T][][], number | null]>(
-        ([groups, previous], date, idx) => {
-            const key = getKey(date);
-            if (key === previous) {
-                groups[groups.length - 1]!.push([idx, date]);
-            } else {
-                groups.push([[idx, date]]);
-            }
-            return [groups, key];
-        },
-        [[], null],
-    )[0];
+const chunks = <T>(
+    array: readonly T[],
+    getKey: (_el: T) => number,
+): NonEmptyArray<Chunk<T>> =>
+    asNonEmpty(
+        array.reduce<{
+            list: Mutable<Chunk<T>>[];
+            prev: number | typeof INIT_SENTINEL;
+        }>(
+            (acc, el) => {
+                const key = getKey(el);
+                const lastGroup = acc.list.at(-1);
 
-export const chapterDatesByMonth = (timeline: Timeline) =>
-    groupBy(
-        chapterDates(timeline),
-        date => date.getFullYear() + 1 + (date.getMonth() + 1) * 12,
+                if (lastGroup && key === acc.prev) {
+                    lastGroup.push(el);
+                } else {
+                    acc.list.push([el]);
+                    acc.prev = key;
+                }
+
+                return acc;
+            },
+            { list: [], prev: INIT_SENTINEL },
+        ).list,
+        'chunk',
     );
 
-export const chapterDatesByYear = (timeline: Timeline) =>
-    groupBy(chapterDates(timeline), date => date.getFullYear() + 1);
-
-const chaptersVolumes = (timeline: TimelineData) =>
-    timeline.volumes.flatMap((vol, vi) => vol.chapters.map(() => vi));
-export const chapters = (timeline: TimelineData) =>
-    timeline.volumes.flatMap(vol => vol.chapters);
-
-export type WidthHelper = (
-    _timeline: TimelineData,
-    _idx: number,
-    _unboundedChapterWidth: boolean,
-) => number;
-
-export const getVolumeByChapter = (timeline: TimelineData, idx: number) =>
-    chaptersVolumes(timeline).find((_, ci) => ci === idx)!;
-const pagesPerVolume = (timeline: TimelineData, idx: number) =>
-    sum(timeline.volumes[idx]!.chapters.map(ch => ch.pages));
-
-export const getChapterWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) => {
-    const pagesInChapter = chapters(timeline)[idx]!.pages;
-    const volume = getVolumeByChapter(timeline, idx);
-    return unboundedChapterWidth ?
-            pagesInChapter * (1000 / 180) * 1.05
-        :   pagesInChapter * (1000 / pagesPerVolume(timeline, volume));
-};
-
-export const getVolumeWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) =>
-    unboundedChapterWidth ?
-        sum(
-            chaptersVolumes(timeline)
-                .map((vi, ci): [number, number] => [vi, ci])
-                .filter(([vi, _]) => vi === idx)
-                .map(([vi, ci]): [number, number] => [
-                    vi,
-                    getChapterWidth(timeline, ci, unboundedChapterWidth),
-                ])
-                .map(([_, cw]) => cw),
-        )
-    :   1000;
-
-export const getArcWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) => {
-    const { from, to } = timeline.sagas.flatMap(saga => saga.arcs)[idx]!
-        .chapters;
-    return sum(
-        range(from - 1, to ?? chapters(timeline).length).map(i =>
-            getChapterWidth(timeline, i, unboundedChapterWidth),
-        ),
-    );
-};
-
-export const getSagaWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) =>
-    sum(
-        timeline.sagas
-            .flatMap((saga, si) => saga.arcs.map(() => si))
-            .map((si, ai) => [si, ai] as const)
-            .filter(([si, _]) => si === idx)
-            .map(([_, ai]) => getArcWidth(timeline, ai, unboundedChapterWidth)),
+// TODO: move into `ResolvedTimeline`?
+export const chapterDatesByMonth = (chapters: NonEmptyArray<ResolvedChapter>) =>
+    chunks(
+        chapters,
+        chapter =>
+            chapter.date.getFullYear() + 1 + (chapter.date.getMonth() + 1) * 12,
     );
 
-const getChapterPageWidth = (
-    timeline: TimelineData,
-    chapter: number,
-    unboundedChapterWidth: boolean,
-) => {
-    const volume = getVolumeByChapter(timeline, chapter);
-    return (
-        getVolumeWidth(timeline, volume, unboundedChapterWidth) /
-        pagesPerVolume(timeline, volume)
-    );
-};
+// TODO: move into `ResolvedTimeline`?
+export const chapterDatesByYear = (chapters: NonEmptyArray<ResolvedChapter>) =>
+    chunks(chapters, chapter => chapter.date.getFullYear() + 1);
 
-const chaptersWithPagesSplit = (timeline: TimelineData) =>
-    timeline.volumes
-        .flatMap(vol => vol.chapters)
-        .map((ch, ci) => {
-            const split = timeline.splitChapters[ci + 1] ?? ch.pages;
-            return [ci, [split, ch.pages - split]] as const;
+export const scrollToId = (id: string) => {
+    const element = document.querySelector(`#${id}`);
+    if (element) {
+        console.debug(`Scrolling to \`#${id}\``);
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
         });
-
-const getEpisodePages = (timeline: TimelineData, idx: number) => {
-    const chaptersSplit = chaptersWithPagesSplit(timeline);
-    const chaptersTotal = chapters(timeline).length;
-
-    const [start, end] = timeline.seasons
-        .flatMap(season => season.episodes ?? [])
-        .map(
-            ({ chapters: { from, to } }) =>
-                [from - 1, to ?? chaptersTotal] as const,
-        )[idx]!;
-
-    return range(start, end).map(ci => {
-        const [_, [split, rest]] = chaptersSplit[ci]!;
-        const pagesInEpisode =
-            split !== 0 && ci === end - 1 ? split
-            : rest !== 0 && ci === start ? rest
-            : split + rest;
-        return [pagesInEpisode, ci] as const;
-    });
-};
-
-export const getEpisodeWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) =>
-    sum(
-        getEpisodePages(timeline, idx).map(
-            ([pagesInEpisode, ci]) =>
-                pagesInEpisode *
-                getChapterPageWidth(timeline, ci, unboundedChapterWidth),
-        ),
-    );
-
-export const getSeasonWidth: WidthHelper = (
-    timeline,
-    idx,
-    unboundedChapterWidth,
-) => {
-    const { from, to } = timeline.seasons[idx]!.chapters;
-    const startIdx = from - 1;
-    const endIdx = (to ?? chapters(timeline).length) - 1;
-
-    // TODO: rewrite the same way as getEpisodeWidth?
-    return sum(
-        chaptersWithPagesSplit(timeline)
-            .slice(startIdx, endIdx + 1)
-            .map(([ci, [split, rest]]) =>
-                ci === startIdx && rest !== 0 ?
-                    rest *
-                    getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-                : ci === endIdx ?
-                    split *
-                    getChapterPageWidth(timeline, ci, unboundedChapterWidth)
-                :   getChapterWidth(timeline, ci, unboundedChapterWidth),
-            ),
-    );
+        (element as HTMLElement).focus({ preventScroll: false });
+    } else {
+        console.warn(`No element found for \`#${id}\``);
+    }
 };
 
 // thanks deepseek-r1 (he thought for 245+150+92 = 487 seconds in total)
 export const interpolateColor = (
     value: number,
-    inputRange: [number, number],
-    colorRange: number[],
+    inputRange: readonly [number, number],
+    colorRange: NonEmptyArray<number>,
 ) => {
     const [inputMin, inputMax] = inputRange;
     const colorCount = colorRange.length;
@@ -224,8 +92,7 @@ export const interpolateColor = (
 
     // Handle single-value input range
     if (inputMin === inputMax) {
-        // validated above
-        return colorRange[0]!;
+        return colorRange[0];
     }
 
     // Calculate global interpolation factor (0-1)
@@ -243,7 +110,9 @@ export const interpolateColor = (
     const tLocal = tGlobal * segmentCount - segmentIndex;
 
     // Get colors for this segment
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const colorStart = colorRange[segmentIndex]!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const colorEnd = colorRange[segmentIndex + 1]!;
 
     // Extract RGB components
@@ -264,8 +133,10 @@ export const interpolateColor = (
     return (r << 16) | (g << 8) | b;
 };
 
-export const MONTHS_GRADIENT = [0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a];
-export const DAYS_GRADIENT = [0xed8581, 0x9df697];
+export const MONTHS_GRADIENT = [
+    0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a,
+] as const;
+export const DAYS_GRADIENT = [0xed8581, 0x9df697] as const;
 
 export const MONTHS = [
     'January',
@@ -291,7 +162,7 @@ export const hueGlow = keyframes`
     }
 `;
 
-export const HEADER_TITLES: Record<TimelineSectionType, string> = {
+export const HEADER_TITLES: Record<TimelineSection, string> = {
     season: 'Anime Seasons',
     episode: 'Episodes',
     saga: 'Story Arcs',
