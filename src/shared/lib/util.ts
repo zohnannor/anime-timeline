@@ -5,15 +5,21 @@ export type Enumerate<
     Acc extends readonly number[] = readonly [],
 > = Acc['length'] extends N ? Acc : Enumerate<N, readonly [...Acc, number]>;
 
-export type Map<
+type Map<Arr extends readonly unknown[], Ty> =
+    Arr extends readonly [infer _Head, ...infer Tail] ?
+        readonly [Ty, ...Map<Tail, Ty>]
+    : Arr extends readonly [] ? readonly []
+    : readonly Ty[];
+
+export type TupleMap<
     Arr extends readonly unknown[],
     Ty,
     Acc extends readonly unknown[] = readonly [],
 > =
     Acc['length'] extends Arr['length'] ? Acc
-    :   Map<Arr, Ty, readonly [...Acc, Ty]>;
+    :   TupleMap<Arr, Ty, readonly [...Acc, Ty]>;
 
-export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
+export type Tuple<Ty, N extends number> = TupleMap<Enumerate<N>, Ty>;
 
 export type ExactUnion<
     T,
@@ -27,13 +33,32 @@ export type Add<A extends number, B extends number> = [
     ...Tuple<number, B>,
 ]['length'];
 
+export type NonEmptyArray<T> = readonly [T, ...T[]];
+
+export type Mutable<T> = {
+    -readonly [K in keyof T]: T[K];
+};
+
+const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
+    arr.length > 0;
+
+const throwError = (message: string): never => {
+    throw new Error(message);
+};
+
+export const asNonEmpty = <T>(
+    arr: readonly T[],
+    name: string,
+): NonEmptyArray<T> =>
+    notEmpty(arr) ? arr : throwError(`Expected non-empty array ${name}`);
+
 export const range = (start: number, end: number) =>
     Array.from({ length: end - start }, (_, idx) => idx + start);
 
 export const map = <T extends readonly unknown[], U>(
     arr: T,
-    fn: (_item: T[number], _itx: number) => U,
-) => arr.map(fn) as T[number] extends U ? T : Map<T, U>;
+    fn: (_item: T[number], _idx: number) => U,
+) => arr.map(fn) as unknown as Map<T, U>;
 
 export const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -60,3 +85,19 @@ export const getDocumentPosition = (element: HTMLElement) => {
 
     return { x, y, width: element.offsetWidth };
 };
+
+export const typedEntries = <T extends object>(obj: T) =>
+    Object.entries(obj) as [keyof T, NonNullable<T[keyof T]>][];
+
+export const typedFromEntries = <K extends PropertyKey, T>(
+    obj: Iterable<readonly [K, T]>,
+) => Object.fromEntries(obj) as Record<K, T>;
+
+export const typedValues = <T extends object>(obj: T) =>
+    Object.values(obj) as NonNullable<T[keyof T]>[];
+
+export const typedKeys = <T extends object>(obj: T) =>
+    Object.keys(obj) as (keyof T)[];
+
+export const typedKeyTuple = <T extends object>(obj: T) =>
+    Object.keys(obj) as [keyof T, ...(keyof T)[]];

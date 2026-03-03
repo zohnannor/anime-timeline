@@ -1,16 +1,8 @@
-/* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
+// a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
-const SEASON_HEIGHT = 1600;
+/* eslint-disable max-lines */ const SEASON_HEIGHT = 1600;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1576;
 const CHAPTER_HEIGHT = 100;
@@ -21,22 +13,9 @@ type VolumesTotal = 13;
 type ArcsTotal = 2;
 type SeasonsTotal = 1;
 
-const volumeTitleChapters = [0, 2, 6, 1, 0, 4, 6, 1, 0, 3, 0, 9];
-const volumeTitle = (timeline: TimelineData, idx: number) =>
-    // volumes/chapters are not empty, `volumeTitleChapters` is volume indices
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    timeline.volumes[idx]!.chapters[volumeTitleChapters[idx]!]!.title(
-        timeline,
-        idx,
-    );
-const volumeCover = (timeline: TimelineData, idx: number) =>
-    // volumes are not empty
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    `Volume_${idx + 1}.-_${timeline.volumes[idx]!.title(
-        timeline,
-        idx,
-    ).replaceAll(' ', '_')}`;
-const chapterLinkExceptions = [
+const volumeCover = (n: number, title: string) =>
+    `Volume_${n}.-_${title.replaceAll(' ', '_')}`;
+const CHAPTER_LINK_EXCEPTIONS = [
     'Matsuda',
     'Give-and-Take',
     'Confluence',
@@ -50,14 +29,14 @@ const chapterLinkExceptions = [
 ];
 const chapterLink = (title: string, n: number): string =>
     n <= 21 ? `Chapter_${n}`
-    : chapterLinkExceptions.includes(title) ? `${title} (chapter)`
+    : CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (chapter)`
     : (
         title === 'Target' // first one is in 0..21
     ) ?
         'Target (chapter 63)'
     : n === 62 ? 'The Decision'
     : title;
-const episodeCover = (_: TimelineData, idx: number) => pad(idx + 1);
+const episodeCover = (idx: number) => pad(idx);
 const episodeLinkExceptions = ['Love', 'Decision', 'New World', 'Matsuda'];
 
 export const DEATHNOTE_TIMELINE: Timeline = {
@@ -65,7 +44,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             numberProcessor: n => (n - 1).toString(),
@@ -74,7 +52,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
@@ -89,7 +66,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: SAGA_HEIGHT,
-            width: getSagaWidth,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Part I',
@@ -97,7 +73,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: title => title,
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -111,7 +86,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -123,14 +97,13 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
             wikiLink: title =>
-                chapterLinkExceptions.includes(title) ? `${title} (volume)`
+                CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (volume)`
                 : title === 'Target' ? 'Target (volume)'
                 : title === 'Boredom' ? 'Boredom (volume)'
                 : title === 'Finis' ? 'Finis (volume)'
@@ -141,7 +114,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         title: 'Death Note',
         volumes: [
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -189,7 +162,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -249,7 +222,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 7,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -309,7 +282,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -369,7 +342,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -429,7 +402,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 5,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -489,7 +462,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 7,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -549,7 +522,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -609,7 +582,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -729,7 +702,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -795,7 +768,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 10,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -888,8 +861,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         sagas: [
             {
                 title: 'unused',
-                cover: null,
-                chapters: { from: 1, to: 108 },
                 arcs: [
                     {
                         title: 'Part I',
@@ -979,7 +950,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                         chapters: { from: 23, to: 25 },
                     },
                     {
-                        title: () => 'Love',
+                        title: 27,
                         cover: () => 'Gealus_death',
                         offset: { x: 200, y: 0 },
                         chapters: { from: 26, to: 27 },
@@ -1021,7 +992,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                         chapters: { from: 38, to: 40 },
                     },
                     {
-                        title: () => 'Matsuda',
+                        title: 41,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 41, to: 43 },
@@ -1143,7 +1114,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

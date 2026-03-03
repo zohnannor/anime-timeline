@@ -31,7 +31,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         }
         return firstVisit;
     });
-    const [unboundedChapterWidth, setUnboundedChapterWidth] = useState(false);
+    const [unboundChapterWidth, setUnboundChapterWidth] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [captureTimelineModalOpen, setCaptureTimelineModalOpen] =
         useState(false);
@@ -98,8 +98,8 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             setShowCrosslines,
             infoBoxOpen,
             setInfoBoxOpen: createModalHandler('infoBoxOpen', setInfoBoxOpen),
-            unboundedChapterWidth,
-            setUnboundedChapterWidth,
+            unboundChapterWidth,
+            setUnboundChapterWidth,
             calendarOpen,
             setCalendarOpen: createModalHandler(
                 'calendarOpen',
@@ -124,7 +124,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         showCrosslines,
         infoBoxOpen,
         setInfoBoxOpen,
-        unboundedChapterWidth,
+        unboundChapterWidth,
         calendarOpen,
         setCalendarOpen,
         showTitles,

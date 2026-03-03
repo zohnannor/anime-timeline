@@ -1,14 +1,14 @@
 import CSS from 'csstype';
 
-import { WidthHelper } from '@shared/lib/helpers';
-import { ExactUnion } from '@shared/lib/util';
-import { TITLES } from '@timelines/registry';
+import { ExactUnion, NonEmptyArray } from '@shared/lib/util';
+import { TIMELINE } from '@timelines/registry';
 
-export type Offset = { x: number; y: number };
+type Offset = { x: number; y: number };
 
-type Range = { from: number; to?: number };
+export type Range = { from: number; to?: number };
 
-export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
+export type Callback<T> = (_n: number) => T;
+export type EntityCallback<T> = (_n: number, _title: string) => T;
 
 export type Chapter = {
     title: Callback<string>;
@@ -18,26 +18,23 @@ export type Chapter = {
 };
 
 export type Volume = {
-    title: Callback<string>;
-    cover: Callback<string> | null;
-    chapters: readonly Chapter[];
+    title: Callback<string> | number;
+    cover: EntityCallback<string> | null;
+    chapters: NonEmptyArray<Chapter>;
 };
-
-export type Saga = {
-    title: string;
-} & ({ cover: string; offset: Offset } | { cover: null }) & {
-        chapters: Range;
-        arcs: readonly Arc[];
-    };
 
 export type Arc = {
     title: string;
-} & ({ cover: string; offset: Offset } | { cover: null }) & {
-        chapters: Range;
-    };
+    chapters: Range;
+} & ExactUnion<{ cover: string; offset: Offset } | { cover: null }>;
+
+export type Saga = {
+    title: string;
+    arcs: NonEmptyArray<Arc>;
+};
 
 export type Episode = {
-    title: Callback<string>;
+    title: Callback<string> | number;
     cover: Callback<string>;
     offset: Offset;
     chapters: Range;
@@ -57,7 +54,7 @@ export type Season = ExactUnion<
 export type SmallImages = {
     'scroller-or-favicon': string;
     'read-info': string;
-    'toggle-unbounded-chapter-width': string;
+    'toggle-unbound-chapter-width': string;
     'toggle-cross-lines': string;
     'open-chapter-calendar': string;
     'toggle-always-show-titles': string;
@@ -71,22 +68,20 @@ export type SocialLink = {
 
 export type TimelineData = {
     title: string;
-    volumes: readonly Volume[];
-    sagas: readonly Saga[];
-    seasons: readonly Season[];
+    volumes: NonEmptyArray<Volume>;
+    sagas: NonEmptyArray<Saga>;
+    seasons?: NonEmptyArray<Season>;
     splitChapters: Record<number, number>;
     wikiBase: string;
     smallImages: SmallImages;
     socialLinks: SocialLink[];
 };
 
-export type Timeline = { layout: TimelineSectionLayout } & {
-    data: TimelineData;
-};
+export type Timeline = { layout: TimelineSectionLayout; data: TimelineData };
 
-export type AnimeTitle = (typeof TITLES)[number];
+export type AnimeTitle = keyof typeof TIMELINE;
 
-export type TimelineSectionType =
+export type TimelineSection =
     | 'season'
     | 'episode'
     | 'saga'
@@ -94,16 +89,12 @@ export type TimelineSectionType =
     | 'chapter'
     | 'volume';
 
-export type TimelineEntity = {
-    season: Season;
-    episode: Episode;
-    saga: Saga;
-    arc: Arc;
-    chapter: Chapter;
-    volume: Volume;
+export type SubtimelinesMap = {
+    season: 'episode';
+    saga: 'arc';
 };
 
-export type TimelineSectionItem<T extends TimelineSectionType> = {
+export type TimelineSectionItem<T extends TimelineSection> = {
     type: T;
     fit?: CSS.Property.ObjectFit;
     defaultCoverPosition?: CSS.Property.ObjectPosition;
@@ -115,11 +106,12 @@ export type TimelineSectionItem<T extends TimelineSectionType> = {
     titleProcessor?: (_title: string, _n: number) => string;
     numberProcessor?: (_number: number) => string;
     height: number;
-    width: WidthHelper;
     sectionLink: string;
     wikiLink: (_title: string, _n: number) => string;
     focusable?: boolean;
-    subTimeline?: TimelineSectionItem<TimelineSectionType>;
+    subTimeline?: T extends keyof SubtimelinesMap ?
+        TimelineSectionItem<SubtimelinesMap[T]>
+    :   never;
 };
 
 export type TimelineSectionLayout = {

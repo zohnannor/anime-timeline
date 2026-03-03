@@ -1,14 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1900;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -20,17 +12,16 @@ type VolumesTotal = 13;
 type SagasTotal = 1;
 type SeasonsTotal = 3;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
-const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx + 1}`;
-const episodeCover = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${pad(n)}`;
+const chapterTitle = (n: number) => `Chapter ${n}`;
+const episodeCover = (n: number) => `Episode_${n}`;
 
 export const JR_TIMELINE: Timeline = {
     layout: {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Jigokuraku (anime)',
@@ -38,7 +29,6 @@ export const JR_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 50,
@@ -52,7 +42,6 @@ export const JR_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: () => 'unused',
             subTimeline: {
@@ -61,7 +50,6 @@ export const JR_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} Arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title => `${title} Arc`,
             },
@@ -72,7 +60,6 @@ export const JR_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -84,7 +71,6 @@ export const JR_TIMELINE: Timeline = {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
@@ -939,9 +925,6 @@ export const JR_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Island',
@@ -1134,7 +1117,7 @@ export const JR_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

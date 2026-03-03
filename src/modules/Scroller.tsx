@@ -93,7 +93,7 @@ export const Scroller = () => {
 
     const updateScrollerHandle = useCallback(
         (ev: MouseEvent) => {
-            if (!scrollerRef.current) {
+            if (scrollerRef.current === null) {
                 return;
             }
             const { left, width } = scrollerRef.current.getBoundingClientRect();
@@ -122,6 +122,10 @@ export const Scroller = () => {
     const scrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;
 
+    const {
+        data: { smallImages },
+    } = TIMELINE[animeTitle];
+
     return (
         <ScrollerHoverArea
             className='scrollerHoverArea'
@@ -134,11 +138,7 @@ export const Scroller = () => {
                 onClick={handleScrollerClick}
             >
                 <ThumbnailImage
-                    src={
-                        TIMELINE[animeTitle].data.smallImages[
-                            'scroller-or-favicon'
-                        ]
-                    }
+                    src={smallImages['scroller-or-favicon']}
                     onMouseDown={() => setDragging(true)}
                 />
             </ScrollerWrapper>

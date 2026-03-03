@@ -1,5 +1,4 @@
 import CSS from 'csstype';
-import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { ChapterPreview } from '@modules/timeline/ChapterPreview';
@@ -11,11 +10,10 @@ import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
 import {
-    Callback,
-    TimelineEntity,
-    TimelineSectionItem,
-    TimelineSectionType,
-} from '@timelines/types';
+    ResolvedSectionItem,
+    ResolvedTimelineEntity,
+} from '@timelines/resolved';
+import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;
@@ -125,7 +123,9 @@ const SectionItemCover = withShadow(
 
         &::after {
             content: attr(data-title);
-            white-space: pre;
+            white-space: pre-wrap;
+            line-break: strict;
+            hyphens: auto;
             position: absolute;
             display: flex;
             align-items: center;
@@ -138,7 +138,6 @@ const SectionItemCover = withShadow(
             inset: 0;
             pointer-events: none;
             transition: opacity 0.2s ease-in-out;
-            text-wrap: auto;
             text-shadow:
                 -1px -1px 0 black,
                 1px -1px 0 black,
@@ -191,15 +190,13 @@ const SectionItem = withCrossLines(
     `,
 );
 
-type TimelineSectionItemProps = {
-    timelineSection: TimelineSectionItem<TimelineSectionType>;
-    entity: TimelineEntity[TimelineSectionType];
-    idx: number;
+type TimelineSectionItemProps<T extends TimelineSectionType> = {
+    timelineSection: ResolvedSectionItem<T>;
+    entity: ResolvedTimelineEntity[T];
+    num: number;
 };
 
-export const TimelineSectionItemComponent: React.FC<
-    TimelineSectionItemProps
-> = ({
+export const TimelineSectionItemComponent = <T extends TimelineSectionType>({
     timelineSection: {
         type,
         fit = 'cover',
@@ -207,41 +204,28 @@ export const TimelineSectionItemComponent: React.FC<
         backgroundColor = 'black',
         scale = 1.05,
         sidewaysText = false,
-        width,
-        wikiLink,
         height,
-        titleProcessor = title => title,
-        numberProcessor = num => num.toString(),
         blankfontSize,
         titleFontSize,
         focusable = false,
         subTimeline: nestedTimeline,
     },
     entity,
-    idx,
-}) => {
-    const [hoveredItem, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, showTitles, showCrosslines, animeTitle } =
+    num,
+}: TimelineSectionItemProps<T>) => {
+    const [hoveredItem, hoverHandlers] = useHover<string>();
+    const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
-    const [itemWidth, setItemWidth] = useState(0);
 
-    const timeline = TIMELINE[animeTitle].data;
+    const {
+        data: { wikiBase },
+    } = TIMELINE[animeTitle];
+    const { number: itemNumber, title, width, wikiLink } = entity;
 
-    useEffect(() => {
-        setItemWidth(width(timeline, idx, unboundedChapterWidth));
-    }, [unboundedChapterWidth, animeTitle, width, timeline, idx]);
-
-    const itemNumber = idx + 1;
-    const processedNumber = numberProcessor(itemNumber);
-
-    const maybeFunction = <T,>(fn: Callback<T> | T): T =>
-        typeof fn === 'function' ? (fn as Callback<T>)(timeline, idx) : fn;
-    const title = maybeFunction(entity.title) ?? processedNumber;
-    const cover = maybeFunction(entity.cover);
+    const itemWidth = width(unboundChapterWidth);
+    const cover = 'cover' in entity ? entity.cover : null;
     const offset = 'offset' in entity ? entity.offset : null;
-
-    const processedTitle = titleProcessor(title, itemNumber);
-    const itemTitle = type === 'chapter' ? processedNumber : processedTitle;
+    const itemTitle = type === 'chapter' ? itemNumber : title;
 
     const hovered = hoveredItem(itemNumber);
     const titleVisible = showTitles || hovered;
@@ -250,8 +234,8 @@ export const TimelineSectionItemComponent: React.FC<
     const linkImage =
         type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
-            `SEASON ${processedNumber}`
-        :   <Link href={`${timeline.wikiBase}${wikiLink(title, itemNumber)}`}>
+            `SEASON ${itemNumber}`
+        :   <Link href={`${wikiBase}${wikiLink}`}>
                 {cover ?
                     <ThumbnailImage
                         src={cover}
@@ -263,7 +247,7 @@ export const TimelineSectionItemComponent: React.FC<
                     // for sagas/arcs without cover, just show the title
                     itemTitle
                     // for everything else, show the number
-                :   processedNumber}
+                :   itemNumber}
             </Link>;
 
     const itemCover = (
@@ -287,7 +271,7 @@ export const TimelineSectionItemComponent: React.FC<
     const chapterPreview = (
         <ChapterPreview className='preview' $hasPicture={!!cover}>
             {cover && <ThumbnailImage src={cover} />}
-            {processedTitle}
+            {title}
         </ChapterPreview>
     );
 
@@ -309,7 +293,6 @@ export const TimelineSectionItemComponent: React.FC<
             className={type}
             $width={itemWidth}
             $height={height}
-            key={cover ?? itemNumber}
             $crossLinesVisible={hovered}
             {...hoverHandlers(itemNumber)}
             $focusable={focusable}
@@ -317,7 +300,7 @@ export const TimelineSectionItemComponent: React.FC<
         >
             {itemCoverTooltip}
             {nestedTimeline && (
-                <TimelineSection specificIndex={idx} {...nestedTimeline} />
+                <TimelineSection parentNumber={num} {...nestedTimeline} />
             )}
         </SectionItem>
     );

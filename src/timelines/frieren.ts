@@ -1,14 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1000;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.25;
@@ -20,9 +12,9 @@ type SeasonsTotal = 5;
 type ArcsTotal = 10;
 type VolumesTotal = 15;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${idx + 1}`;
-const episodeCover = (_: TimelineData, idx: number) => `Episode_${idx + 1}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${n}`;
+const episodeCover = (n: number) => `Episode_${n}`;
 
 export const FRIEREN_TIMELINE: Timeline = {
     layout: {
@@ -31,17 +23,15 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            width: getSeasonWidth,
             sectionLink: "Frieren: Beyond Journey's End (Anime)",
             wikiLink: title => title,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
                 scale: 1.2,
-                titleProcessor: (title, idx) => `${title}\n(Episode ${idx})`,
+                titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 35,
-                width: getEpisodeWidth,
                 sectionLink: "Frieren:_Beyond_Journey's_End_(Anime)#Episodes",
                 wikiLink: (_, n) => `Episode_${n}`,
             },
@@ -51,7 +41,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: () => 'unused',
             subTimeline: {
@@ -61,7 +50,6 @@ export const FRIEREN_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title => `${title}_Arc`,
             },
@@ -76,7 +64,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
@@ -86,7 +73,6 @@ export const FRIEREN_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
@@ -1073,9 +1059,6 @@ export const FRIEREN_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: "Beyond Journey's End",
@@ -1143,7 +1126,7 @@ export const FRIEREN_TIMELINE: Timeline = {
         seasons: [
             {
                 title: "Frieren: Beyond Journey's End Season 1",
-                cover: (_, idx) => `Season_${idx + 1}_key_visual_3`,
+                cover: n => `Season_${n}_key_visual_3`,
                 offset: { x: 0, y: 4650 },
                 chapters: { from: 1, to: 60 },
                 episodes: [
@@ -1320,7 +1303,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             },
             {
                 title: "Frieren: Beyond Journey's End Season 2",
-                cover: (_, idx) => `Season_${idx + 1}_key_visual_3`,
+                cover: n => `Season_${n}_key_visual_3`,
                 offset: { x: 0, y: 500 },
                 chapters: { from: 61, to: 80 },
                 episodes: [
@@ -1393,7 +1376,7 @@ export const FRIEREN_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',
