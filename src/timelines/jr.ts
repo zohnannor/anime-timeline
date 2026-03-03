@@ -1,8 +1,8 @@
-// a lot of data for a title
+/* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
-/* eslint-disable max-lines */ const SEASON_HEIGHT = 1900;
+const SEASON_HEIGHT = 1900;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1571;
 const CHAPTER_HEIGHT = 100;

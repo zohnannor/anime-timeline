@@ -3,7 +3,7 @@ import { keyframes } from 'styled-components';
 
 import { asNonEmpty, Mutable, NonEmptyArray } from '@shared/lib/util';
 import { ResolvedChapter } from '@timelines/resolved';
-import { TimelineSectionType } from '@timelines/types';
+import { TimelineSection } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
 
@@ -21,7 +21,7 @@ export const tokyoDate = (date: string) =>
 
 export type Chunk<T> = NonEmptyArray<T>;
 
-const sentinel = Symbol('sentinel');
+const INIT_SENTINEL = Symbol('init-sentinel');
 
 const chunks = <T>(
     array: readonly T[],
@@ -30,7 +30,7 @@ const chunks = <T>(
     asNonEmpty(
         array.reduce<{
             list: Mutable<Chunk<T>>[];
-            prev: number | typeof sentinel;
+            prev: number | typeof INIT_SENTINEL;
         }>(
             (acc, el) => {
                 const key = getKey(el);
@@ -45,7 +45,7 @@ const chunks = <T>(
 
                 return acc;
             },
-            { list: [], prev: sentinel },
+            { list: [], prev: INIT_SENTINEL },
         ).list,
         'chunk',
     );
@@ -162,7 +162,7 @@ export const hueGlow = keyframes`
     }
 `;
 
-export const HEADER_TITLES: Record<TimelineSectionType, string> = {
+export const HEADER_TITLES: Record<TimelineSection, string> = {
     season: 'Anime Seasons',
     episode: 'Episodes',
     saga: 'Story Arcs',

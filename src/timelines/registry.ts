@@ -1,3 +1,4 @@
+import { typedKeyTuple } from '@shared/lib/util';
 import { AOT_TIMELINE } from '@timelines/aot';
 import { BERSERK_TIMELINE } from '@timelines/berserk';
 import { CSM_TIMELINE } from '@timelines/csm';
@@ -8,18 +9,6 @@ import { FRIEREN_TIMELINE } from '@timelines/frieren';
 import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
 import resolveTimeline from '@timelines/resolved';
-
-export const TITLES = [
-    'csm',
-    'berserk',
-    'fp',
-    'frieren',
-    'eva',
-    'aot',
-    'opm',
-    'deathnote',
-    'jr',
-] as const;
 
 export const TIMELINE = resolveTimeline({
     csm: CSM_TIMELINE,
@@ -32,3 +21,5 @@ export const TIMELINE = resolveTimeline({
     deathnote: DEATHNOTE_TIMELINE,
     jr: JR_TIMELINE,
 });
+
+export const TITLES = typedKeyTuple(TIMELINE);

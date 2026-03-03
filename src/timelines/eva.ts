@@ -16,6 +16,7 @@ const volumeCover = (n: number) =>
     n === 3 ? `Volume${n}Manga` : `Sadamoto_${n === 13 ? 'v' : 'V'}olume_${n}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
+const CHAPTER_STOPS = [6, 12, 19, 26, 33, 40, 48, 56, 63, 70, 76, 83, 90];
 
 export const EVA_TIMELINE: Timeline = {
     layout: {
@@ -42,24 +43,8 @@ export const EVA_TIMELINE: Timeline = {
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
             wikiLink: (title, n) =>
                 `Volume_${
-                    n <= 6 ? '1'
-                    : n <= 12 ? '2'
-                    : n <= 19 ? '3'
-                    : n <= 26 ? '4'
-                    : n <= 33 ? '5'
-                    : n <= 40 ? '6'
-                    : n <= 48 ? '7'
-                    : n <= 56 ? '8'
-                    : n <= 63 ? '9'
-                    : n <= 70 ? '10'
-                    : n <= 76 ? '11'
-                    : n <= 83 ? '12'
-                    : n <= 90 ? '13'
-                    : '14'
-                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(
-                    ' ',
-                    '_',
-                )}`,
+                    CHAPTER_STOPS.filter(stop => n > stop).length + 1
+                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(' ', '_')}`,
         },
         saga: {
             type: 'saga',

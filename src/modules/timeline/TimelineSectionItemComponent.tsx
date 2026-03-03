@@ -13,7 +13,7 @@ import {
     ResolvedSectionItem,
     ResolvedTimelineEntity,
 } from '@timelines/resolved';
-import { TimelineSectionType } from '@timelines/types';
+import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
 type SectionItemCoverProps = {
     $titleVisible?: boolean;

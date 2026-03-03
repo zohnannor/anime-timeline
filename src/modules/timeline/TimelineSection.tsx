@@ -4,7 +4,7 @@ import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionI
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { TIMELINE } from '@timelines/registry';
 import { ResolvedSectionItem } from '@timelines/resolved';
-import { TimelineSectionType } from '@timelines/types';
+import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
 type TimelineSections = (
     | {

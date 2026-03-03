@@ -1,8 +1,8 @@
-// a lot of data for a title
+/* eslint-disable max-lines */ // a lot of data for a title
 import { Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
-/* eslint-disable max-lines */ const SEASON_HEIGHT = 1200;
+const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
@@ -17,9 +17,10 @@ const chapterNumber = (n: number): string =>
 const volumeTitle = (n: number) => `Volume ${n}`;
 const volumeCover = (n: number) =>
     n <= 40 ? `V${n}-Cover-Manga` : `Manga_V${n}_Cover`;
-const episodeCover1 = (n: number) => `Episode_${n}`;
-const episodeCover2 = (n: number) => `Episode${n}`;
-const episodeCover3 = (n: number) => `Episode_${n - 25}_(2016)`;
+const episodeCover = (n: number) =>
+    n <= 2 ? `Episode_${n}`
+    : n <= 23 ? `Episode${n}`
+    : `Episode_${n - 25}_(2016)`;
 
 export const BERSERK_TIMELINE: Timeline = {
     layout: {
@@ -2807,151 +2808,151 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'Black Swordsman',
-                        cover: episodeCover1,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 1, to: 5 },
                     },
                     {
                         title: () => 'Band of the Falcon',
-                        cover: episodeCover1,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 11, to: 13 },
                     },
                     {
                         title: () => 'First Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 13, to: 15 },
                     },
                     {
                         title: () => 'The Hand of God',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 330 },
                         chapters: { from: 6, to: 11 },
                     },
                     {
                         title: () => 'Sword Wind',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 1, to: 16 + 2 },
                     },
                     {
                         title: () => 'Zodd the Immortal',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 2, to: 16 + 5 },
                     },
                     {
                         title: () => 'Sword Master',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 6, to: 16 + 7 },
                     },
                     {
                         title: () => 'Conspiracy',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 7, to: 16 + 7 },
                     },
                     {
                         title: () => 'Assassination',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 8, to: 16 + 10 },
                     },
                     {
                         title: () => 'Precious Thing',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 10, to: 16 + 12 },
                     },
                     {
                         title: () => 'The Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 13, to: 16 + 15 },
                     },
                     {
                         title: () => 'Together',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 15, to: 16 + 18 },
                     },
                     {
                         title: () => 'Ready to Die',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 18, to: 16 + 20 },
                     },
                     {
                         title: () => 'Bonfire of Dreams',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 20, to: 16 + 22 },
                     },
                     {
                         title: () => 'The Decisive Battle',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 22, to: 16 + 24 },
                     },
                     {
                         title: () => 'The Conqueror',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 24, to: 16 + 29 },
                     },
                     {
                         title: () => 'Moment of Glory',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 29, to: 16 + 31 },
                     },
                     {
                         title: () => 'Tombstone of Flames',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 31, to: 16 + 33 },
                     },
                     {
                         title: () => 'Separation',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 33, to: 16 + 39 },
                     },
                     {
                         title: () => 'Sparks',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 40, to: 16 + 42 },
                     },
                     {
                         title: () => 'Confession',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 43, to: 16 + 48 },
                     },
                     {
                         title: () => 'Infiltration',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 280 },
                         chapters: { from: 16 + 49, to: 16 + 62 },
                     },
                     {
                         title: () => 'Eve of the Feast',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 180 },
                         chapters: { from: 16 + 63, to: 16 + 72 },
                     },
                     {
                         title: () => 'Eclipse',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 60 },
                         chapters: { from: 16 + 73, to: 16 + 78 },
                     },
                     {
                         title: () => 'Time of Eternity',
-                        cover: episodeCover2,
+                        cover: episodeCover,
                         offset: { x: 0, y: 300 },
                         chapters: { from: 16 + 79, to: 16 + 94 },
                     },
@@ -2965,73 +2966,73 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'The Dragon Slayer',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 95, to: 16 + 107 },
                     },
                     {
                         title: () => 'The Holy Iron Chain Knights',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 108, to: 16 + 122 },
                     },
                     {
                         title: () => 'Night of Miracles',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 123, to: 16 + 127 },
                     },
                     {
                         title: () => 'Revelations',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 128, to: 16 + 132 },
                     },
                     {
                         title: () => 'Tower of Conviction',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 133, to: 16 + 136 },
                     },
                     {
                         title: () => 'Night Banquet of Burning at the Stake',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 137, to: 16 + 143 },
                     },
                     {
                         title: () => 'The Black Witch',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 144, to: 16 + 148 },
                     },
                     {
                         title: () => 'Reunion in the Den of Evil',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 148, to: 16 + 151 },
                     },
                     {
                         title: () => 'Blood Flow of the Dead',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 152, to: 16 + 157 },
                     },
                     {
                         title: () => "Hell's Angels",
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 158, to: 16 + 164 },
                     },
                     {
                         title: () => 'Shadows of Idea',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 165, to: 16 + 171 },
                     },
                     {
                         title: () => 'Those Who Cling, Those Who Struggle',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 171, to: 16 + 176 },
                     },
@@ -3045,73 +3046,73 @@ export const BERSERK_TIMELINE: Timeline = {
                 episodes: [
                     {
                         title: () => 'The Rent World',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 177, to: 16 + 183 },
                     },
                     {
                         title: () => 'Winter Journey',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 184, to: 16 + 190 },
                     },
                     {
                         title: () => 'Banner of the Flying Sword',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 191, to: 16 + 195 },
                     },
                     {
                         title: () => 'Forest of Demonic Beasts',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 196, to: 16 + 200 },
                     },
                     {
                         title: () => 'The Astral World',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 201, to: 16 + 204 },
                     },
                     {
                         title: () => 'Struggle Against the Demon Horde',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 204, to: 16 + 210 },
                     },
                     {
                         title: () => 'The Arcana of Invocation',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 210, to: 16 + 215 },
                     },
                     {
                         title: () => 'The Corruption of Qliphoth',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 215, to: 16 + 221 },
                     },
                     {
                         title: () => 'The Berserker Armor',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 222, to: 16 + 226 },
                     },
                     {
                         title: () => 'A Journey Begins in Flames',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 226, to: 16 + 236 },
                     },
                     {
                         title: () => 'Proclaimed Omens',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 237, to: 16 + 243 },
                     },
                     {
                         title: () => 'City of Humans',
-                        cover: episodeCover3,
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 16 + 243, to: 16 + 249 },
                     },

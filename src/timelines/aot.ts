@@ -1,5 +1,4 @@
-// a lot of data for a title
-/* eslint-disable max-lines */
+/* eslint-disable max-lines */ // a lot of data for a title
 import { Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 

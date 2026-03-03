@@ -15,7 +15,7 @@ type SeasonsTotal = 1;
 
 const volumeCover = (n: number, title: string) =>
     `Volume_${n}.-_${title.replaceAll(' ', '_')}`;
-const chapterLinkExceptions = [
+const CHAPTER_LINK_EXCEPTIONS = [
     'Matsuda',
     'Give-and-Take',
     'Confluence',
@@ -29,7 +29,7 @@ const chapterLinkExceptions = [
 ];
 const chapterLink = (title: string, n: number): string =>
     n <= 21 ? `Chapter_${n}`
-    : chapterLinkExceptions.includes(title) ? `${title} (chapter)`
+    : CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (chapter)`
     : (
         title === 'Target' // first one is in 0..21
     ) ?
@@ -103,7 +103,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleFontSize: 100,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
             wikiLink: title =>
-                chapterLinkExceptions.includes(title) ? `${title} (volume)`
+                CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (volume)`
                 : title === 'Target' ? 'Target (volume)'
                 : title === 'Boredom' ? 'Boredom (volume)'
                 : title === 'Finis' ? 'Finis (volume)'

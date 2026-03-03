@@ -1,9 +1,9 @@
 import CSS from 'csstype';
 
 import { ExactUnion, NonEmptyArray } from '@shared/lib/util';
-import { TITLES } from '@timelines/registry';
+import { TIMELINE } from '@timelines/registry';
 
-export type Offset = { x: number; y: number };
+type Offset = { x: number; y: number };
 
 export type Range = { from: number; to?: number };
 
@@ -79,25 +79,22 @@ export type TimelineData = {
 
 export type Timeline = { layout: TimelineSectionLayout; data: TimelineData };
 
-export type AnimeTitle = (typeof TITLES)[number];
+export type AnimeTitle = keyof typeof TIMELINE;
 
-export type TimelineEntity = {
-    season: Season;
-    episode: Episode;
-    saga: Saga;
-    arc: Arc;
-    chapter: Chapter;
-    volume: Volume;
-};
-
-export type TimelineSectionType = keyof TimelineEntity;
+export type TimelineSection =
+    | 'season'
+    | 'episode'
+    | 'saga'
+    | 'arc'
+    | 'chapter'
+    | 'volume';
 
 export type SubtimelinesMap = {
     season: 'episode';
     saga: 'arc';
 };
 
-export type TimelineSectionItem<T extends TimelineSectionType> = {
+export type TimelineSectionItem<T extends TimelineSection> = {
     type: T;
     fit?: CSS.Property.ObjectFit;
     defaultCoverPosition?: CSS.Property.ObjectPosition;
