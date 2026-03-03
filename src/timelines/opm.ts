@@ -60,6 +60,7 @@ export const OPM_TIMELINE: Timeline = {
                 titleFontSize: 42,
                 sectionLink: 'Episodes',
                 wikiLink: (_, n) => `Episode_${n}`,
+                focusable: true,
             },
         },
         saga: {

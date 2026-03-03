@@ -34,6 +34,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                 titleFontSize: 35,
                 sectionLink: "Frieren:_Beyond_Journey's_End_(Anime)#Episodes",
                 wikiLink: (_, n) => `Episode_${n}`,
+                focusable: true,
             },
         },
         saga: {

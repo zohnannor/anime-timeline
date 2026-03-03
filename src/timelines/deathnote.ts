@@ -61,6 +61,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                     episodeLinkExceptions.includes(title) ?
                         `${title} (episode)`
                     :   title,
+                focusable: true,
             },
         },
         saga: {

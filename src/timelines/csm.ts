@@ -35,6 +35,7 @@ export const CSM_TIMELINE: Timeline = {
                 titleFontSize: 42,
                 sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
                 wikiLink: (_, n) => `Episode_${n}`,
+                focusable: true,
             },
         },
         saga: {

@@ -42,6 +42,7 @@ export const AOT_TIMELINE: Timeline = {
                 titleFontSize: 42,
                 sectionLink: 'List of Attack on Titan episodes',
                 wikiLink: title => `${title.replaceAll(' ', '_')}_(Episode)`,
+                focusable: true,
             },
         },
         saga: {

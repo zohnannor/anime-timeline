@@ -19,7 +19,7 @@ const volumeCover = (n: number) =>
     n <= 40 ? `V${n}-Cover-Manga` : `Manga_V${n}_Cover`;
 const episodeCover = (n: number) =>
     n <= 2 ? `Episode_${n}`
-    : n <= 23 ? `Episode${n}`
+    : n <= 25 ? `Episode${n}`
     : `Episode_${n - 25}_(2016)`;
 
 export const BERSERK_TIMELINE: Timeline = {
@@ -48,6 +48,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     n <= 25 ?
                         `Episode_${n}_(1997_Anime)`
                     :   `Episode_${n - 25}_(2016_Anime)`,
+                focusable: true,
             },
         },
         saga: {

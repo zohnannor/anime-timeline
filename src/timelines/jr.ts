@@ -35,6 +35,7 @@ export const JR_TIMELINE: Timeline = {
                 titleFontSize: 50,
                 sectionLink: 'Jigokuraku_(anime)#Episodes',
                 wikiLink: (_, n) => `Episode_${n}`,
+                focusable: true,
             },
         },
         saga: {
@@ -1113,6 +1114,7 @@ export const JR_TIMELINE: Timeline = {
                         title: () => 'Chrysanthemum and Peach',
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
+                        date: 'March 1, 2026',
                         chapters: { from: 75, to: 77 },
                     },
                 ],
