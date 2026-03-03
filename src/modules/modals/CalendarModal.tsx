@@ -246,17 +246,18 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = new Date();
-    const [first] = TIMELINE[animeTitle].data.chapters;
+    const { chapters } = TIMELINE[animeTitle].data;
+    const [first] = chapters;
     const startDate = first.date;
 
     const chapterDateMap = useMemo(() => {
         const map = new Map<string, string>();
-        TIMELINE[animeTitle].data.chapters.forEach(({ date, number }) => {
+        chapters.forEach(({ date, number }) => {
             const dateStr = getISODate(date);
             map.set(dateStr, number);
         });
         return map;
-    }, [animeTitle]);
+    }, [chapters]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];
