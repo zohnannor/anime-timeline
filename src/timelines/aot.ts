@@ -1,6 +1,7 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
+/* eslint-disable max-lines */
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1511;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -12,12 +13,11 @@ type VolumesTotal = 35;
 type ArcsTotal = 9;
 type SeasonsTotal = 8;
 
-const volumeTitle = (_: TimelineData, n: number) =>
+const volumeTitle = (n: number) =>
     `Volume ${n}${n <= 34 ? '' : '\n(Side Stories)'}`;
-const volumeCover = (_: TimelineData, n: number) =>
+const volumeCover = (n: number) =>
     n === 1 ? `Volume_${n}_Cover` : `SnK_-_Manga_Volume_${n}`;
-const episodeCover = (_: TimelineData, n: number) =>
-    `Attack_on_Titan_-_Episode_${n}_Title_Card`;
+const episodeCover = (n: number) => `Attack_on_Titan_-_Episode_${n}_Title_Card`;
 
 export const AOT_TIMELINE: Timeline = {
     layout: {

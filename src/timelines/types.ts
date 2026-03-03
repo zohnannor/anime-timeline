@@ -7,7 +7,8 @@ export type Offset = { x: number; y: number };
 
 export type Range = { from: number; to?: number };
 
-export type Callback<T> = (_timeline: TimelineData, _idx: number) => T;
+export type Callback<T> = (_n: number) => T;
+export type EntityCallback<T> = (_n: number, _title: string) => T;
 
 export type Chapter = {
     title: Callback<string>;
@@ -17,8 +18,8 @@ export type Chapter = {
 };
 
 export type Volume = {
-    title: Callback<string>;
-    cover: Callback<string> | null;
+    title: Callback<string> | number;
+    cover: EntityCallback<string> | null;
     chapters: NonEmptyArray<Chapter>;
 };
 
@@ -33,7 +34,7 @@ export type Saga = {
 };
 
 export type Episode = {
-    title: Callback<string>;
+    title: Callback<string> | number;
     cover: Callback<string>;
     offset: Offset;
     chapters: Range;

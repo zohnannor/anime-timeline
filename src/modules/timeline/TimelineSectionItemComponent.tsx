@@ -190,15 +190,13 @@ const SectionItem = withCrossLines(
     `,
 );
 
-type TimelineSectionItemProps = {
-    timelineSection: ResolvedSectionItem<TimelineSectionType>;
-    entity: ResolvedTimelineEntity[TimelineSectionType];
+type TimelineSectionItemProps<T extends TimelineSectionType> = {
+    timelineSection: ResolvedSectionItem<T>;
+    entity: ResolvedTimelineEntity[T];
     num: number;
 };
 
-export const TimelineSectionItemComponent: React.FC<
-    TimelineSectionItemProps
-> = ({
+export const TimelineSectionItemComponent = <T extends TimelineSectionType>({
     timelineSection: {
         type,
         fit = 'cover',
@@ -214,7 +212,7 @@ export const TimelineSectionItemComponent: React.FC<
     },
     entity,
     num,
-}) => {
+}: TimelineSectionItemProps<T>) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
@@ -222,14 +220,11 @@ export const TimelineSectionItemComponent: React.FC<
     const {
         data: { wikiBase },
     } = TIMELINE[animeTitle];
+    const { number: itemNumber, title, width, wikiLink } = entity;
 
-    const itemWidth = entity.width(unboundChapterWidth);
-    const itemNumber = entity.number;
-
-    const { title } = entity;
+    const itemWidth = width(unboundChapterWidth);
     const cover = 'cover' in entity ? entity.cover : null;
     const offset = 'offset' in entity ? entity.offset : null;
-
     const itemTitle = type === 'chapter' ? itemNumber : title;
 
     const hovered = hoveredItem(itemNumber);
@@ -240,7 +235,7 @@ export const TimelineSectionItemComponent: React.FC<
         type === 'season' && typeof cover !== 'string' ?
             // don't add link to seasons without cover (speculation)
             `SEASON ${itemNumber}`
-        :   <Link href={`${wikiBase}${entity.wikiLink}`}>
+        :   <Link href={`${wikiBase}${wikiLink}`}>
                 {cover ?
                     <ThumbnailImage
                         src={cover}
@@ -298,7 +293,6 @@ export const TimelineSectionItemComponent: React.FC<
             className={type}
             $width={itemWidth}
             $height={height}
-            key={cover ?? itemNumber}
             $crossLinesVisible={hovered}
             {...hoverHandlers(itemNumber)}
             $focusable={focusable}

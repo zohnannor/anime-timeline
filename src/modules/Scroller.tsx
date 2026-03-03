@@ -93,7 +93,7 @@ export const Scroller = () => {
 
     const updateScrollerHandle = useCallback(
         (ev: MouseEvent) => {
-            if (!scrollerRef.current) {
+            if (scrollerRef.current === null) {
                 return;
             }
             const { left, width } = scrollerRef.current.getBoundingClientRect();
@@ -122,7 +122,9 @@ export const Scroller = () => {
     const scrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;
 
-    const { smallImages } = TIMELINE[animeTitle].data;
+    const {
+        data: { smallImages },
+    } = TIMELINE[animeTitle];
 
     return (
         <ScrollerHoverArea

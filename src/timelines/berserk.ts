@@ -1,8 +1,8 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
-const SEASON_HEIGHT = 1200;
+/* eslint-disable max-lines */ const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1421;
 const CHAPTER_HEIGHT = 100;
@@ -14,13 +14,12 @@ type VolumesTotal = 44;
 
 const chapterNumber = (n: number): string =>
     n <= 16 ? `0-${n}` : (n - 16).toString();
-const volumeTitle = (_: TimelineData, n: number) => `Volume ${n}`;
-const volumeCover = (_: TimelineData, n: number) =>
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) =>
     n <= 40 ? `V${n}-Cover-Manga` : `Manga_V${n}_Cover`;
-const episodeCover1 = (_: TimelineData, n: number) => `Episode_${n}`;
-const episodeCover2 = (_: TimelineData, n: number) => `Episode${n}`;
-const episodeCover3 = (_: TimelineData, n: number) =>
-    `Episode_${n - 25}_(2016)`;
+const episodeCover1 = (n: number) => `Episode_${n}`;
+const episodeCover2 = (n: number) => `Episode${n}`;
+const episodeCover3 = (n: number) => `Episode_${n - 25}_(2016)`;
 
 export const BERSERK_TIMELINE: Timeline = {
     layout: {

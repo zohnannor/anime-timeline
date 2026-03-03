@@ -2,7 +2,7 @@
 import { keyframes } from 'styled-components';
 
 import { asNonEmpty, Mutable, NonEmptyArray } from '@shared/lib/util';
-import { ResolvedTimeline } from '@timelines/resolved';
+import { ResolvedChapter } from '@timelines/resolved';
 import { TimelineSectionType } from '@timelines/types';
 
 export { default as fetchNextChapterDate } from './ProtobufReader';
@@ -50,15 +50,32 @@ const chunks = <T>(
         'chunk',
     );
 
-export const chapterDatesByMonth = (timeline: ResolvedTimeline) =>
+// TODO: move into `ResolvedTimeline`?
+export const chapterDatesByMonth = (chapters: NonEmptyArray<ResolvedChapter>) =>
     chunks(
-        timeline.data.chapters,
+        chapters,
         chapter =>
             chapter.date.getFullYear() + 1 + (chapter.date.getMonth() + 1) * 12,
     );
 
-export const chapterDatesByYear = (timeline: ResolvedTimeline) =>
-    chunks(timeline.data.chapters, chapter => chapter.date.getFullYear() + 1);
+// TODO: move into `ResolvedTimeline`?
+export const chapterDatesByYear = (chapters: NonEmptyArray<ResolvedChapter>) =>
+    chunks(chapters, chapter => chapter.date.getFullYear() + 1);
+
+export const scrollToId = (id: string) => {
+    const element = document.querySelector(`#${id}`);
+    if (element) {
+        console.debug(`Scrolling to \`#${id}\``);
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+        });
+        (element as HTMLElement).focus({ preventScroll: false });
+    } else {
+        console.warn(`No element found for \`#${id}\``);
+    }
+};
 
 // thanks deepseek-r1 (he thought for 245+150+92 = 487 seconds in total)
 export const interpolateColor = (

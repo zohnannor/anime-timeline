@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -13,16 +13,8 @@ type VolumesTotal = 24;
 type SagasTotal = 2;
 type SeasonsTotal = 4;
 
-const volumeTitle = (timeline: TimelineData, idx: number) =>
-    // volumes/chapters are not empty
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    timeline.volumes[idx - 1]!.chapters[0].title(timeline, idx);
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx)}`;
-const episodeTitle = (idx: number) => (timeline: TimelineData) =>
-    // chapters are not empty
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    timeline.volumes.flatMap(vol => vol.chapters)[idx]!.title(timeline, idx);
-const episodeCover = (_: TimelineData, idx: number) => idx.toString();
+const volumeCover = (n: number) => `Volume_${pad(n)}`;
+const episodeCover = (n: number) => n.toString();
 
 export const CSM_TIMELINE: Timeline = {
     layout: {
@@ -92,7 +84,7 @@ export const CSM_TIMELINE: Timeline = {
         title: 'Chainsaw Man',
         volumes: [
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -140,7 +132,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -200,7 +192,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -260,7 +252,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -320,7 +312,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -380,7 +372,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -440,7 +432,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -500,7 +492,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -560,7 +552,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -620,7 +612,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -681,7 +673,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -741,7 +733,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -783,7 +775,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -843,7 +835,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -909,7 +901,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -981,7 +973,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1047,7 +1039,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1113,7 +1105,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1185,7 +1177,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1257,7 +1249,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1329,7 +1321,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1407,7 +1399,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1485,7 +1477,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1563,7 +1555,7 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: null,
                 chapters: [
                     {
@@ -1721,73 +1713,73 @@ export const CSM_TIMELINE: Timeline = {
                 chapters: { from: 1, to: 38 },
                 episodes: [
                     {
-                        title: episodeTitle(0),
+                        title: 1,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 1, to: 1 },
                     },
                     {
-                        title: episodeTitle(2),
+                        title: 3,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 2, to: 5 },
                     },
                     {
-                        title: episodeTitle(6),
+                        title: 7,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 5, to: 8 },
                     },
                     {
-                        title: episodeTitle(8),
+                        title: 9,
                         cover: episodeCover,
                         offset: { x: 20, y: 0 },
                         chapters: { from: 9, to: 12 },
                     },
                     {
-                        title: episodeTitle(12),
+                        title: 13,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 12, to: 15 },
                     },
                     {
-                        title: episodeTitle(16),
+                        title: 17,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 15, to: 18 },
                     },
                     {
-                        title: episodeTitle(20),
+                        title: 21,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 18, to: 21 },
                     },
                     {
-                        title: episodeTitle(22),
+                        title: 23,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 22, to: 25 },
                     },
                     {
-                        title: episodeTitle(26),
+                        title: 27,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 25, to: 28 },
                     },
                     {
-                        title: episodeTitle(29),
+                        title: 30,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 29, to: 31 },
                     },
                     {
-                        title: episodeTitle(32),
+                        title: 33,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 31, to: 35 },
                     },
                     {
-                        title: episodeTitle(35),
+                        title: 36,
                         cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         chapters: { from: 35, to: 38 },

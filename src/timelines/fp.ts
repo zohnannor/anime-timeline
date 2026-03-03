@@ -1,5 +1,5 @@
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Timeline, Volume } from '@timelines/types';
 
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
@@ -8,9 +8,9 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 type ArcsTotal = 5;
 type VolumesTotal = 8;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx)}`;
-const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${pad(n)}`;
+const chapterTitle = (n: number) => `Chapter ${n}`;
 
 export const FP_TIMELINE: Timeline = {
     layout: {

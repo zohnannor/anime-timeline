@@ -47,7 +47,7 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
 
     useLayoutEffect(() => {
         const element = previewRef.current;
-        if (!element) {
+        if (element === null) {
             return;
         }
 

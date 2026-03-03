@@ -11,7 +11,15 @@ type Map<Arr extends readonly unknown[], Ty> =
     : Arr extends readonly [] ? readonly []
     : readonly Ty[];
 
-export type Tuple<Ty, N extends number> = Map<Enumerate<N>, Ty>;
+export type TupleMap<
+    Arr extends readonly unknown[],
+    Ty,
+    Acc extends readonly unknown[] = readonly [],
+> =
+    Acc['length'] extends Arr['length'] ? Acc
+    :   TupleMap<Arr, Ty, readonly [...Acc, Ty]>;
+
+export type Tuple<Ty, N extends number> = TupleMap<Enumerate<N>, Ty>;
 
 export type ExactUnion<
     T,
@@ -24,10 +32,6 @@ export type Add<A extends number, B extends number> = [
     ...Tuple<number, A>,
     ...Tuple<number, B>,
 ]['length'];
-
-export type StructOfArrays<T> = {
-    [K in keyof T]: readonly T[K][];
-};
 
 export type NonEmptyArray<T> = readonly [T, ...T[]];
 

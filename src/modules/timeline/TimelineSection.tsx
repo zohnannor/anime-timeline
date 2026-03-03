@@ -2,12 +2,8 @@ import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineContainer } from '@modules/timeline/TimelineContainer';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { StructOfArrays } from '@shared/lib/util';
 import { TIMELINE } from '@timelines/registry';
-import {
-    ResolvedSectionItem,
-    ResolvedTimelineEntity,
-} from '@timelines/resolved';
+import { ResolvedSectionItem } from '@timelines/resolved';
 import { TimelineSectionType } from '@timelines/types';
 
 type TimelineSections = (
@@ -32,22 +28,21 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         data: { episodes, seasons, sagas, arcs, chapters, volumes },
     } = TIMELINE[animeTitle];
 
-    const entities: StructOfArrays<ResolvedTimelineEntity> = {
-        episode: episodes.filter(ep => ep.season === parentNumber),
-        season: seasons ?? [],
-        saga: sagas,
-        arc: arcs.filter(arc => arc.saga === parentNumber),
-        chapter: chapters,
-        volume: volumes,
-    };
+    const entities = () =>
+        type === 'episode' ? episodes.filter(ep => ep.season === parentNumber)
+        : type === 'season' ? (seasons ?? [])
+        : type === 'saga' ? sagas
+        : type === 'arc' ? arcs.filter(arc => arc.saga === parentNumber)
+        : type === 'chapter' ? chapters
+        : volumes;
 
     return (
         <TimelineContainer>
-            {entities[type].map((entity, idx) => (
+            {entities().map((entity, idx) => (
                 <TimelineSectionItemComponent
                     timelineSection={timelineItem}
                     entity={entity}
-                    num={idx}
+                    num={idx + 1}
                     key={`${entity.title}-${idx + 1}`}
                 />
             ))}

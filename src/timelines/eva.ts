@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1500;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -12,7 +12,7 @@ type SeasonsTotal = 2;
 type ArcsTotal = 6;
 type VolumesTotal = 14;
 
-const volumeCover = (_: TimelineData, n: number) =>
+const volumeCover = (n: number) =>
     n === 3 ? `Volume${n}Manga` : `Sadamoto_${n === 13 ? 'v' : 'V'}olume_${n}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;

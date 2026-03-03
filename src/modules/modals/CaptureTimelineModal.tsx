@@ -38,12 +38,12 @@ export const CaptureTimelineModal: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const { maxHeight, maxWidth } = TIMELINE[animeTitle];
+    const { maxHeight: height, maxWidth } = TIMELINE[animeTitle];
     const width = maxWidth(unboundChapterWidth);
 
     const [_, captureTimeline, __] = useToPng({
         selector: '#root',
-        canvasHeight: maxHeight,
+        canvasHeight: height,
         canvasWidth: width,
         backgroundColor: '#000',
         filter: el =>
@@ -53,7 +53,7 @@ export const CaptureTimelineModal: React.FC = () => {
         onStart: () => {
             setLoading(false);
             setError(null);
-            console.debug(`Real dimensions: ${width}x${maxHeight}`);
+            console.debug(`Real dimensions: ${width}x${height}`);
         },
         onSuccess: dataUrl => {
             const link = document.createElement('a');

@@ -1,8 +1,8 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
-const SEASON_HEIGHT = 1900;
+/* eslint-disable max-lines */ const SEASON_HEIGHT = 1900;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1571;
 const CHAPTER_HEIGHT = 100;
@@ -12,10 +12,10 @@ type VolumesTotal = 13;
 type SagasTotal = 1;
 type SeasonsTotal = 3;
 
-const volumeTitle = (_: TimelineData, n: number) => `Volume ${n}`;
-const volumeCover = (_: TimelineData, n: number) => `Volume_${pad(n)}`;
-const chapterTitle = (_: TimelineData, n: number) => `Chapter ${n}`;
-const episodeCover = (_: TimelineData, n: number) => `Episode_${n}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${pad(n)}`;
+const chapterTitle = (n: number) => `Chapter ${n}`;
+const episodeCover = (n: number) => `Episode_${n}`;
 
 export const JR_TIMELINE: Timeline = {
     layout: {

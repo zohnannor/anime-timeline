@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { Add, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1200;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -16,13 +16,13 @@ type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
 type SagasTotal = 4;
 
-const volumeTitle = (_: TimelineData, n: number) => `Volume ${n}`;
-const volumeCover = (_: TimelineData, n: number) =>
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) =>
     n <= 20 ? `Volume_${n}`
     : n <= 27 ? `Volume_${n}_Cover`
     : n <= 28 ? `Vol.${n}`
     : `Volume_${n}_Front_Cover`;
-const episodeCover = (_: TimelineData, n: number) =>
+const episodeCover = (n: number) =>
     n <= 12 ? `Episode${n}_Pics`
     : n <= 24 ? `Season2Ep${n - 12}pics`
     : n <= 29 ? `OPMS3Ep${n - 24}`

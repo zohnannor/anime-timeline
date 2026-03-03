@@ -1,8 +1,8 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
 import { Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
-const SEASON_HEIGHT = 1000;
+/* eslint-disable max-lines */ const SEASON_HEIGHT = 1000;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.25;
 const VOLUME_HEIGHT = 1572;
 const CHAPTER_HEIGHT = 100;
@@ -12,9 +12,9 @@ type SeasonsTotal = 5;
 type ArcsTotal = 10;
 type VolumesTotal = 15;
 
-const volumeTitle = (_: TimelineData, n: number) => `Volume ${n}`;
-const volumeCover = (_: TimelineData, n: number) => `Volume_${n}`;
-const episodeCover = (_: TimelineData, n: number) => `Episode_${n}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${n}`;
+const episodeCover = (n: number) => `Episode_${n}`;
 
 export const FRIEREN_TIMELINE: Timeline = {
     layout: {
@@ -1126,7 +1126,7 @@ export const FRIEREN_TIMELINE: Timeline = {
         seasons: [
             {
                 title: "Frieren: Beyond Journey's End Season 1",
-                cover: (_, n) => `Season_${n}_key_visual_3`,
+                cover: n => `Season_${n}_key_visual_3`,
                 offset: { x: 0, y: 4650 },
                 chapters: { from: 1, to: 60 },
                 episodes: [
@@ -1303,7 +1303,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             },
             {
                 title: "Frieren: Beyond Journey's End Season 2",
-                cover: (_, n) => `Season_${n}_key_visual_3`,
+                cover: n => `Season_${n}_key_visual_3`,
                 offset: { x: 0, y: 500 },
                 chapters: { from: 61, to: 80 },
                 episodes: [

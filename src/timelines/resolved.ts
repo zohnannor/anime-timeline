@@ -14,6 +14,7 @@ import {
     Arc,
     Callback,
     Chapter,
+    EntityCallback,
     Episode,
     Range,
     Saga,
@@ -117,12 +118,17 @@ export type ResolvedTimeline = {
 const DEFAULT_VOLUME_WIDTH = 1000;
 const DEFAULT_VOLUME_PAGES = 180;
 
+const maybeCallback = <T>(fn: Callback<T> | T, n: number): T =>
+    typeof fn === 'function' ? (fn as Callback<T>)(n) : fn;
+const maybeEntityCallback = <T>(
+    fn: EntityCallback<T> | T,
+    n: number,
+    title: string,
+): T => (typeof fn === 'function' ? (fn as EntityCallback<T>)(n, title) : fn);
+
 // eslint-disable-next-line max-lines-per-function, max-statements
 const resolveTimelineData = (
-    rawData: TimelineData,
-    templates: ItemTemplates,
-): ResolvedTimelineData => {
-    const {
+    {
         title,
         volumes: volumesRaw,
         sagas: sagasRaw,
@@ -131,11 +137,9 @@ const resolveTimelineData = (
         wikiBase,
         smallImages,
         socialLinks,
-    } = rawData;
-
-    const maybeFunction = <T>(fn: Callback<T> | T, idx: number): T =>
-        typeof fn === 'function' ? (fn as Callback<T>)(rawData, idx) : fn;
-
+    }: TimelineData,
+    templates: ItemTemplates,
+): ResolvedTimelineData => {
     const chapters: ResolvedChapter[] = [];
     const volumes: ResolvedVolume[] = [];
     const arcs: ResolvedArc[] = [];
@@ -162,9 +166,7 @@ const resolveTimelineData = (
             // eslint-disable-next-line no-plusplus
             const chapterIdx = globalChapterIdx++;
             const chapterNumber = chapterIdx + 1;
-
-            const title = maybeFunction(titleRaw, chapterNumber);
-
+            const title = maybeCallback(titleRaw, chapterNumber);
             const pagesInChapter = pages;
             const chapterWidthUnbound =
                 pagesInChapter *
@@ -192,9 +194,13 @@ const resolveTimelineData = (
         const unboundVolumeWidth = sum(
             volumeChapters.map(ch => ch.width(true)),
         );
-        const title = maybeFunction(titleRaw, volumeNumber);
+        const title =
+            typeof titleRaw === 'number' ?
+                (volumeChapters[titleRaw - 1]?.title ??
+                `Chapter ${titleRaw - 1} not found`)
+            :   maybeCallback(titleRaw, volumeNumber);
         volumes.push({
-            cover: maybeFunction(coverRaw, volumeNumber),
+            cover: maybeEntityCallback(coverRaw, volumeNumber, title),
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
             title: templates.volume.titleProcessor(title, volumeNumber),
@@ -214,7 +220,7 @@ const resolveTimelineData = (
             {
                 chapters: { from, to },
                 cover,
-                title,
+                title: rawTitle,
                 offset,
             },
         ] of arcsRaw.entries()) {
@@ -225,25 +231,27 @@ const resolveTimelineData = (
                         .slice(from - 1, to ?? chaptersTotal)
                         .map(ch => ch.width(unboundChapterWidth)),
                 );
-
+            const title = templates.arc.titleProcessor(rawTitle, arcNumber);
+            const number = templates.arc.numberProcessor(arcNumber);
+            const wikiLink = templates.arc.wikiLink(title, arcNumber);
             if (cover === null) {
                 sagaArcs.push({
                     cover: null,
                     width,
-                    saga: sagaIdx,
-                    title: templates.arc.titleProcessor(title, arcNumber),
-                    number: templates.arc.numberProcessor(arcNumber),
-                    wikiLink: templates.arc.wikiLink(title, arcNumber),
+                    saga: sagaNumber,
+                    title,
+                    number,
+                    wikiLink,
                 });
             } else {
                 sagaArcs.push({
                     cover,
                     offset,
                     width,
-                    saga: sagaIdx,
-                    title: templates.arc.titleProcessor(title, arcNumber),
-                    number: templates.arc.numberProcessor(arcNumber),
-                    wikiLink: templates.arc.wikiLink(title, arcNumber),
+                    saga: sagaNumber,
+                    title,
+                    number,
+                    wikiLink,
                 });
             }
         }
@@ -282,33 +290,37 @@ const resolveTimelineData = (
     if (seasonsRaw !== undefined) {
         for (const [
             seasonIdx,
-            { title, cover: coverRaw, offset, chapters, episodes: episodesRaw },
+            {
+                title: titleRaw,
+                cover: coverRaw,
+                offset,
+                chapters: chaptersRange,
+                episodes: episodesRaw,
+            },
         ] of seasonsRaw.entries()) {
             const seasonNumber = seasonIdx + 1;
-
-            const width = widthBasedOnPages(chapters);
-
-            if (title === undefined) {
+            const width = widthBasedOnPages(chaptersRange);
+            const number = templates.season.numberProcessor(seasonNumber);
+            const title = templates.season.titleProcessor(
+                titleRaw ?? seasonNumber.toString(),
+                seasonNumber,
+            );
+            const wikiLink = templates.season.wikiLink(title, seasonNumber);
+            if (coverRaw === undefined) {
                 seasons.push({
                     width,
-                    title: templates.season.titleProcessor(
-                        seasonNumber.toString(),
-                        seasonNumber,
-                    ),
-                    number: templates.season.numberProcessor(seasonNumber),
-                    wikiLink: templates.season.wikiLink(
-                        seasonNumber.toString(),
-                        seasonNumber,
-                    ),
+                    title,
+                    number,
+                    wikiLink,
                 });
             } else {
                 seasons.push({
-                    cover: maybeFunction(coverRaw, seasonNumber),
-                    offset,
                     width,
-                    title: templates.season.titleProcessor(title, seasonNumber),
-                    number: templates.season.numberProcessor(seasonNumber),
-                    wikiLink: templates.season.wikiLink(title, seasonNumber),
+                    cover: maybeCallback(coverRaw, seasonNumber),
+                    offset,
+                    title,
+                    number,
+                    wikiLink,
                 });
             }
 
@@ -320,18 +332,21 @@ const resolveTimelineData = (
                 title: titleRaw,
                 cover: coverRaw,
                 offset,
-                chapters,
+                chapters: chaptersRange,
             } of episodesRaw) {
                 // eslint-disable-next-line no-plusplus
                 const episodeIdx = globalEpisodeIdx++;
                 const episodeNumber = episodeIdx + 1;
-
-                const title = maybeFunction(titleRaw, episodeNumber);
+                const title =
+                    typeof titleRaw === 'number' ?
+                        (chapters[titleRaw - 1]?.title ??
+                        `Chapter ${titleRaw - 1} not found`)
+                    :   maybeCallback(titleRaw, episodeNumber);
                 episodes.push({
-                    cover: maybeFunction(coverRaw, episodeNumber),
+                    cover: maybeCallback(coverRaw, episodeNumber),
                     offset,
-                    width: widthBasedOnPages(chapters),
-                    season: seasonIdx,
+                    width: widthBasedOnPages(chaptersRange),
+                    season: seasonNumber,
                     title: templates.episode.titleProcessor(
                         title,
                         episodeNumber,
@@ -422,7 +437,7 @@ const resolveTimelineSectionLayout = (
         }
 
         const rawItem = rawLayout[key];
-        if (!rawItem) {
+        if (rawItem === undefined) {
             return;
         }
 

@@ -52,6 +52,7 @@ const Header = styled.div`
     background: black;
     padding: ${scale(100)};
     border-bottom: ${scale(5)} solid #333;
+    z-index: 10;
 
     & svg {
         height: ${scale(100)};
