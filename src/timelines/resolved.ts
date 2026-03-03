@@ -57,7 +57,11 @@ type ResolvedSaga = Omit<Saga, 'chapters' | 'arcs'> & {
     width: WidthResolver;
 } & ResolvedTemplates;
 
-type ResolvedEpisode = Omit<Episode, 'title' | 'cover' | 'chapters'> & {
+type ResolvedEpisode = Omit<
+    Episode,
+    'title' | 'cover' | 'chapters' | 'date'
+> & {
+    date: Date;
     cover: string;
     width: WidthResolver;
     season: number;
@@ -338,6 +342,7 @@ const resolveTimelineData = (
                 cover: rawCover,
                 offset,
                 chapters: chaptersRange,
+                date: rawDate,
             } of rawEpisodes) {
                 // eslint-disable-next-line no-plusplus
                 const episodeNumber = globalEpisodeIdx++ + 1;
@@ -347,6 +352,7 @@ const resolveTimelineData = (
                         `Chapter ${rawTitle - 1} not found`)
                     :   maybeCallback(rawTitle, episodeNumber);
                 episodes.push({
+                    date: tokyoDate(rawDate),
                     cover: maybeCallback(rawCover, episodeNumber),
                     offset,
                     width: widthBasedOnPages(chaptersRange),
