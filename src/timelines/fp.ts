@@ -1,11 +1,5 @@
-import {
-    getArcWidth,
-    getChapterWidth,
-    getSagaWidth,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Timeline, Volume } from '@timelines/types';
 
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
@@ -14,9 +8,9 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 type ArcsTotal = 5;
 type VolumesTotal = 8;
 
-const volumeTitle = (_: TimelineData, idx: number) => `Volume ${idx + 1}`;
-const volumeCover = (_: TimelineData, idx: number) => `Volume_${pad(idx + 1)}`;
-const chapterTitle = (_: TimelineData, idx: number) => `Chapter ${idx + 1}`;
+const volumeTitle = (n: number) => `Volume ${n}`;
+const volumeCover = (n: number) => `Volume_${pad(n)}`;
+const chapterTitle = (n: number) => `Chapter ${n}`;
 
 export const FP_TIMELINE: Timeline = {
     layout: {
@@ -25,7 +19,6 @@ export const FP_TIMELINE: Timeline = {
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Story Arcs',
             wikiLink: () => 'unused',
             subTimeline: {
@@ -34,7 +27,6 @@ export const FP_TIMELINE: Timeline = {
                 titleProcessor: title => `${title} arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
-                width: getArcWidth,
                 sectionLink: 'Story Arcs',
                 wikiLink: title =>
                     `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
@@ -50,7 +42,6 @@ export const FP_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            width: getChapterWidth,
             sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Chapter_${n}`,
             focusable: true,
@@ -60,7 +51,6 @@ export const FP_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             blankfontSize: 500,
             titleFontSize: 100,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             sectionLink: 'Fire_Punch_(manga)#Volumes',
             wikiLink: (_, n) => `Volume_${n}`,
@@ -620,9 +610,6 @@ export const FP_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Behemdorg',
@@ -652,13 +639,12 @@ export const FP_TIMELINE: Timeline = {
                 ] as const satisfies Tuple<Arc, ArcsTotal>,
             },
         ],
-        seasons: [] as const satisfies Tuple<Season, 0>,
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',

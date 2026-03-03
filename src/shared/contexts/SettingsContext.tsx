@@ -7,8 +7,8 @@ export type Settings = {
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
     infoBoxOpen: boolean;
     setInfoBoxOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    unboundedChapterWidth: boolean;
-    setUnboundedChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
+    unboundChapterWidth: boolean;
+    setUnboundChapterWidth: React.Dispatch<React.SetStateAction<boolean>>;
     calendarOpen: boolean;
     setCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     showTitles: boolean;
@@ -46,7 +46,7 @@ type SettingsValuesSetters = {
 export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     showCrosslines: 'setShowCrosslines',
     infoBoxOpen: 'setInfoBoxOpen',
-    unboundedChapterWidth: 'setUnboundedChapterWidth',
+    unboundChapterWidth: 'setUnboundChapterWidth',
     calendarOpen: 'setCalendarOpen',
     showTitles: 'setShowTitles',
     captureTimelineModalOpen: 'setCaptureTimelineModalOpen',
@@ -62,8 +62,8 @@ export const SettingsContext = createContext<Settings>({
     setShowCrosslines: dummy,
     infoBoxOpen: false,
     setInfoBoxOpen: dummy,
-    unboundedChapterWidth: false,
-    setUnboundedChapterWidth: dummy,
+    unboundChapterWidth: false,
+    setUnboundChapterWidth: dummy,
     calendarOpen: false,
     setCalendarOpen: dummy,
     showTitles: true,

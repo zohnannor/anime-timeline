@@ -4,21 +4,22 @@ import styled from 'styled-components';
 import { withCrossLines } from '@modules/timeline/CrossLines';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import {
-    chapterDates,
     chapterDatesByMonth,
     chapterDatesByYear,
+    Chunk,
     DAYS_GRADIENT,
-    getChapterWidth,
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
     scale,
+    scrollToId,
 } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
-import { sum } from '@shared/lib/util';
+import { map, NonEmptyArray, sum } from '@shared/lib/util';
 import { withShadow } from '@shared/ui';
 import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
+import { ResolvedChapter } from '@timelines/resolved';
 import { AnimeTitle } from '@timelines/types';
 
 type DayProps = {
@@ -66,16 +67,17 @@ const TimelineWrapper = styled.div`
 `;
 
 type Segment = {
-    chapterNumbers: number[];
+    width: number;
     colorValue: number;
     label: string;
+    chapterNumber: string;
 };
 
 type TimelineSegmentProps = {
-    segments: Segment[];
+    segments: NonEmptyArray<Segment>;
     colorInterpolation: {
-        inputRange: [number, number];
-        outputGradient: number[];
+        inputRange: readonly [number, number];
+        outputGradient: NonEmptyArray<number>;
     };
     variant: 'years' | 'months' | 'days';
 };
@@ -85,15 +87,14 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     colorInterpolation,
     variant,
 }) => {
-    const [hoveredSegment, hoverHandlers] = useHover();
-    const { unboundedChapterWidth, setCalendarOpen, animeTitle } =
-        useSettings();
-    const lastClickedChapter = useRef<number | null>(null);
+    const [hoveredSegment, hoverHandlers] = useHover<string>();
+    const { setCalendarOpen } = useSettings();
+    const lastClickedChapter = useRef<string | null>(null);
 
     const handleDayClick = useCallback(
-        (ev: React.MouseEvent, chapterNumber: number | null) => {
+        (ev: React.MouseEvent, chapterNumber: string | null) => {
             ev.preventDefault();
-            if (!chapterNumber) {
+            if (chapterNumber === null) {
                 return;
             }
 
@@ -108,37 +109,16 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
             return;
         }
 
-        const element = document.querySelector(
-            `#day-${lastClickedChapter.current}`,
-        );
-        if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-                inline: 'center',
-            });
-            (element as HTMLElement).focus({
-                preventScroll: false,
-            });
-        }
+        scrollToId(`day-${lastClickedChapter.current}`);
 
         lastClickedChapter.current = null;
     }, [setCalendarOpen]);
 
     return (
         <TimelineWrapper className={`wrapper-${variant}`}>
-            {segments.map((segment, idx) => {
-                const { chapterNumbers, colorValue, label } = segment;
+            {segments.map(segment => {
+                const { width, colorValue, label, chapterNumber } = segment;
                 const { inputRange, outputGradient } = colorInterpolation;
-                const totalWidth = sum(
-                    chapterNumbers.map(ci =>
-                        getChapterWidth(
-                            TIMELINE[animeTitle].data,
-                            ci - 1,
-                            unboundedChapterWidth,
-                        ),
-                    ),
-                );
 
                 const color = interpolateColor(
                     colorValue,
@@ -146,18 +126,17 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                     outputGradient,
                 );
 
-                const chapter = idx + 1;
                 return (
                     <Timeframe
-                        key={chapter}
+                        key={chapterNumber}
                         className={`frame-${variant}`}
-                        $width={totalWidth}
-                        $crossLinesVisible={hoveredSegment(chapter)}
-                        {...hoverHandlers(chapter)}
+                        $width={width}
+                        $crossLinesVisible={hoveredSegment(chapterNumber)}
+                        {...hoverHandlers(chapterNumber)}
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
                             variant === 'days' ?
-                                ev => handleDayClick(ev, chapter)
+                                ev => handleDayClick(ev, chapterNumber)
                             :   undefined
                         }
                         $variant={variant}
@@ -170,7 +149,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                                     (ev.key === 'Enter' || ev.key === ' ') &&
                                     handleDayClick(
                                         ev as unknown as React.MouseEvent,
-                                        chapter,
+                                        chapterNumber,
                                     )
                             :   undefined
                         }
@@ -189,56 +168,82 @@ type TimelineProps = {
     animeTitle: AnimeTitle;
 };
 
+const toSegments = <T extends ResolvedChapter>(
+    chunks: NonEmptyArray<Chunk<T>>,
+    getMeta: (_first: T) => Omit<Segment, 'width'>,
+    unboundChapterWidth: boolean,
+): NonEmptyArray<Segment> =>
+    map(chunks, group => {
+        const [first] = group;
+        return {
+            width: sum(group.map(({ width }) => width(unboundChapterWidth))),
+            ...getMeta(first),
+        };
+    });
+
 export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
-    const daysSegments = useMemo(
+    const { unboundChapterWidth } = useSettings();
+    const {
+        data: { chapters },
+    } = TIMELINE[animeTitle];
+
+    const daysSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            chapterDates(TIMELINE[animeTitle]).map((date, idx) => ({
-                chapterNumbers: [idx + 1],
+            map(chapters, ({ width, date, number }) => ({
+                width: width(unboundChapterWidth),
                 colorValue: date.getDate(),
                 label: date.getDate().toString(),
+                chapterNumber: number,
             })),
-        [animeTitle],
+        [chapters, unboundChapterWidth],
     );
 
-    const monthsSegments = useMemo(
+    const monthsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            chapterDatesByMonth(TIMELINE[animeTitle]).map(dates => {
-                // each month in the array has at least one day
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                const month = dates[0]![1].getMonth();
-                return {
-                    chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
-                    colorValue: (month + 1) % 12,
-                    // can't be out of bounds, obtained from `getMonth`
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    label: MONTHS[month]!,
-                };
-            }),
-        [animeTitle],
+            toSegments(
+                chapterDatesByMonth(chapters),
+                ({ date, number }) => {
+                    const month = date.getMonth();
+                    return {
+                        colorValue: (month + 1) % 12,
+                        label: MONTHS[month] ?? 'Invalid month',
+                        chapterNumber: number,
+                    };
+                },
+                unboundChapterWidth,
+            ),
+        [chapters, unboundChapterWidth],
     );
 
-    const yearsSegments = useMemo(
+    const yearsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            chapterDatesByYear(TIMELINE[animeTitle]).map(dates => {
-                // each month has at least one day
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                const [, yearDate] = dates[0]!;
-                return {
-                    chapterNumbers: dates.map(([dateIdx]) => dateIdx + 1),
-                    colorValue: yearDate.getFullYear(),
-                    label: yearDate.getFullYear().toString(),
-                };
-            }),
-        [animeTitle],
+            toSegments(
+                chapterDatesByYear(chapters),
+                ({ date, number }) => {
+                    const year = date.getFullYear();
+                    return {
+                        colorValue: year,
+                        label: year.toString(),
+                        chapterNumber: number,
+                    };
+                },
+                unboundChapterWidth,
+            ),
+        [chapters, unboundChapterWidth],
     );
+    const yearRange = useMemo(() => {
+        const start = yearsSegments[0].colorValue;
+        const end = yearsSegments.at(-1)?.colorValue ?? start;
+        return [start, end] as const;
+    }, [yearsSegments]);
 
     return (
         <>
             <TimelineSegment
                 segments={yearsSegments}
                 colorInterpolation={{
-                    inputRange: [2018, 2025],
-                    outputGradient: [0xaaaaaa, 0xffffff],
+                    inputRange: yearRange,
+                    outputGradient: [0x888888, 0xffffff],
                 }}
                 variant='years'
             />

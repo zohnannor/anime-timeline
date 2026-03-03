@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
 import { HEADER_TITLES, scale } from '@shared/lib/helpers';
+import { typedKeys } from '@shared/lib/util';
 import { Link, withShadow } from '@shared/ui';
 import { HEADERS_WIDTH, TIMELINE_HEIGHT } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
-import { AnimeTitle, TimelineSectionLayout } from '@timelines/types';
+import { AnimeTitle } from '@timelines/types';
 
 type HeaderProps = {
     $height: number;
@@ -58,15 +59,9 @@ export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
 
     return (
         <Headers className='headers'>
-            {Object.keys(layout)
-                .filter(
-                    (
-                        section,
-                    ): section is Exclude<
-                        keyof TimelineSectionLayout,
-                        'timeline'
-                    > => section !== 'timeline', // TODO: add it correctly?
-                )
+            {typedKeys(layout)
+                // TODO: add it correctly?
+                .filter(section => section !== 'timeline')
                 .map(
                     section =>
                         layout[section] && (

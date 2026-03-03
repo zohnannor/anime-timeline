@@ -9,7 +9,6 @@ import styled, { css } from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
 import {
-    chapterDates,
     DAYS_GRADIENT,
     fetchNextChapterDate,
     hueGlow,
@@ -17,6 +16,7 @@ import {
     MONTHS,
     MONTHS_GRADIENT,
     scale,
+    scrollToId,
 } from '@shared/lib/helpers';
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
@@ -104,9 +104,9 @@ const TooltipContent = styled.div`
 type MonthComponentProps = {
     month: Date;
     currentDate: Date;
-    chapterDateMap: Map<string, number>;
+    chapterDateMap: Map<string, string>;
     nextChapterDate: Date | null;
-    onDayClick: (_ev: React.MouseEvent, _chapterNumber: number | null) => void;
+    onDayClick: (_ev: React.MouseEvent, _chapterNumber: string | null) => void;
 };
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
@@ -156,7 +156,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                 .toString(16)
                 .padStart(6, '0');
 
-            const dayKey = `day-${dateStr}-${chapterNumber ?? 'no-chapter'}`;
+            const dayKey = `day-${chapterNumber ?? `${dateStr}-no-chapter`}`;
 
             let day = (
                 <Day
@@ -245,20 +245,19 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const allChapterDates = chapterDates(TIMELINE[animeTitle]);
     const currentDate = new Date();
-    // non-empty
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const startDate = allChapterDates[0]!;
+    const { chapters } = TIMELINE[animeTitle].data;
+    const [first] = chapters;
+    const startDate = first.date;
 
     const chapterDateMap = useMemo(() => {
-        const map = new Map<string, number>();
-        allChapterDates.forEach((date, index) => {
+        const map = new Map<string, string>();
+        chapters.forEach(({ date, number }) => {
             const dateStr = getISODate(date);
-            map.set(dateStr, index + 1);
+            map.set(dateStr, number);
         });
         return map;
-    }, [allChapterDates]);
+    }, [chapters]);
 
     const getMonthsBetween = (start: Date, end: Date) => {
         const months = [];
@@ -291,23 +290,15 @@ export const CalendarModal: React.FC = () => {
     );
 
     const handleDayClick = useCallback(
-        (ev: React.MouseEvent, chapterNumber: number | null) => {
+        (ev: React.MouseEvent, chapterNumber: string | null) => {
             ev.preventDefault();
-            if (!chapterNumber) {
+            if (chapterNumber === null) {
                 return;
             }
 
             setCalendarOpen(false);
 
-            const element = document.querySelector(`#chapter-${chapterNumber}`);
-            if (element) {
-                element.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'center',
-                });
-                (element as HTMLElement).focus({ preventScroll: false });
-            }
+            scrollToId(`chapter-${chapterNumber}`);
         },
         [setCalendarOpen],
     );

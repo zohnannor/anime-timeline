@@ -1,15 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import {
-    getArcWidth,
-    getChapterWidth,
-    getEpisodeWidth,
-    getSagaWidth,
-    getSeasonWidth,
-    getVolumeByChapter,
-    getVolumeWidth,
-} from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
-import { Arc, Season, Timeline, TimelineData, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1500;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
@@ -21,19 +12,17 @@ type SeasonsTotal = 2;
 type ArcsTotal = 6;
 type VolumesTotal = 14;
 
-const volumeCover = (_: TimelineData, idx: number) =>
-    idx === 2 ?
-        `Volume${idx + 1}Manga`
-    :   `Sadamoto_${idx === 12 ? 'v' : 'V'}olume_${idx + 1}`;
+const volumeCover = (n: number) =>
+    n === 3 ? `Volume${n}Manga` : `Sadamoto_${n === 13 ? 'v' : 'V'}olume_${n}`;
 const episodeTitle = (_: string, n: number) =>
     n <= 26 ? `Episode ${pad(n)}` : `Episode ${n - 2}'`;
+const CHAPTER_STOPS = [6, 12, 19, 26, 33, 40, 48, 56, 63, 70, 76, 83, 90];
 
 export const EVA_TIMELINE: Timeline = {
     layout: {
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
-            width: getVolumeWidth,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
@@ -47,7 +36,6 @@ export const EVA_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            width: getChapterWidth,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -55,24 +43,19 @@ export const EVA_TIMELINE: Timeline = {
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
             wikiLink: (title, n) =>
                 `Volume_${
-                    getVolumeByChapter(EVA_TIMELINE.data, n - 1) + 1
-                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(
-                    ' ',
-                    '_',
-                )}`,
+                    CHAPTER_STOPS.filter(stop => n > stop).length + 1
+                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(' ', '_')}`,
         },
         saga: {
             type: 'saga',
             height: ARC_HEIGHT,
             blankfontSize: 0,
             titleFontSize: 0,
-            width: getSagaWidth,
             sectionLink: 'Episodes_and_Films_(Portal)#Notes',
             wikiLink: () => 'unused',
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                width: getArcWidth,
                 titleProcessor: (title, n) => (n <= 3 ? `${title} arc` : title),
                 blankfontSize: 100,
                 titleFontSize: 100,
@@ -83,7 +66,6 @@ export const EVA_TIMELINE: Timeline = {
         season: {
             type: 'season',
             height: SEASON_HEIGHT,
-            width: getSeasonWidth,
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'Episodes_and_Films_(Portal)',
@@ -91,7 +73,6 @@ export const EVA_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
-                width: getEpisodeWidth,
                 scale: 1.2,
                 titleProcessor: (title, n) =>
                     `${title}\n(${episodeTitle(title, n)})`,
@@ -297,9 +278,6 @@ export const EVA_TIMELINE: Timeline = {
         sagas: [
             {
                 title: '',
-                cover: '',
-                offset: { x: 0, y: 0 },
-                chapters: { from: 1 },
                 arcs: [
                     {
                         title: 'Intro',
@@ -1053,7 +1031,7 @@ export const EVA_TIMELINE: Timeline = {
         smallImages: {
             'scroller-or-favicon': 'circle',
             'read-info': 'circle',
-            'toggle-unbounded-chapter-width': 'circle',
+            'toggle-unbound-chapter-width': 'circle',
             'toggle-cross-lines': 'circle',
             'open-chapter-calendar': 'circle',
             'toggle-always-show-titles': 'circle',
