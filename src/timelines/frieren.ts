@@ -1381,9 +1381,16 @@ export const FRIEREN_TIMELINE: Timeline = {
                     {
                         title: () => 'Divine Revolte',
                         cover: episodeCover,
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 90, y: 0 },
                         date: 'March 6, 2026',
                         chapters: { from: 72, to: 74 },
+                    },
+                    {
+                        title: () => 'A Magnificent End',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        date: 'March 13, 2026',
+                        chapters: { from: 74, to: 76 },
                     },
                 ],
             },
@@ -1407,6 +1414,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             58: 5,
             66: 16,
             72: 12,
+            74: 8,
         } as const,
         wikiBase: 'https://frieren.fandom.com/wiki/',
         smallImages: {
