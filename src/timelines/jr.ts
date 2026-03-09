@@ -1117,6 +1117,13 @@ export const JR_TIMELINE: Timeline = {
                         date: 'March 1, 2026',
                         chapters: { from: 75, to: 77 },
                     },
+                    {
+                        title: () => 'Love and Karma',
+                        cover: episodeCover,
+                        offset: { x: 1, y: 0 },
+                        date: 'March 8, 2026',
+                        chapters: { from: 78, to: 81 },
+                    },
                 ],
             },
             {
