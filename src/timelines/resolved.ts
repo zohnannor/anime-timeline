@@ -3,6 +3,7 @@ import {
     asNonEmpty,
     NonEmptyArray,
     sum,
+    throwError,
     typedEntries,
     typedFromEntries,
     typedKeys,
@@ -175,7 +176,7 @@ const resolveTimelineData = (
         } of rawChapters) {
             // eslint-disable-next-line no-plusplus
             const chapterNumber = globalChapterIdx++ + 1;
-            const title = maybeCallback(rawTitle, chapterNumber);
+            const titleString = maybeCallback(rawTitle, chapterNumber);
             const pagesInChapter = pages;
             const chapterWidthUnbound =
                 pagesInChapter *
@@ -184,6 +185,10 @@ const resolveTimelineData = (
             const chapterWidthBounded =
                 pagesInChapter * (DEFAULT_VOLUME_WIDTH / pagesInVolume);
 
+            const title = chapterTemplates.titleProcessor(
+                titleString,
+                chapterNumber,
+            );
             volumeChapters.push({
                 date: tokyoDate(rawDate),
                 pages,
@@ -193,7 +198,7 @@ const resolveTimelineData = (
                         chapterWidthBounded
                     ),
                 volume: volumeIdx,
-                title: chapterTemplates.titleProcessor(title, chapterNumber),
+                title,
                 number: chapterTemplates.numberProcessor(chapterNumber),
                 wikiLink: chapterTemplates.wikiLink(title, chapterNumber),
             });
@@ -206,8 +211,9 @@ const resolveTimelineData = (
         const title =
             typeof rawTitle === 'number' ?
                 (volumeChapters[rawTitle - 1]?.title ??
-                `Chapter ${rawTitle - 1} not found`)
+                throwError(`Chapter ${rawTitle - 1} not found`))
             :   maybeCallback(rawTitle, volumeNumber);
+        // unprocessed `title` passed to `rawCover` and `wikiLink` - intentional
         volumes.push({
             cover: maybeEntityCallback(rawCover, volumeNumber, title),
             width: unboundChapterWidth =>
@@ -296,7 +302,7 @@ const resolveTimelineData = (
             );
     };
 
-    if (rawSeasons !== undefined) {
+    if (rawSeasons !== undefined && seasonTemplates !== undefined) {
         for (const [
             seasonIdx,
             {
@@ -333,7 +339,7 @@ const resolveTimelineData = (
                 });
             }
 
-            if (rawEpisodes === undefined) {
+            if (rawEpisodes === undefined || episodeTemplates === undefined) {
                 continue;
             }
 
@@ -349,7 +355,7 @@ const resolveTimelineData = (
                 const title =
                     typeof rawTitle === 'number' ?
                         (chapters[rawTitle - 1]?.title ??
-                        `Chapter ${rawTitle - 1} not found`)
+                        throwError(`Chapter ${rawTitle - 1} not found`))
                     :   maybeCallback(rawTitle, episodeNumber);
                 episodes.push({
                     date: tokyoDate(rawDate),
@@ -382,17 +388,15 @@ const resolveTimelineData = (
     };
 };
 
-type Templates = Pick<
-    TimelineSectionItem<TimelineSection>,
-    'titleProcessor' | 'numberProcessor' | 'wikiLink'
+type Templates = Required<
+    Pick<
+        TimelineSectionItem<TimelineSection>,
+        'titleProcessor' | 'numberProcessor' | 'wikiLink'
+    >
 >;
 
-type ItemTemplates = Record<
-    TimelineSection,
-    {
-        [K in keyof Templates]-?: Templates[K];
-    }
->;
+type ItemTemplates = Partial<Record<'season' | 'episode', Templates>> &
+    Record<Exclude<TimelineSection, 'season' | 'episode'>, Templates>;
 
 const resolveTimelineSectionLayout = (
     rawLayout: TimelineSectionLayout,

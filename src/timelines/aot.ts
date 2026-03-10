@@ -59,7 +59,7 @@ export const AOT_TIMELINE: Timeline = {
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Story Arcs',
-                wikiLink: title => `${title} arc`,
+                wikiLink: title => title,
             },
         },
         timeline: {
@@ -1205,7 +1205,7 @@ export const AOT_TIMELINE: Timeline = {
                         chapters: { from: 91, to: 106 },
                     },
                     {
-                        title: 'War for Paradis ',
+                        title: 'War for Paradis',
                         cover: 'Volume_29_Cover_-_Clean_Version',
                         offset: { x: 0, y: 2200 },
                         chapters: { from: 107, to: 139 },

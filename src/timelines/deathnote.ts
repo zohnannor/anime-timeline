@@ -1,8 +1,8 @@
-// a lot of data for a title
+/* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
-/* eslint-disable max-lines */ const SEASON_HEIGHT = 1600;
+const SEASON_HEIGHT = 1600;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1576;
 const CHAPTER_HEIGHT = 100;
@@ -16,6 +16,7 @@ type SeasonsTotal = 1;
 const volumeCover = (n: number, title: string) =>
     `Volume_${n}.-_${title.replaceAll(' ', '_')}`;
 const CHAPTER_LINK_EXCEPTIONS = [
+    'Boredom',
     'Matsuda',
     'Give-and-Take',
     'Confluence',
@@ -23,21 +24,14 @@ const CHAPTER_LINK_EXCEPTIONS = [
     'Love',
     'Whiteout',
     'Zero',
+    'Target',
     'Yotsuba',
     'Contact',
     'Kindred Spirits',
+    'Finis',
 ];
-const chapterLink = (title: string, n: number): string =>
-    n <= 21 ? `Chapter_${n}`
-    : CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (chapter)`
-    : (
-        title === 'Target' // first one is in 0..21
-    ) ?
-        'Target (chapter 63)'
-    : n === 62 ? 'The Decision'
-    : title;
-const episodeCover = (idx: number) => pad(idx);
-const episodeLinkExceptions = ['Love', 'Decision', 'New World', 'Matsuda'];
+const episodeCover = (n: number) => pad(n);
+const EPISODE_LINK_EXCEPTIONS = ['Love', 'Decision', 'New World', 'Matsuda'];
 
 export const DEATHNOTE_TIMELINE: Timeline = {
     layout: {
@@ -46,7 +40,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            numberProcessor: n => (n - 1).toString(),
             sectionLink: 'Death Note (anime)',
             wikiLink: title => title,
             subTimeline: {
@@ -58,7 +51,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 titleFontSize: 42,
                 sectionLink: 'Death Note (anime)',
                 wikiLink: title =>
-                    episodeLinkExceptions.includes(title) ?
+                    EPISODE_LINK_EXCEPTIONS.includes(title) ?
                         `${title} (episode)`
                     :   title,
                 focusable: true,
@@ -74,7 +67,6 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                titleProcessor: title => title,
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Part I',
@@ -92,7 +84,13 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
-            wikiLink: chapterLink,
+            wikiLink: (title: string, n: number): string =>
+                n <= 21 ? `Chapter_${n}`
+                    // first one is in 0..21
+                : title === 'Target' ? 'Target (chapter 63)'
+                : CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (chapter)`
+                : n === 62 ? 'The Decision'
+                : title,
             focusable: true,
         },
         volume: {
@@ -104,11 +102,9 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleFontSize: 100,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
             wikiLink: title =>
-                CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (volume)`
-                : title === 'Target' ? 'Target (volume)'
-                : title === 'Boredom' ? 'Boredom (volume)'
-                : title === 'Finis' ? 'Finis (volume)'
-                : title,
+                CHAPTER_LINK_EXCEPTIONS.includes(title) ?
+                    `${title} (volume)`
+                :   title,
         },
     },
     data: {

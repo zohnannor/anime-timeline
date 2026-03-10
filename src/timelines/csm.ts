@@ -53,7 +53,7 @@ export const CSM_TIMELINE: Timeline = {
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Story Arcs',
-                wikiLink: title => `${title} arc`,
+                wikiLink: title => title,
             },
         },
         timeline: {
