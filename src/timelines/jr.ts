@@ -1126,9 +1126,7 @@ export const JR_TIMELINE: Timeline = {
                     },
                 ],
             },
-            {
-                chapters: { from: 87 },
-            },
+            { chapters: { from: 87 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             6: 9,

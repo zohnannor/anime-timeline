@@ -11,7 +11,7 @@ const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type VolumesTotal = 24;
 type SagasTotal = 2;
-type SeasonsTotal = 4;
+type SeasonsTotal = 6;
 
 const volumeCover = (n: number) => `Volume_${pad(n)}`;
 const episodeCover = (n: number) => n.toString();
@@ -1819,9 +1819,9 @@ export const CSM_TIMELINE: Timeline = {
                 chapters: { from: 53, to: 97 },
                 episodes: [],
             },
-            {
-                chapters: { from: 98 },
-            },
+            { chapters: { from: 98, to: 131 } },
+            { chapters: { from: 132, to: 190 } },
+            { chapters: { from: 191 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             5: 10,

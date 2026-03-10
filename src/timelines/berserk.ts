@@ -3168,9 +3168,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     },
                 ],
             },
-            {
-                chapters: { from: 16 + 250 },
-            },
+            { chapters: { from: 16 + 250 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {},
         wikiBase: 'https://berserk.fandom.com/wiki/',
