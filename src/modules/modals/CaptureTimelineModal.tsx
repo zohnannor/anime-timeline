@@ -29,6 +29,9 @@ const Container = styled.div`
     }
 `;
 
+const isImg = (el: Node): el is HTMLImageElement =>
+    el instanceof HTMLImageElement && el.getAttribute('src') !== null;
+
 export const CaptureTimelineModal: React.FC = () => {
     const {
         captureTimelineModalOpen,
@@ -36,10 +39,14 @@ export const CaptureTimelineModal: React.FC = () => {
         unboundChapterWidth,
         animeTitle,
     } = useSettings();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const { maxHeight: height, maxWidth } = TIMELINE[animeTitle];
+    const {
+        maxHeight: height,
+        maxWidth,
+        data: { title },
+    } = TIMELINE[animeTitle];
     const width = maxWidth(unboundChapterWidth);
 
     const [_, captureTimeline, __] = useToPng({
@@ -47,27 +54,36 @@ export const CaptureTimelineModal: React.FC = () => {
         canvasHeight: height,
         canvasWidth: width,
         backgroundColor: '#000',
-        filter: el =>
-            ['floatingButtons', 'scrollerHoverArea'].every(
-                className => !el.classList.contains(className),
+        skipAutoScale: true,
+        filter: (el: Node) =>
+            !(el instanceof HTMLElement) ||
+            !(
+                [
+                    'floatingButtons',
+                    'scrollerHoverArea',
+                    'crosslines',
+                    'tooltipContent',
+                ].some(cls => el.classList.contains(cls)) ||
+                (isImg(el) && el.complete && el.naturalWidth === 0)
             ),
         onStart: () => {
-            setLoading(false);
+            setLoading(`starting "${title}" timeline capture`);
             setError(null);
             console.debug(`Real dimensions: ${width}x${height}`);
         },
         onSuccess: dataUrl => {
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = `${toTitleCase(
+            const filename = `${toTitleCase(
                 animeTitle,
             )}_Timeline_${new Date().toISOString()}.png`;
+            link.download = filename;
             link.click();
-            setLoading(false);
+            setLoading(`saving "${filename}" image`);
         },
-        onLoading: () => setLoading(true),
+        onLoading: () => setLoading('rendering timeline'),
         onError: error => {
-            setLoading(false);
+            setLoading(null);
             setError(error);
         },
     });
@@ -77,7 +93,7 @@ export const CaptureTimelineModal: React.FC = () => {
             isOpen={captureTimelineModalOpen}
             onClose={() => {
                 setCaptureTimelineModalOpen(false);
-                setLoading(false);
+                setLoading(null);
                 setError(null);
             }}
             title='Are you sure?'
@@ -88,15 +104,15 @@ export const CaptureTimelineModal: React.FC = () => {
                     This will save a huge (50MB-100MB) PNG file. It is
                     recommended to scroll to the end of the timeline to load all
                     images. Your settings (visibility of titles and chapter
-                    width) will affect the rendered image. The maximum width is
-                    16384px. If something renders incorrectly, try Chrome
-                    browser.
+                    width) will affect the rendered image, but some elements are
+                    not rendered anyway (UI). If something renders incorrectly,
+                    try Chrome browser.
                 </h5>
                 <ConfirmButton onClick={captureTimeline}>
                     Yes, proceed
                 </ConfirmButton>
                 <h6>(this might take a while)</h6>
-                {loading && <div>Loading...</div>}
+                {loading !== null && <div>Loading ({loading}...)</div>}
                 {error && <div style={{ color: 'red' }}>{error}</div>}
             </Container>
         </Modal>
