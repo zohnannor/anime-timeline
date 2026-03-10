@@ -1704,7 +1704,7 @@ export const CSM_TIMELINE: Timeline = {
                         chapters: { from: 156, to: 190 },
                     },
                     {
-                        title: 'Current',
+                        title: 'War Devil',
                         cover: "Pochita_surrounded_by_Yoru's_Devil_Army",
                         offset: { x: 0, y: 0 },
                         chapters: { from: 191 },
