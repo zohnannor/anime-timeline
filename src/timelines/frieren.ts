@@ -1394,15 +1394,9 @@ export const FRIEREN_TIMELINE: Timeline = {
                     },
                 ],
             },
-            {
-                chapters: { from: 81, to: 104 },
-            },
-            {
-                chapters: { from: 105, to: 125 },
-            },
-            {
-                chapters: { from: 126 },
-            },
+            { chapters: { from: 81, to: 104 } },
+            { chapters: { from: 105, to: 125 } },
+            { chapters: { from: 126 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             2: 13,

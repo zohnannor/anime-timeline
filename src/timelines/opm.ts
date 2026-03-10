@@ -2438,20 +2438,8 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-            {
-                // title: 'Season Three - Part 2',
-                // cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
-                // offset: { x: 0, y: 0 },
-                chapters: { from: 117, to: 161 },
-                // episodes: [],
-            },
-            {
-                // title: 'Season Three - Part 2',
-                // cover: () => 'One-Punch_Man_Season_3_Key_Visual_2',
-                // offset: { x: 0, y: 0 },
-                chapters: { from: 162, to: CHAPTERS_TOTAL },
-                // episodes: [],
-            },
+            { chapters: { from: 117, to: 161 } },
+            { chapters: { from: 162, to: CHAPTERS_TOTAL } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             18: 5,
