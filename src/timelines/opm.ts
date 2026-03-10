@@ -75,11 +75,11 @@ export const OPM_TIMELINE: Timeline = {
                 type: 'arc',
                 height: ARC_HEIGHT,
                 sidewaysText: true,
-                titleProcessor: title => `${title} arc`,
+                titleProcessor: title => `${title} Arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Story Arcs',
-                wikiLink: title => `${title} Arc`,
+                wikiLink: title => title,
             },
         },
         timeline: {

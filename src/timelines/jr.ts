@@ -52,7 +52,7 @@ export const JR_TIMELINE: Timeline = {
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Story Arcs',
-                wikiLink: title => `${title} Arc`,
+                wikiLink: title => title,
             },
         },
         timeline: {
@@ -1172,7 +1172,7 @@ export const JR_TIMELINE: Timeline = {
             },
             { name: 'Anime Website', url: 'https://www.jigokuraku.com/' },
             {
-                name: 'Crunchyroll ',
+                name: 'Crunchyroll',
                 url: 'https://www.crunchyroll.com/series/GJ0H7Q5ZJ/hells-paradise',
             },
         ],

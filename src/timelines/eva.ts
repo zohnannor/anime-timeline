@@ -56,7 +56,7 @@ export const EVA_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                titleProcessor: (title, n) => (n <= 3 ? `${title} arc` : title),
+                titleProcessor: (title, n) => (n <= 4 ? `${title} Arc` : title),
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Episodes_and_Films_(Portal)#Notes',

@@ -110,10 +110,9 @@ export type TimelineSectionItem<T extends TimelineSection> = {
     sectionLink: string;
     wikiLink: (_title: string, _n: number) => string;
     focusable?: boolean;
-    subTimeline?: T extends keyof SubtimelinesMap ?
-        TimelineSectionItem<SubtimelinesMap[T]>
-    :   never;
-};
+} & (T extends keyof SubtimelinesMap ?
+    { subTimeline: TimelineSectionItem<SubtimelinesMap[T]> }
+:   { subTimeline?: never });
 
 export type TimelineSectionLayout = {
     season?: TimelineSectionItem<'season'>;

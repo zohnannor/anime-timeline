@@ -42,7 +42,7 @@ export type Mutable<T> = {
 const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
     arr.length > 0;
 
-const throwError = (message: string): never => {
+export const throwError = (message: string): never => {
     throw new Error(message);
 };
 

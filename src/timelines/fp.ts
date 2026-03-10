@@ -24,12 +24,11 @@ export const FP_TIMELINE: Timeline = {
             subTimeline: {
                 type: 'arc',
                 height: ARC_HEIGHT,
-                titleProcessor: title => `${title} arc`,
+                titleProcessor: title => `${title} Arc`,
                 blankfontSize: 100,
                 titleFontSize: 100,
                 sectionLink: 'Story Arcs',
-                wikiLink: title =>
-                    `Story_Arcs#${title.replaceAll(' ', '_')}_Arc`,
+                wikiLink: title => `Story_Arcs#${title.replaceAll(' ', '_')}`,
             },
         },
         timeline: {
