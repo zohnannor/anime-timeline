@@ -2776,7 +2776,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     {
                         title: 'Golden Age',
                         cover: 'V5-Cover_Art-Manga',
-                        offset: { x: 0, y: 1000 },
+                        offset: { x: 0, y: 10790 },
                         chapters: { from: 9, to: 16 + 94 },
                     },
                     {
@@ -2794,7 +2794,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     {
                         title: 'Fantasia',
                         cover: 'V38-Guts-Manga',
-                        offset: { x: 0, y: 2310 },
+                        offset: { x: 0, y: 2160 },
                         chapters: { from: 16 + 308 },
                     },
                 ] as const satisfies Tuple<Arc, ArcsTotal>,
@@ -2804,7 +2804,7 @@ export const BERSERK_TIMELINE: Timeline = {
             {
                 title: 'Berserk (1997 Anime)',
                 cover: () => 'Berserk_Anime_Box_Art',
-                offset: { x: 0, y: 12770 },
+                offset: { x: 0, y: 11481 },
                 chapters: { from: 1, to: 16 + 94 },
                 episodes: [
                     {
