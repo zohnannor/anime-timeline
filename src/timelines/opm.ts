@@ -10,7 +10,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 230;
+const CHAPTERS_TOTAL = 231;
 const VOLUMES_TOTAL = 43;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
@@ -1748,6 +1748,12 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'New Blood 3',
                         date: 'February 26, 2026',
                         pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Fury',
+                        date: 'March 12, 2026',
+                        pages: 20,
                         cover: null,
                     },
                 ],
