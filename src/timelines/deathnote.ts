@@ -876,7 +876,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             {
                 title: 'Death Note (anime)',
                 cover: () => 'DEATH_NOTE_anime',
-                offset: { x: 0, y: 3075 },
+                offset: { x: 0, y: 4345 },
                 chapters: { from: 1, to: 107 }, // not a typo
                 episodes: [
                     // https://discord.com/channels/349085232521150474
