@@ -14,22 +14,14 @@ const chapterTitle = (n: number) => `Chapter ${n}`;
 
 export const FP_TIMELINE: Timeline = {
     layout: {
-        saga: {
-            type: 'saga',
+        arc: {
+            type: 'arc',
             height: ARC_HEIGHT,
-            blankfontSize: 0,
-            titleFontSize: 0,
+            titleProcessor: title => `${title} Arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                titleProcessor: title => `${title} Arc`,
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Story Arcs',
-                wikiLink: title => `Story_Arcs#${title.replaceAll(' ', '_')}`,
-            },
+            wikiLink: title => `Story_Arcs#${title.replaceAll(' ', '_')}`,
         },
         timeline: {
             type: 'timeline',
@@ -606,38 +598,33 @@ export const FP_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
-        sagas: [
+        arcs: [
             {
-                title: '',
-                arcs: [
-                    {
-                        title: 'Behemdorg',
-                        cover: null,
-                        chapters: { from: 1, to: 33 },
-                    },
-                    {
-                        title: 'Catharsis',
-                        cover: null,
-                        chapters: { from: 34, to: 52 },
-                    },
-                    {
-                        title: 'Amnesia',
-                        cover: null,
-                        chapters: { from: 53, to: 62 },
-                    },
-                    {
-                        title: 'Fire Punch',
-                        cover: null,
-                        chapters: { from: 63, to: 80 },
-                    },
-                    {
-                        title: 'Final Film',
-                        cover: null,
-                        chapters: { from: 81, to: 83 },
-                    },
-                ] as const satisfies Tuple<Arc, ArcsTotal>,
+                title: 'Behemdorg',
+                cover: null,
+                chapters: { from: 1, to: 33 },
             },
-        ],
+            {
+                title: 'Catharsis',
+                cover: null,
+                chapters: { from: 34, to: 52 },
+            },
+            {
+                title: 'Amnesia',
+                cover: null,
+                chapters: { from: 53, to: 62 },
+            },
+            {
+                title: 'Fire Punch',
+                cover: null,
+                chapters: { from: 63, to: 80 },
+            },
+            {
+                title: 'Final Film',
+                cover: null,
+                chapters: { from: 81, to: 83 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',
         smallImages: {

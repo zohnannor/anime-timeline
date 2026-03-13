@@ -50,7 +50,7 @@ export const asNonEmpty = <T>(
     arr: readonly T[],
     name: string,
 ): NonEmptyArray<T> =>
-    notEmpty(arr) ? arr : throwError(`Expected non-empty array ${name}`);
+    notEmpty(arr) ? arr : throwError(`Expected non-empty array \`${name}\``);
 
 export const range = (start: number, end: number) =>
     Array.from({ length: end - start }, (_, idx) => idx + start);

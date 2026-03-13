@@ -37,23 +37,15 @@ export const FRIEREN_TIMELINE: Timeline = {
                 focusable: true,
             },
         },
-        saga: {
-            type: 'saga',
+        arc: {
+            type: 'arc',
             height: ARC_HEIGHT,
-            blankfontSize: 0,
-            titleFontSize: 0,
+            sidewaysText: true,
+            titleProcessor: title => `${title} Arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                sidewaysText: true,
-                titleProcessor: title => `${title} Arc`,
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Story Arcs',
-                wikiLink: title => title,
-            },
+            wikiLink: title => title,
         },
         timeline: {
             type: 'timeline',
@@ -1057,73 +1049,68 @@ export const FRIEREN_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
-        sagas: [
+        arcs: [
             {
-                title: '',
-                arcs: [
-                    {
-                        title: "Beyond Journey's End",
-                        cover: 'Chapter_1_(clean)',
-                        offset: { x: 0, y: 170 },
-                        chapters: { from: 1, to: 13 },
-                    },
-                    {
-                        title: 'Aura the Guillotine',
-                        cover: 'Volume_3_(clean)',
-                        offset: { x: 0, y: 380 },
-                        chapters: { from: 14, to: 23 },
-                    },
-                    {
-                        title: 'Travels to Äußerst',
-                        cover: 'Volume_4_(clean)',
-                        offset: { x: 0, y: 200 },
-                        chapters: { from: 24, to: 36 },
-                    },
-                    {
-                        title: 'First-Class Mage Exam', // divide stages?
-                        cover: 'Volume_5_(clean)',
-                        offset: { x: 0, y: 760 },
-                        chapters: { from: 37, to: 60 },
-                    },
-                    {
-                        title: 'Continued Northern Travels',
-                        cover: 'Volume_7_(clean)',
-                        offset: { x: 0, y: 440 },
-                        chapters: { from: 61, to: 70 },
-                    },
-                    {
-                        title: 'Divine Revolte',
-                        cover: 'Volume_8_(clean)',
-                        offset: { x: 50, y: 0 },
-                        chapters: { from: 71, to: 76 },
-                    },
-                    {
-                        title: 'The Golden Land',
-                        cover: 'Chapter_87',
-                        offset: { x: 0, y: 350 },
-                        chapters: { from: 77, to: 104 },
-                    },
-                    {
-                        title: "Goddess's Monument",
-                        cover: 'Chapter_107_color_page_2',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 105, to: 119 },
-                    },
-                    {
-                        title: 'Imperial Territory Travels',
-                        cover: 'Chapter_124',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 120, to: 125 },
-                    },
-                    {
-                        title: 'Foundation Festival',
-                        cover: 'Chapter_143',
-                        offset: { x: 0, y: 1040 },
-                        chapters: { from: 126 },
-                    },
-                ] as const satisfies Tuple<Arc, ArcsTotal>,
+                title: "Beyond Journey's End",
+                cover: 'Chapter_1_(clean)',
+                offset: { x: 0, y: 170 },
+                chapters: { from: 1, to: 13 },
             },
-        ],
+            {
+                title: 'Aura the Guillotine',
+                cover: 'Volume_3_(clean)',
+                offset: { x: 0, y: 380 },
+                chapters: { from: 14, to: 23 },
+            },
+            {
+                title: 'Travels to Äußerst',
+                cover: 'Volume_4_(clean)',
+                offset: { x: 0, y: 200 },
+                chapters: { from: 24, to: 36 },
+            },
+            {
+                title: 'First-Class Mage Exam', // divide stages?
+                cover: 'Volume_5_(clean)',
+                offset: { x: 0, y: 760 },
+                chapters: { from: 37, to: 60 },
+            },
+            {
+                title: 'Continued Northern Travels',
+                cover: 'Volume_7_(clean)',
+                offset: { x: 0, y: 440 },
+                chapters: { from: 61, to: 70 },
+            },
+            {
+                title: 'Divine Revolte',
+                cover: 'Volume_8_(clean)',
+                offset: { x: 50, y: 0 },
+                chapters: { from: 71, to: 76 },
+            },
+            {
+                title: 'The Golden Land',
+                cover: 'Chapter_87',
+                offset: { x: 0, y: 350 },
+                chapters: { from: 77, to: 104 },
+            },
+            {
+                title: "Goddess's Monument",
+                cover: 'Chapter_107_color_page_2',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 105, to: 119 },
+            },
+            {
+                title: 'Imperial Territory Travels',
+                cover: 'Chapter_124',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 120, to: 125 },
+            },
+            {
+                title: 'Foundation Festival',
+                cover: 'Chapter_143',
+                offset: { x: 0, y: 1040 },
+                chapters: { from: 126 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
             {
                 title: "Frieren: Beyond Journey's End Season 1",

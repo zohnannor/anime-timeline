@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
-import { Saga, Season, Timeline, Volume } from '@timelines/types';
+import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1900;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
@@ -9,7 +9,7 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
 type VolumesTotal = 13;
-type SagasTotal = 1;
+type ArcsTotal = 4;
 type SeasonsTotal = 3;
 
 const volumeTitle = (n: number) => `Volume ${n}`;
@@ -38,22 +38,14 @@ export const JR_TIMELINE: Timeline = {
                 focusable: true,
             },
         },
-        saga: {
-            type: 'saga',
+        arc: {
+            type: 'arc',
             height: ARC_HEIGHT,
-            blankfontSize: 0,
-            titleFontSize: 0,
+            titleProcessor: title => `${title} Arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                titleProcessor: title => `${title} Arc`,
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Story Arcs',
-                wikiLink: title => title,
-            },
+            wikiLink: title => title,
         },
         timeline: {
             type: 'timeline',
@@ -923,37 +915,32 @@ export const JR_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
-        sagas: [
+        arcs: [
             {
-                title: '',
-                arcs: [
-                    {
-                        title: 'Island',
-                        cover: 'The_vanguard_sailing_to_Kotaku',
-                        offset: { x: 0, y: 500 },
-                        chapters: { from: 1, to: 16 },
-                    },
-                    {
-                        title: 'Lord Tensen',
-                        cover: 'Lord_Tensen_Arc_Infobox',
-                        offset: { x: 0, y: 100 },
-                        chapters: { from: 17, to: 59 },
-                    },
-                    {
-                        title: 'Hōrai',
-                        cover: 'Horai_flower_setting',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 60, to: 110 },
-                    },
-                    {
-                        title: 'Departure',
-                        cover: "The_Survivors_on_Rien's_ship",
-                        offset: { x: 0, y: 50 },
-                        chapters: { from: 111 },
-                    },
-                ],
+                title: 'Island',
+                cover: 'The_vanguard_sailing_to_Kotaku',
+                offset: { x: 0, y: 500 },
+                chapters: { from: 1, to: 16 },
             },
-        ] as const satisfies Tuple<Saga, SagasTotal>,
+            {
+                title: 'Lord Tensen',
+                cover: 'Lord_Tensen_Arc_Infobox',
+                offset: { x: 0, y: 100 },
+                chapters: { from: 17, to: 59 },
+            },
+            {
+                title: 'Hōrai',
+                cover: 'Horai_flower_setting',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 60, to: 110 },
+            },
+            {
+                title: 'Departure',
+                cover: "The_Survivors_on_Rien's_ship",
+                offset: { x: 0, y: 50 },
+                chapters: { from: 111 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
             {
                 title: 'Jigokuraku Season 1',

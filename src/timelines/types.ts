@@ -70,13 +70,15 @@ export type SocialLink = {
 export type TimelineData = {
     title: string;
     volumes: NonEmptyArray<Volume>;
-    sagas: NonEmptyArray<Saga>;
-    seasons?: NonEmptyArray<Season>;
-    splitChapters: Record<number, number>;
-    wikiBase: string;
-    smallImages: SmallImages;
-    socialLinks: SocialLink[];
-};
+} & ExactUnion<
+    { sagas: NonEmptyArray<Saga> } | { arcs: NonEmptyArray<Arc> }
+> & {
+        seasons?: NonEmptyArray<Season>;
+        splitChapters: Record<number, number>;
+        wikiBase: string;
+        smallImages: SmallImages;
+        socialLinks: SocialLink[];
+    };
 
 export type Timeline = { layout: TimelineSectionLayout; data: TimelineData };
 
@@ -116,10 +118,12 @@ export type TimelineSectionItem<T extends TimelineSection> = {
 
 export type TimelineSectionLayout = {
     season?: TimelineSectionItem<'season'>;
-    saga: TimelineSectionItem<'saga'>;
-    chapter: TimelineSectionItem<'chapter'>;
-    volume: TimelineSectionItem<'volume'>;
-    timeline: {
-        type: 'timeline';
+} & ExactUnion<
+    { saga: TimelineSectionItem<'saga'> } | { arc: TimelineSectionItem<'arc'> }
+> & {
+        chapter: TimelineSectionItem<'chapter'>;
+        volume: TimelineSectionItem<'volume'>;
+        timeline: {
+            type: 'timeline';
+        };
     };
-};
