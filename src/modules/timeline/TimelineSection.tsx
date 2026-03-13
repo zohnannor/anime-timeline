@@ -28,11 +28,20 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         data: { episodes, seasons, sagas, arcs, chapters, volumes },
     } = TIMELINE[animeTitle];
 
+    if (type === 'season' && seasons === undefined) {
+        return null;
+    }
+    if (type === 'saga' && sagas === undefined) {
+        return null;
+    }
+
     const entities = () =>
         type === 'episode' ? episodes.filter(ep => ep.season === parentNumber)
         : type === 'season' ? (seasons ?? [])
-        : type === 'saga' ? sagas
-        : type === 'arc' ? arcs.filter(arc => arc.saga === parentNumber)
+        : type === 'saga' ? (sagas ?? [])
+        : type === 'arc' ?
+            parentNumber ? arcs.filter(arc => arc.saga === parentNumber)
+            :   arcs
         : type === 'chapter' ? chapters
         : volumes;
 

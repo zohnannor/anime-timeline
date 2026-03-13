@@ -46,22 +46,14 @@ export const EVA_TIMELINE: Timeline = {
                     CHAPTER_STOPS.filter(stop => n > stop).length + 1
                 }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(' ', '_')}`,
         },
-        saga: {
-            type: 'saga',
+        arc: {
+            type: 'arc',
             height: ARC_HEIGHT,
-            blankfontSize: 0,
-            titleFontSize: 0,
+            titleProcessor: (title, n) => (n <= 4 ? `${title} Arc` : title),
+            blankfontSize: 100,
+            titleFontSize: 100,
             sectionLink: 'Episodes_and_Films_(Portal)#Notes',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                titleProcessor: (title, n) => (n <= 4 ? `${title} Arc` : title),
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Episodes_and_Films_(Portal)#Notes',
-                wikiLink: () => 'Episodes_and_Films_(Portal)#Notes',
-            },
+            wikiLink: () => 'Episodes_and_Films_(Portal)#Notes',
         },
         season: {
             type: 'season',
@@ -303,43 +295,38 @@ export const EVA_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
-        sagas: [
+        arcs: [
             {
-                title: '',
-                arcs: [
-                    {
-                        title: 'Intro',
-                        cover: null,
-                        chapters: { from: 1, to: 15 },
-                    },
-                    {
-                        title: 'Action',
-                        cover: null,
-                        chapters: { from: 16, to: 31 },
-                    },
-                    {
-                        title: 'Descent',
-                        cover: null,
-                        chapters: { from: 32, to: 51 },
-                    },
-                    {
-                        title: 'Bitter End',
-                        cover: null,
-                        chapters: { from: 52, to: 72 },
-                    },
-                    {
-                        title: 'End of TV',
-                        cover: null,
-                        chapters: { from: 73, to: 74 },
-                    },
-                    {
-                        title: 'Movies',
-                        cover: null,
-                        chapters: { from: 75 },
-                    },
-                ] as const satisfies Tuple<Arc, ArcsTotal>,
+                title: 'Intro',
+                cover: null,
+                chapters: { from: 1, to: 15 },
             },
-        ],
+            {
+                title: 'Action',
+                cover: null,
+                chapters: { from: 16, to: 31 },
+            },
+            {
+                title: 'Descent',
+                cover: null,
+                chapters: { from: 32, to: 51 },
+            },
+            {
+                title: 'Bitter End',
+                cover: null,
+                chapters: { from: 52, to: 72 },
+            },
+            {
+                title: 'End of TV',
+                cover: null,
+                chapters: { from: 73, to: 74 },
+            },
+            {
+                title: 'Movies',
+                cover: null,
+                chapters: { from: 75 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         volumes: [
             {
                 title: () => 'Angel Attack (使徒、襲来 / Shito, Shūrai)',

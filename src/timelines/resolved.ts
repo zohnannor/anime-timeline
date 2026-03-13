@@ -1,6 +1,7 @@
 import { tokyoDate } from '@shared/lib/helpers';
 import {
     asNonEmpty,
+    ExactUnion,
     NonEmptyArray,
     sum,
     throwError,
@@ -86,14 +87,16 @@ export type ResolvedTimelineData = {
     title: string;
     chapters: NonEmptyArray<ResolvedChapter>;
     volumes: NonEmptyArray<ResolvedVolume>;
-    arcs: NonEmptyArray<ResolvedArc>;
-    sagas: NonEmptyArray<ResolvedSaga>;
-    episodes: ResolvedEpisode[];
-    seasons?: ResolvedSeason[];
-    wikiBase: string;
-    smallImages: SmallImages;
-    socialLinks: SocialLink[];
-};
+} & ExactUnion<
+    | { arcs: NonEmptyArray<ResolvedArc> }
+    | { sagas: NonEmptyArray<ResolvedSaga>; arcs: NonEmptyArray<ResolvedArc> }
+> & {
+        episodes: ResolvedEpisode[];
+        seasons?: ResolvedSeason[];
+        wikiBase: string;
+        smallImages: SmallImages;
+        socialLinks: SocialLink[];
+    };
 
 export type ResolvedSectionItem<T extends TimelineSection> = Omit<
     TimelineSectionItem<T>,
@@ -136,6 +139,7 @@ const resolveTimelineData = (
         title,
         volumes: rawVolumes,
         sagas: rawSagas,
+        arcs: rawArcs,
         seasons: rawSeasons,
         splitChapters,
         wikiBase,
@@ -177,13 +181,10 @@ const resolveTimelineData = (
             // eslint-disable-next-line no-plusplus
             const chapterNumber = globalChapterIdx++ + 1;
             const titleString = maybeCallback(rawTitle, chapterNumber);
-            const pagesInChapter = pages;
             const chapterWidthUnbound =
-                pagesInChapter *
-                (DEFAULT_VOLUME_WIDTH / DEFAULT_VOLUME_PAGES) *
-                1.05;
+                pages * (DEFAULT_VOLUME_WIDTH / DEFAULT_VOLUME_PAGES) * 1.05;
             const chapterWidthBounded =
-                pagesInChapter * (DEFAULT_VOLUME_WIDTH / pagesInVolume);
+                pages * (DEFAULT_VOLUME_WIDTH / pagesInVolume);
 
             const title = chapterTemplates.titleProcessor(
                 titleString,
@@ -226,59 +227,49 @@ const resolveTimelineData = (
 
     const chaptersTotal = globalChapterIdx;
 
-    for (const [sagaIdx, { arcs: rawArcs, title }] of rawSagas.entries()) {
-        const sagaNumber = sagaIdx + 1;
-
-        const sagaArcs: ResolvedArc[] = [];
-        for (const [
-            arcIdx,
-            {
-                chapters: { from, to },
-                cover,
-                title: rawTitle,
-                offset,
+    const resolveArcs = (
+        rawArcs: NonEmptyArray<Arc>,
+        sagaNumber: number,
+    ): ResolvedArc[] =>
+        rawArcs.map(
+            (
+                { chapters: { from, to }, cover, title: rawTitle, offset },
+                arcIdx,
+            ) => {
+                const arcNumber = arcIdx + 1;
+                const title = arcTemplates.titleProcessor(rawTitle, arcNumber);
+                return {
+                    ...(cover === null ? { cover } : { cover, offset }),
+                    width: unboundChapterWidth =>
+                        sum(
+                            chapters
+                                .slice(from - 1, to ?? chaptersTotal)
+                                .map(ch => ch.width(unboundChapterWidth)),
+                        ),
+                    saga: sagaNumber,
+                    title,
+                    number: arcTemplates.numberProcessor(arcNumber),
+                    wikiLink: arcTemplates.wikiLink(title, arcNumber),
+                };
             },
-        ] of rawArcs.entries()) {
-            const arcNumber = arcIdx + 1;
-            const width: WidthResolver = unboundChapterWidth =>
-                sum(
-                    chapters
-                        .slice(from - 1, to ?? chaptersTotal)
-                        .map(ch => ch.width(unboundChapterWidth)),
-                );
-            const title = arcTemplates.titleProcessor(rawTitle, arcNumber);
-            const number = arcTemplates.numberProcessor(arcNumber);
-            const wikiLink = arcTemplates.wikiLink(title, arcNumber);
-            if (cover === null) {
-                sagaArcs.push({
-                    cover: null,
-                    width,
-                    saga: sagaNumber,
-                    title,
-                    number,
-                    wikiLink,
-                });
-            } else {
-                sagaArcs.push({
-                    cover,
-                    offset,
-                    width,
-                    saga: sagaNumber,
-                    title,
-                    number,
-                    wikiLink,
-                });
-            }
-        }
-        arcs.push(...sagaArcs);
+        );
 
-        sagas.push({
-            width: unboundChapterWidth =>
-                sum(sagaArcs.map(arc => arc.width(unboundChapterWidth))),
-            title: sagaTemplates.titleProcessor(title, sagaNumber),
-            number: sagaTemplates.numberProcessor(sagaNumber),
-            wikiLink: sagaTemplates.wikiLink(title, sagaNumber),
-        });
+    if (rawSagas === undefined) {
+        resolveArcs(rawArcs, 0);
+        arcs.push(...resolveArcs(rawArcs, 0));
+    } else {
+        for (const [sagaIdx, { arcs: rawArcs, title }] of rawSagas.entries()) {
+            const sagaNumber = sagaIdx + 1;
+            const sagaArcs = resolveArcs(rawArcs, sagaNumber);
+            arcs.push(...sagaArcs);
+            sagas.push({
+                width: unboundChapterWidth =>
+                    sum(sagaArcs.map(arc => arc.width(unboundChapterWidth))),
+                title: sagaTemplates.titleProcessor(title, sagaNumber),
+                number: sagaTemplates.numberProcessor(sagaNumber),
+                wikiLink: sagaTemplates.wikiLink(title, sagaNumber),
+            });
+        }
     }
 
     let globalEpisodeIdx = 0;
@@ -296,7 +287,6 @@ const resolveTimelineData = (
                         rest !== 0 && chapterIdx === start ? rest
                         : chapterIdx === end - 1 ? split
                         : pages;
-
                     return pagesInSegment * pageWidth;
                 }),
             );
@@ -314,30 +304,20 @@ const resolveTimelineData = (
             },
         ] of rawSeasons.entries()) {
             const seasonNumber = seasonIdx + 1;
-            const width = widthBasedOnPages(chaptersRange);
-            const number = seasonTemplates.numberProcessor(seasonNumber);
             const title = seasonTemplates.titleProcessor(
                 rawTitle ?? seasonNumber.toString(),
                 seasonNumber,
             );
             const wikiLink = seasonTemplates.wikiLink(title, seasonNumber);
-            if (rawCover === undefined) {
-                seasons.push({
-                    width,
-                    title,
-                    number,
-                    wikiLink,
-                });
-            } else {
-                seasons.push({
-                    width,
-                    cover: maybeCallback(rawCover, seasonNumber),
-                    offset,
-                    title,
-                    number,
-                    wikiLink,
-                });
-            }
+            seasons.push({
+                width: widthBasedOnPages(chaptersRange),
+                ...(rawCover === undefined ?
+                    {}
+                :   { cover: maybeCallback(rawCover, seasonNumber), offset }),
+                title,
+                number: seasonTemplates.numberProcessor(seasonNumber),
+                wikiLink,
+            });
 
             if (rawEpisodes === undefined || episodeTemplates === undefined) {
                 continue;
@@ -379,7 +359,9 @@ const resolveTimelineData = (
         chapters: asNonEmpty(chapters, 'chapters'),
         volumes: asNonEmpty(volumes, 'volumes'),
         arcs: asNonEmpty(arcs, 'arcs'),
-        sagas: asNonEmpty(sagas, 'sagas'),
+        ...(rawSagas === undefined ?
+            {}
+        :   { sagas: asNonEmpty(sagas, 'sagas') }),
         episodes,
         seasons,
         wikiBase,

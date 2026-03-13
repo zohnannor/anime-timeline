@@ -45,22 +45,14 @@ export const AOT_TIMELINE: Timeline = {
                 focusable: true,
             },
         },
-        saga: {
-            type: 'saga',
+        arc: {
+            type: 'arc',
             height: ARC_HEIGHT,
-            blankfontSize: 0,
-            titleFontSize: 0,
+            titleProcessor: title => `${title} arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
             sectionLink: 'Story Arcs',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                titleProcessor: title => `${title} arc`,
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Story Arcs',
-                wikiLink: title => title,
-            },
+            wikiLink: title => title,
         },
         timeline: {
             type: 'timeline',
@@ -1152,67 +1144,62 @@ export const AOT_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
-        sagas: [
+        arcs: [
             {
-                title: '',
-                arcs: [
-                    {
-                        title: 'Prologue',
-                        cover: 'The_Colossus_Titan_appears',
-                        offset: { x: 100, y: 0 },
-                        chapters: { from: 1, to: 2 },
-                    },
-                    {
-                        title: 'Wall Sealing',
-                        cover: 'Battle_of_Trost_District',
-                        offset: { x: 0, y: 700 },
-                        chapters: { from: 3, to: 14 },
-                    },
-                    {
-                        title: '104th Training Corps',
-                        cover: '104th_Training_Corps',
-                        offset: { x: 0, y: 0 },
-                        chapters: { from: 15, to: 18 },
-                    },
-                    {
-                        title: 'The Female Titan',
-                        cover: 'The_Female_Titan_battle',
-                        offset: { x: 0, y: 1500 },
-                        chapters: { from: 19, to: 34 },
-                    },
-                    {
-                        title: 'Clash of the Titans',
-                        cover: 'Clash_of_the_Titans',
-                        offset: { x: 0, y: 1 },
-                        chapters: { from: 35, to: 50 },
-                    },
-                    {
-                        title: 'Royal Government',
-                        cover: 'Erwin_and_Pixis_speaking',
-                        offset: { x: 0, y: 1000 },
-                        chapters: { from: 51, to: 70 },
-                    },
-                    {
-                        title: 'Return to Shiganshina',
-                        cover: 'Eren_returns_home',
-                        offset: { x: 0, y: 1000 },
-                        chapters: { from: 71, to: 90 },
-                    },
-                    {
-                        title: 'Marley',
-                        cover: 'Volume_23_Cover_-_Clean_Version',
-                        offset: { x: 0, y: 2000 },
-                        chapters: { from: 91, to: 106 },
-                    },
-                    {
-                        title: 'War for Paradis',
-                        cover: 'Volume_29_Cover_-_Clean_Version',
-                        offset: { x: 0, y: 2200 },
-                        chapters: { from: 107, to: 139 },
-                    },
-                ] as const satisfies Tuple<Arc, ArcsTotal>,
+                title: 'Prologue',
+                cover: 'The_Colossus_Titan_appears',
+                offset: { x: 100, y: 0 },
+                chapters: { from: 1, to: 2 },
             },
-        ],
+            {
+                title: 'Wall Sealing',
+                cover: 'Battle_of_Trost_District',
+                offset: { x: 0, y: 700 },
+                chapters: { from: 3, to: 14 },
+            },
+            {
+                title: '104th Training Corps',
+                cover: '104th_Training_Corps',
+                offset: { x: 0, y: 0 },
+                chapters: { from: 15, to: 18 },
+            },
+            {
+                title: 'The Female Titan',
+                cover: 'The_Female_Titan_battle',
+                offset: { x: 0, y: 1500 },
+                chapters: { from: 19, to: 34 },
+            },
+            {
+                title: 'Clash of the Titans',
+                cover: 'Clash_of_the_Titans',
+                offset: { x: 0, y: 1 },
+                chapters: { from: 35, to: 50 },
+            },
+            {
+                title: 'Royal Government',
+                cover: 'Erwin_and_Pixis_speaking',
+                offset: { x: 0, y: 1000 },
+                chapters: { from: 51, to: 70 },
+            },
+            {
+                title: 'Return to Shiganshina',
+                cover: 'Eren_returns_home',
+                offset: { x: 0, y: 1000 },
+                chapters: { from: 71, to: 90 },
+            },
+            {
+                title: 'Marley',
+                cover: 'Volume_23_Cover_-_Clean_Version',
+                offset: { x: 0, y: 2000 },
+                chapters: { from: 91, to: 106 },
+            },
+            {
+                title: 'War for Paradis',
+                cover: 'Volume_29_Cover_-_Clean_Version',
+                offset: { x: 0, y: 2200 },
+                chapters: { from: 107, to: 139 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
             // https://imgur.com/a/attack-on-titan-chapter-coverage-guide-AsZ683p
             {
