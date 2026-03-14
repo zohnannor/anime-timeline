@@ -1375,9 +1375,16 @@ export const FRIEREN_TIMELINE: Timeline = {
                     {
                         title: () => 'A Magnificent End',
                         cover: episodeCover,
-                        offset: { x: 0, y: 0 },
+                        offset: { x: 1, y: 0 },
                         date: 'March 13, 2026',
                         chapters: { from: 74, to: 76 },
+                    },
+                    {
+                        title: () => "Himmel's Memoirs",
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        date: 'March 20, 2026',
+                        chapters: { from: 77, to: 78 },
                     },
                 ],
             },
