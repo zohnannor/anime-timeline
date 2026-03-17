@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import enum
 import os
 import sys
 import subprocess
@@ -9,68 +8,10 @@ import logging
 import shutil
 from pathlib import Path
 from dataclasses import dataclass
-from typing import Callable, List, Dict, Optional, Final
+from typing import Callable, Final
 from concurrent.futures import ThreadPoolExecutor
 
-
-# Color codes for logging
-class Color(enum.StrEnum):
-    """ANSI color codes for terminal output"""
-
-    RESET = "\033[0m"
-    BOLD = "\033[1m"
-    BLACK = "\033[30m"
-    RED = "\033[31m"
-    GREEN = "\033[32m"
-    YELLOW = "\033[33m"
-    BLUE = "\033[34m"
-    MAGENTA = "\033[35m"
-    CYAN = "\033[36m"
-    WHITE = "\033[37m"
-    BRIGHT_BLACK = "\033[90m"
-    BRIGHT_RED = "\033[91m"
-    BRIGHT_GREEN = "\033[92m"
-    BRIGHT_YELLOW = "\033[93m"
-    BRIGHT_BLUE = "\033[94m"
-    BRIGHT_MAGENTA = "\033[95m"
-    BRIGHT_CYAN = "\033[96m"
-    BRIGHT_WHITE = "\033[97m"
-
-
-def should_use_colors(color_arg: str) -> bool:
-    """Determine if colors should be used based on args and environment"""
-
-    if color_arg == "always":
-        return True
-    elif color_arg == "never":
-        return False
-    elif color_arg == "auto":
-        # Auto mode: check TTY and NO_COLOR environment variable
-        is_tty = sys.stdout.isatty()
-        no_color_env = os.environ.get("NO_COLOR")
-        return is_tty and (no_color_env is None)
-    return False
-
-
-class ColorContext:
-    """Global color configuration"""
-
-    _enabled: bool = True
-
-    @classmethod
-    def set_enabled(cls, enabled: bool):
-        cls._enabled = enabled
-
-    @classmethod
-    def get_enabled(cls):
-        return cls._enabled
-
-
-def colored(text: str, color_code: str) -> str:
-    """Color text if colors are enabled globally"""
-    if not ColorContext.get_enabled():
-        return text
-    return f"{color_code}{text}{Color.RESET}"
+from colors import Color, ColorContext, colored, should_use_colors
 
 
 class ColorFormatter(logging.Formatter):
@@ -84,9 +25,7 @@ class ColorFormatter(logging.Formatter):
         logging.CRITICAL: f"{Color.BRIGHT_RED}{Color.BOLD}",
     }
 
-    def __init__(
-        self, fmt: Optional[str] = None, datefmt: Optional[str] = None
-    ):
+    def __init__(self, fmt: str | None = None, datefmt: str | None = None):
         # Default format if none provided
         fmt = fmt or "%(asctime)s - %(levelname)s - %(message)s"
         super().__init__(fmt, datefmt)
@@ -116,7 +55,7 @@ class Config:
     thumb_width: int = 100
 
 
-SPECIAL_IMAGES: Final[Dict[str, set[str]]] = {
+SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
     "csm": {
         "Chainsaw_Man_Anime_Key_Visual_1.png",
         "Volume_01_Pochita_Sketch_2.png",
@@ -183,6 +122,20 @@ SPECIAL_IMAGES: Final[Dict[str, set[str]]] = {
         "Horai_flower_setting.png",
         "The_Survivors_on_Rien's_ship.png",
     },
+    "jjk": {
+        'Jujutsu_Kaisen_Movie_Key_Visual_2_(Cleaned).png'
+        "Anime_Key_Visual_2.png"
+        "Anime_Key_Visual_12.png"
+        "Anime_Key_Visual_20.png"
+        "Chapter_1_(Cleaned).png"
+        "Anime_Key_Visual_6.png"
+        "Anime_Key_Visual_4_(Cleaned).png"
+        "Chapter_58_(Cleaned).png"
+        "Anime_Key_Visual_11.png"
+        "Chapter_107.png"
+        "Jump_Festa_2022_Genga_Museum_illustration.png"
+        "Chapter_246_(Cleaned).png"
+    },
 }
 
 
@@ -221,7 +174,7 @@ class ImageProcessor:
         """Check if an image is special (should be processed separately)"""
         return path.name in self.special_images
 
-    def run_command(self, cmd: List[str]) -> bool:
+    def run_command(self, cmd: list[str]) -> bool:
         """Run a shell command and handle errors"""
         try:
             result = subprocess.run(
@@ -232,7 +185,7 @@ class ImageProcessor:
             logging.error(f"Error running command `{' '.join(cmd)}`: {e}")
             return False
 
-    def find_files(self, patterns: List[str]) -> List[Path]:
+    def find_files(self, patterns: list[str]) -> list[Path]:
         """Find files matching patterns in main directory"""
         return sorted(
             list(
@@ -248,7 +201,7 @@ class ImageProcessor:
         self,
         *,
         header: str,
-        files: List[Path],
+        files: list[Path],
         no_files_message: str,
         process_single: Callable[[Path], bool],
         image_kind: str,
@@ -287,9 +240,9 @@ class ImageProcessor:
         dest: Path,
         should_skip: Callable[[], bool],
         skip_reason: str,
-        commands: List[List[str]],
-        on_failure: Optional[Callable[[], None]] = None,
-        error_message: Optional[str] = None,
+        commands: list[list[str]],
+        on_failure: Callable[[], None] | None = None,
+        error_message: str | None = None,
         success_message: str,
         fail_message: str,
     ) -> bool:
@@ -576,7 +529,7 @@ class ImageProcessor:
         self.get_size_report()
 
 
-def find_all_titles() -> List[str]:
+def find_all_titles() -> list[str]:
     """Find all anime titles in the public directory"""
 
     public_dir = Path("./public")
@@ -620,7 +573,9 @@ def main():
         description="Optimize manga/anime images",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("TITLE", nargs="?", help="Manga/Anime title")
+    parser.add_argument(
+        "TITLE", nargs="?", help="Manga/Anime title codeword (e.g. `csm`)"
+    )
     parser.add_argument(
         "--force",
         action="store_true",

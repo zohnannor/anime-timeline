@@ -6,6 +6,7 @@ import { DEATHNOTE_TIMELINE } from '@timelines/deathnote';
 import { EVA_TIMELINE } from '@timelines/eva';
 import { FP_TIMELINE } from '@timelines/fp';
 import { FRIEREN_TIMELINE } from '@timelines/frieren';
+import { JJK_TIMELINE } from '@timelines/jjk';
 import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
 import resolveTimeline from '@timelines/resolved';
@@ -20,6 +21,7 @@ export const TIMELINE = resolveTimeline({
     opm: OPM_TIMELINE,
     deathnote: DEATHNOTE_TIMELINE,
     jr: JR_TIMELINE,
+    jjk: JJK_TIMELINE,
 });
 
 export const TITLES = typedKeyTuple(TIMELINE);

@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import {
     DAYS_GRADIENT,
@@ -21,7 +22,6 @@ import {
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE } from '@timelines/registry';
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 
 const getISODate = (date: Date): string => {
     const iso = date.toISOString();
