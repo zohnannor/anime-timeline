@@ -199,6 +199,20 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "Season_1.png",
         "Season_2.png",
     },
+    "jjk": {
+        "Jujutsu_Kaisen_Movie_Key_Visual_2_(Cleaned).png",
+        "Anime_Key_Visual_2.png",
+        "Anime_Key_Visual_12.png",
+        "Anime_Key_Visual_20.png",
+        "Chapter_1_(Cleaned).png",
+        "Anime_Key_Visual_6.png",
+        "Anime_Key_Visual_4_(Cleaned).png",
+        "Chapter_58_(Cleaned).png",
+        "Anime_Key_Visual_11.png",
+        "Chapter_107.png",
+        "Jump_Festa_2022_Genga_Museum_illustration.png",
+        "Chapter_246_(Cleaned).png",
+    },
 }
 
 
