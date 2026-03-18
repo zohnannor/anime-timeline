@@ -2,11 +2,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng } from '@hugocxl/react-to-image';
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale, toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 
 const ConfirmButton = styled.button`
     cursor: pointer;

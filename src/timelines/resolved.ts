@@ -25,9 +25,9 @@ import {
     SubtimelinesMap,
     Timeline,
     TimelineData,
+    TimelineSection,
     TimelineSectionItem,
     TimelineSectionLayout,
-    TimelineSection,
     Volume,
 } from '@timelines/types';
 
@@ -59,7 +59,7 @@ type ResolvedSaga = Omit<Saga, 'chapters' | 'arcs'> & {
     width: WidthResolver;
 } & ResolvedTemplates;
 
-type ResolvedEpisode = Omit<
+export type ResolvedEpisode = Omit<
     Episode,
     'title' | 'cover' | 'chapters' | 'date'
 > & {
