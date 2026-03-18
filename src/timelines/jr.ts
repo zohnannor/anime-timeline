@@ -1045,8 +1045,8 @@ export const JR_TIMELINE: Timeline = {
             {
                 title: 'Jigokuraku Season 2',
                 cover: () => 'Jigokuraku_Season_2_Key_Visual_2',
-                offset: { x: 0, y: 3000 },
-                chapters: { from: 45, to: 86 },
+                offset: { x: 0, y: 3500 },
+                chapters: { from: 45, to: 93 },
                 episodes: [
                     {
                         title: () => 'Dawn and Confusion',
@@ -1111,9 +1111,16 @@ export const JR_TIMELINE: Timeline = {
                         date: 'March 8, 2026',
                         chapters: { from: 78, to: 81 },
                     },
+                    {
+                        title: () => 'Master and Student',
+                        cover: episodeCover,
+                        offset: { x: 0, y: 0 },
+                        date: 'March 15, 2026',
+                        chapters: { from: 82, to: 85 },
+                    },
                 ],
             },
-            { chapters: { from: 87 } },
+            { chapters: { from: 94 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             6: 9,
