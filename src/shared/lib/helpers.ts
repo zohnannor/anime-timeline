@@ -1,7 +1,12 @@
 /* eslint-disable no-bitwise */
 import { keyframes } from 'styled-components';
 
-import { asNonEmpty, Mutable, NonEmptyArray } from '@shared/lib/util';
+import {
+    asNonEmpty,
+    Mutable,
+    NonEmptyArray,
+    throwError,
+} from '@shared/lib/util';
 import { ResolvedChapter } from '@timelines/resolved';
 import { TimelineSection } from '@timelines/types';
 
@@ -16,8 +21,15 @@ export const toTitleCase = (string: string) =>
 export const scale = (n: number) =>
     `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
 
-export const tokyoDate = (date: string) =>
-    new Date(`${date.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
+const isValidDate = (date: Date) => !isNaN(date.getTime());
+
+export const tokyoDate = (dateStr: string): Date => {
+    const date = new Date(`${dateStr.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
+    if (isValidDate(date)) {
+        return date;
+    }
+    return throwError(`Invalid date: ${dateStr}`);
+};
 
 export type Chunk<T> = NonEmptyArray<T>;
 

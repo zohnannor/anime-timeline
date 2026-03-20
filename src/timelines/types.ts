@@ -34,7 +34,7 @@ export type Saga = {
 };
 
 export type Episode = {
-    title: Callback<string> | number;
+    title: string | number;
     cover: Callback<string>;
     offset: Offset;
     date: string;
