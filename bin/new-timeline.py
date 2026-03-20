@@ -220,7 +220,7 @@ def create_new_timeline(title: str | None = None):
                     wikiLink: (_, n) => `Episode_${{n}}`,
                     focusable: true,
                 }},
-            }},\n"""
+            }},\n       """
             if seasons != 0
             else ""
         )
@@ -235,7 +235,6 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
-const SAGA_HEIGHT = ARC_HEIGHT;
 
 type VolumesTotal = {volumes};
 type ArcsTotal = {arcs};
@@ -244,7 +243,6 @@ type SeasonsTotal = {seasons};
 const volumeTitle = (n: number) => `Volume ${{n}}`;
 const volumeCover = (n: number) => `Volume_${{pad(n)}}`;
 const chapterTitle = (n: number) => `Chapter ${{n}}`;
-const episodeTitle = (n: number) => `Episode ${{n}}`;
 const episodeCover = (n: number) => n.toString();
 
 export const {const_name}: Timeline = {{
