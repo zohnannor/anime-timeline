@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
@@ -14,7 +14,8 @@ import {
 import { RefreshIcon } from '@shared/ui/icons/refresh';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE, TITLES } from '@timelines/registry';
-import { ResolvedChapter } from '@timelines/resolved';
+import { ResolvedChapter, ResolvedEpisode } from '@timelines/resolved';
+import { AnimeTitle, SmallImages } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -35,6 +36,7 @@ const TitleButton = styled.div`
     align-items: center;
     gap: ${scale(100)};
     padding: ${scale(50)} 0;
+    width: 100%;
 
     & > img {
         width: ${scale(200)};
@@ -51,46 +53,118 @@ const TitleContainer = styled.div`
     font-size: ${scale(75)};
 `;
 
+const TitleWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const BadgeWrapper = styled.span`
+    opacity: 0.6;
+    font-size: 0.9em;
+`;
+
 const totalChapterCount = (chapters: readonly ResolvedChapter[]) =>
     chapters.length;
 const totalPageCount = (chapters: readonly ResolvedChapter[]) =>
     sum(chapters.map(ch => ch.pages));
-const recentlyUpdated = (chapters: readonly ResolvedChapter[]) =>
-    Math.max(...chapters.map(ch => ch.date.getTime()));
+const recentlyUpdated = (
+    chapters: readonly ResolvedChapter[],
+    episodes: ResolvedEpisode[] | undefined,
+) =>
+    Math.max(
+        ...chapters.map(ch => ch.date.getTime()),
+        ...(episodes
+            ?.filter(ep => ep.date < new Date())
+            .map(ep => ep.date.getTime()) ?? []),
+    );
+
+type Sorting =
+    | 'unsorted'
+    | 'alphabetical'
+    | 'chapter count'
+    | 'page count'
+    | 'recently updated';
+
+type SortData =
+    | { type: 'string'; value: string; badge: string | null }
+    | { type: 'number'; value: number; badge: string | null };
+
+type Sort = {
+    animeTitle: AnimeTitle;
+    title: string;
+    smallImages: SmallImages;
+} & SortData;
 
 export const AnimeTitleSelectorModal: React.FC = () => {
     const { animeTitleSelectorOpen, setAnimeTitleSelectorOpen, setAnimeTitle } =
         useSettings();
-    const [sorting, setSorting] = useState<
-        | 'unsorted'
-        | 'alphabetical'
-        | 'chapter count'
-        | 'page count'
-        | 'recently updated'
-    >('unsorted');
+    const [sorting, setSorting] = useState<Sorting>('unsorted');
+
+    const titles = useMemo(
+        () =>
+            TITLES.map(animeTitle => {
+                const {
+                    data: { chapters, episodes, title, smallImages },
+                } = TIMELINE[animeTitle];
+                const strategies: Record<Sorting, () => SortData> = {
+                    alphabetical: () => ({
+                        type: 'string',
+                        value: animeTitle,
+                        badge: null,
+                    }),
+                    'chapter count': () => {
+                        const count = totalChapterCount(chapters);
+                        return {
+                            type: 'number',
+                            value: count,
+                            badge: `${count} chapters`,
+                        };
+                    },
+                    'page count': () => {
+                        const count = totalPageCount(chapters);
+                        return {
+                            type: 'number',
+                            value: count,
+                            badge: `${count} pages`,
+                        };
+                    },
+                    'recently updated': () => {
+                        const time = recentlyUpdated(chapters, episodes);
+                        return {
+                            type: 'number',
+                            value: time,
+                            badge: new Date(time).toLocaleDateString(
+                                undefined,
+                                {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                },
+                            ),
+                        };
+                    },
+                    unsorted: () => ({ type: 'number', value: 0, badge: null }),
+                };
+                return {
+                    animeTitle,
+                    title,
+                    smallImages,
+                    ...strategies[sorting](),
+                } satisfies Sort;
+            }).toSorted((titleA, titleB) =>
+                titleA.type === 'string' && titleB.type === 'string' ?
+                    titleA.value.localeCompare(titleB.value)
+                : titleA.type === 'number' && titleB.type === 'number' ?
+                    titleB.value - titleA.value
+                :   0,
+            ),
+        [sorting],
+    );
 
     if (!animeTitleSelectorOpen) {
         return null;
     }
-
-    const titles = TITLES.toSorted((titleA, titleB) => {
-        const {
-            data: { chapters: chaptersA },
-        } = TIMELINE[titleA];
-        const {
-            data: { chapters: chaptersB },
-        } = TIMELINE[titleB];
-        return (
-            sorting === 'alphabetical' ? titleA.localeCompare(titleB)
-            : sorting === 'chapter count' ?
-                totalChapterCount(chaptersB) - totalChapterCount(chaptersA)
-            : sorting === 'page count' ?
-                totalPageCount(chaptersB) - totalPageCount(chaptersA)
-            : sorting === 'recently updated' ?
-                recentlyUpdated(chaptersB) - recentlyUpdated(chaptersA)
-            :   0
-        );
-    });
 
     const nextSorting = {
         unsorted: 'alphabetical',
@@ -128,27 +202,25 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
             <TitleContainer>
-                {titles.map(animeTitle => {
-                    const {
-                        data: { title, smallImages },
-                    } = TIMELINE[animeTitle];
-                    return (
-                        <TitleButton
-                            key={animeTitle}
-                            onClick={() => {
-                                setAnimeTitle(animeTitle);
-                                setAnimeTitleSelectorOpen(false);
-                            }}
-                        >
-                            <ThumbnailImage
-                                className='animeTitleImage'
-                                animeTitle={animeTitle}
-                                src={smallImages['scroller-or-favicon']}
-                            />
+                {titles.map(({ animeTitle, title, smallImages, badge }) => (
+                    <TitleButton
+                        key={animeTitle}
+                        onClick={() => {
+                            setAnimeTitle(animeTitle);
+                            setAnimeTitleSelectorOpen(false);
+                        }}
+                    >
+                        <ThumbnailImage
+                            className='animeTitleImage'
+                            animeTitle={animeTitle}
+                            src={smallImages['scroller-or-favicon']}
+                        />
+                        <TitleWrapper>
                             {title}
-                        </TitleButton>
-                    );
-                })}
+                            {badge && <BadgeWrapper>{badge}</BadgeWrapper>}
+                        </TitleWrapper>
+                    </TitleButton>
+                ))}
             </TitleContainer>
         </Modal>
     );

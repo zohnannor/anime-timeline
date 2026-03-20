@@ -1,2 +1,2 @@
-export { Modal } from './Modal';
 export { HeaderButton } from './HeaderButton';
+export { Modal } from './Modal';
