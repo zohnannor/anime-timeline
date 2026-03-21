@@ -123,7 +123,6 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "The_Survivors_on_Rien's_ship.png",
     },
     "hxh": {
-        "Hunter___Hunter_2011_logo.png",
         "Hunter_Exam_Poster.png",
         "2011_Volume_9_Textless.png",
         "Yorknew_City_arc.png",
