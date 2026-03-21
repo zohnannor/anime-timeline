@@ -280,9 +280,52 @@ class ImageProcessor:
 
     def convert_orphan_images(self):
         """
-        Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists)
+        Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists).
+        In CI (GitHub Actions), delete orphan files instead to keep cache clean.
         """
+        orphan_files = self.find_files(["webp", "gif"])
 
+        if os.environ.get("GITHUB_ACTIONS"):
+            logging.debug(
+                colored(
+                    "Running in CI (GitHub Actions), deleting orphans",
+                    Color.BRIGHT_YELLOW,
+                )
+            )
+
+            # CI: delete orphan images
+            def _delete_orphan_single(path: Path) -> bool:
+                # Skip if original PNG/JPG/JPEG exists (i.e., not actually orphan)
+                if any(
+                    path.with_suffix(ext).exists()
+                    for ext in [".png", ".jpg", ".jpeg"]
+                ):
+                    return True  # Not an orphan – skip gracefully
+                try:
+                    path.unlink()
+                    logging.debug(
+                        colored(f"Deleted orphan: {path}", Color.BRIGHT_RED)
+                    )
+                    return True
+                except Exception as e:
+                    logging.error(
+                        colored(
+                            f"Failed to delete orphan {path}: {e}",
+                            Color.BRIGHT_RED,
+                        )
+                    )
+                    return False
+
+            self.process_files(
+                header="Deleting orphan images (CI)",
+                files=orphan_files,
+                no_files_message="No orphan images to delete",
+                process_single=_delete_orphan_single,
+                image_kind="orphan images",
+            )
+            return
+
+        # Local: convert orphans to PNG
         def _convert_orphan_single(path: Path) -> bool:
             dest = path.with_suffix(".png")
             return self.process_single_file(
@@ -301,7 +344,7 @@ class ImageProcessor:
 
         self.process_files(
             header="Converting orphan images to PNG",
-            files=self.find_files(["webp", "gif"]),
+            files=orphan_files,
             no_files_message="No orphan images to convert",
             process_single=_convert_orphan_single,
             image_kind="orphan images",
