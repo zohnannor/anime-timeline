@@ -85,7 +85,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleFontSize: 45,
             sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
             wikiLink: (title: string, n: number): string =>
-                n <= 21 ? `Chapter_${n}`
+                n <= 21 ? `Chapter ${n}`
                     // first one is in 0..21
                 : title === 'Target' ? 'Target (chapter 63)'
                 : CHAPTER_LINK_EXCEPTIONS.includes(title) ? `${title} (chapter)`

@@ -33,7 +33,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                 blankfontSize: 42,
                 titleFontSize: 35,
                 sectionLink: "Frieren:_Beyond_Journey's_End_(Anime)#Episodes",
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -58,7 +58,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Chapters_and_Volumes#Volumes',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {
@@ -68,7 +68,7 @@ export const FRIEREN_TIMELINE: Timeline = {
             titleFontSize: 100,
             defaultCoverPosition: 'top',
             sectionLink: 'Chapters_and_Volumes#Volumes',
-            wikiLink: (_, n) => `Volume_${n}`,
+            wikiLink: (_, n) => `Volume ${n}`,
         },
     },
     data: {

@@ -46,8 +46,8 @@ export const BERSERK_TIMELINE: Timeline = {
                 sectionLink: 'Berserk_(1997_Anime)#Episodes',
                 wikiLink: (_, n) =>
                     n <= 25 ?
-                        `Episode_${n}_(1997_Anime)`
-                    :   `Episode_${n - 25}_(2016_Anime)`,
+                        `Episode ${n} (1997 Anime)`
+                    :   `Episode ${n - 25} (2016 Anime)`,
                 focusable: true,
             },
         },
@@ -73,7 +73,7 @@ export const BERSERK_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Releases_(Manga)#Volumes',
-            wikiLink: (_, n) => `Episode_${chapterNumber(n)}_(Manga)`,
+            wikiLink: (_, n) => `Episode ${chapterNumber(n)} (Manga)`,
             focusable: true,
         },
         volume: {
