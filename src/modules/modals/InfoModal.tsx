@@ -186,14 +186,16 @@ const infoModalContent = ({
             intellectual property on this site.
         </Box>
 
-        <Box $dir='column'>
-            <h3>Official Links:</h3>
-            {socialLinks.map(({ name, url }) => (
-                <Link key={name} href={url}>
-                    {name}
-                </Link>
-            ))}
-        </Box>
+        {socialLinks.length !== 0 && (
+            <Box $dir='column'>
+                <h3>Official Links:</h3>
+                {socialLinks.map(({ name, url }) => (
+                    <Link key={name} href={url}>
+                        {name}
+                    </Link>
+                ))}
+            </Box>
+        )}
     </Box>
 );
 
