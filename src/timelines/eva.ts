@@ -70,7 +70,7 @@ export const EVA_TIMELINE: Timeline = {
                     `${title}\n(${episodeTitle(title, n)})`,
                 blankfontSize: 50,
                 titleFontSize: 50,
-                sectionLink: 'Episodes and Films (Portal)',
+                sectionLink: 'Episodes_and_Films_(Portal)',
                 wikiLink: (title, n) =>
                     episodeTitle(title, n).replaceAll(' ', '_'),
             },

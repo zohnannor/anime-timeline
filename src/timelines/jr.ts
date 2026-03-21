@@ -34,7 +34,7 @@ export const JR_TIMELINE: Timeline = {
                 blankfontSize: 50,
                 titleFontSize: 50,
                 sectionLink: 'Jigokuraku_(anime)#Episodes',
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -58,7 +58,7 @@ export const JR_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Chapters and Volumes',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {
@@ -68,7 +68,7 @@ export const JR_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Chapters and Volumes',
-            wikiLink: (_, n) => `Volume_${n}`,
+            wikiLink: (_, n) => `Volume ${n}`,
         },
     },
     data: {

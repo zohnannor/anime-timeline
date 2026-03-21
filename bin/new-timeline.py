@@ -217,10 +217,10 @@ def create_new_timeline(title: str | None = None):
                     blankfontSize: 42,
                     titleFontSize: 42,
                     sectionLink: '{title_urlsafe}_(Anime)#Episodes',
-                    wikiLink: (_, n) => `Episode_${{n}}`,
+                    wikiLink: (_, n) => `Episode ${{n}}`,
                     focusable: true,
                 }},
-            }},\n"""
+            }},\n       """
             if seasons != 0
             else ""
         )
@@ -235,7 +235,6 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
-const SAGA_HEIGHT = ARC_HEIGHT;
 
 type VolumesTotal = {volumes};
 type ArcsTotal = {arcs};
@@ -244,7 +243,6 @@ type SeasonsTotal = {seasons};
 const volumeTitle = (n: number) => `Volume ${{n}}`;
 const volumeCover = (n: number) => `Volume_${{pad(n)}}`;
 const chapterTitle = (n: number) => `Chapter ${{n}}`;
-const episodeTitle = (n: number) => `Episode ${{n}}`;
 const episodeCover = (n: number) => n.toString();
 
 export const {const_name}: Timeline = {{
@@ -269,7 +267,7 @@ export const {const_name}: Timeline = {{
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: '{title_urlsafe}_(Manga)#Chapters',
-            wikiLink: (_, n) => `Chapter_${{n}}`,
+            wikiLink: (_, n) => `Chapter ${{n}}`,
             focusable: true,
         }},
         volume: {{
@@ -280,7 +278,7 @@ export const {const_name}: Timeline = {{
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: '{title_urlsafe}_(Manga)#Chapters',
-            wikiLink: (_, n) => `Volume_${{n}}`,
+            wikiLink: (_, n) => `Volume ${{n}}`,
         }},
     }},
     data: {{

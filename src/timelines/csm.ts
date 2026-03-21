@@ -34,7 +34,7 @@ export const CSM_TIMELINE: Timeline = {
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -67,7 +67,7 @@ export const CSM_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {
@@ -78,7 +78,7 @@ export const CSM_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
-            wikiLink: (_, n) => `Volume_${n}`,
+            wikiLink: (_, n) => `Volume ${n}`,
         },
     },
     data: {
