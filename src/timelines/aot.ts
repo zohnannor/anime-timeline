@@ -41,7 +41,7 @@ export const AOT_TIMELINE: Timeline = {
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'List of Attack on Titan episodes',
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -65,7 +65,7 @@ export const AOT_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Attack on Titan chapters',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {

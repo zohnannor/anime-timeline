@@ -28,13 +28,13 @@ const episodeCover = (n: number) =>
     : n <= 29 ? `OPMS3Ep${n - 24}`
     : `One-Punch_Man_Episode_${n}`;
 const chapterLink = (title: string, n: number): string =>
-    n <= 118 ? `Chapter_${n}`
-    : n <= 126 ? `Chapter_${n - 4}_(Online)`
-    : n <= 129 ? `Chapter_${n - 3}_(Online)`
-    : n <= 130 ? `Chapter_${n}`
-    : n <= 138 ? `Chapter_${n - 4}_(Online)`
-    : n <= 139 ? `Chapter_${n}`
-    : n <= CHAPTERS_TOTAL ? `Chapter_${n - 5}_(Online)`
+    n <= 118 ? `Chapter ${n}`
+    : n <= 126 ? `Chapter ${n - 4} (Online)`
+    : n <= 129 ? `Chapter ${n - 3} (Online)`
+    : n <= 130 ? `Chapter ${n}`
+    : n <= 138 ? `Chapter ${n - 4} (Online)`
+    : n <= 139 ? `Chapter ${n}`
+    : n <= CHAPTERS_TOTAL ? `Chapter ${n - 5} (Online)`
     : title;
 
 export const OPM_TIMELINE: Timeline = {
@@ -59,7 +59,7 @@ export const OPM_TIMELINE: Timeline = {
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Episodes',
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -105,7 +105,7 @@ export const OPM_TIMELINE: Timeline = {
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: (_, n) =>
                 n <= VOLUMES_TOTAL ?
-                    `Volume_${n}`
+                    `Volume ${n}`
                 :   'Chapters_and_Volumes#Volume_List',
         },
     },

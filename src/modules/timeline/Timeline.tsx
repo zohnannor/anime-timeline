@@ -232,9 +232,10 @@ export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
         [chapters, unboundChapterWidth],
     );
     const yearRange = useMemo(() => {
-        const start = yearsSegments[0].colorValue;
-        const end = yearsSegments.at(-1)?.colorValue ?? start;
-        return [start, end] as const;
+        const years = yearsSegments.map(seg => seg.colorValue);
+        const minYear = Math.min(...years);
+        const maxYear = Math.max(...years);
+        return [minYear, maxYear] as const;
     }, [yearsSegments]);
 
     return (

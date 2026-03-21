@@ -34,7 +34,7 @@ export const FP_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Fire_Punch_(manga)#Volumes',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {
@@ -44,7 +44,7 @@ export const FP_TIMELINE: Timeline = {
             titleFontSize: 100,
             defaultCoverPosition: 'top',
             sectionLink: 'Fire_Punch_(manga)#Volumes',
-            wikiLink: (_, n) => `Volume_${n}`,
+            wikiLink: (_, n) => `Volume ${n}`,
         },
     },
     data: {
