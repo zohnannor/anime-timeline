@@ -28,7 +28,7 @@ export const EVA_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
-            wikiLink: (_, n) => `Volume ${n} (Neon Genesis Evangelion)`,
+            wikiLink: (_, n) => `Volume_${n}_(Neon_Genesis_Evangelion)`,
         },
         timeline: {
             type: 'timeline',
@@ -42,7 +42,7 @@ export const EVA_TIMELINE: Timeline = {
             titleFontSize: 45,
             sectionLink: 'Neon_Genesis_Evangelion_(manga)',
             wikiLink: (title, n) =>
-                `Volume ${
+                `Volume_${
                     CHAPTER_STOPS.filter(stop => n > stop).length + 1
                 }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(' ', '_')}`,
         },
@@ -70,7 +70,7 @@ export const EVA_TIMELINE: Timeline = {
                     `${title}\n(${episodeTitle(title, n)})`,
                 blankfontSize: 50,
                 titleFontSize: 50,
-                sectionLink: 'Episodes and Films (Portal)',
+                sectionLink: 'Episodes_and_Films_(Portal)',
                 wikiLink: (title, n) =>
                     episodeTitle(title, n).replaceAll(' ', '_'),
             },
