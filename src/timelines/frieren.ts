@@ -1380,13 +1380,13 @@ export const FRIEREN_TIMELINE: Timeline = {
                     },
                     {
                         title: "Himmel's Memoirs",
-                        cover: () => '',
+                        cover: episodeCover,
                         offset: { x: 0, y: 0 },
                         date: 'March 20, 2026',
                         chapters: { from: 77, to: 78 },
                     },
                     {
-                        title: '',
+                        title: 'A Beautiful Sight',
                         cover: () => '',
                         offset: { x: 0, y: 0 },
                         date: 'March 27, 2026',
