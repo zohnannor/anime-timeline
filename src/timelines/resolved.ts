@@ -64,13 +64,13 @@ export type ResolvedEpisode = Omit<
     'title' | 'cover' | 'chapters' | 'date'
 > & {
     date: Date;
-    cover: string;
+    cover: string | null;
     width: WidthResolver;
     season: number;
 } & ResolvedTemplates;
 
 type ResolvedSeason = Omit<Season, 'cover' | 'chapters' | 'episodes'> & {
-    cover?: string;
+    cover: string | null;
     width: WidthResolver;
 } & ResolvedTemplates;
 
@@ -304,15 +304,15 @@ const resolveTimelineData = (
             },
         ] of rawSeasons.entries()) {
             const seasonNumber = seasonIdx + 1;
-            const title = seasonTemplates.titleProcessor(
-                rawTitle ?? seasonNumber.toString(),
-                seasonNumber,
-            );
+            const title =
+                rawTitle === undefined ?
+                    `SEASON ${seasonNumber}`
+                :   seasonTemplates.titleProcessor(rawTitle, seasonNumber);
             const wikiLink = seasonTemplates.wikiLink(title, seasonNumber);
             seasons.push({
                 width: widthBasedOnPages(chaptersRange),
-                ...(rawCover === undefined ?
-                    {}
+                ...(rawCover === undefined || rawCover === null ?
+                    { cover: null }
                 :   { cover: maybeCallback(rawCover, seasonNumber), offset }),
                 title,
                 number: seasonTemplates.numberProcessor(seasonNumber),
@@ -339,8 +339,12 @@ const resolveTimelineData = (
                     :   maybeCallback(rawTitle, episodeNumber);
                 episodes.push({
                     date: tokyoDate(rawDate),
-                    cover: maybeCallback(rawCover, episodeNumber),
-                    offset,
+                    ...(rawCover === null ?
+                        { cover: null }
+                    :   {
+                            cover: maybeCallback(rawCover, episodeNumber),
+                            offset,
+                        }),
                     width: widthBasedOnPages(chaptersRange),
                     season: seasonNumber,
                     title: episodeTemplates.titleProcessor(

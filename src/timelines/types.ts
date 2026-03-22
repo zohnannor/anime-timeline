@@ -10,6 +10,10 @@ export type Range = { from: number; to?: number };
 export type Callback<T> = (_n: number) => T;
 export type EntityCallback<T> = (_n: number, _title: string) => T;
 
+type CoverOffset<C> = ExactUnion<
+    { cover: C; offset: Offset } | { cover: null }
+>;
+
 export type Chapter = {
     title: Callback<string>;
     date: string;
@@ -26,7 +30,7 @@ export type Volume = {
 export type Arc = {
     title: string;
     chapters: Range;
-} & ExactUnion<{ cover: string; offset: Offset } | { cover: null }>;
+} & CoverOffset<string>;
 
 export type Saga = {
     title: string;
@@ -35,20 +39,16 @@ export type Saga = {
 
 export type Episode = {
     title: string | number;
-    cover: Callback<string>;
-    offset: Offset;
     date: string;
     chapters: Range;
-};
+} & CoverOffset<Callback<string>>;
 
 export type Season = ExactUnion<
-    | {
+    | ({
           title: string;
-          cover: Callback<string>;
-          offset: Offset;
           chapters: Range;
           episodes: Episode[];
-      }
+      } & CoverOffset<Callback<string>>)
     | { chapters: Range }
 >;
 

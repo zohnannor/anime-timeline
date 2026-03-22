@@ -27,8 +27,6 @@ export const HXH_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            // TODO: this is kinda hacky 🤷
-            numberProcessor: n => (n === 1 ? 'Hunter × Hunter' : n.toString()),
             sectionLink: 'Hunter × Hunter#Anime',
             wikiLink: () => 'List of Episodes (2011 series)',
             subTimeline: {
@@ -2855,8 +2853,7 @@ export const HXH_TIMELINE: Timeline = {
         seasons: [
             {
                 title: 'Hunter × Hunter',
-                cover: () => '',
-                offset: { x: 0, y: 0 },
+                cover: null,
                 chapters: { from: 1, to: 339 },
                 episodes: [
                     {

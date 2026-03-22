@@ -196,7 +196,7 @@ type TimelineSectionItemProps<T extends TimelineSectionType> = {
     num: number;
 };
 
-export const TimelineSectionItemComponent = <T extends TimelineSectionType>({
+export const TimelineSectionItemComponent = ({
     timelineSection: {
         type,
         fit = 'cover',
@@ -212,7 +212,7 @@ export const TimelineSectionItemComponent = <T extends TimelineSectionType>({
     },
     entity,
     num,
-}: TimelineSectionItemProps<T>) => {
+}: TimelineSectionItemProps<TimelineSectionType>) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
         useSettings();
@@ -232,22 +232,21 @@ export const TimelineSectionItemComponent = <T extends TimelineSectionType>({
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
-        type === 'season' && typeof cover !== 'string' ?
+        type === 'season' && cover === null ?
             // don't add link to seasons without cover (speculation)
-            `SEASON ${itemNumber}`
+            title
         :   <Link href={`${wikiBase}${wikiLink}`}>
-                {cover ?
-                    <ThumbnailImage
+                {cover === null ?
+                    type === 'episode' || type === 'volume' ?
+                        itemNumber
+                    :   itemTitle
+                :   <ThumbnailImage
                         src={cover}
                         $offsetX={offset?.x}
                         $offsetY={offset?.y}
                         $defaultPosition={defaultCoverPosition}
                     />
-                : type === 'arc' || type === 'saga' ?
-                    // for sagas/arcs without cover, just show the title
-                    itemTitle
-                    // for everything else, show the number
-                :   itemNumber}
+                }
             </Link>;
 
     const itemCover = (
