@@ -1387,8 +1387,7 @@ export const FRIEREN_TIMELINE: Timeline = {
                     },
                     {
                         title: 'A Beautiful Sight',
-                        cover: () => '',
-                        offset: { x: 0, y: 0 },
+                        cover: null,
                         date: 'March 27, 2026',
                         chapters: { from: 79, to: 80 },
                     },
