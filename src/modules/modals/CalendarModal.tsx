@@ -11,7 +11,6 @@ import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import {
     DAYS_GRADIENT,
-    fetchNextChapterDate,
     hueGlow,
     interpolateColor,
     MONTHS,
@@ -250,7 +249,12 @@ export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
-    const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
+
+    // previously, we fetched the next chapter date from Manga Plus for CSM. as
+    // CSM has finished publication, this is no longer necessary. commented out
+    // for now, but will be re-enabled if needed in the future for other ongoing
+    // titles on Manga Plus.
+    /* const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
 
     useEffect(() => {
         // `useEffect` awaits the promise
@@ -266,7 +270,7 @@ export const CalendarModal: React.FC = () => {
             }
             setNextChapterDate(await fetchNextChapterDate());
         })();
-    }, [calendarOpen, animeTitle]);
+    }, [calendarOpen, animeTitle]); */
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
@@ -317,12 +321,14 @@ export const CalendarModal: React.FC = () => {
         return months;
     };
 
-    const furthestDate =
+    // see comment above for why this is commented out
+    /* const furthestDate =
         nextChapterDate ?
             currentDate > nextChapterDate ?
                 currentDate
             :   nextChapterDate
-        :   currentDate;
+        :   currentDate; */
+    const furthestDate = currentDate;
 
     const months = useMemo(
         () => getMonthsBetween(startDate, furthestDate),
@@ -382,7 +388,7 @@ export const CalendarModal: React.FC = () => {
                         key={`month-${month.toISOString()}`}
                         month={month}
                         currentDate={currentDate}
-                        nextChapterDate={nextChapterDate}
+                        nextChapterDate={null /* nextChapterDate */}
                         chapterDateMap={eventMap}
                         onDayClick={handleDayClick}
                     />
