@@ -88,6 +88,7 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
     "frieren": {
         "Season_1_key_visual_3.png",
         "Season_2_key_visual_3.png",
+        "Season_3_key_visual.png",
         "Chapter_87.png",
     },
     "eva": {"End_of_Evangelion_poster.jpg", "Neon_Genesis_Evangelion_logo.jpg"},
