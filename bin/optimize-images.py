@@ -131,6 +131,16 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "Chimera_ant_arc_poster.png",
         "13th_Hunter_Chairman_Election_arc_2011.png",
         "Hunter_x_Hunter_Succession_Contest_arc.png",
+    },
+    "jojo": {
+        "Season_1_1.jpg",
+        "Season_1_2.jpg",
+        "Season_2_1.jpg",
+        "Season_2_2.png",
+        "Season_3.jpg",
+        "Season_4.png",
+        "Season_5.png",
+        "Season_6.jpg",
     }
 }
 
