@@ -137,9 +137,13 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "Season_1_2.jpg",
         "Season_2_1.jpg",
         "Season_2_2.png",
-        "Season_3.jpg",
-        "Season_4.png",
-        "Season_5.png",
+        "Season_3_1.jpg",
+        "Season_3_2.jpg",
+        "Season_4_1.png",
+        "Season_4_2.jpg",
+        "Season_5_1.png",
+        "Season_5_2.png",
+        "Season_5_3.jpeg",
         "Season_6.jpg",
     }
 }
