@@ -1556,7 +1556,6 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: 1,
                 cover: null,
                 chapters: [
                     {
