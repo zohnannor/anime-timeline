@@ -2743,7 +2743,6 @@ export const BERSERK_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {

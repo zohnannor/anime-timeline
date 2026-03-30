@@ -7,9 +7,9 @@ import { EVA_TIMELINE } from '@timelines/eva';
 import { FP_TIMELINE } from '@timelines/fp';
 import { FRIEREN_TIMELINE } from '@timelines/frieren';
 import { HXH_TIMELINE } from '@timelines/hxh';
+import { JOJO_TIMELINE } from '@timelines/jojo';
 import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
-import { JOJO_TIMELINE } from './jojo';
 import resolveTimeline from '@timelines/resolved';
 
 export const TIMELINE = resolveTimeline({

@@ -1447,7 +1447,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1483,7 +1482,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1519,7 +1517,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1555,7 +1552,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1615,7 +1611,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1675,7 +1670,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
@@ -1735,7 +1729,6 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
                 cover: null,
                 chapters: [
                     {
