@@ -21,9 +21,13 @@ export type Chapter = {
     cover: string | null;
 };
 
-export type Volume = {
-    title: Callback<string> | number;
-    cover: EntityCallback<string> | null;
+export type Volume = ExactUnion<
+    | {
+          title: Callback<string> | number;
+          cover: EntityCallback<string>;
+      }
+    | { cover: null }
+> & {
     chapters: NonEmptyArray<Chapter>;
 };
 

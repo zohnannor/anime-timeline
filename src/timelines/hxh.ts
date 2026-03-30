@@ -2721,7 +2721,6 @@ export const HXH_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: 1,
                 cover: null,
                 chapters: [
                     {

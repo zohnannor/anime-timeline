@@ -213,7 +213,8 @@ const resolveTimelineData = (
             typeof rawTitle === 'number' ?
                 (volumeChapters[rawTitle - 1]?.title ??
                 throwError(`Chapter ${rawTitle - 1} not found`))
-            :   maybeCallback(rawTitle, volumeNumber);
+            : rawTitle === undefined ? volumeNumber.toString()
+            : maybeCallback(rawTitle, volumeNumber);
         // unprocessed `title` passed to `rawCover` and `wikiLink` - intentional
         volumes.push({
             cover: maybeEntityCallback(rawCover, volumeNumber, title),
@@ -304,9 +305,10 @@ const resolveTimelineData = (
             },
         ] of rawSeasons.entries()) {
             const seasonNumber = seasonIdx + 1;
+            const number = seasonTemplates.numberProcessor(seasonNumber);
             const title =
                 rawTitle === undefined ?
-                    `SEASON ${seasonNumber}`
+                    `SEASON ${number}`
                 :   seasonTemplates.titleProcessor(rawTitle, seasonNumber);
             const wikiLink = seasonTemplates.wikiLink(title, seasonNumber);
             seasons.push({
@@ -315,7 +317,7 @@ const resolveTimelineData = (
                     { cover: null }
                 :   { cover: maybeCallback(rawCover, seasonNumber), offset }),
                 title,
-                number: seasonTemplates.numberProcessor(seasonNumber),
+                number,
                 wikiLink,
             });
 
