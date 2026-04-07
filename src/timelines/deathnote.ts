@@ -9,6 +9,7 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = 200;
 const SAGA_HEIGHT = ARC_HEIGHT;
 
+const CHAPTERS_TOTAL = 108;
 type VolumesTotal = 13;
 type ArcsTotal = 2;
 type SeasonsTotal = 1;
@@ -79,6 +80,8 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
+            numberProcessor: (n, title) =>
+                n <= CHAPTERS_TOTAL ? n.toString() : title,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,

@@ -200,7 +200,7 @@ const resolveTimelineData = (
                     ),
                 volume: volumeIdx,
                 title,
-                number: chapterTemplates.numberProcessor(chapterNumber),
+                number: chapterTemplates.numberProcessor(chapterNumber, title),
                 wikiLink: chapterTemplates.wikiLink(title, chapterNumber),
             });
         }
@@ -221,7 +221,7 @@ const resolveTimelineData = (
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
             title: volumeTemplates.titleProcessor(title, volumeNumber),
-            number: volumeTemplates.numberProcessor(volumeNumber),
+            number: volumeTemplates.numberProcessor(volumeNumber, title),
             wikiLink: volumeTemplates.wikiLink(title, volumeNumber),
         });
     }
@@ -249,7 +249,7 @@ const resolveTimelineData = (
                         ),
                     saga: sagaNumber,
                     title,
-                    number: arcTemplates.numberProcessor(arcNumber),
+                    number: arcTemplates.numberProcessor(arcNumber, title),
                     wikiLink: arcTemplates.wikiLink(title, arcNumber),
                 };
             },
@@ -267,7 +267,7 @@ const resolveTimelineData = (
                 width: unboundChapterWidth =>
                     sum(sagaArcs.map(arc => arc.width(unboundChapterWidth))),
                 title: sagaTemplates.titleProcessor(title, sagaNumber),
-                number: sagaTemplates.numberProcessor(sagaNumber),
+                number: sagaTemplates.numberProcessor(sagaNumber, title),
                 wikiLink: sagaTemplates.wikiLink(title, sagaNumber),
             });
         }
@@ -305,12 +305,14 @@ const resolveTimelineData = (
             },
         ] of rawSeasons.entries()) {
             const seasonNumber = seasonIdx + 1;
-            const number = seasonTemplates.numberProcessor(seasonNumber);
+            const number = seasonTemplates.numberProcessor(
+                seasonNumber,
+                rawTitle ?? seasonNumber.toString(),
+            );
             const title =
                 rawTitle === undefined ?
                     `SEASON ${number}`
                 :   seasonTemplates.titleProcessor(rawTitle, seasonNumber);
-            const wikiLink = seasonTemplates.wikiLink(title, seasonNumber);
             seasons.push({
                 width: widthBasedOnPages(chaptersRange),
                 ...(rawCover === undefined || rawCover === null ?
@@ -318,7 +320,7 @@ const resolveTimelineData = (
                 :   { cover: maybeCallback(rawCover, seasonNumber), offset }),
                 title,
                 number,
-                wikiLink,
+                wikiLink: seasonTemplates.wikiLink(title, seasonNumber),
             });
 
             if (rawEpisodes === undefined || episodeTemplates === undefined) {
@@ -353,7 +355,10 @@ const resolveTimelineData = (
                         title,
                         episodeNumber,
                     ),
-                    number: episodeTemplates.numberProcessor(episodeNumber),
+                    number: episodeTemplates.numberProcessor(
+                        episodeNumber,
+                        title,
+                    ),
                     wikiLink: episodeTemplates.wikiLink(title, episodeNumber),
                 });
             }

@@ -23,15 +23,17 @@ export const JOJO_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            numberProcessor: n => (n - 5).toString(),
+            numberProcessor: n => (n - 6).toString(),
             sectionLink: "JoJo's_Bizarre_Adventure:_The_Animation#Seasons",
             wikiLink: (title, n) =>
-                (n <= 2 ?
-                    title.replaceAll(': ', '_(Season)#')
-                :   title
+                n <= 2 ?
+                    title.replaceAll(': ', '_(Season)#').replaceAll(' ', '_')
+                : n <= 11 ?
+                    title
                         .replace("JoJo's Bizarre Adventure: ", '')
                         .replace(' - ', '_(Anime)#')
-                ).replaceAll(' ', '_'),
+                        .replaceAll(' ', '_')
+                :   title.replace(": JoJo's Bizarre Adventure", ' (Anime)'),
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -47,7 +49,6 @@ export const JOJO_TIMELINE: Timeline = {
         saga: {
             type: 'saga',
             height: SAGA_HEIGHT,
-            titleProcessor: saga => saga,
             blankfontSize: 96,
             titleFontSize: 96,
             sectionLink: 'Category:Story Arcs',
@@ -9594,7 +9595,7 @@ export const JOJO_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: "JoJo's Bizarre Adventure: Steel Ball Run",
+                title: "Steel Ball Run: JoJo's Bizarre Adventure",
                 cover: () => 'Season_6',
                 offset: { x: 0, y: 21500 },
                 chapters: { from: 753, to: 847 },

@@ -88,6 +88,8 @@ export const OPM_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
+            numberProcessor: n =>
+                n <= CHAPTERS_TOTAL ? n.toString() : `E${n - CHAPTERS_TOTAL}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
@@ -1750,7 +1752,7 @@ export const OPM_TIMELINE: Timeline = {
                         cover: null,
                     },
                     {
-                        title: () => 'Calamity',
+                        title: () => 'Life or Death',
                         date: 'March 26, 2026',
                         pages: 17,
                         cover: null,
