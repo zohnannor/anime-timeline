@@ -111,7 +111,7 @@ export type TimelineSectionItem<T extends TimelineSection> = {
     blankfontSize: number;
     titleFontSize: number;
     titleProcessor?: (_title: string, _n: number) => string;
-    numberProcessor?: (_number: number) => string;
+    numberProcessor?: (_number: number, _title: string) => string;
     height: number;
     sectionLink: string;
     wikiLink: (_title: string, _n: number) => string;
