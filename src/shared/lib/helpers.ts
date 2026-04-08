@@ -74,10 +74,13 @@ export const chapterDatesByMonth = (chapters: NonEmptyArray<ResolvedChapter>) =>
 export const chapterDatesByYear = (chapters: NonEmptyArray<ResolvedChapter>) =>
     chunks(chapters, chapter => chapter.date.getFullYear() + 1);
 
+export const sanitizeId = (id: string) => id.replaceAll(/[^\w]/gu, '-');
+
 export const scrollToId = (id: string) => {
-    const element = document.querySelector(`#${id}`);
+    const sanitizedId = sanitizeId(id);
+    const element = document.querySelector(`#${sanitizedId}`);
     if (element) {
-        console.debug(`Scrolling to \`#${id}\``);
+        console.debug(`Scrolling to \`#${sanitizedId}\``);
         element.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
@@ -85,7 +88,7 @@ export const scrollToId = (id: string) => {
         });
         (element as HTMLElement).focus({ preventScroll: false });
     } else {
-        console.warn(`No element found for \`#${id}\``);
+        console.warn(`No element found for \`#${sanitizedId}\``);
     }
 };
 

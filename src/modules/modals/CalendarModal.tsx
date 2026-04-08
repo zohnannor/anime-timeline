@@ -15,6 +15,7 @@ import {
     interpolateColor,
     MONTHS,
     MONTHS_GRADIENT,
+    sanitizeId,
     scale,
     scrollToId,
 } from '@shared/lib/helpers';
@@ -186,7 +187,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
 
             let day = (
                 <Day
-                    id={dayKey}
+                    id={sanitizeId(dayKey)}
                     key={dayKey}
                     className='day'
                     $isChapter={isChapter}
