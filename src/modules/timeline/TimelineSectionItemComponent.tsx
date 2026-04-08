@@ -5,7 +5,7 @@ import { ChapterPreview } from '@modules/timeline/ChapterPreview';
 import { withCrossLines } from '@modules/timeline/CrossLines';
 import { TimelineSection } from '@modules/timeline/TimelineSection';
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { hueGlow, scale } from '@shared/lib/helpers';
+import { hueGlow, sanitizeId, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
 import { TIMELINE } from '@timelines/registry';
@@ -288,7 +288,7 @@ export const TimelineSectionItemComponent = ({
 
     return (
         <SectionItem
-            id={`${type}-${itemNumber}`}
+            id={sanitizeId(`${type}-${itemNumber}`)}
             className={type}
             $width={itemWidth}
             $height={height}
