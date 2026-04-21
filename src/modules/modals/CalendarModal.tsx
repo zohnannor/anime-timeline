@@ -283,7 +283,7 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const currentDate = new Date();
+    const currentDate = useMemo(() => new Date(), []);
     const { chapters, episodes } = TIMELINE[animeTitle].data;
     const [first] = chapters;
     const startDate = first.date;

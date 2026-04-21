@@ -128,6 +128,7 @@ const decodeApiResponse = (
 
 export default async (): Promise<Date | null> => {
     try {
+        // eslint-disable-next-line react-x/purity
         const response = await fetch(
             `${PROXY_URL}${encodeURIComponent(MANGA_API_URL)}`,
         );

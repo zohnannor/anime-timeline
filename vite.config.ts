@@ -14,6 +14,7 @@ export default defineConfig({
                 useFlatConfig: true,
             },
             typescript: true,
+            enableBuild: false, // skip checking during 'yarn build'
         }),
     ],
     build: {

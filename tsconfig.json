@@ -27,6 +27,7 @@
         "noImplicitThis": true,
         "noPropertyAccessFromIndexSignature": true,
         "noUncheckedIndexedAccess": true,
+        "noUncheckedSideEffectImports": false,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "paths": {
@@ -47,6 +48,7 @@
             ]
         },
         "resolveJsonModule": true,
+        "rootDir": "./src/",
         "skipLibCheck": true,
         "strict": true,
         "strictBindCallApply": true,
@@ -54,6 +56,9 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "target": "esnext",
+        "types": [
+            "node",
+        ],
         "useUnknownInCatchVariables": true
     },
     "include": [
