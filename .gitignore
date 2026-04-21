@@ -21,6 +21,7 @@ __pycache__
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.eslintcache
 
 # Editor directories and files
 .vscode/*

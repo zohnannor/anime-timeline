@@ -1,5 +1,5 @@
 import CSS from 'csstype';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useSyncExternalStore } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
@@ -88,7 +88,15 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
     $bgColor,
     $mobileFullscreen,
 }) => {
-    if (!isOpen) {
+    const modalElement = useSyncExternalStore(
+        () => () => {
+            /* empty */
+        },
+        () => document.querySelector('#modal'),
+        () => null,
+    );
+
+    if (!isOpen || !modalElement) {
         return null;
     }
 
@@ -115,7 +123,6 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                 {children}
             </ModalContainer>
         </>,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        document.querySelector('#modal')!,
+        modalElement,
     );
 };

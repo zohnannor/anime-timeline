@@ -35,11 +35,11 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [calendarOpen, setCalendarOpen] = useState(false);
     const [captureTimelineModalOpen, setCaptureTimelineModalOpen] =
         useState(false);
-    const [showTitles, setShowTitlesRaw] = useState(
+    const [showTitles, setShowTitles] = useState(
         // default to true if not set (first visit), otherwise get from storage
         () => globalThis.localStorage.getItem('showTitles') !== 'false',
     );
-    const [animeTitle, setAnimeTitleRaw] = useState<AnimeTitle>(() => {
+    const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(globalThis.location.search);
         const animeTitle = params.get('title');
         if (title(animeTitle)) {
@@ -80,16 +80,16 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }, []);
 
     const context = useMemo(() => {
-        const setAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
+        const toggleAnimeTitle = (title: React.SetStateAction<AnimeTitle>) => {
             const theTitle =
                 typeof title === 'function' ? title(animeTitle) : title;
-            setAnimeTitleRaw(theTitle);
+            setAnimeTitle(theTitle);
             globalThis.history.replaceState({}, '', `?title=${theTitle}`);
         };
 
-        const setShowTitles = (show: React.SetStateAction<boolean>) => {
+        const toggleShowTitles = (show: React.SetStateAction<boolean>) => {
             const doShow = typeof show === 'function' ? show(showTitles) : show;
-            setShowTitlesRaw(doShow);
+            setShowTitles(doShow);
             globalThis.localStorage.setItem('showTitles', doShow.toString());
         };
 
@@ -106,14 +106,14 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
                 setCalendarOpen,
             ),
             showTitles,
-            setShowTitles,
+            setShowTitles: toggleShowTitles,
             captureTimelineModalOpen,
             setCaptureTimelineModalOpen: createModalHandler(
                 'captureTimelineModalOpen',
                 setCaptureTimelineModalOpen,
             ),
             animeTitle,
-            setAnimeTitle,
+            setAnimeTitle: toggleAnimeTitle,
             animeTitleSelectorOpen,
             setAnimeTitleSelectorOpen: createModalHandler(
                 'animeTitleSelectorOpen',
