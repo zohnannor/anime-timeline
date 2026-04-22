@@ -47,14 +47,17 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     if (type === 'saga' && sagas === undefined) {
         return null;
     }
+    if (type === 'arc' && arcs === undefined) {
+        return null;
+    }
 
     const entities = () =>
         type === 'episode' ? episodes.filter(ep => ep.season === parentNumber)
         : type === 'season' ? (seasons ?? [])
         : type === 'saga' ? (sagas ?? [])
         : type === 'arc' ?
-            parentNumber ? arcs.filter(arc => arc.saga === parentNumber)
-            :   arcs
+            parentNumber ? (arcs ?? []).filter(arc => arc.saga === parentNumber)
+            :   (arcs ?? [])
         : type === 'chapter' ? chapters
         : volumes;
 

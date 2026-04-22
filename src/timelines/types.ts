@@ -1,6 +1,6 @@
 import CSS from 'csstype';
 
-import { ExactUnion, NonEmptyArray } from '@shared/lib/util';
+import { EmptyObject, ExactUnion, NonEmptyArray } from '@shared/lib/util';
 import { TIMELINE } from '@timelines/registry';
 
 type Offset = { x: number; y: number };
@@ -75,7 +75,9 @@ export type TimelineData = {
     title: string;
     volumes: NonEmptyArray<Volume>;
 } & ExactUnion<
-    { sagas: NonEmptyArray<Saga> } | { arcs: NonEmptyArray<Arc> }
+    | { sagas: NonEmptyArray<Saga> }
+    | { arcs: NonEmptyArray<Arc> }
+    | EmptyObject<'saga' | 'arc'>
 > & {
         seasons?: NonEmptyArray<Season>;
         splitChapters: Record<number, number>;
@@ -123,7 +125,9 @@ export type TimelineSectionItem<T extends TimelineSection> = {
 export type TimelineSectionLayout = {
     season?: TimelineSectionItem<'season'>;
 } & ExactUnion<
-    { saga: TimelineSectionItem<'saga'> } | { arc: TimelineSectionItem<'arc'> }
+    | { saga: TimelineSectionItem<'saga'> }
+    | { arc: TimelineSectionItem<'arc'> }
+    | EmptyObject<'saga' | 'arc'>
 > & {
         chapter: TimelineSectionItem<'chapter'>;
         volume: TimelineSectionItem<'volume'>;

@@ -145,6 +145,10 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "Season_5_2.png",
         "Season_5_3.jpeg",
         "Season_6.jpg",
+    },
+    "dhd": {
+        "Season_1.png",
+        "Season_2.png",
     }
 }
 
