@@ -10,13 +10,12 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 232;
-const VOLUMES_TOTAL = 43;
+const CHAPTERS_TOTAL = 233;
+const VOLUMES_TOTAL = 42;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
 type SagasTotal = 4;
 
-const volumeTitle = (n: number) => `Volume ${n}`;
 const volumeCover = (n: number) =>
     n <= 20 ? `Volume_${n}`
     : n <= 27 ? `Volume_${n}_Cover`
@@ -36,6 +35,7 @@ const chapterLink = (title: string, n: number): string =>
     : n <= 139 ? `Chapter ${n}`
     : n <= CHAPTERS_TOTAL ? `Chapter ${n - 5} (Online)`
     : title;
+const VOLUME_RELEASE_SPLIT_CHAPTERS = [84, 90, 96, 117, 138] as const;
 
 export const OPM_TIMELINE: Timeline = {
     layout: {
@@ -89,11 +89,19 @@ export const OPM_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ? n.toString() : `E${n - CHAPTERS_TOTAL}`,
+                n > CHAPTERS_TOTAL ?
+                    `X${n - CHAPTERS_TOTAL}`
+                :   `${n}\n(${
+                        n -
+                        VOLUME_RELEASE_SPLIT_CHAPTERS.findLastIndex(
+                            ch => n >= ch + 1,
+                        ) -
+                        1
+                    })`,
             fit: 'contain',
             backgroundColor: 'white',
-            blankfontSize: 45,
-            titleFontSize: 45,
+            blankfontSize: 40,
+            titleFontSize: 40,
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
@@ -104,6 +112,7 @@ export const OPM_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             defaultCoverPosition: 'top',
+            titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: (_, n) =>
                 n <= VOLUMES_TOTAL ?
@@ -115,7 +124,7 @@ export const OPM_TIMELINE: Timeline = {
         title: 'One-Punch Man',
         volumes: [
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -169,7 +178,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -217,7 +226,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 5,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -253,7 +262,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -283,7 +292,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -319,7 +328,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -355,7 +364,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -379,7 +388,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -403,7 +412,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -451,7 +460,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 8,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -505,7 +514,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -547,7 +556,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 5,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -589,7 +598,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -619,7 +628,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -649,7 +658,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -685,7 +694,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -715,7 +724,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -739,7 +748,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -763,7 +772,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -793,7 +802,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -811,7 +820,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -847,7 +856,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -883,7 +892,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 2,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -925,7 +934,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -967,7 +976,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 4,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1015,7 +1024,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1057,7 +1066,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1099,7 +1108,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 6,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1141,7 +1150,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1189,7 +1198,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 6,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1231,7 +1240,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1268,7 +1277,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1310,7 +1319,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 4,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1341,7 +1350,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 3,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1371,7 +1380,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 1,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1413,7 +1422,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: volumeTitle,
+                title: 6,
                 cover: volumeCover,
                 chapters: [
                     {
@@ -1446,11 +1455,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 29,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'Unascertained',
                         date: 'March 23, 2023',
@@ -1463,6 +1467,11 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 26,
                         cover: null,
                     },
+                ],
+            },
+            {
+                cover: null,
+                chapters: [
                     {
                         title: () => 'Scout',
                         date: 'May 4, 2023',
@@ -1481,11 +1490,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 33,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'The Butterfly and the Back',
                         date: 'June 29, 2023',
@@ -1504,6 +1508,11 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 31,
                         cover: null,
                     },
+                ],
+            },
+            {
+                cover: null,
+                chapters: [
                     {
                         title: () => 'Scheme',
                         date: 'August 10, 2023',
@@ -1516,11 +1525,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 32,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'Level Up',
                         date: 'September 21, 2023',
@@ -1539,6 +1543,11 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 37,
                         cover: null,
                     },
+                ],
+            },
+            {
+                cover: null,
+                chapters: [
                     {
                         title: () => 'That Man',
                         date: 'January 23, 2025',
@@ -1551,11 +1560,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 23,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'Karma',
                         date: 'February 13, 2025',
@@ -1598,6 +1602,11 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 22,
                         cover: null,
                     },
+                ],
+            },
+            {
+                cover: null,
+                chapters: [
                     {
                         title: () => 'Fully Recovered',
                         date: 'August 22, 2024',
@@ -1610,11 +1619,6 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 16,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'Tough Guy',
                         date: 'September 19, 2024',
@@ -1728,17 +1732,17 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 19,
                         cover: null,
                     },
-                ],
-            },
-            {
-                cover: null,
-                chapters: [
                     {
                         title: () => 'New Blood 2',
                         date: 'February 12, 2026',
                         pages: 18,
                         cover: null,
                     },
+                ],
+            },
+            {
+                cover: null,
+                chapters: [
                     {
                         title: () => 'New Blood 3',
                         date: 'February 26, 2026',
@@ -1757,9 +1761,15 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 17,
                         cover: null,
                     },
+                    {
+                        title: () => 'Life or Death 2',
+                        date: 'April 9, 2026',
+                        pages: 15,
+                        cover: null,
+                    },
                 ],
             },
-            // REMEMBER TO INCREMENT THE `CHAPTERS_TOTAL` CONSTANT
+            // REMEMBER TO INCREMENT THE `CHAPTERS_TOTAL` CONSTANT AT THE TOP
             {
                 title: () => 'Volume 1-5 Extras',
                 cover: () => 'Volume_1',
@@ -1960,7 +1970,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: () => 'Volume 24-35 Extras',
+                title: () => 'Volume 24-36 Extras',
                 cover: () => 'Volume_24_Cover',
                 chapters: [
                     {
@@ -2013,8 +2023,14 @@ export const OPM_TIMELINE: Timeline = {
                     },
                     {
                         title: () => "Don't Be Scared",
-                        date: 'August 4, 2025', // unknown yet
-                        pages: 0, // unknown yet
+                        date: 'October 3, 2025',
+                        pages: 6,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'First Courage',
+                        date: 'March 4, 2026',
+                        pages: 5,
                         cover: null,
                     },
                 ],
@@ -2151,14 +2167,14 @@ export const OPM_TIMELINE: Timeline = {
                         title: 'Supreme Hero',
                         cover: 'Supreme_Hero_Arc_Manga',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 204 + 5, to: CHAPTERS_TOTAL },
+                        chapters: { from: 204 + 5, to: 218 + 5 },
                     },
-                    // {
-                    //     title: 'Neo Heroes Uprising',
-                    //     cover: '',
-                    //     offset: { x: 0, y: 0 },
-                    //     chapters: { from: 1, to: 2 },
-                    // },
+                    {
+                        title: 'Neo Heroes Uprising',
+                        cover: 'Neo_Heroes_Uprising_Arc',
+                        offset: { x: 0, y: 550 },
+                        chapters: { from: 219 + 5, to: CHAPTERS_TOTAL },
+                    },
                     // {
                     //     title: 'Robot Invasion',
                     //     cover: '',
