@@ -10,7 +10,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 232;
+const CHAPTERS_TOTAL = 233;
 const VOLUMES_TOTAL = 43;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
@@ -36,6 +36,7 @@ const chapterLink = (title: string, n: number): string =>
     : n <= 139 ? `Chapter ${n}`
     : n <= CHAPTERS_TOTAL ? `Chapter ${n - 5} (Online)`
     : title;
+const VOLUME_RELEASE_SPLIT_CHAPTERS = [84, 90, 96, 117, 138] as const;
 
 export const OPM_TIMELINE: Timeline = {
     layout: {
@@ -89,11 +90,19 @@ export const OPM_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ? n.toString() : `E${n - CHAPTERS_TOTAL}`,
+                n > CHAPTERS_TOTAL ?
+                    `X${n - CHAPTERS_TOTAL}`
+                :   `${n}\n(${
+                        n -
+                        VOLUME_RELEASE_SPLIT_CHAPTERS.findLastIndex(
+                            ch => n >= ch + 1,
+                        ) -
+                        1
+                    })`,
             fit: 'contain',
             backgroundColor: 'white',
-            blankfontSize: 45,
-            titleFontSize: 45,
+            blankfontSize: 40,
+            titleFontSize: 40,
             sectionLink: 'Chapters_and_Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
@@ -1755,6 +1764,12 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Life or Death',
                         date: 'March 26, 2026',
                         pages: 17,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Life or Death 2',
+                        date: 'April 9, 2026',
+                        pages: 15,
                         cover: null,
                     },
                 ],

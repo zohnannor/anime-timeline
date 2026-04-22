@@ -1,10 +1,23 @@
+import styled from 'styled-components';
+
 import { Timeline } from '@modules/timeline/Timeline';
-import { TimelineContainer } from '@modules/timeline/TimelineContainer';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { TIMELINE } from '@timelines/registry';
 import { ResolvedSectionItem } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
+
+type ContainerProps = {
+    $dir?: 'row' | 'column';
+};
+
+const TimelineContainer = styled.div.attrs<ContainerProps>({
+    className: 'timelineContainer',
+})`
+    display: flex;
+    flex-direction: ${({ $dir: dir }) => dir ?? 'row'};
+    position: relative;
+`;
 
 type TimelineSections = (
     | {
