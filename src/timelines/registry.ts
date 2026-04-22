@@ -3,6 +3,7 @@ import { AOT_TIMELINE } from '@timelines/aot';
 import { BERSERK_TIMELINE } from '@timelines/berserk';
 import { CSM_TIMELINE } from '@timelines/csm';
 import { DEATHNOTE_TIMELINE } from '@timelines/deathnote';
+import { DHD_TIMELINE } from '@timelines/dhd';
 import { EVA_TIMELINE } from '@timelines/eva';
 import { FP_TIMELINE } from '@timelines/fp';
 import { FRIEREN_TIMELINE } from '@timelines/frieren';
@@ -24,6 +25,7 @@ export const TIMELINE = resolveTimeline({
     jr: JR_TIMELINE,
     hxh: HXH_TIMELINE,
     jojo: JOJO_TIMELINE,
+    dhd: DHD_TIMELINE,
 });
 
 export const TITLES = typedKeyTuple(TIMELINE);

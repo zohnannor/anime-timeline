@@ -75,7 +75,7 @@ export type TimelineData = {
     title: string;
     volumes: NonEmptyArray<Volume>;
 } & ExactUnion<
-    { sagas: NonEmptyArray<Saga> } | { arcs: NonEmptyArray<Arc> }
+    { sagas: NonEmptyArray<Saga> } | { arcs?: NonEmptyArray<Arc> }
 > & {
         seasons?: NonEmptyArray<Season>;
         splitChapters: Record<number, number>;
@@ -123,7 +123,7 @@ export type TimelineSectionItem<T extends TimelineSection> = {
 export type TimelineSectionLayout = {
     season?: TimelineSectionItem<'season'>;
 } & ExactUnion<
-    { saga: TimelineSectionItem<'saga'> } | { arc: TimelineSectionItem<'arc'> }
+    { saga: TimelineSectionItem<'saga'> } | { arc?: TimelineSectionItem<'arc'> }
 > & {
         chapter: TimelineSectionItem<'chapter'>;
         volume: TimelineSectionItem<'volume'>;
