@@ -235,7 +235,13 @@ export const TimelineSectionItemComponent = ({
         type === 'season' && cover === null ?
             // don't add link to seasons without cover (speculation)
             title
-        :   <Link href={`${wikiBase}${wikiLink}`}>
+        :   <Link
+                href={`${wikiBase}${wikiLink}`}
+                style={{
+                    whiteSpace: 'pre-wrap',
+                    textAlign: 'center',
+                }}
+            >
                 {cover === null ?
                     type === 'episode' || type === 'volume' ?
                         itemNumber
