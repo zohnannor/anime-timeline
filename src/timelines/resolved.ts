@@ -1,6 +1,7 @@
 import { tokyoDate } from '@shared/lib/helpers';
 import {
     asNonEmpty,
+    EmptyObject,
     ExactUnion,
     NonEmptyArray,
     sum,
@@ -88,8 +89,9 @@ export type ResolvedTimelineData = {
     chapters: NonEmptyArray<ResolvedChapter>;
     volumes: NonEmptyArray<ResolvedVolume>;
 } & ExactUnion<
-    | { arcs: ResolvedArc[] }
-    | { sagas: NonEmptyArray<ResolvedSaga>; arcs: ResolvedArc[] }
+    | { arcs: NonEmptyArray<ResolvedArc> }
+    | { sagas: NonEmptyArray<ResolvedSaga>; arcs: NonEmptyArray<ResolvedArc> }
+    | EmptyObject<'saga' | 'arc'>
 > & {
         episodes: ResolvedEpisode[];
         seasons?: ResolvedSeason[];
@@ -229,40 +231,37 @@ const resolveTimelineData = (
     const chaptersTotal = globalChapterIdx;
 
     const resolveArcs = (
-        rawArcs: NonEmptyArray<Arc> | undefined,
+        rawArcs: NonEmptyArray<Arc>,
         sagaNumber: number,
     ): ResolvedArc[] =>
-        rawArcs && rawArcs.length > 0 ?
-            rawArcs.map(
-                (
-                    { chapters: { from, to }, cover, title: rawTitle, offset },
-                    arcIdx,
-                ) => {
-                    const arcNumber = arcIdx + 1;
-                    const title = arcTemplates.titleProcessor(
-                        rawTitle,
-                        arcNumber,
-                    );
-                    return {
-                        ...(cover === null ? { cover } : { cover, offset }),
-                        width: unboundChapterWidth =>
-                            sum(
-                                chapters
-                                    .slice(from - 1, to ?? chaptersTotal)
-                                    .map(ch => ch.width(unboundChapterWidth)),
-                            ),
-                        saga: sagaNumber,
-                        title,
-                        number: arcTemplates.numberProcessor(arcNumber, title),
-                        wikiLink: arcTemplates.wikiLink(title, arcNumber),
-                    };
-                },
-            )
-        :   [];
+        rawArcs.map(
+            (
+                { chapters: { from, to }, cover, title: rawTitle, offset },
+                arcIdx,
+            ) => {
+                const arcNumber = arcIdx + 1;
+                const title = arcTemplates.titleProcessor(rawTitle, arcNumber);
+                return {
+                    ...(cover === null ? { cover } : { cover, offset }),
+                    width: unboundChapterWidth =>
+                        sum(
+                            chapters
+                                .slice(from - 1, to ?? chaptersTotal)
+                                .map(ch => ch.width(unboundChapterWidth)),
+                        ),
+                    saga: sagaNumber,
+                    title,
+                    number: arcTemplates.numberProcessor(arcNumber, title),
+                    wikiLink: arcTemplates.wikiLink(title, arcNumber),
+                };
+            },
+        );
 
     if (rawSagas === undefined) {
-        resolveArcs(rawArcs, 0);
-        arcs.push(...resolveArcs(rawArcs, 0));
+        if (rawArcs !== undefined) {
+            resolveArcs(rawArcs, 0);
+            arcs.push(...resolveArcs(rawArcs, 0));
+        }
     } else {
         for (const [sagaIdx, { arcs: rawArcs, title }] of rawSagas.entries()) {
             const sagaNumber = sagaIdx + 1;
@@ -374,7 +373,9 @@ const resolveTimelineData = (
         title,
         chapters: asNonEmpty(chapters, 'chapters'),
         volumes: asNonEmpty(volumes, 'volumes'),
-        arcs,
+        ...(rawSagas === undefined && rawArcs === undefined ?
+            {}
+        :   { arcs: asNonEmpty(arcs, 'arcs') }),
         ...(rawSagas === undefined ?
             {}
         :   { sagas: asNonEmpty(sagas, 'sagas') }),

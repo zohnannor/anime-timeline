@@ -22,9 +22,8 @@ export const DHD_TIMELINE: Timeline = {
             height: SEASON_HEIGHT,
             blankfontSize: 250,
             titleFontSize: 100,
-            numberProcessor: n => n.toString(),
-            sectionLink: 'Dorohedoro_(anime)',
-            wikiLink: () => 'Dorohedoro_(anime)',
+            sectionLink: 'Dorohedoro (anime)',
+            wikiLink: () => 'Dorohedoro (anime)',
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -33,7 +32,7 @@ export const DHD_TIMELINE: Timeline = {
                 blankfontSize: 42,
                 titleFontSize: 42,
                 sectionLink: 'Dorohedoro_(Anime)#Episodes',
-                wikiLink: (_, n) => `Episode_${n}`,
+                wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
         },
@@ -47,19 +46,18 @@ export const DHD_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Volumes_and_Chapters',
-            wikiLink: (_, n) => `Chapter_${n}`,
+            sectionLink: 'Volumes and Chapters',
+            wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
         volume: {
             type: 'volume',
             height: VOLUME_HEIGHT,
             defaultCoverPosition: 'top',
-            titleProcessor: title => title,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Volumes_and_Chapters',
-            wikiLink: (_, n) => `Volume_${n}`,
+            sectionLink: 'Volumes and Chapters',
+            wikiLink: (_, n) => `Volume ${n}`,
         },
     },
     data: {
@@ -74,37 +72,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'December 30, 2000',
                         pages: 24,
                         cover: null,
-                    }, // 1
+                    },
                     {
                         title: () => 'Hungry Bug',
                         date: 'February 28, 2001',
                         pages: 26,
                         cover: null,
-                    }, // 1
+                    },
                     {
                         title: () => 'The Guy from the Nightmare',
                         date: 'April 30, 2001',
                         pages: 24,
                         cover: null,
-                    }, // 1
+                    },
                     {
                         title: () => 'In The Bag',
                         date: 'June 30, 2001',
                         pages: 24,
                         cover: null,
-                    }, // 1
+                    },
                     {
                         title: () => 'Silence At The Table',
                         date: 'August 31, 2001',
                         pages: 24,
                         cover: null,
-                    }, // 1
+                    },
                     {
                         title: () => 'The Magic User From The Next Town',
                         date: 'November 1, 2001',
                         pages: 24,
                         cover: null,
-                    }, // 1
+                    },
                 ],
             },
             {
@@ -116,31 +114,31 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'July 1, 2002',
                         pages: 26,
                         cover: null,
-                    }, // 2
+                    },
                     {
                         title: () => 'Bloody Fight',
                         date: 'August 1, 2002',
                         pages: 28,
                         cover: null,
-                    }, // 2
+                    },
                     {
                         title: () => 'Lizards Can Dance Too',
                         date: 'September 1, 2002',
                         pages: 28,
                         cover: null,
-                    }, // 2
+                    },
                     {
                         title: () => 'Roast Duck With Magic User Sauce',
                         date: 'October 1, 2002',
                         pages: 28,
                         cover: null,
-                    }, // 2
+                    },
                     {
                         title: () => 'Competition of the So-Called Underworld',
                         date: 'November 1, 2002',
                         pages: 28,
                         cover: null,
-                    }, // 2
+                    },
                 ],
             },
             {
@@ -152,37 +150,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'December 1, 2002',
                         pages: 28,
                         cover: null,
-                    }, // 3
+                    },
                     {
                         title: () => 'Another Year in the Hole',
                         date: 'January 1, 2003',
                         pages: 28,
                         cover: null,
-                    }, // 3
+                    },
                     {
                         title: () => 'Kaiman in Wonderland',
                         date: 'April 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 3
+                    },
                     {
                         title: () => 'The Secret story of the fire toilet',
                         date: 'May 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 3
+                    },
                     {
                         title: () => 'The Girl Who Sells Smoke',
                         date: 'June 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 3
+                    },
                     {
                         title: () => 'Ripe Mushrooms En Masse',
                         date: 'July 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 3
+                    },
                 ],
             },
             {
@@ -194,37 +192,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'August 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 4
+                    },
                     {
                         title: () => 'Sewer Elegy',
                         date: 'September 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 4
+                    },
                     {
                         title: () => 'The All-Star - Dream Game',
                         date: 'October 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 4
+                    },
                     {
                         title: () => 'The All-Star - Dream Game Heats Up!!',
                         date: 'November 1, 2003',
                         pages: 25,
                         cover: null,
-                    }, // 4
+                    },
                     {
                         title: () => 'Reptiles Spawn',
                         date: 'December 1, 2003',
                         pages: 24,
                         cover: null,
-                    }, // 4
+                    },
                     {
                         title: () => 'A Good Day To Leave',
                         date: 'January 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 4
+                    },
                 ],
             },
             {
@@ -236,43 +234,43 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'February 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'Splendid & Exuberant',
                         date: 'March 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'Blue Night Land',
                         date: 'April 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'Ah, Flower Smoke',
                         date: 'May 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'Awesome Meatpie',
                         date: 'June 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'A Macabre Mushroom Appears!',
                         date: 'July 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                     {
                         title: () => 'Welcome Mushroom-chan!',
                         date: 'August 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 5
+                    },
                 ],
             },
             {
@@ -284,37 +282,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'September 1, 2004',
                         pages: 25,
                         cover: null,
-                    }, // 6
+                    },
                     {
                         title: () => 'Odd Person In The Night',
                         date: 'October 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 6
+                    },
                     {
                         title: () => 'Before Nightmare',
                         date: 'November 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 6
+                    },
                     {
                         title: () => 'Manju Terror',
                         date: 'December 1, 2004',
                         pages: 24,
                         cover: null,
-                    }, // 6
+                    },
                     {
                         title: () => 'Yakimo Rendezvous',
                         date: 'January 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 6
+                    },
                     {
                         title: () => 'The Boss',
                         date: 'February 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 6
+                    },
                 ],
             },
             {
@@ -326,43 +324,43 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'April 1, 2005',
                         pages: 25,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'Meat Bags Free For All',
                         date: 'May 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'Battle - Boy Meets Girl',
                         date: 'June 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'Recycling',
                         date: 'July 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'A Dinner In Good Company',
                         date: 'August 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'Smoky Drive!',
                         date: 'September 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                     {
                         title: () => 'Terror At The Gory House- Mass Slaughter',
                         date: 'October 1, 2005',
                         pages: 24,
                         cover: null,
-                    }, // 7
+                    },
                 ],
             },
             {
@@ -374,37 +372,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'November 1, 2005',
                         pages: 26,
                         cover: null,
-                    }, // 8
+                    },
                     {
                         title: () => 'Crosseye Doll',
                         date: 'December 1, 2005',
                         pages: 28,
                         cover: null,
-                    }, // 8
+                    },
                     {
                         title: () => 'Mastema Sub Promenade',
                         date: 'February 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 8
+                    },
                     {
                         title: () => 'Cross-Eye Tragedy',
                         date: 'March 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 8
+                    },
                     {
                         title: () => 'Sweet Home',
                         date: 'April 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 8
+                    },
                     {
                         title: () => 'Sparkling ★ Youth',
                         date: 'May 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 8
+                    },
                 ],
             },
             {
@@ -417,37 +415,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'July 1, 2006',
                         pages: 32,
                         cover: null,
-                    }, // 9
+                    },
                     {
                         title: () => 'Comeback Hole',
                         date: 'August 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 9
+                    },
                     {
                         title: () => 'Golden Beetles are Rich',
                         date: 'September 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 9
+                    },
                     {
                         title: () => 'Cute Butchery',
                         date: 'October 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 9
+                    },
                     {
                         title: () => 'The Door To The Past',
                         date: 'November 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 9
+                    },
                     {
                         title: () => 'The Final Night - Two People',
                         date: 'December 1, 2006',
                         pages: 24,
                         cover: null,
-                    }, // 9
+                    },
                 ],
             },
             {
@@ -459,37 +457,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'January 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 10
+                    },
                     {
                         title: () => 'Good Company is the Best Shortcut',
                         date: 'March 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 10
+                    },
                     {
                         title: () => 'Small Change Love',
                         date: 'April 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 10
+                    },
                     {
                         title: () => 'Mushroom Revival',
                         date: 'May 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 10
+                    },
                     {
                         title: () => 'Farewell, Kaiman',
                         date: 'June 1, 2007',
                         pages: 32,
                         cover: null,
-                    }, // 10
+                    },
                     {
                         title: () => 'Magic and Carpets',
                         date: 'July 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 10
+                    },
                 ],
             },
             {
@@ -501,37 +499,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'September 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 11
+                    },
                     {
                         title: () => 'Memory Bubbles',
                         date: 'October 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 11
+                    },
                     {
                         title: () => 'Many Feelings - One True Motive',
                         date: 'November 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 11
+                    },
                     {
                         title: () => 'Cross-Dude-Expedition',
                         date: 'December 1, 2007',
                         pages: 24,
                         cover: null,
-                    }, // 11
+                    },
                     {
                         title: () => 'Reunion of the Freaks',
                         date: 'January 1, 2008',
                         pages: 26,
                         cover: null,
-                    }, // 11
+                    },
                     {
                         title: () => 'Juncture Skills',
                         date: 'February 1, 2008',
                         pages: 32,
                         cover: null,
-                    }, // 11
+                    },
                 ],
             },
             {
@@ -543,37 +541,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'April 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 12
+                    },
                     {
                         title: () => 'Rovin Chase',
                         date: 'May 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 12
+                    },
                     {
                         title: () => 'Black Box',
                         date: 'June 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 12
+                    },
                     {
                         title: () => 'Room 501',
                         date: 'July 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 12
+                    },
                     {
                         title: () => 'Mosh Pit',
                         date: 'August 1, 2008',
                         pages: 32,
                         cover: null,
-                    }, // 12
+                    },
                     {
                         title: () => 'The Embossing Process',
                         date: 'September 1, 2008',
                         pages: 22,
                         cover: null,
-                    }, // 12
+                    },
                 ],
             },
             {
@@ -585,37 +583,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'November 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 13
+                    },
                     {
                         title: () => 'Idea Drome',
                         date: 'December 1, 2008',
                         pages: 24,
                         cover: null,
-                    }, // 13
+                    },
                     {
                         title: () => 'Lucky ★ Jerk',
                         date: 'January 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 13
+                    },
                     {
                         title: () => 'Advance Level Magic',
                         date: 'February 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 13
+                    },
                     {
                         title: () => 'Headbump-Ballad',
                         date: 'April 1, 2009',
                         pages: 32,
                         cover: null,
-                    }, // 13
+                    },
                     {
                         title: () => 'Q&A',
                         date: 'May 1, 2009',
                         pages: 32,
                         cover: null,
-                    }, // 13
+                    },
                 ],
             },
             {
@@ -627,37 +625,37 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'July 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 14
+                    },
                     {
                         title: () => "A Demon's Dining Table",
                         date: 'August 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 14
+                    },
                     {
                         title: () => 'Headband Journey',
                         date: 'October 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 14
+                    },
                     {
                         title: () => 'Ground Zero',
                         date: 'November 1, 2009',
                         pages: 24,
                         cover: null,
-                    }, // 14
+                    },
                     {
                         title: () => 'Killing Field',
                         date: 'December 1, 2009',
                         pages: 32,
                         cover: null,
-                    }, // 14
+                    },
                     {
                         title: () => 'Morphing',
                         date: 'January 1, 2010',
                         pages: 32,
                         cover: null,
-                    }, // 14
+                    },
                 ],
             },
             {
@@ -669,49 +667,49 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'March 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Messy Skull',
                         date: 'April 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Strange Love',
                         date: 'May 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Day Zero',
                         date: 'June 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Eyewitness',
                         date: 'July 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Evil Makeover',
                         date: 'September 1, 2010',
                         pages: 24,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Whole in One',
                         date: 'October 1, 2010',
                         pages: 26,
                         cover: null,
-                    }, // 15
+                    },
                     {
                         title: () => 'Remaining Bullets',
                         date: 'November 1, 2010',
                         pages: 26,
                         cover: null,
-                    }, // 15
+                    },
                 ],
             },
             {
@@ -723,49 +721,49 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'January 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Conceptual Quarrel',
                         date: 'February 1, 2011',
                         pages: 28,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Free Hospital',
                         date: 'March 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => "Fujita's Excellent Adventure",
                         date: 'April 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Morphing',
                         date: 'June 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Playing with Parts',
                         date: 'August 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Half-Clear',
                         date: 'September 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                     {
                         title: () => 'Colorless Hero',
                         date: 'October 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 16
+                    },
                 ],
             },
             {
@@ -777,49 +775,49 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'December 1, 2011',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Bug Harassment',
                         date: 'January 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Silent Reunion',
                         date: 'February 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Food Court Full-Course Meal',
                         date: 'May 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Quagmire',
                         date: 'June 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Sludge Sacrifice',
                         date: 'July 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Mirage Landmark',
                         date: 'August 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 17
+                    },
                     {
                         title: () => 'Seriously Close',
                         date: 'September 1, 2012',
                         pages: 26,
                         cover: null,
-                    }, // 17
+                    },
                 ],
             },
             {
@@ -831,49 +829,49 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'November 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'Castle on the Lake',
                         date: 'December 1, 2012',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'Deep House',
                         date: 'January 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'Blind Labyrinth',
                         date: 'February 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'The Wired Dead',
                         date: 'March 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'Cracking Tube',
                         date: 'April 1, 2013',
                         pages: 26,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => "Smash 'n' Grab",
                         date: 'May 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                     {
                         title: () => 'Decentralized Department Store',
                         date: 'June 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 18
+                    },
                 ],
             },
             {
@@ -885,61 +883,61 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'August 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Evil Day Trip',
                         date: 'September 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Biological Renovation',
                         date: 'October 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => "Haru's Gym Class",
                         date: 'November 1, 2013',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Pit of the Stomach',
                         date: 'January 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Rolling Heads',
                         date: 'February 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => "Evil's Tail",
                         date: 'March 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Rare Body Parts',
                         date: 'April 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Free Play',
                         date: 'May 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                     {
                         title: () => 'Return of the Cycle of Life',
                         date: 'June 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 19
+                    },
                 ],
             },
             {
@@ -951,61 +949,61 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'August 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Speculative Hole',
                         date: 'September 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Extortion Completed',
                         date: 'October 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Control vs. Control',
                         date: 'November 1, 2014',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Lock Out & Disperse',
                         date: 'April 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Black Town',
                         date: 'May 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Swearing to the Remains',
                         date: 'June 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => "The Devil's Gyoza",
                         date: 'July 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Crazy Comeback',
                         date: 'August 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                     {
                         title: () => 'Maze Trail',
                         date: 'September 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 20
+                    },
                 ],
             },
             {
@@ -1017,61 +1015,61 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'November 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Fusion Setup',
                         date: 'December 1, 2015',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Devil Gambling',
                         date: 'January 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Sacrificial Wish',
                         date: 'March 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Extreme Mushroom Critical',
                         date: 'April 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Birthday',
                         date: 'May 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Expansion Limit',
                         date: 'June 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'The Source of Evil',
                         date: 'July 1, 2016',
                         pages: 24,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Sayonara full swing',
                         date: 'August 1, 2016',
                         pages: 30,
                         cover: null,
-                    }, // 21
+                    },
                     {
                         title: () => 'Long Desired Birthday',
                         date: 'September 1, 2016',
                         pages: 36,
                         cover: null,
-                    }, // 21
+                    },
                 ],
             },
             {
@@ -1083,49 +1081,49 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'November 1, 2016',
                         pages: 28,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'Inside of Inside of Inside is na-na-na',
                         date: 'December 1, 2016',
                         pages: 28,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'Hole Gourmet Report',
                         date: 'January 1, 2017',
                         pages: 32,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'Extra Dimensional Dream',
                         date: 'February 1, 2017',
                         pages: 24,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'Future Forecast: Heavy Rain',
                         date: 'March 1, 2017',
                         pages: 32,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => "Hole-Kun's Counting Song",
                         date: 'April 1, 2017',
                         pages: 32,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'The sound of parting rain',
                         date: 'May 1, 2017',
                         pages: 32,
                         cover: null,
-                    }, // 22
+                    },
                     {
                         title: () => 'I am Kaiman',
                         date: 'June 1, 2017',
                         pages: 50,
                         cover: null,
-                    }, // 22
+                    },
                 ],
             },
             {
@@ -1137,73 +1135,73 @@ export const DHD_TIMELINE: Timeline = {
                         date: 'August 1, 2017',
                         pages: 24,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Magic as Gyou wish',
                         date: 'December 1, 2017',
                         pages: 26,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => "Shou's Revival Show",
                         date: 'January 1, 2018',
                         pages: 26,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'A Happy Reunion',
                         date: 'February 1, 2018',
                         pages: 26,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'The Abyss and the Mountain',
                         date: 'March 1, 2018',
                         pages: 24,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Eternal Grudge',
                         date: 'April 1, 2018',
                         pages: 24,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'A Shocking Face',
                         date: 'May 1, 2018',
                         pages: 24,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Rolling Head',
                         date: 'June 1, 2018',
                         pages: 24,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Gyoza Barrage',
                         date: 'July 1, 2018',
                         pages: 32,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Dorohedoro',
                         date: 'August 1, 2018',
                         pages: 32,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'Final Battle',
                         date: 'September 1, 2018',
                         pages: 32,
                         cover: null,
-                    }, // 23
+                    },
                     {
                         title: () => 'All-Star Sayonara',
                         date: 'October 1, 2018',
                         pages: 33,
                         cover: null,
-                    }, // 23
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
@@ -1307,12 +1305,8 @@ export const DHD_TIMELINE: Timeline = {
                 chapters: { from: 42, to: 73 },
                 episodes: [],
             },
-            {
-                chapters: { from: 74, to: 120 },
-            },
-            {
-                chapters: { from: 121, to: 167 },
-            },
+            { chapters: { from: 74, to: 120 } },
+            { chapters: { from: 121, to: 167 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             4: 3,
