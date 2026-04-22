@@ -1840,7 +1840,9 @@ export const CSM_TIMELINE: Timeline = {
         },
         wikiBase: 'https://chainsaw-man.fandom.com/wiki/',
         smallImages: {
-            'scroller-or-favicon': 'pochita',
+            favicon: 'pochita',
+            scroller: 'pochita',
+            'select-title': 'pochita', // ?
             'read-info': 'pochita2',
             'toggle-unbound-chapter-width': 'pochita3',
             'toggle-cross-lines': 'pochita6',

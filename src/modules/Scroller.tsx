@@ -138,7 +138,7 @@ export const Scroller = () => {
                 onClick={handleScrollerClick}
             >
                 <ThumbnailImage
-                    src={smallImages['scroller-or-favicon']}
+                    src={smallImages.scroller}
                     onMouseDown={() => setDragging(true)}
                 />
             </ScrollerWrapper>

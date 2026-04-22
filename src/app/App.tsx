@@ -85,8 +85,7 @@ const App: React.FC = () => {
         const favicon =
             document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
         if (favicon) {
-            const icon = smallImages['scroller-or-favicon'];
-            favicon.href = `./${animeTitle}/${icon}.webp`;
+            favicon.href = `./${animeTitle}/${smallImages.favicon}.webp`;
         }
     }, [animeTitle, maxHeight, smallImages, title]);
 
@@ -102,7 +101,7 @@ const App: React.FC = () => {
                     <FloatingButtons>
                         <FloatingButton
                             key='animeTitleSelectorOpen'
-                            filename={smallImages['scroller-or-favicon']}
+                            filename={smallImages['select-title']}
                             title='Select Manga/Anime Title'
                             option='animeTitleSelectorOpen'
                         />

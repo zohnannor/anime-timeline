@@ -2,6 +2,7 @@
 
 import argparse
 import re
+import shutil
 import sys
 import readline  # pyright: ignore[reportUnusedImport]
 from pathlib import Path
@@ -131,6 +132,12 @@ def create_new_timeline(title: str | None = None):
                 f"✔ Created folder: {public_dir.relative_to(root)}", Color.GREEN
             )
         )
+
+        # Copy all default icons to public dir
+        source_dir = root / "bin" / "default-icons"
+        for icon in source_dir.iterdir():
+            shutil.copy(icon, public_dir)
+            print(colored(f"✔ Copied icon: {icon.name}", Color.GREEN))
 
         volumes_objects = "\n".join(
             [
@@ -293,13 +300,15 @@ export const {const_name}: Timeline = {{
         splitChapters: {{}},
         wikiBase: '{wiki_base}',
         smallImages: {{
-            'scroller-or-favicon': 'circle',
-            'read-info': 'circle',
-            'toggle-unbound-chapter-width': 'circle',
-            'toggle-cross-lines': 'circle',
-            'open-chapter-calendar': 'circle',
-            'toggle-always-show-titles': 'circle',
-            'capture-timeline': 'circle',
+            favicon: 'circle',
+            'scroller': 'scroll',
+            'select-title': 'list',
+            'read-info': 'info',
+            'toggle-unbound-chapter-width': 'chapter-width',
+            'toggle-cross-lines': 'crosslines',
+            'open-chapter-calendar': 'calendar',
+            'toggle-always-show-titles': 'title',
+            'capture-timeline': 'capture',
         }},
         socialLinks: [],
     }},

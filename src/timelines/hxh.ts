@@ -4001,13 +4001,15 @@ export const HXH_TIMELINE: Timeline = {
         },
         wikiBase: 'https://hunterxhunter.fandom.com/wiki/',
         smallImages: {
-            'scroller-or-favicon': 'circle',
-            'read-info': 'circle',
-            'toggle-unbound-chapter-width': 'circle',
-            'toggle-cross-lines': 'circle',
-            'open-chapter-calendar': 'circle',
-            'toggle-always-show-titles': 'circle',
-            'capture-timeline': 'circle',
+            favicon: 'circle',
+            scroller: 'scroll',
+            'select-title': 'list',
+            'read-info': 'info',
+            'toggle-unbound-chapter-width': 'chapter-width',
+            'toggle-cross-lines': 'crosslines',
+            'open-chapter-calendar': 'calendar',
+            'toggle-always-show-titles': 'title',
+            'capture-timeline': 'capture',
         },
         socialLinks: [
             {

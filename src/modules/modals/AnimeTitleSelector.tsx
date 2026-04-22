@@ -213,7 +213,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                         <ThumbnailImage
                             className='animeTitleImage'
                             animeTitle={animeTitle}
-                            src={smallImages['scroller-or-favicon']}
+                            src={smallImages.favicon}
                         />
                         <TitleWrapper>
                             {title}

@@ -57,7 +57,9 @@ export type Season = ExactUnion<
 >;
 
 export type SmallImages = {
-    'scroller-or-favicon': string;
+    'favicon': string;
+    'scroller': string;
+    'select-title': string;
     'read-info': string;
     'toggle-unbound-chapter-width': string;
     'toggle-cross-lines': string;
