@@ -1169,7 +1169,10 @@ export const JR_TIMELINE: Timeline = {
                 name: 'VIZ Media',
                 url: 'https://www.viz.com/shonenjump/chapters/hells-paradise-jigokuraku',
             },
-            { name: "Author's Twitter", url: 'https://x.com/ug_kaku' },
+            {
+                name: "Author's Twitter",
+                url: 'https://x.com/ug_kaku',
+            },
             {
                 name: 'Shōnen Jump+',
                 url: 'https://shonenjumpplus.com/episode/13932016480029295972',
@@ -1178,7 +1181,10 @@ export const JR_TIMELINE: Timeline = {
                 name: 'Official Anime Twitter',
                 url: 'https://x.com/jplus_jigokurak',
             },
-            { name: 'Anime Website', url: 'https://www.jigokuraku.com/' },
+            {
+                name: 'Anime Website',
+                url: 'https://www.jigokuraku.com/',
+            },
             {
                 name: 'Crunchyroll',
                 url: 'https://www.crunchyroll.com/series/GJ0H7Q5ZJ/hells-paradise',

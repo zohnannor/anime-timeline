@@ -1,3 +1,5 @@
+export type EmptyObject<Keys extends string> = Partial<Record<Keys, never>>;
+
 export type Length<T extends readonly unknown[]> = T['length'];
 
 export type Enumerate<

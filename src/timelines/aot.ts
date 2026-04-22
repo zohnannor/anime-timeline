@@ -1978,8 +1978,14 @@ export const AOT_TIMELINE: Timeline = {
             'capture-timeline': 'circle',
         },
         socialLinks: [
-            { name: 'Anime website', url: 'http://shingeki.tv/' },
-            { name: 'Manga website', url: 'http://shingeki.net/' },
+            {
+                name: 'Anime website',
+                url: 'http://shingeki.tv/',
+            },
+            {
+                name: 'Manga website',
+                url: 'http://shingeki.net/',
+            },
             {
                 name: 'Bessatsu Shōnen Magazine',
                 url: 'http://www.shonenmagazine.com/bmaga/index.html',

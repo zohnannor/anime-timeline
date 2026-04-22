@@ -1,6 +1,7 @@
 import { tokyoDate } from '@shared/lib/helpers';
 import {
     asNonEmpty,
+    EmptyObject,
     ExactUnion,
     NonEmptyArray,
     sum,
@@ -90,6 +91,7 @@ export type ResolvedTimelineData = {
 } & ExactUnion<
     | { arcs: NonEmptyArray<ResolvedArc> }
     | { sagas: NonEmptyArray<ResolvedSaga>; arcs: NonEmptyArray<ResolvedArc> }
+    | EmptyObject<'saga' | 'arc'>
 > & {
         episodes: ResolvedEpisode[];
         seasons?: ResolvedSeason[];
@@ -256,8 +258,10 @@ const resolveTimelineData = (
         );
 
     if (rawSagas === undefined) {
-        resolveArcs(rawArcs, 0);
-        arcs.push(...resolveArcs(rawArcs, 0));
+        if (rawArcs !== undefined) {
+            resolveArcs(rawArcs, 0);
+            arcs.push(...resolveArcs(rawArcs, 0));
+        }
     } else {
         for (const [sagaIdx, { arcs: rawArcs, title }] of rawSagas.entries()) {
             const sagaNumber = sagaIdx + 1;
@@ -369,7 +373,9 @@ const resolveTimelineData = (
         title,
         chapters: asNonEmpty(chapters, 'chapters'),
         volumes: asNonEmpty(volumes, 'volumes'),
-        arcs: asNonEmpty(arcs, 'arcs'),
+        ...(rawSagas === undefined && rawArcs === undefined ?
+            {}
+        :   { arcs: asNonEmpty(arcs, 'arcs') }),
         ...(rawSagas === undefined ?
             {}
         :   { sagas: asNonEmpty(sagas, 'sagas') }),
