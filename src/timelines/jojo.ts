@@ -1,5 +1,15 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { Tuple } from '@shared/lib/util';
+import {
+    ArrowRangeIcon,
+    CalendarIcon,
+    CameraIcon,
+    ExpandIcon,
+    FitIcon,
+    InfoIcon,
+    ListIcon,
+    TitleIcon,
+} from '@shared/ui/icons';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1579;
@@ -9671,16 +9681,16 @@ export const JOJO_TIMELINE: Timeline = {
             750: 14,
         } as const,
         wikiBase: 'https://jojowiki.com/',
-        smallImages: {
+        icons: {
             favicon: 'circle',
-            scroller: 'scroll',
-            'select-title': 'list',
-            'read-info': 'info',
-            'toggle-unbound-chapter-width': 'chapter-width',
-            'toggle-cross-lines': 'crosslines',
-            'open-chapter-calendar': 'calendar',
-            'toggle-always-show-titles': 'title',
-            'capture-timeline': 'capture',
+            scroller: ArrowRangeIcon,
+            'select-title': ListIcon,
+            'read-info': InfoIcon,
+            'toggle-unbound-chapter-width': ExpandIcon,
+            'toggle-cross-lines': FitIcon,
+            'open-chapter-calendar': CalendarIcon,
+            'toggle-always-show-titles': TitleIcon,
+            'capture-timeline': CameraIcon,
         },
         socialLinks: [],
     },

@@ -36,7 +36,7 @@ const App: React.FC = () => {
     const [renderUi, setRenderUi] = useState(true);
 
     const {
-        data: { smallImages, title },
+        data: { icons, title },
         layout,
         maxHeight,
     } = TIMELINE[animeTitle];
@@ -85,9 +85,9 @@ const App: React.FC = () => {
         const favicon =
             document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
         if (favicon) {
-            favicon.href = `./${animeTitle}/${smallImages.favicon}.webp`;
+            favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, maxHeight, smallImages, title]);
+    }, [animeTitle, maxHeight, icons, title]);
 
     return (
         <>
@@ -99,16 +99,10 @@ const App: React.FC = () => {
             <AppContainer className='appContainer'>
                 {renderUi && (
                     <FloatingButtons>
-                        <FloatingButton
-                            key='animeTitleSelectorOpen'
-                            filename={smallImages['select-title']}
-                            title='Select Manga/Anime Title'
-                            option='animeTitleSelectorOpen'
-                        />
-                        {FLOATING_BUTTONS.map(({ filename, title, option }) => (
+                        {FLOATING_BUTTONS.map(({ icon, title, option }) => (
                             <FloatingButton
-                                key={filename}
-                                filename={smallImages[filename]}
+                                key={icon}
+                                icon={icons[icon]}
                                 title={title}
                                 option={option}
                             />

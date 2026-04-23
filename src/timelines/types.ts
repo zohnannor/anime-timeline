@@ -56,16 +56,18 @@ export type Season = ExactUnion<
     | { chapters: Range }
 >;
 
-export type SmallImages = {
-    'favicon': string;
-    'scroller': string;
-    'select-title': string;
-    'read-info': string;
-    'toggle-unbound-chapter-width': string;
-    'toggle-cross-lines': string;
-    'open-chapter-calendar': string;
-    'toggle-always-show-titles': string;
-    'capture-timeline': string;
+export type Icon = string | React.FC<React.HTMLAttributes<HTMLElement>>;
+
+export type Icons = {
+    favicon: string;
+    scroller: Icon;
+    'select-title': Icon;
+    'read-info': Icon;
+    'toggle-unbound-chapter-width': Icon;
+    'toggle-cross-lines': Icon;
+    'open-chapter-calendar': Icon;
+    'toggle-always-show-titles': Icon;
+    'capture-timeline': Icon;
 };
 
 export type SocialLink = {
@@ -84,7 +86,7 @@ export type TimelineData = {
         seasons?: NonEmptyArray<Season>;
         splitChapters: Record<number, number>;
         wikiBase: string;
-        smallImages: SmallImages;
+        icons: Icons;
         socialLinks: SocialLink[];
     };
 

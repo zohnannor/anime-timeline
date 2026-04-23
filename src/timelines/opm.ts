@@ -1,5 +1,15 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { Add, Tuple } from '@shared/lib/util';
+import {
+    ArrowRangeIcon,
+    ListIcon,
+    InfoIcon,
+    ExpandIcon,
+    FitIcon,
+    CalendarIcon,
+    TitleIcon,
+    CameraIcon,
+} from '@shared/ui/icons';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1200;
@@ -2480,16 +2490,16 @@ export const OPM_TIMELINE: Timeline = {
             101: 11,
         },
         wikiBase: 'https://onepunchman.fandom.com/wiki/',
-        smallImages: {
+        icons: {
             favicon: 'circle',
-            scroller: 'scroll',
-            'select-title': 'list',
-            'read-info': 'info',
-            'toggle-unbound-chapter-width': 'chapter-width',
-            'toggle-cross-lines': 'crosslines',
-            'open-chapter-calendar': 'calendar',
-            'toggle-always-show-titles': 'title',
-            'capture-timeline': 'capture',
+            scroller: ArrowRangeIcon,
+            'select-title': ListIcon,
+            'read-info': InfoIcon,
+            'toggle-unbound-chapter-width': ExpandIcon,
+            'toggle-cross-lines': FitIcon,
+            'open-chapter-calendar': CalendarIcon,
+            'toggle-always-show-titles': TitleIcon,
+            'capture-timeline': CameraIcon,
         },
         socialLinks: [
             {

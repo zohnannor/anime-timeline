@@ -1,7 +1,7 @@
-import CSS from 'csstype';
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
+import { IconWrapper } from '@modules/IconWrapper';
 import {
     SETTINGS_FUNCTIONS,
     SettingsValues,
@@ -9,6 +9,7 @@ import {
 } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { ThumbnailImage, Tooltip } from '@shared/ui';
+import { ResolvedIcon } from '@timelines/resolved';
 
 const ButtonSection = styled.div`
     display: flex;
@@ -21,15 +22,6 @@ const ButtonSection = styled.div`
     top: ${scale(63)};
     right: ${scale(63)};
     z-index: 100;
-
-    & > div > img {
-        width: ${scale(160)};
-        filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 1));
-    }
-
-    & > div > img:hover {
-        transform: scale(1.05);
-    }
 `;
 
 const FloatingButtonTooltip = styled.div`
@@ -47,18 +39,24 @@ export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (
     <ButtonSection className='floatingButtons'>{children}</ButtonSection>
 );
 
+const IconButton = styled(IconWrapper)`
+    position: relative;
+    cursor: pointer;
+    &:hover {
+        transform: scale(1.05);
+    }
+`;
+
 type ButtonProps = {
-    filename: string;
+    icon: ResolvedIcon;
     title: string;
     option: keyof SettingsValues;
-    cursor?: CSS.Property.Cursor;
 };
 
-export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
-    filename,
+export const FloatingButton: React.FC<ButtonProps> = ({
+    icon: Icon,
     title,
     option,
-    cursor = 'pointer',
 }) => {
     const settings = useSettings();
     const value = settings[option];
@@ -78,12 +76,14 @@ export const FloatingButton: React.FC<PropsWithChildren<ButtonProps>> = ({
                 </FloatingButtonTooltip>
             }
         >
-            <ThumbnailImage
-                src={filename}
+            <IconButton
+                $filter={filter}
                 onClick={() => setter(state => !state)}
-                title={title}
-                style={{ cursor, filter }}
-            />
+            >
+                {typeof Icon === 'string' ?
+                    <ThumbnailImage src={Icon} />
+                :   <Icon />}
+            </IconButton>
         </Tooltip>
     );
 };

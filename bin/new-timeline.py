@@ -2,7 +2,6 @@
 
 import argparse
 import re
-import shutil
 import sys
 import readline  # pyright: ignore[reportUnusedImport]
 from pathlib import Path
@@ -133,12 +132,6 @@ def create_new_timeline(title: str | None = None):
             )
         )
 
-        # Copy all default icons to public dir
-        source_dir = root / "bin" / "default-icons"
-        for icon in source_dir.iterdir():
-            shutil.copy(icon, public_dir)
-            print(colored(f"✔ Copied icon: {icon.name}", Color.GREEN))
-
         volumes_objects = "\n".join(
             [
                 f"""
@@ -235,6 +228,16 @@ def create_new_timeline(title: str | None = None):
         ts_content = f"""
 /* eslint-disable max-lines */ // a lot of data for a title
 import {{ pad, Tuple }} from '@shared/lib/util';
+import {{
+    ArrowRangeIcon,
+    ListIcon,
+    InfoIcon,
+    ExpandIcon,
+    FitIcon,
+    CalendarIcon,
+    TitleIcon,
+    CameraIcon,
+}} from '@shared/ui/icons';
 import {{ Arc, Season, Timeline, Volume }} from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
@@ -299,16 +302,16 @@ export const {const_name}: Timeline = {{
         {seasons_data}
         splitChapters: {{}},
         wikiBase: '{wiki_base}',
-        smallImages: {{
+        icons: {{
             favicon: 'circle',
-            'scroller': 'scroll',
-            'select-title': 'list',
-            'read-info': 'info',
-            'toggle-unbound-chapter-width': 'chapter-width',
-            'toggle-cross-lines': 'crosslines',
-            'open-chapter-calendar': 'calendar',
-            'toggle-always-show-titles': 'title',
-            'capture-timeline': 'capture',
+            scroller: ArrowRangeIcon,
+            'select-title': ListIcon,
+            'read-info': InfoIcon,
+            'toggle-unbound-chapter-width': ExpandIcon,
+            'toggle-cross-lines': FitIcon,
+            'open-chapter-calendar': CalendarIcon,
+            'toggle-always-show-titles': TitleIcon,
+            'capture-timeline': CameraIcon,
         }},
         socialLinks: [],
     }},

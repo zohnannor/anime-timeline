@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { IconWrapper } from '@modules/IconWrapper';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
@@ -58,23 +59,19 @@ const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     display: flex;
     align-items: center;
     filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
+`;
 
-    & > img {
-        position: absolute;
-        width: ${scale(160)};
-        height: ${scale(160)};
-        filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
-        left: var(--left);
-        transform: translateX(-50%) scale(1);
-        transition: transform 0.2s ease-in-out;
-    }
+const IconScroller = styled(IconWrapper)`
+    position: absolute;
+    left: var(--left);
+    transform: translateX(-50%) scale(1);
+    cursor: grab;
 
-    & > img:hover {
-        cursor: grab;
+    &:hover {
         transform: translateX(-50%) scale(1.05);
     }
 
-    & > img:active {
+    &:active {
         cursor: grabbing;
         transform: translateX(-50%) scale(0.95);
     }
@@ -112,7 +109,7 @@ export const Scroller = () => {
         window.addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
-            window.removeEventListener('mouseup', stopDrag);
+            window.addEventListener('mouseup', stopDrag);
         };
     }, [body, dragging, updateScrollerHandle]);
 
@@ -123,8 +120,10 @@ export const Scroller = () => {
         dragging || scrolling || mouseY > window.innerHeight - 100;
 
     const {
-        data: { smallImages },
+        data: { icons },
     } = TIMELINE[animeTitle];
+
+    const ScrollerIcon = icons.scroller;
 
     return (
         <ScrollerHoverArea
@@ -137,10 +136,16 @@ export const Scroller = () => {
                 $offset={offset}
                 onClick={handleScrollerClick}
             >
-                <ThumbnailImage
-                    src={smallImages.scroller}
-                    onMouseDown={() => setDragging(true)}
-                />
+                <IconScroller
+                    onMouseDown={ev => {
+                        ev.preventDefault();
+                        setDragging(true);
+                    }}
+                >
+                    {typeof ScrollerIcon === 'string' ?
+                        <ThumbnailImage src={ScrollerIcon} />
+                    :   <ScrollerIcon />}
+                </IconScroller>
             </ScrollerWrapper>
         </ScrollerHoverArea>
     );

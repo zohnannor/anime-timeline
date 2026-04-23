@@ -1,4 +1,13 @@
+export { ArrowRangeIcon } from './arrowrange';
+export { CalendarIcon } from './calendar';
+export { CameraIcon } from './camera';
+export { ExpandIcon } from './expand';
+export { FitIcon } from './fit';
+export { InfoIcon } from './info';
+export { ListIcon } from './list';
+export { RefreshIcon } from './refresh';
 export { ShuffleIcon } from './shuffle';
 export { Sort91Icon } from './sort91';
 export { SortAzIcon } from './sortAZ';
 export { SortLinesIcon } from './sortLines';
+export { TitleIcon } from './title';

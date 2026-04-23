@@ -1,6 +1,6 @@
 import { SettingsValues } from '@shared/contexts/SettingsContext';
 import { isMobileDevice } from '@shared/lib/util';
-import { SmallImages } from '@timelines/types';
+import { Icons } from '@timelines/types';
 
 export const SCROLLER_WIDTH = 1300;
 export const HEADERS_WIDTH = 150;
@@ -11,13 +11,18 @@ export const SMALL_FONT_SIZE = 45;
 export const TIMELINE_HEIGHT = 200;
 
 export const FLOATING_BUTTONS: {
-    filename: Exclude<keyof SmallImages, 'scroller-or-favicon'>;
+    icon: Exclude<keyof Icons, 'favicon' | 'scroller'>;
     title: string;
     option: keyof SettingsValues;
 }[] = [
-    { filename: 'read-info', title: 'Read info', option: 'infoBoxOpen' },
     {
-        filename: 'toggle-unbound-chapter-width',
+        icon: 'select-title',
+        title: 'Select Manga/Anime Title',
+        option: 'animeTitleSelectorOpen',
+    },
+    { icon: 'read-info', title: 'Read info', option: 'infoBoxOpen' },
+    {
+        icon: 'toggle-unbound-chapter-width',
         title: 'Toggle unbound chapter width',
         option: 'unboundChapterWidth',
     },
@@ -26,23 +31,23 @@ export const FLOATING_BUTTONS: {
         []
     :   [
             {
-                filename: 'toggle-cross-lines',
+                icon: 'toggle-cross-lines',
                 title: 'Toggle cross-lines',
                 option: 'showCrosslines',
             } as const,
         ]),
     {
-        filename: 'open-chapter-calendar',
+        icon: 'open-chapter-calendar',
         title: 'Open chapter calendar',
         option: 'calendarOpen',
     },
     {
-        filename: 'toggle-always-show-titles',
+        icon: 'toggle-always-show-titles',
         title: 'Toggle always show titles',
         option: 'showTitles',
     },
     {
-        filename: 'capture-timeline',
+        icon: 'capture-timeline',
         title: 'Capture timeline (Save as a PNG)',
         option: 'captureTimelineModalOpen',
     },
