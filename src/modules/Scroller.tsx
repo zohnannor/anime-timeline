@@ -109,7 +109,7 @@ export const Scroller = () => {
         window.addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
-            window.addEventListener('mouseup', stopDrag);
+            window.removeEventListener('mouseup', stopDrag);
         };
     }, [body, dragging, updateScrollerHandle]);
 
@@ -136,12 +136,7 @@ export const Scroller = () => {
                 $offset={offset}
                 onClick={handleScrollerClick}
             >
-                <IconScroller
-                    onMouseDown={ev => {
-                        ev.preventDefault();
-                        setDragging(true);
-                    }}
-                >
+                <IconScroller onMouseDown={() => setDragging(true)}>
                     {typeof ScrollerIcon === 'string' ?
                         <ThumbnailImage src={ScrollerIcon} />
                     :   <ScrollerIcon />}

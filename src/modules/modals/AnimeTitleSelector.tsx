@@ -14,12 +14,8 @@ import {
 } from '@shared/ui/icons';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE, TITLES } from '@timelines/registry';
-import {
-    ResolvedChapter,
-    ResolvedEpisode,
-    ResolvedIcons,
-} from '@timelines/resolved';
-import { AnimeTitle } from '@timelines/types';
+import { ResolvedChapter, ResolvedEpisode } from '@timelines/resolved';
+import { AnimeTitle, Icons } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -97,7 +93,7 @@ type SortData =
 type Sort = {
     animeTitle: AnimeTitle;
     title: string;
-    icons: ResolvedIcons;
+    icons: Icons;
 } & SortData;
 
 export const AnimeTitleSelectorModal: React.FC = () => {

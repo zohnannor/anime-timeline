@@ -9,7 +9,7 @@ import {
 } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { ThumbnailImage, Tooltip } from '@shared/ui';
-import { ResolvedIcon } from '@timelines/resolved';
+import { Icon } from '@timelines/types';
 
 const ButtonSection = styled.div`
     display: flex;
@@ -48,7 +48,7 @@ const IconButton = styled(IconWrapper)`
 `;
 
 type ButtonProps = {
-    icon: ResolvedIcon;
+    icon: Icon;
     title: string;
     option: keyof SettingsValues;
 };

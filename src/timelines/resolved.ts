@@ -18,7 +18,6 @@ import {
     Chapter,
     EntityCallback,
     Episode,
-    Icon,
     Icons,
     Range,
     Saga,
@@ -85,16 +84,6 @@ export type ResolvedTimelineEntity = {
     volume: ResolvedVolume;
 };
 
-export type ResolvedIcon = Icon; /* 
-    | string
-    | React.ReactElement<
-          React.HTMLAttributes<HTMLElement>,
-          React.FunctionComponent<React.HTMLAttributes<HTMLElement>>
-      >; */
-
-export type ResolvedIcons = Icons; /*  Pick<Icons, 'favicon'> &
-    Record<Exclude<keyof Icons, 'favicon'>, ResolvedIcon>; */
-
 export type ResolvedTimelineData = {
     title: string;
     chapters: NonEmptyArray<ResolvedChapter>;
@@ -107,7 +96,7 @@ export type ResolvedTimelineData = {
         episodes: ResolvedEpisode[];
         seasons?: ResolvedSeason[];
         wikiBase: string;
-        icons: ResolvedIcons;
+        icons: Icons;
         socialLinks: SocialLink[];
     };
 
@@ -156,7 +145,7 @@ const resolveTimelineData = (
         seasons: rawSeasons,
         splitChapters,
         wikiBase,
-        icons: rawIcons,
+        icons,
         socialLinks,
     }: TimelineData,
     {
@@ -379,26 +368,6 @@ const resolveTimelineData = (
             }
         }
     }
-
-    // const resolveIcon = (icon: Icon): ResolvedIcon =>
-    //     typeof icon === 'string' ? icon : createElement(icon);
-
-    const icons: ResolvedIcons = {
-        // favicon: rawIcons.favicon,
-        ...rawIcons,
-        // scroller: resolveIcon(rawIcons.scroller),
-        // 'select-title': resolveIcon(rawIcons['select-title']),
-        // 'read-info': resolveIcon(rawIcons['read-info']),
-        // 'toggle-unbound-chapter-width': resolveIcon(
-        //     rawIcons['toggle-unbound-chapter-width'],
-        // ),
-        // 'toggle-cross-lines': resolveIcon(rawIcons['toggle-cross-lines']),
-        // 'open-chapter-calendar': resolveIcon(rawIcons['open-chapter-calendar']),
-        // 'toggle-always-show-titles': resolveIcon(
-        //     rawIcons['toggle-always-show-titles'],
-        // ),
-        // 'capture-timeline': resolveIcon(rawIcons['capture-timeline']),
-    };
 
     return {
         title,
