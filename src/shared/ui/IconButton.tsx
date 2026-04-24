@@ -50,11 +50,12 @@ type IconButtonProps = {
 export const IconButton: React.FC<IconButtonProps> = ({
     icon: Icon,
     filter,
+    animeTitle,
     ...props
 }) => (
     <IconWrapper $filter={filter} {...props}>
         {typeof Icon === 'string' ?
-            <ThumbnailImage {...props} src={Icon} />
+            <ThumbnailImage {...props} animeTitle={animeTitle} src={Icon} />
         :   <Icon {...props} />}
     </IconWrapper>
 );
