@@ -19,9 +19,6 @@ import { FLOATING_BUTTONS } from '@timelines/index';
 import { TIMELINE, TITLES } from '@timelines/registry';
 import { AnimeTitle } from '@timelines/types';
 
-const isTitle = (animeTitle: string | null): animeTitle is AnimeTitle =>
-    TITLES.includes(animeTitle as AnimeTitle);
-
 const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -121,6 +118,9 @@ const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
         </>
     );
 };
+
+const isTitle = (animeTitle: string | null): animeTitle is AnimeTitle =>
+    TITLES.includes(animeTitle as AnimeTitle);
 
 const App: React.FC = () => {
     const [urlPath, setUrlPath] = useState(globalThis.location.search);
