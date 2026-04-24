@@ -18,10 +18,10 @@ import {
     Chapter,
     EntityCallback,
     Episode,
+    Icons,
     Range,
     Saga,
     Season,
-    SmallImages,
     SocialLink,
     SubtimelinesMap,
     Timeline,
@@ -96,7 +96,7 @@ export type ResolvedTimelineData = {
         episodes: ResolvedEpisode[];
         seasons?: ResolvedSeason[];
         wikiBase: string;
-        smallImages: SmallImages;
+        icons: Icons;
         socialLinks: SocialLink[];
     };
 
@@ -145,7 +145,7 @@ const resolveTimelineData = (
         seasons: rawSeasons,
         splitChapters,
         wikiBase,
-        smallImages,
+        icons,
         socialLinks,
     }: TimelineData,
     {
@@ -382,7 +382,7 @@ const resolveTimelineData = (
         episodes,
         seasons,
         wikiBase,
-        smallImages,
+        icons,
         socialLinks,
     };
 };
