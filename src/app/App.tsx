@@ -83,11 +83,11 @@ const App: React.FC = () => {
         );
         document.title = `${title} Timeline`;
         const favicon =
-            document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
-        if (favicon) {
+            document.head.querySelector<HTMLLinkElement>("link[rel*='icon']");
+        if (favicon && typeof icons.favicon === 'string') {
             favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, maxHeight, icons, title]);
+    }, [animeTitle, icons.favicon, maxHeight, title]);
 
     return (
         <>

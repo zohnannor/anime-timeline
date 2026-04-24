@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
+import { IconWrapper } from '@modules/IconWrapper';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
@@ -210,11 +211,15 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                             setAnimeTitleSelectorOpen(false);
                         }}
                     >
-                        <ThumbnailImage
-                            className='animeTitleImage'
-                            animeTitle={animeTitle}
-                            src={icons.favicon}
-                        />
+                        <IconWrapper>
+                            {typeof icons.favicon === 'string' ?
+                                <ThumbnailImage
+                                    className='animeTitleImage'
+                                    animeTitle={animeTitle}
+                                    src={icons.favicon}
+                                />
+                            :   <icons.favicon />}
+                        </IconWrapper>
                         <TitleWrapper>
                             {title}
                             {badge && <BadgeWrapper>{badge}</BadgeWrapper>}

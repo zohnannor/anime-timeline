@@ -2,13 +2,14 @@
 import { Add, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
-    ListIcon,
-    InfoIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
-    CalendarIcon,
+    InfoIcon,
+    ListIcon,
     TitleIcon,
-    CameraIcon,
 } from '@shared/ui/icons';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
@@ -4011,7 +4012,7 @@ export const HXH_TIMELINE: Timeline = {
         },
         wikiBase: 'https://hunterxhunter.fandom.com/wiki/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

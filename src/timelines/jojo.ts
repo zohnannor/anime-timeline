@@ -4,6 +4,7 @@ import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -9682,7 +9683,7 @@ export const JOJO_TIMELINE: Timeline = {
         } as const,
         wikiBase: 'https://jojowiki.com/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

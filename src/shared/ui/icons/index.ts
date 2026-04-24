@@ -1,6 +1,7 @@
 export { ArrowRangeIcon } from './arrowrange';
 export { CalendarIcon } from './calendar';
 export { CameraIcon } from './camera';
+export { EmptyIcon } from './empty';
 export { ExpandIcon } from './expand';
 export { FitIcon } from './fit';
 export { InfoIcon } from './info';

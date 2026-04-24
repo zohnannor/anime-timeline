@@ -4,6 +4,7 @@ import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -1162,7 +1163,7 @@ export const JR_TIMELINE: Timeline = {
         },
         wikiBase: 'https://jigokuraku.fandom.com/wiki/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

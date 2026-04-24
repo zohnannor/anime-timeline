@@ -2,13 +2,14 @@
 import { pad, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
-    ListIcon,
-    InfoIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
-    CalendarIcon,
+    InfoIcon,
+    ListIcon,
     TitleIcon,
-    CameraIcon,
 } from '@shared/ui/icons';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
@@ -1159,7 +1160,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         splitChapters: {},
         wikiBase: 'https://deathnote.fandom.com/wiki/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

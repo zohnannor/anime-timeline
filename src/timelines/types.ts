@@ -59,7 +59,7 @@ export type Season = ExactUnion<
 export type Icon = string | React.FC<React.HTMLAttributes<HTMLElement>>;
 
 export type Icons = {
-    favicon: string;
+    favicon: Icon;
     scroller: Icon;
     'select-title': Icon;
     'read-info': Icon;

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { scale } from '@shared/lib/helpers';
 
 export const IconWrapper = styled.div<{ $filter?: string | undefined }>`

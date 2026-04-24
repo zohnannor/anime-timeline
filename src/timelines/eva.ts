@@ -2,13 +2,14 @@
 import { pad, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
-    ListIcon,
-    InfoIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
-    CalendarIcon,
+    InfoIcon,
+    ListIcon,
     TitleIcon,
-    CameraIcon,
 } from '@shared/ui/icons';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
@@ -1051,7 +1052,7 @@ export const EVA_TIMELINE: Timeline = {
         },
         wikiBase: 'https://wiki.evageeks.org/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

@@ -4,6 +4,7 @@ import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -1979,7 +1980,7 @@ export const AOT_TIMELINE: Timeline = {
         },
         wikiBase: 'https://attackontitan.fandom.com/wiki/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,

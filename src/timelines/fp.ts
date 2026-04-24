@@ -1,13 +1,14 @@
 import { pad, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
-    ListIcon,
-    InfoIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
     ExpandIcon,
     FitIcon,
-    CalendarIcon,
+    InfoIcon,
+    ListIcon,
     TitleIcon,
-    CameraIcon,
 } from '@shared/ui/icons';
 import { Arc, Timeline, Volume } from '@timelines/types';
 
@@ -638,7 +639,7 @@ export const FP_TIMELINE: Timeline = {
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',
         icons: {
-            favicon: 'circle',
+            favicon: EmptyIcon,
             scroller: ArrowRangeIcon,
             'select-title': ListIcon,
             'read-info': InfoIcon,
