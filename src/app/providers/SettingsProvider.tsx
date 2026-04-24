@@ -86,6 +86,7 @@ export const SettingsProvider: React.FC<
                 typeof title === 'function' ? title(animeTitle) : title;
             setAnimeTitle(theTitle);
             globalThis.history.replaceState({}, '', `?title=${theTitle}`);
+            globalThis.dispatchEvent(new Event('urlchange'));
         };
 
         const toggleShowTitles = (show: React.SetStateAction<boolean>) => {
