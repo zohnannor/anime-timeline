@@ -123,7 +123,19 @@ const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
 };
 
 const App: React.FC = () => {
-    const params = new URLSearchParams(globalThis.location.search);
+    const [urlPath, setUrlPath] = useState(globalThis.location.search);
+
+    useEffect(() => {
+        const syncUrl = () => setUrlPath(globalThis.location.search);
+        globalThis.addEventListener('popstate', syncUrl);
+        globalThis.addEventListener('urlchange', syncUrl);
+        return () => {
+            globalThis.removeEventListener('popstate', syncUrl);
+            globalThis.removeEventListener('urlchange', syncUrl);
+        };
+    }, []);
+
+    const params = new URLSearchParams(urlPath);
     const animeTitle = params.get('title');
 
     if (!isTitle(animeTitle)) {
