@@ -70,7 +70,7 @@ export const SettingsContext = createContext<Settings>({
     setShowTitles: dummy,
     captureTimelineModalOpen: false,
     setCaptureTimelineModalOpen: dummy,
-    animeTitle: 'csm',
+    animeTitle: 'csm', // unused
     setAnimeTitle: dummy,
     animeTitleSelectorOpen: false,
     setAnimeTitleSelectorOpen: dummy,

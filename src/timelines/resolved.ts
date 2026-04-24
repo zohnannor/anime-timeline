@@ -117,7 +117,7 @@ type ResolvedTimelineSectionLayout = {
     [S in keyof TimelineSectionLayout]: ResolveSectionItem<S>;
 };
 
-type ResolvedTimeline = {
+export type ResolvedTimeline = {
     layout: ResolvedTimelineSectionLayout;
     data: ResolvedTimelineData;
     maxHeight: number;
