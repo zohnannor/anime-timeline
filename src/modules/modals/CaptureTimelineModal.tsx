@@ -87,7 +87,6 @@ export const CaptureTimelineModal: React.FC = () => {
             setError(error);
         },
     });
- 
 
     return (
         <Modal
