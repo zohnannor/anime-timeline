@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { SettingsProvider } from '@app/providers/SettingsProvider';
 import { FloatingButton, FloatingButtons } from '@modules/FloatingButtons';
 import {
     AnimeTitleSelectorModal,
@@ -15,7 +16,11 @@ import { useSettings } from '@shared/contexts/SettingsContext';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { typedValues } from '@shared/lib/util';
 import { FLOATING_BUTTONS } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
+import { TIMELINE, TITLES } from '@timelines/registry';
+import { AnimeTitle } from '@timelines/types';
+
+const isTitle = (animeTitle: string | null): animeTitle is AnimeTitle =>
+    TITLES.includes(animeTitle as AnimeTitle);
 
 const AppContainer = styled.div`
     display: flex;
@@ -24,14 +29,17 @@ const AppContainer = styled.div`
     user-select: none;
 `;
 
-const App: React.FC = () => {
+type TimelineContentProps = {
+    animeTitle: AnimeTitle;
+};
+
+const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
     const { width } = useWindowSize();
     const {
         infoBoxOpen,
         calendarOpen,
         captureTimelineModalOpen,
         animeTitleSelectorOpen,
-        animeTitle,
     } = useSettings();
     const [renderUi, setRenderUi] = useState(true);
 
@@ -63,13 +71,9 @@ const App: React.FC = () => {
         animeTitleSelectorOpen,
     ]);
 
-    const handleKeyDown = (ev: KeyboardEvent) => {
-        if (ev.ctrlKey && ev.code === 'KeyV') {
-            setRenderUi(state => !state);
-        }
-    };
-
     useEffect(() => {
+        const handleKeyDown = (ev: KeyboardEvent) =>
+            ev.ctrlKey && ev.code === 'KeyV' && setRenderUi(state => !state);
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, []);
@@ -122,6 +126,26 @@ const App: React.FC = () => {
                 {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}
             </AppContainer>
         </>
+    );
+};
+
+const App: React.FC = () => {
+    const params = new URLSearchParams(globalThis.location.search);
+    const animeTitle = params.get('title');
+
+    if (!isTitle(animeTitle)) {
+        return (
+            <SettingsProvider animeTitle='csm' animeTitleSelectorOpen>
+                <AnimeTitleSelectorModal />
+                <AppContainer className='appContainer' />
+            </SettingsProvider>
+        );
+    }
+
+    return (
+        <SettingsProvider animeTitle={animeTitle}>
+            <TimelineContent animeTitle={animeTitle} />
+        </SettingsProvider>
     );
 };
 
