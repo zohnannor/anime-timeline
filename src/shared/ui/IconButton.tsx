@@ -1,4 +1,3 @@
-import { FC, HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { scale } from '@shared/lib/helpers';
@@ -6,9 +5,11 @@ import { Icon } from '@timelines/types';
 
 import { ThumbnailImage } from './ThumbnailImage';
 
-const IconWrapper = styled.div<{
+type IconWrapperProps = {
     $filter: string | undefined;
-}>`
+};
+
+const IconWrapper = styled.div<IconWrapperProps>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,16 +44,17 @@ const IconWrapper = styled.div<{
 type IconButtonProps = {
     icon: Icon;
     filter?: string | undefined;
-} & HTMLAttributes<HTMLDivElement>;
+    animeTitle?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export const IconButton: FC<IconButtonProps> = ({
+export const IconButton: React.FC<IconButtonProps> = ({
     icon: Icon,
     filter,
     ...props
 }) => (
     <IconWrapper $filter={filter} {...props}>
         {typeof Icon === 'string' ?
-            <ThumbnailImage src={Icon} />
-        :   <Icon />}
+            <ThumbnailImage {...props} src={Icon} />
+        :   <Icon {...props} />}
     </IconWrapper>
 );

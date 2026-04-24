@@ -210,7 +210,11 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                             setAnimeTitleSelectorOpen(false);
                         }}
                     >
-                        <IconButton icon={icons.favicon} />
+                        <IconButton
+                            className='animeTitleImage'
+                            animeTitle={animeTitle}
+                            icon={icons.favicon}
+                        />
                         <TitleWrapper>
                             {title}
                             {badge && <BadgeWrapper>{badge}</BadgeWrapper>}

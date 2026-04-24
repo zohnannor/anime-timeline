@@ -78,7 +78,6 @@ export const FloatingButton: React.FC<ButtonProps> = ({
             <FloatingIconButton
                 icon={icon}
                 onClick={() => setter(state => !state)}
-                title={title}
                 filter={filter}
             />
         </Tooltip>
