@@ -42,7 +42,7 @@ const IconWrapper = styled.div<{
 
 type IconButtonProps = {
     icon: Icon;
-    filter?: string;
+    filter?: string | undefined;
 } & HTMLAttributes<HTMLDivElement>;
 
 export const IconButton: FC<IconButtonProps> = ({
