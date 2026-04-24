@@ -3,3 +3,4 @@ export { Modal } from './Modal/Modal';
 export { withShadow } from './ShadowWrapper';
 export { ThumbnailImage } from './ThumbnailImage';
 export { Tooltip } from './Tooltip';
+export { IconButton } from './IconButton';

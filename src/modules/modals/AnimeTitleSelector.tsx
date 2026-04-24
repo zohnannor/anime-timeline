@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { IconWrapper } from '@modules/IconWrapper';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
-import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
+import { IconButton, Modal, Tooltip } from '@shared/ui';
 import {
     RefreshIcon,
     ShuffleIcon,
@@ -211,15 +210,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                             setAnimeTitleSelectorOpen(false);
                         }}
                     >
-                        <IconWrapper>
-                            {typeof icons.favicon === 'string' ?
-                                <ThumbnailImage
-                                    className='animeTitleImage'
-                                    animeTitle={animeTitle}
-                                    src={icons.favicon}
-                                />
-                            :   <icons.favicon />}
-                        </IconWrapper>
+                        <IconButton icon={icons.favicon} />
                         <TitleWrapper>
                             {title}
                             {badge && <BadgeWrapper>{badge}</BadgeWrapper>}

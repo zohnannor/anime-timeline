@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { IconWrapper } from '@modules/IconWrapper';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
-import { ThumbnailImage } from '@shared/ui';
+import { IconButton } from '@shared/ui';
 import { SCROLLER_WIDTH } from '@timelines/index';
 import { TIMELINE } from '@timelines/registry';
 
@@ -61,7 +60,7 @@ const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
 `;
 
-const IconScroller = styled(IconWrapper)`
+const IconScroller = styled(IconButton)`
     position: absolute;
     left: var(--left);
     transform: translateX(-50%) scale(1);
@@ -123,8 +122,6 @@ export const Scroller = () => {
         data: { icons },
     } = TIMELINE[animeTitle];
 
-    const ScrollerIcon = icons.scroller;
-
     return (
         <ScrollerHoverArea
             className='scrollerHoverArea'
@@ -136,11 +133,10 @@ export const Scroller = () => {
                 $offset={offset}
                 onClick={handleScrollerClick}
             >
-                <IconScroller onMouseDown={() => setDragging(true)}>
-                    {typeof ScrollerIcon === 'string' ?
-                        <ThumbnailImage src={ScrollerIcon} />
-                    :   <ScrollerIcon />}
-                </IconScroller>
+                <IconScroller
+                    icon={icons.scroller}
+                    onMouseDown={() => setDragging(true)}
+                />
             </ScrollerWrapper>
         </ScrollerHoverArea>
     );

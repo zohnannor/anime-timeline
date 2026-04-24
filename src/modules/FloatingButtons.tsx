@@ -1,14 +1,13 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { IconWrapper } from '@modules/IconWrapper';
 import {
     SETTINGS_FUNCTIONS,
     SettingsValues,
     useSettings,
 } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
-import { ThumbnailImage, Tooltip } from '@shared/ui';
+import { IconButton, Tooltip } from '@shared/ui';
 import { Icon } from '@timelines/types';
 
 const ButtonSection = styled.div`
@@ -39,7 +38,7 @@ export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (
     <ButtonSection className='floatingButtons'>{children}</ButtonSection>
 );
 
-const IconButton = styled(IconWrapper)`
+const FloatingIconButton = styled(IconButton)`
     position: relative;
     cursor: pointer;
     &:hover {
@@ -54,7 +53,7 @@ type ButtonProps = {
 };
 
 export const FloatingButton: React.FC<ButtonProps> = ({
-    icon: Icon,
+    icon,
     title,
     option,
 }) => {
@@ -76,14 +75,12 @@ export const FloatingButton: React.FC<ButtonProps> = ({
                 </FloatingButtonTooltip>
             }
         >
-            <IconButton
-                $filter={filter}
+            <FloatingIconButton
+                icon={icon}
                 onClick={() => setter(state => !state)}
-            >
-                {typeof Icon === 'string' ?
-                    <ThumbnailImage src={Icon} />
-                :   <Icon />}
-            </IconButton>
+                title={title}
+                filter={filter}
+            />
         </Tooltip>
     );
 };
