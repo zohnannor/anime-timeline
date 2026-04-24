@@ -44,7 +44,7 @@ const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
     const [renderUi, setRenderUi] = useState(true);
 
     const {
-        data: { smallImages, title },
+        data: { icons, title },
         layout,
         maxHeight,
     } = TIMELINE[animeTitle];
@@ -87,12 +87,11 @@ const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
         );
         document.title = `${title} Timeline`;
         const favicon =
-            document.head.querySelector<HTMLLinkElement>("link[rel~='icon']");
-        if (favicon) {
-            const icon = smallImages['scroller-or-favicon'];
-            favicon.href = `./${animeTitle}/${icon}.webp`;
+            document.head.querySelector<HTMLLinkElement>("link[rel*='icon']");
+        if (favicon && typeof icons.favicon === 'string') {
+            favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, maxHeight, smallImages, title]);
+    }, [animeTitle, icons.favicon, maxHeight, title]);
 
     return (
         <>
@@ -104,16 +103,10 @@ const TimelineContent: React.FC<TimelineContentProps> = ({ animeTitle }) => {
             <AppContainer className='appContainer'>
                 {renderUi && (
                     <FloatingButtons>
-                        <FloatingButton
-                            key='animeTitleSelectorOpen'
-                            filename={smallImages['scroller-or-favicon']}
-                            title='Select Manga/Anime Title'
-                            option='animeTitleSelectorOpen'
-                        />
-                        {FLOATING_BUTTONS.map(({ filename, title, option }) => (
+                        {FLOATING_BUTTONS.map(({ icon, title, option }) => (
                             <FloatingButton
-                                key={filename}
-                                filename={smallImages[filename]}
+                                key={icon}
+                                icon={icons[icon]}
                                 title={title}
                                 option={option}
                             />
