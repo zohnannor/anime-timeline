@@ -1,5 +1,16 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
+import {
+    ArrowRangeIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
+    ExpandIcon,
+    FitIcon,
+    InfoIcon,
+    ListIcon,
+    TitleIcon,
+} from '@shared/ui/icons';
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1900;
@@ -1151,14 +1162,16 @@ export const JR_TIMELINE: Timeline = {
             82: 14,
         },
         wikiBase: 'https://jigokuraku.fandom.com/wiki/',
-        smallImages: {
-            'scroller-or-favicon': 'circle',
-            'read-info': 'circle',
-            'toggle-unbound-chapter-width': 'circle',
-            'toggle-cross-lines': 'circle',
-            'open-chapter-calendar': 'circle',
-            'toggle-always-show-titles': 'circle',
-            'capture-timeline': 'circle',
+        icons: {
+            favicon: EmptyIcon,
+            scroller: ArrowRangeIcon,
+            'select-title': ListIcon,
+            'read-info': InfoIcon,
+            'toggle-unbound-chapter-width': ExpandIcon,
+            'toggle-cross-lines': FitIcon,
+            'open-chapter-calendar': CalendarIcon,
+            'toggle-always-show-titles': TitleIcon,
+            'capture-timeline': CameraIcon,
         },
         socialLinks: [
             {

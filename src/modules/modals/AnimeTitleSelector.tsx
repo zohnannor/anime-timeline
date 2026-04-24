@@ -4,18 +4,18 @@ import styled from 'styled-components';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 import { sum } from '@shared/lib/util';
-import { Modal, ThumbnailImage, Tooltip } from '@shared/ui';
+import { IconButton, Modal, Tooltip } from '@shared/ui';
 import {
+    RefreshIcon,
     ShuffleIcon,
     Sort91Icon,
     SortAzIcon,
     SortLinesIcon,
 } from '@shared/ui/icons';
-import { RefreshIcon } from '@shared/ui/icons/refresh';
 import { HeaderButton } from '@shared/ui/Modal';
 import { TIMELINE, TITLES } from '@timelines/registry';
 import { ResolvedChapter, ResolvedEpisode } from '@timelines/resolved';
-import { AnimeTitle, SmallImages } from '@timelines/types';
+import { AnimeTitle, Icons } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -93,7 +93,7 @@ type SortData =
 type Sort = {
     animeTitle: AnimeTitle;
     title: string;
-    smallImages: SmallImages;
+    icons: Icons;
 } & SortData;
 
 export const AnimeTitleSelectorModal: React.FC = () => {
@@ -105,7 +105,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         () =>
             TITLES.map(animeTitle => {
                 const {
-                    data: { chapters, episodes, title, smallImages },
+                    data: { chapters, episodes, title, icons },
                 } = TIMELINE[animeTitle];
                 const strategies: Record<Sorting, () => SortData> = {
                     alphabetical: () => ({
@@ -149,7 +149,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                 return {
                     animeTitle,
                     title,
-                    smallImages,
+                    icons,
                     ...strategies[sorting](),
                 } satisfies Sort;
             }).toSorted((titleA, titleB) =>
@@ -202,7 +202,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
             <TitleContainer>
-                {titles.map(({ animeTitle, title, smallImages, badge }) => (
+                {titles.map(({ animeTitle, title, icons, badge }) => (
                     <TitleButton
                         key={animeTitle}
                         onClick={() => {
@@ -210,10 +210,10 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                             setAnimeTitleSelectorOpen(false);
                         }}
                     >
-                        <ThumbnailImage
+                        <IconButton
                             className='animeTitleImage'
                             animeTitle={animeTitle}
-                            src={smallImages['scroller-or-favicon']}
+                            icon={icons.favicon}
                         />
                         <TitleWrapper>
                             {title}

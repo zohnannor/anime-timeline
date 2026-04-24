@@ -1,4 +1,15 @@
 import { pad, Tuple } from '@shared/lib/util';
+import {
+    ArrowRangeIcon,
+    CalendarIcon,
+    CameraIcon,
+    EmptyIcon,
+    ExpandIcon,
+    FitIcon,
+    InfoIcon,
+    ListIcon,
+    TitleIcon,
+} from '@shared/ui/icons';
 import { Arc, Timeline, Volume } from '@timelines/types';
 
 const VOLUME_HEIGHT = 1579;
@@ -627,14 +638,16 @@ export const FP_TIMELINE: Timeline = {
         ] as const satisfies Tuple<Arc, ArcsTotal>,
         splitChapters: {} as const,
         wikiBase: 'https://fire-punch.fandom.com/wiki/',
-        smallImages: {
-            'scroller-or-favicon': 'circle',
-            'read-info': 'circle',
-            'toggle-unbound-chapter-width': 'circle',
-            'toggle-cross-lines': 'circle',
-            'open-chapter-calendar': 'circle',
-            'toggle-always-show-titles': 'circle',
-            'capture-timeline': 'circle',
+        icons: {
+            favicon: EmptyIcon,
+            scroller: ArrowRangeIcon,
+            'select-title': ListIcon,
+            'read-info': InfoIcon,
+            'toggle-unbound-chapter-width': ExpandIcon,
+            'toggle-cross-lines': FitIcon,
+            'open-chapter-calendar': CalendarIcon,
+            'toggle-always-show-titles': TitleIcon,
+            'capture-timeline': CameraIcon,
         },
         socialLinks: [],
     },
