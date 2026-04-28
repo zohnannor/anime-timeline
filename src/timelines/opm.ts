@@ -21,7 +21,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 233;
+const CHAPTERS_TOTAL = 234;
 const VOLUMES_TOTAL = 42;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
@@ -1776,6 +1776,12 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Life or Death 2',
                         date: 'April 9, 2026',
                         pages: 15,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Interception',
+                        date: 'April 23, 2026',
+                        pages: 16,
                         cover: null,
                     },
                 ],
