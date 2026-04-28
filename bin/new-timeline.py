@@ -6,7 +6,23 @@ import sys
 import readline  # pyright: ignore[reportUnusedImport]
 from pathlib import Path
 
-from colors import Color, ColorContext, bold, colored, should_use_colors
+if not __package__:
+    from colors import (  # pyright: ignore[reportImplicitRelativeImport]
+        Color,
+        ColorContext,
+        bold,
+        colored,
+        should_use_colors,
+    )
+else:
+    from .colors import Color, ColorContext, bold, colored, should_use_colors
+
+
+class Args(argparse.Namespace):
+    """CLI Arguments"""
+
+    TITLE: str | None = None
+    color: str = "auto"
 
 
 def get_root() -> Path:
@@ -25,7 +41,7 @@ def slugify(text: str) -> str:
     return re.sub(r"[\W_]+", "", text).lower()
 
 
-def update_registry(path: Path, slug: str, const_name: str, root: Path):
+def update_registry(path: Path, slug: str, const_name: str, root: Path) -> None:
     if not path.exists():
         print(
             colored(f"✘ Error: {path.relative_to(root)} not found", Color.RED)
@@ -65,7 +81,7 @@ def update_registry(path: Path, slug: str, const_name: str, root: Path):
                 lines.insert(i, new_entry)
                 break
 
-    path.write_text("\n".join(lines) + "\n")
+    _ = path.write_text("\n".join(lines) + "\n")
     print(colored(f"✔ Updated registry: {path.relative_to(root)}", Color.GREEN))
 
 
@@ -76,7 +92,7 @@ def ask(question: str) -> str:
         return ""
 
 
-def create_new_timeline(title: str | None = None):
+def create_new_timeline(title: str | None = None) -> None:
     try:
         root = get_root()
 
@@ -320,7 +336,7 @@ export const {const_name}: Timeline = {{
 """
         if not ts_file.exists():
             ts_file.parent.mkdir(parents=True, exist_ok=True)
-            ts_file.write_text(ts_content.strip() + "\n")
+            _ = ts_file.write_text(ts_content.strip() + "\n")
             print(
                 colored(
                     f"✔ Created file: {ts_file.relative_to(root)}", Color.GREEN
@@ -343,15 +359,16 @@ export const {const_name}: Timeline = {{
         sys.exit(130)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Create boilerplate files for a new anime timeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "TITLE", nargs="?", help="Manga/Anime title codeword (e.g. `csm`)"
+    # Using _ as a hint that we aren't using the Action object returned
+    _ = parser.add_argument(
+        "TITLE", nargs="?", help="Manga/Anime title codeword (e.g. `csm` text)"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--color",
         choices=["auto", "always", "never"],
         default="auto",
@@ -360,7 +377,7 @@ def main():
         + "(default: auto)",
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Args())
 
     colors_enabled = should_use_colors(args.color)
     ColorContext.set_enabled(colors_enabled)

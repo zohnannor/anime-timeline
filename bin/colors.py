@@ -48,11 +48,11 @@ class ColorContext:
     _enabled: bool = True
 
     @classmethod
-    def set_enabled(cls, enabled: bool):
+    def set_enabled(cls, enabled: bool) -> None:
         cls._enabled = enabled
 
     @classmethod
-    def get_enabled(cls):
+    def get_enabled(cls) -> bool:
         return cls._enabled
 
 
@@ -70,7 +70,7 @@ def bold(text: str) -> str:
     return f"{Color.BOLD}{text}{Color.RESET}"
 
 
-def main():
+def main() -> None:
     print(colored("Don't run this file", Color.BRIGHT_GREEN))
 
 
