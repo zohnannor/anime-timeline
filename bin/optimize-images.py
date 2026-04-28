@@ -8,12 +8,31 @@ import logging
 import shutil
 from pathlib import Path
 from dataclasses import dataclass
-from typing import Callable, Final
+from typing import Callable, Final, final, override
 from concurrent.futures import ThreadPoolExecutor
 
-from colors import Color, ColorContext, colored, should_use_colors
+if not __package__:
+    from colors import (  # pyright: ignore[reportImplicitRelativeImport]
+        Color,
+        ColorContext,
+        colored,
+        should_use_colors,
+    )
+else:
+    from .colors import Color, ColorContext, colored, should_use_colors
 
 
+class Args(argparse.Namespace):
+    """CLI Arguments"""
+
+    TITLE: str | None = None
+    force: bool = False
+    all: bool = False
+    cpu: int = 32
+    color: str = "auto"
+
+
+@final
 class ColorFormatter(logging.Formatter):
     """Custom formatter with colors for different log levels"""
 
@@ -25,12 +44,15 @@ class ColorFormatter(logging.Formatter):
         logging.CRITICAL: f"{Color.BRIGHT_RED}{Color.BOLD}",
     }
 
-    def __init__(self, fmt: str | None = None, datefmt: str | None = None):
+    def __init__(
+        self, fmt: str | None = None, datefmt: str | None = None
+    ) -> None:
         # Default format if none provided
         fmt = fmt or "%(asctime)s - %(levelname)s - %(message)s"
         super().__init__(fmt, datefmt)
         self.colors_enabled = ColorContext.get_enabled()
 
+    @override
     def format(self, record: logging.LogRecord) -> str:
         orig_levelname = record.levelname
         color_code = self.LEVEL_COLORS.get(record.levelno)
@@ -149,12 +171,18 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
     "dhd": {
         "Season_1.png",
         "Season_2.png",
-    }
+    },
 }
 
 
+@final
 class ImageProcessor:
-    def __init__(self, title: str, config: Config, force_mode: bool = False):
+    def __init__(
+        self,
+        title: str,
+        config: Config | None = None,
+        force_mode: bool = False,
+    ) -> None:
         """Initialize the ImageProcessor class"""
 
         self.title = title
@@ -174,7 +202,7 @@ class ImageProcessor:
 
         self._check_commands()
 
-    def _check_commands(self):
+    def _check_commands(self) -> None:
         """Check if required commands are available"""
         for cmd in ["magick", "cwebp"]:
             if not shutil.which(cmd):
@@ -219,7 +247,7 @@ class ImageProcessor:
         no_files_message: str,
         process_single: Callable[[Path], bool],
         image_kind: str,
-    ):
+    ) -> None:
         """Process a list of files"""
 
         style = f"{Color.BRIGHT_MAGENTA}{Color.BOLD}"
@@ -297,7 +325,7 @@ class ImageProcessor:
                 on_failure()
             return False
 
-    def convert_orphan_images(self):
+    def convert_orphan_images(self) -> None:
         """
         Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists).
         In CI (GitHub Actions), delete orphan files instead to keep cache clean.
@@ -369,7 +397,7 @@ class ImageProcessor:
             image_kind="orphan images",
         )
 
-    def generate_thumbnails(self):
+    def generate_thumbnails(self) -> None:
         """Generate thumbnails from originals"""
 
         def _generate_thumbnail_single(path: Path) -> bool:
@@ -408,7 +436,7 @@ class ImageProcessor:
             image_kind="thumbnails",
         )
 
-    def process_special_images(self):
+    def process_special_images(self) -> None:
         """Process special images with custom settings"""
 
         if not self.special_images:
@@ -453,7 +481,7 @@ class ImageProcessor:
             image_kind="special images",
         )
 
-    def process_main_images(self):
+    def process_main_images(self) -> None:
         """Create optimized WebP versions (excluding special images)"""
 
         def _process_main_single(path: Path) -> bool:
@@ -509,7 +537,7 @@ class ImageProcessor:
             image_kind="main images",
         )
 
-    def get_size_report(self):
+    def get_size_report(self) -> None:
         style = f"{Color.BRIGHT_BLUE}{Color.BOLD}"
         logging.info(colored("=" * 60, style))
         logging.info(colored("  Size Report", style))
@@ -534,7 +562,7 @@ class ImageProcessor:
             f"📊 Thumbnail WebP files count: {colored(str(len(thumb_webp_files)), Color.BRIGHT_CYAN)}"
         )
 
-    def _format_size(self, size_bytes: int) -> str:
+    def _format_size(self, size_bytes: int | float) -> str:
         """Format file size in human-readable format"""
 
         size = float(size_bytes)
@@ -544,7 +572,7 @@ class ImageProcessor:
             size /= 1024.0
         return f"{size:.2f} TB"
 
-    def process_all(self):
+    def process_all(self) -> None:
         """Run the complete image optimization pipeline"""
 
         style = f"{Color.BRIGHT_GREEN}{Color.BOLD}"
@@ -587,12 +615,9 @@ class ImageProcessor:
 
 
 def find_all_titles() -> list[str]:
-    """Find all anime titles in the public directory"""
-
     public_dir = Path("./public")
     if not public_dir.exists():
         return []
-
     return sorted(
         [
             item.name
@@ -625,31 +650,31 @@ def process_single_title(
         return False
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Optimize manga/anime images",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "TITLE", nargs="?", help="Manga/Anime title codeword (e.g. `csm`)"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--force",
         action="store_true",
         help="Force reprocessing of all images (default: false)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--all",
         action="store_true",
         help="Process all anime titles (default: false)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--cpu",
         type=int,
         default=os.cpu_count(),
         help="Number of parallel processes (default: number of CPUs)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--color",
         choices=["auto", "always", "never"],
         default="auto",
@@ -658,7 +683,7 @@ def main():
         + "(default: auto)",
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(namespace=Args())
 
     colors_enabled = should_use_colors(args.color)
     ColorContext.set_enabled(colors_enabled)
@@ -730,7 +755,7 @@ def main():
             )
         )
     elif args.TITLE:
-        process_single_title(args.TITLE, config, args.force)
+        assert process_single_title(args.TITLE, config, args.force)
     else:
         parser.print_help()
 

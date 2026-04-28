@@ -25,7 +25,7 @@ yarn
 Generate optimized images
 
 ```bash
-python bin/optimize-images.py --all
+python -m bin.optimize-images --all
 ```
 
 Start the dev server
