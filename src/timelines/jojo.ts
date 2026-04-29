@@ -8187,7 +8187,7 @@ export const JOJO_TIMELINE: Timeline = {
                         title: 'Usagi, Fraud, and Suspicion',
                         cover: 'Arc_9_9',
                         offset: { x: 0, y: 0 },
-                        chapters: { from: 990, to: 992 },
+                        chapters: { from: 990 },
                     },
                 ],
             },
@@ -9627,7 +9627,7 @@ export const JOJO_TIMELINE: Timeline = {
                 ],
             },
             { chapters: { from: 848, to: 957 } },
-            { chapters: { from: 958, to: 992 } },
+            { chapters: { from: 958 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             11: 5,
