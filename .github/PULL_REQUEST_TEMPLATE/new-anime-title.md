@@ -9,7 +9,7 @@ Add a new timeline for: **[TITLE HERE]**
 - [ ] New title is wired into `TIMELINE` in [`src/constants.ts`](../../src/constants.ts)
 - [ ] Timeline data is defined in [`src/timelines`](../../src/timelines) (re-using an existing file as a template, e.g. `csm.ts`, so keeping the same style and ordering)
 - [ ] All wiki / external links point to stable, well-maintained sources (see [Wiki Buddy list](https://getindie.wiki/listings/))
-- [ ] Images for this title are added under `public/<title>` (PNG/JPG/JPEG)
+- [ ] Images for this title are added under `assets/<title>` (PNG/JPG/JPEG)
 - [ ] `python bin/optimize-images.py <title>` has been run locally and the optimized PNG outputs are committed
 - [ ] Timeline renders correctly in the live app (no obvious layout issues, overlapping labels, or missing assets)
 - [ ] If the title is still ongoing:

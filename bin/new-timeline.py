@@ -110,7 +110,7 @@ def create_new_timeline(title: str | None = None) -> None:
         slug = slug_input if slug_input else suggested_slug
         const_name = f"{slug.upper()}_TIMELINE"
 
-        public_dir = root / "public" / slug
+        assets_dir = root / "assets" / slug
         ts_file = root / "src" / "timelines" / f"{slug}.ts"
         registry_file = root / "src" / "timelines" / "registry.ts"
 
@@ -141,10 +141,10 @@ def create_new_timeline(title: str | None = None) -> None:
         )
 
         # File Operations
-        public_dir.mkdir(parents=True, exist_ok=True)
+        assets_dir.mkdir(parents=True, exist_ok=True)
         print(
             colored(
-                f"✔ Created folder: {public_dir.relative_to(root)}", Color.GREEN
+                f"✔ Created folder: {assets_dir.relative_to(root)}", Color.GREEN
             )
         )
 
