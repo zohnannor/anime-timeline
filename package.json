@@ -3,7 +3,7 @@
     "scripts": {
         "dev": "vite",
         "optimize": "python -m bin.optimize-images --all",
-        "build": "yarn optimize && tsc && vite build",
+        "build": "tsc && vite build",
         "lint": "eslint . --cache --cache-location .eslintcache",
         "fmt": "prettier --write src --cache",
         "preview": "vite preview"

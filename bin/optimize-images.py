@@ -30,6 +30,16 @@ class Args(argparse.Namespace):
     all: bool = False
     cpu: int = 32
     color: str = "auto"
+    log_level: str | None = None
+
+
+LOG_LEVELS: Final[dict[str, int]] = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL,
+}
 
 
 @final
@@ -75,6 +85,23 @@ class Config:
     thumb_quality: int = 10
     main_width: int = 800
     thumb_width: int = 100
+
+
+def resolve_log_level(args: Args, parser: argparse.ArgumentParser) -> int:
+    """Resolve the log level from the command line arguments or environment"""
+
+    level_name = args.log_level or os.environ.get("LOG_LEVEL")
+    if level_name is None:
+        level_name = "debug"
+
+    level = LOG_LEVELS.get(level_name.lower())
+    if level is None:
+        valid_levels = ", ".join(LOG_LEVELS)
+        parser.error(
+            f"Invalid log level: {level_name}. Expected one of: {valid_levels}"
+        )
+
+    return level
 
 
 SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
@@ -707,6 +734,11 @@ def main() -> None:
         + "This program respects the NO_COLOR environment variable. "
         + "(default: auto)",
     )
+    _ = parser.add_argument(
+        "--log-level",
+        choices=LOG_LEVELS.keys(),
+        help="Minimum log level to show. Can also be set with LOG_LEVEL.",
+    )
 
     args = parser.parse_args(namespace=Args())
 
@@ -719,7 +751,7 @@ def main() -> None:
         ColorFormatter(datefmt=colored("%Y-%m-%d %H:%M:%S", Color.BRIGHT_BLACK))
     )
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=resolve_log_level(args, parser),
         handlers=[handler],
     )
 

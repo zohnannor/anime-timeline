@@ -91,13 +91,8 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     const { setCalendarOpen } = useSettings();
     const lastClickedChapter = useRef<string | null>(null);
 
-    const handleDayClick = useCallback(
-        (ev: React.MouseEvent, chapterNumber: string | null) => {
-            ev.preventDefault();
-            if (chapterNumber === null) {
-                return;
-            }
-
+    const openCalendarForChapter = useCallback(
+        (chapterNumber: string) => {
             setCalendarOpen(true);
             lastClickedChapter.current = chapterNumber;
         },
@@ -136,7 +131,10 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         $background={`#${color.toString(16).padStart(6, '0')}`}
                         onClick={
                             variant === 'days' ?
-                                ev => handleDayClick(ev, chapterNumber)
+                                ev => {
+                                    ev.preventDefault();
+                                    openCalendarForChapter(chapterNumber);
+                                }
                             :   undefined
                         }
                         $variant={variant}
@@ -144,13 +142,14 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
                         tabIndex={variant === 'days' ? 0 : -1}
                         onKeyDown={
                             variant === 'days' ?
-                                ev =>
+                                ev => {
                                     // a11y: allow focusing with space or enter
-                                    (ev.key === 'Enter' || ev.key === ' ') &&
-                                    handleDayClick(
-                                        ev as unknown as React.MouseEvent,
-                                        chapterNumber,
-                                    )
+                                    if (ev.key !== 'Enter' && ev.key !== ' ') {
+                                        return;
+                                    }
+                                    ev.preventDefault();
+                                    openCalendarForChapter(chapterNumber);
+                                }
                             :   undefined
                         }
                     >

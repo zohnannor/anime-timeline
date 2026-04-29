@@ -58,7 +58,7 @@ See its `--help` for more details.
 </summary>
 
 ```bash
-usage: optimize-images.py [-h] [--force] [--all] [--cpu CPU] [--color {auto,always,never}] [TITLE]
+usage: optimize-images.py [-h] [--force] [--all] [--cpu CPU] [--color {auto,always,never}] [--log-level {debug,info,warning,error,critical}] [TITLE]
 
 Optimize manga/anime images
 
@@ -72,9 +72,16 @@ options:
   --cpu CPU             Number of parallel processes (default: number of CPUs)
   --color {auto,always,never}
                         Control color output (auto, always, never). This program respects the NO_COLOR environment variable. (default: auto)
+  --log-level {debug,info,warning,error,critical}
+                        Minimum log level to show. Can also be set with LOG_LEVEL.
 ```
 
 </details>
+
+The script defaults to `LOG_LEVEL=debug`. Use `LOG_LEVEL=info yarn optimize` to
+hide per-file debug output if it's too noisy for you, or `LOG_LEVEL=warning yarn
+optimize` to show only warnings and errors. The same filter can be passed as
+`python -m bin.optimize-images --log-level info csm`.
 
 Requirements:
 
