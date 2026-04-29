@@ -2,13 +2,13 @@ name: Deploy Static Content to GitHub Pages
 
 on:
     pull_request:
-        branches: ["main"]
+        branches: ['main']
     push:
-        branches: ["main"]
+        branches: ['main']
     workflow_dispatch:
         inputs:
             force_optimize:
-                description: "Force image optimization (ignore cache)"
+                description: 'Force image optimization (ignore cache)'
                 required: false
                 default: false
                 type: boolean
@@ -19,7 +19,7 @@ permissions:
     id-token: write
 
 concurrency:
-    group: "pages"
+    group: 'pages'
     cancel-in-progress: true
 
 jobs:
@@ -53,11 +53,10 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: |
-                      public/**/*.webp
-                      public/*-thumbnails
-                  key: webp-${{ hashFiles('bin/optimize-images.py', 'src/images/**') }}${{ steps.force.outputs.value == 'true' && format('-force-{0}', github.run_id) || '' }}
+                      public/*
+                  key: webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}${{ steps.force.outputs.value == 'true' && format('-force-{0}', github.run_id) || '' }}
                   restore-keys: |
-                      webp-${{ hashFiles('bin/optimize-images.py', 'src/images/**') }}-
+                      webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-
                       webp-
 
             - name: Enable Corepack
@@ -67,7 +66,7 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 22
-                  cache: "yarn"
+                  cache: 'yarn'
 
             - name: Install Dependencies
               run: yarn install --immutable
@@ -89,13 +88,13 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                  python-version: "3.x"
+                  python-version: '3.x'
 
             - name: Run image optimization
               run: |
                   FORCE_FLAG=$([[ "${{ steps.force.outputs.value }}" == "true" ]] && echo "--force" || echo "")
                   echo "Running image optimization..."
-                  python bin/optimize-images.py --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
+                  python -m bin.optimize-images --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
               env:
                   CPU: 2
 
@@ -105,7 +104,7 @@ jobs:
             - name: Upload Build Artifacts
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: "./build"
+                  path: './build'
 
     deploy:
         needs: build

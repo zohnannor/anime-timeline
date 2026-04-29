@@ -2,7 +2,8 @@
     "name": "anime-timeline",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "optimize": "python -m bin.optimize-images --all",
+        "build": "yarn optimize && tsc && vite build",
         "lint": "eslint . --cache --cache-location .eslintcache",
         "fmt": "prettier --write src --cache",
         "preview": "vite preview"

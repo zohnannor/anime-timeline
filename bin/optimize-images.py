@@ -183,21 +183,24 @@ class ImageProcessor:
         config: Config | None = None,
         force_mode: bool = False,
     ) -> None:
-        """Initialize the ImageProcessor class"""
+        """Initialize the ImageProcessor class for a given title using the
+        specified config"""
 
         self.title = title
         self.force_mode = force_mode
         self.config = config or Config()
 
-        self.main_dir = Path(f"./public/{title}")
-        self.thumb_dir = Path(f"./public/{title}-thumbnails")
+        self.source_dir = Path(f"./assets/{title}")
+        self.out_dir = Path(f"./public/{title}")
+        self.thumb_out_dir = Path(f"./public/{title}-thumbnails")
 
-        if not self.main_dir.exists():
+        if not self.source_dir.is_dir():
             raise FileNotFoundError(
-                f"Directory for '{title}' does not exist: {self.main_dir}"
+                f"Source directory for '{title}' does not exist: {self.source_dir}"
             )
 
-        self.thumb_dir.mkdir(parents=True, exist_ok=True)
+        self.out_dir.mkdir(parents=True, exist_ok=True)
+        self.thumb_out_dir.mkdir(parents=True, exist_ok=True)
         self.special_images = SPECIAL_IMAGES.get(title, set())
 
         self._check_commands()
@@ -226,18 +229,6 @@ class ImageProcessor:
         except Exception as e:
             logging.error(f"Error running command `{' '.join(cmd)}`: {e}")
             return False
-
-    def find_files(self, patterns: list[str]) -> list[Path]:
-        """Find files matching patterns in main directory"""
-        return sorted(
-            list(
-                {
-                    file
-                    for ext in patterns
-                    for file in self.main_dir.rglob(f"*.{ext}")
-                }
-            )
-        )
 
     def process_files(
         self,
@@ -278,8 +269,8 @@ class ImageProcessor:
     def process_single_file(
         self,
         *,
-        path: Path,
-        dest: Path,
+        path: str | os.PathLike[str],
+        dest: str | os.PathLike[str],
         should_skip: Callable[[], bool],
         skip_reason: str,
         commands: list[list[str]],
@@ -289,6 +280,9 @@ class ImageProcessor:
         fail_message: str,
     ) -> bool:
         """Process a single file"""
+
+        path = Path(path)
+        dest = Path(dest)
 
         if should_skip():
             logging.debug(
@@ -314,7 +308,8 @@ class ImageProcessor:
 
         if success:
             logging.debug(
-                f"{colored(success_message, Color.BRIGHT_GREEN)}: {path.name} {colored('->', Color.BRIGHT_MAGENTA)} {dest.name}"
+                f"{colored(success_message, Color.BRIGHT_GREEN)}: {path.name} "
+                + f"{colored('->', Color.BRIGHT_MAGENTA)} {dest.name}"
             )
             return True
         else:
@@ -325,33 +320,39 @@ class ImageProcessor:
                 on_failure()
             return False
 
+    @staticmethod
+    def _has_original(path: Path) -> bool:
+        """Check if the original image exists for a given WebP/GIF path"""
+        return any(
+            path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]
+        )
+
     def convert_orphan_images(self) -> None:
         """
-        Convert orphan WebP and GIF images to PNG (if no PNG/JPG/JPEG exists).
-        In CI (GitHub Actions), delete orphan files instead to keep cache clean.
+        Handle orphan WebP/GIF in the source directory.
+        - Local: losslessly convert to PNG, then delete the original orphan.
+        - CI (GitHub Actions): delete the orphan to avoid cache pollution.
         """
-        orphan_files = self.find_files(["webp", "gif"])
+
+        orphan_files = find_files(self.source_dir, ["webp", "gif"])
 
         if os.environ.get("GITHUB_ACTIONS"):
             logging.debug(
                 colored(
-                    "Running in CI (GitHub Actions), deleting orphans",
+                    "Running in CI (GitHub Actions) -  deleting orphan sources",
                     Color.BRIGHT_YELLOW,
                 )
             )
 
             # CI: delete orphan images
             def _delete_orphan_single(path: Path) -> bool:
-                # Skip if original PNG/JPG/JPEG exists (i.e., not actually orphan)
-                if any(
-                    path.with_suffix(ext).exists()
-                    for ext in [".png", ".jpg", ".jpeg"]
-                ):
-                    return True  # Not an orphan – skip gracefully
+                # Skip if a proper original already exists (not an orphan)
+                if self._has_original(path):
+                    return True  # Not an orphan - skip gracefully
                 try:
                     path.unlink()
                     logging.debug(
-                        colored(f"Deleted orphan: {path}", Color.BRIGHT_RED)
+                        colored(f"Deleted orphan: {path}", Color.BRIGHT_YELLOW)
                     )
                     return True
                 except Exception as e:
@@ -364,35 +365,50 @@ class ImageProcessor:
                     return False
 
             self.process_files(
-                header="Deleting orphan images (CI)",
+                header="Deleting orphan source images (CI)",
                 files=orphan_files,
-                no_files_message="No orphan images to delete",
+                no_files_message="No orphan sources to delete",
                 process_single=_delete_orphan_single,
                 image_kind="orphan images",
             )
             return
 
-        # Local: convert orphans to PNG
+        # Local: convert orphans to PNG and remove them from the source dir
         def _convert_orphan_single(path: Path) -> bool:
             dest = path.with_suffix(".png")
-            return self.process_single_file(
+            success = self.process_single_file(
                 path=path,
                 dest=dest,
                 # Skip if already converted or has original
-                should_skip=lambda: any(
-                    path.with_suffix(ext).exists()
-                    for ext in [".png", ".jpg", ".jpeg"]
-                ),
+                should_skip=lambda: self._has_original(path),
                 skip_reason="(has original)",
                 commands=[["magick", f"{path}[0]", "-strip", str(dest)]],
                 success_message="✅ Converted orphan image",
-                fail_message="❌ Failed to convert orphan image",
+                fail_message="❌ Failed to convert orphan",
             )
+            if success:
+                # Remove the orphan source so only the PNG remains
+                try:
+                    path.unlink()
+                    logging.debug(
+                        colored(
+                            f"Removed orphan source after conversion: {path}",
+                            Color.BRIGHT_YELLOW,
+                        )
+                    )
+                except Exception as e:
+                    logging.error(
+                        colored(
+                            f"Could not remove orphan source {path}: {e}",
+                            Color.BRIGHT_RED,
+                        )
+                    )
+            return success
 
         self.process_files(
-            header="Converting orphan images to PNG",
+            header="Converting orphan source images to PNG",
             files=orphan_files,
-            no_files_message="No orphan images to convert",
+            no_files_message="No orphan source images to convert",
             process_single=_convert_orphan_single,
             image_kind="orphan images",
         )
@@ -401,9 +417,8 @@ class ImageProcessor:
         """Generate thumbnails from originals"""
 
         def _generate_thumbnail_single(path: Path) -> bool:
-            dest = self.thumb_dir / path.relative_to(self.main_dir).with_suffix(
-                ".webp"
-            )
+            filename = path.relative_to(self.source_dir)
+            dest = self.thumb_out_dir / filename.with_suffix(".webp")
             return self.process_single_file(
                 path=path,
                 dest=dest,
@@ -430,8 +445,8 @@ class ImageProcessor:
 
         self.process_files(
             header="Generating thumbnails",
-            files=self.find_files(["png", "jpg", "jpeg"]),
-            no_files_message="No images found for thumbnail generation",
+            files=find_files(self.source_dir, ["png", "jpg", "jpeg"]),
+            no_files_message="No source images found for thumbnail generation",
             process_single=_generate_thumbnail_single,
             image_kind="thumbnails",
         )
@@ -448,9 +463,9 @@ class ImageProcessor:
             )
             return
 
-        def _process_special_single(image_name: Path) -> bool:
-            path = self.main_dir / image_name
-            dest = path.with_suffix(".webp")
+        def _process_special_single(filename: Path) -> bool:
+            path = self.source_dir / filename
+            dest = self.out_dir / filename.with_suffix(".webp")
             return self.process_single_file(
                 path=path,
                 dest=dest,
@@ -485,7 +500,9 @@ class ImageProcessor:
         """Create optimized WebP versions (excluding special images)"""
 
         def _process_main_single(path: Path) -> bool:
-            dest = path.with_suffix(".webp")
+            filename = path.relative_to(self.source_dir)
+            dest = self.out_dir / filename.with_suffix(".webp")
+
             return self.process_single_file(
                 path=path,
                 dest=dest,
@@ -529,7 +546,7 @@ class ImageProcessor:
             header="Creating optimized WebP versions",
             files=[
                 p
-                for p in self.find_files(["png", "jpg", "jpeg"])
+                for p in find_files(self.source_dir, ["png", "jpg", "jpeg"])
                 if not self.is_special_image(p)
             ],
             no_files_message="No main images to process",
@@ -543,8 +560,8 @@ class ImageProcessor:
         logging.info(colored("  Size Report", style))
         logging.info(colored("=" * 60, style))
 
-        main_webp_files = list(self.main_dir.rglob("*.webp"))
-        thumb_webp_files = list(self.thumb_dir.rglob("*.webp"))
+        main_webp_files = find_files(self.out_dir, ["webp"])
+        thumb_webp_files = find_files(self.thumb_out_dir, ["webp"])
 
         main_size = sum(f.stat().st_size for f in main_webp_files)
         thumb_size = sum(f.stat().st_size for f in thumb_webp_files)
@@ -575,31 +592,29 @@ class ImageProcessor:
     def process_all(self) -> None:
         """Run the complete image optimization pipeline"""
 
-        style = f"{Color.BRIGHT_GREEN}{Color.BOLD}"
-        logging.info(colored("=" * 80, style))
-        logging.info(colored(f"  Processing: {self.title}", style))
-        logging.info(colored("=" * 80, style))
-
         logging.info(f"📂 Title: {colored(self.title, Color.BRIGHT_CYAN)}")
         logging.info(
             f"⚡ Force: {colored(str(self.force_mode), Color.BRIGHT_YELLOW)}"
         )
         logging.info(
-            f"📁 Main directory: {colored(str(self.main_dir), Color.BRIGHT_BLUE)}"
+            f"📁 Source directory: {colored(str(self.source_dir), Color.BRIGHT_BLUE)}"
         )
         logging.info(
-            f"📁 Thumbnails directory: {colored(str(self.thumb_dir), Color.BRIGHT_BLUE)}"
+            f"📁 Output directory: {colored(str(self.out_dir), Color.BRIGHT_BLUE)}"
+        )
+        logging.info(
+            f"📁 Thumbnails directory: {colored(str(self.thumb_out_dir), Color.BRIGHT_BLUE)}"
         )
 
         # Count source images and existing WebP files
-        source_files = self.find_files(["png", "jpg", "jpeg"])
-        webp_files = list(self.main_dir.rglob("*.webp"))
+        source_files = len(find_files(self.source_dir, ["png", "jpg", "jpeg"]))
+        webp_files = len(find_files(self.out_dir, ["webp"]))
 
         logging.info(
-            f"Source images found: {colored(str(len(source_files)), Color.BRIGHT_CYAN)}"
+            f"Source images found: {colored(str(source_files), Color.BRIGHT_CYAN)}"
         )
         logging.info(
-            f"Existing WebP files: {colored(str(len(webp_files)), Color.BRIGHT_CYAN)}"
+            f"Existing WebP files: {colored(str(webp_files), Color.BRIGHT_CYAN)}"
         )
 
         self.convert_orphan_images()
@@ -615,18 +630,28 @@ class ImageProcessor:
 
 
 def find_all_titles() -> list[str]:
-    public_dir = Path("./public")
-    if not public_dir.exists():
+    """Find all titles in the assets directory"""
+
+    assets_dir = Path("./assets")
+    if not assets_dir.exists():
         return []
     return sorted(
         [
             item.name
-            for item in public_dir.iterdir()
+            for item in assets_dir.iterdir()
             if item.is_dir()
             and not item.name.endswith("-thumbnails")
-            and item.name not in ["index.html"]
             and not item.name.startswith(".")
         ]
+    )
+
+
+def find_files(path: str | os.PathLike[str], patterns: list[str]) -> list[Path]:
+    """Find files matching patterns in specified directory"""
+    return sorted(
+        list(
+            {file for ext in patterns for file in Path(path).rglob(f"*.{ext}")}
+        )
     )
 
 
@@ -656,7 +681,7 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     _ = parser.add_argument(
-        "TITLE", nargs="?", help="Manga/Anime title codeword (e.g. `csm`)"
+        "TITLE", nargs="?", help="Manga/Anime title (e.g. `csm`)"
     )
     _ = parser.add_argument(
         "--force",
@@ -705,7 +730,7 @@ def main() -> None:
         if not titles:
             logging.error(
                 colored(
-                    "No anime titles found in ./public directory",
+                    "No anime titles found in ./assets directory",
                     Color.BRIGHT_RED,
                 )
             )
@@ -720,14 +745,13 @@ def main() -> None:
         source_count = 0
         webp_count = 0
         for title in titles:
+            source_dir = Path(f"./assets/{title}")
             main_dir = Path(f"./public/{title}")
             if main_dir.exists():
-                source_count += (
-                    len(list(main_dir.rglob("*.png")))
-                    + len(list(main_dir.rglob("*.jpg")))
-                    + len(list(main_dir.rglob("*.jpeg")))
+                source_count += len(
+                    find_files(source_dir, ["png", "jpg", "jpeg"])
                 )
-                webp_count += len(list(main_dir.rglob("*.webp")))
+                webp_count += len(find_files(main_dir, ["webp"]))
 
         logging.info(
             colored(f"Source images found: {source_count}", Color.BRIGHT_CYAN)
