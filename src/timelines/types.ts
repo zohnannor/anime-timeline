@@ -1,7 +1,12 @@
 import CSS from 'csstype';
 
-import { EmptyObject, ExactUnion, NonEmptyArray } from '@shared/lib/util';
-import { TIMELINE } from '@timelines/registry';
+import {
+    EmptyObject,
+    ExactUnion,
+    NonEmptyArray,
+    typedKeyTuple,
+} from '@shared/lib/util';
+import { TIMELINE_LOADERS } from '@timelines/registry';
 
 type Offset = { x: number; y: number };
 
@@ -92,7 +97,9 @@ export type TimelineData = {
 
 export type Timeline = { layout: TimelineSectionLayout; data: TimelineData };
 
-export type AnimeTitle = keyof typeof TIMELINE;
+export const TITLES = typedKeyTuple(TIMELINE_LOADERS);
+
+export type AnimeTitle = (typeof TITLES)[number];
 
 export type TimelineSection =
     | 'season'

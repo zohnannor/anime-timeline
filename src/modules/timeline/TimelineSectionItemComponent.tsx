@@ -5,10 +5,10 @@ import { ChapterPreview } from '@modules/timeline/ChapterPreview';
 import { withCrossLines } from '@modules/timeline/CrossLines';
 import { TimelineSection } from '@modules/timeline/TimelineSection';
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { hueGlow, sanitizeId, scale } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
 import { Link, ThumbnailImage, Tooltip, withShadow } from '@shared/ui';
-import { TIMELINE } from '@timelines/registry';
 import {
     ResolvedSectionItem,
     ResolvedTimelineEntity,
@@ -214,12 +214,11 @@ export const TimelineSectionItemComponent = ({
     num,
 }: TimelineSectionItemProps<TimelineSectionType>) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
-    const { unboundChapterWidth, showTitles, showCrosslines, animeTitle } =
-        useSettings();
-
+    const { unboundChapterWidth, showTitles, showCrosslines } = useSettings();
     const {
         data: { wikiBase },
-    } = TIMELINE[animeTitle];
+    } = useTimeline();
+
     const { number: itemNumber, title, width, wikiLink } = entity;
 
     const itemWidth = width(unboundChapterWidth);
