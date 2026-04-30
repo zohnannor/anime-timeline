@@ -9,6 +9,7 @@ import styled, { css } from 'styled-components';
 
 import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import {
     DAYS_GRADIENT,
     hueGlow,
@@ -21,7 +22,6 @@ import {
 } from '@shared/lib/helpers';
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
-import { TIMELINE } from '@timelines/registry';
 
 const getISODate = (date: Date): string => {
     const iso = date.toISOString();
@@ -247,7 +247,10 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
 );
 
 export const CalendarModal: React.FC = () => {
-    const { calendarOpen, setCalendarOpen, animeTitle } = useSettings();
+    const { calendarOpen, setCalendarOpen } = useSettings();
+    const {
+        data: { chapters, episodes },
+    } = useTimeline();
     const [scrolledToBottom, setScrolledToBottom] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -284,7 +287,6 @@ export const CalendarModal: React.FC = () => {
     }, [calendarOpen, scrolledToBottom]);
 
     const currentDate = useMemo(() => new Date(), []);
-    const { chapters, episodes } = TIMELINE[animeTitle].data;
     const [first] = chapters;
     const startDate = first.date;
 
