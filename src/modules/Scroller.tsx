@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
 import { IconButton } from '@shared/ui';
 import { SCROLLER_WIDTH } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
 
 type ScrollHoverAreaProps = {
     $visible: boolean;
@@ -81,7 +80,9 @@ export const Scroller = () => {
     const { scrollX, setScrollX, scrolling } = useWindowScroll();
     const [dragging, setDragging] = useState(false);
     const { y: mouseY } = useMousePosition();
-    const { animeTitle } = useSettings();
+    const {
+        data: { icons },
+    } = useTimeline();
 
     const { body } = document;
     const totalX = body.scrollWidth - body.clientWidth;
@@ -117,10 +118,6 @@ export const Scroller = () => {
 
     const scrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;
-
-    const {
-        data: { icons },
-    } = TIMELINE[animeTitle];
 
     return (
         <ScrollerHoverArea

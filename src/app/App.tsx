@@ -14,8 +14,8 @@ import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { typedValues } from '@shared/lib/util';
+import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { FLOATING_BUTTONS } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
 
 const AppContainer = styled.div`
     display: flex;
@@ -34,12 +34,7 @@ const App: React.FC = () => {
         animeTitle,
     } = useSettings();
     const [renderUi, setRenderUi] = useState(true);
-
-    const {
-        data: { icons, title },
-        layout,
-        maxHeight,
-    } = TIMELINE[animeTitle];
+    const { timeline } = useTimelineContext();
 
     useEffect(() => {
         const handleScroll = (ev: WheelEvent) => {
@@ -77,6 +72,14 @@ const App: React.FC = () => {
     useGlobalShortcuts();
 
     useEffect(() => {
+        if (timeline === null) {
+            return;
+        }
+
+        const {
+            data: { icons, title },
+            maxHeight,
+        } = timeline;
         document.documentElement.style.setProperty(
             '--max-height',
             `${maxHeight}`,
@@ -87,11 +90,20 @@ const App: React.FC = () => {
         if (favicon && typeof icons.favicon === 'string') {
             favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, icons.favicon, maxHeight, title]);
+    }, [animeTitle, timeline]);
+
+    if (timeline === null) {
+        return null;
+    }
+
+    const {
+        data: { icons },
+        layout,
+    } = timeline;
 
     return (
         <>
-            <TimeLineHeaders $animeTitle={animeTitle} />
+            <TimeLineHeaders />
             <AnimeTitleSelectorModal />
             <CalendarModal />
             <CaptureTimelineModal />

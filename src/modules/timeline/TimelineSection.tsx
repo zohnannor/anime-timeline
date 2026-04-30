@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
-import { useSettings } from '@shared/contexts/SettingsContext';
-import { TIMELINE } from '@timelines/registry';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { ResolvedSectionItem } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
@@ -29,18 +28,14 @@ type TimelineSections = (
 ) & { parentNumber?: number };
 
 export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
-    const { animeTitle } = useSettings();
-
     const { type, parentNumber } = timelineItem;
-
-    if (type === 'timeline') {
-        return <Timeline animeTitle={animeTitle} />;
-    }
-
     const {
         data: { episodes, seasons, sagas, arcs, chapters, volumes },
-    } = TIMELINE[animeTitle];
+    } = useTimeline();
 
+    if (type === 'timeline') {
+        return <Timeline />;
+    }
     if (type === 'season' && seasons === undefined) {
         return null;
     }
