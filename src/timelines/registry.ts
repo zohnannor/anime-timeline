@@ -1,31 +1,45 @@
-import { typedKeyTuple } from '@shared/lib/util';
-import { AOT_TIMELINE } from '@timelines/aot';
-import { BERSERK_TIMELINE } from '@timelines/berserk';
-import { CSM_TIMELINE } from '@timelines/csm';
-import { DEATHNOTE_TIMELINE } from '@timelines/deathnote';
-import { DHD_TIMELINE } from '@timelines/dhd';
-import { EVA_TIMELINE } from '@timelines/eva';
-import { FP_TIMELINE } from '@timelines/fp';
-import { FRIEREN_TIMELINE } from '@timelines/frieren';
-import { HXH_TIMELINE } from '@timelines/hxh';
-import { JOJO_TIMELINE } from '@timelines/jojo';
-import { JR_TIMELINE } from '@timelines/jr';
-import { OPM_TIMELINE } from '@timelines/opm';
-import resolveTimeline from '@timelines/resolved';
+import { throwError } from '@shared/lib/util';
+import { ResolvedTimeline, resolveTimeline } from '@timelines/resolved';
+import { AnimeTitle, Timeline } from '@timelines/types';
 
-export const TIMELINE = resolveTimeline({
-    csm: CSM_TIMELINE,
-    berserk: BERSERK_TIMELINE,
-    fp: FP_TIMELINE,
-    frieren: FRIEREN_TIMELINE,
-    eva: EVA_TIMELINE,
-    aot: AOT_TIMELINE,
-    opm: OPM_TIMELINE,
-    deathnote: DEATHNOTE_TIMELINE,
-    jr: JR_TIMELINE,
-    hxh: HXH_TIMELINE,
-    jojo: JOJO_TIMELINE,
-    dhd: DHD_TIMELINE,
-});
+export const TIMELINE_LOADERS = {
+    csm: () => import('@timelines/csm'),
+    berserk: () => import('@timelines/berserk'),
+    fp: () => import('@timelines/fp'),
+    frieren: () => import('@timelines/frieren'),
+    eva: () => import('@timelines/eva'),
+    aot: () => import('@timelines/aot'),
+    opm: () => import('@timelines/opm'),
+    deathnote: () => import('@timelines/deathnote'),
+    jr: () => import('@timelines/jr'),
+    hxh: () => import('@timelines/hxh'),
+    jojo: () => import('@timelines/jojo'),
+    dhd: () => import('@timelines/dhd'),
+};
 
-export const TITLES = typedKeyTuple(TIMELINE);
+const getModule = (
+    title: AnimeTitle,
+    mod: Record<string, unknown>,
+): Timeline => {
+    const key = `${title.toUpperCase()}_TIMELINE`;
+    const timeline = mod[key];
+    if (timeline === undefined) {
+        throwError(`\`@timelines/${title}\` doesn't export \`${key}\``);
+    }
+    return timeline as Timeline;
+};
+
+const timelineCache = new Map<AnimeTitle, ResolvedTimeline>();
+
+export const loadTimeline = async (
+    title: AnimeTitle,
+): Promise<ResolvedTimeline> => {
+    const cached = timelineCache.get(title);
+    if (cached !== undefined) {
+        return cached;
+    }
+    const mod = await TIMELINE_LOADERS[title]();
+    const timeline = resolveTimeline(getModule(title, mod));
+    timelineCache.set(title, timeline);
+    return timeline;
+};

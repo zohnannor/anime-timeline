@@ -18,9 +18,8 @@ import { useHover } from '@shared/lib/hooks';
 import { map, NonEmptyArray, sum } from '@shared/lib/util';
 import { withShadow } from '@shared/ui';
 import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
 import { ResolvedChapter } from '@timelines/resolved';
-import { AnimeTitle } from '@timelines/types';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 
 type DayProps = {
     $width: number;
@@ -163,10 +162,6 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 };
 
-type TimelineProps = {
-    animeTitle: AnimeTitle;
-};
-
 const toSegments = <T extends ResolvedChapter>(
     chunks: NonEmptyArray<Chunk<T>>,
     getMeta: (_first: T) => Omit<Segment, 'width'>,
@@ -180,11 +175,11 @@ const toSegments = <T extends ResolvedChapter>(
         };
     });
 
-export const Timeline: React.FC<TimelineProps> = ({ animeTitle }) => {
+export const Timeline: React.FC = () => {
     const { unboundChapterWidth } = useSettings();
     const {
         data: { chapters },
-    } = TIMELINE[animeTitle];
+    } = useTimeline();
 
     const daysSegments: NonEmptyArray<Segment> = useMemo(
         () =>
