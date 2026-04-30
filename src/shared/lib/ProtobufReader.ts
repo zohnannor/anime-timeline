@@ -1,3 +1,4 @@
+import { throwError } from '@shared/lib/util';
 import * as varint from 'varint';
 
 type ProtobufReader = {
@@ -136,14 +137,13 @@ export default async (): Promise<Date | null> => {
         const reader = createProtobufReader(buffer);
         const result = decodeApiResponse(reader, reader.len);
 
-        if (!result.Ok?.titleDetailView?.nextTimeStamp) {
-            console.error(result);
-            throw new Error('Next chapter timestamp not found in response');
-        }
+        const nextTimeStamp =
+            result.Ok?.titleDetailView?.nextTimeStamp ??
+            throwError('Next chapter timestamp not found in response');
 
         console.debug('protobuf result:', result);
 
-        return new Date(result.Ok.titleDetailView.nextTimeStamp * 1000);
+        return new Date(nextTimeStamp * 1000);
     } catch (error) {
         console.error('Error fetching next chapter date:', error);
         return null;

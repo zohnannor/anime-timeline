@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { scale } from '@shared/lib/helpers';
 import { Link, Modal } from '@shared/ui';
-import { TIMELINE } from '@timelines/registry';
 import { ResolvedTimelineData } from '@timelines/resolved';
 
 type BoxProps = {
@@ -204,7 +204,8 @@ const InfoBoxContainer = styled.div`
 `;
 
 export const InfoModal: React.FC = () => {
-    const { infoBoxOpen, setInfoBoxOpen, animeTitle } = useSettings();
+    const { infoBoxOpen, setInfoBoxOpen } = useSettings();
+    const { data } = useTimeline();
 
     return (
         <Modal
@@ -213,9 +214,7 @@ export const InfoModal: React.FC = () => {
             title='About this site'
             $bgColor='rgba(0, 0, 0, 0.85)'
         >
-            <InfoBoxContainer>
-                {infoModalContent(TIMELINE[animeTitle].data)}
-            </InfoBoxContainer>
+            <InfoBoxContainer>{infoModalContent(data)}</InfoBoxContainer>
         </Modal>
     );
 };

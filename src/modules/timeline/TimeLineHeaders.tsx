@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { HEADER_TITLES, scale } from '@shared/lib/helpers';
 import { typedKeys } from '@shared/lib/util';
 import { Link, withShadow } from '@shared/ui';
 import { HEADERS_WIDTH, TIMELINE_HEIGHT } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
-import { AnimeTitle } from '@timelines/types';
 
 type HeaderProps = {
     $height: number;
@@ -49,13 +48,11 @@ const Headers = styled.div`
     user-select: none;
 `;
 
-export const TimeLineHeaders: React.FC<{ $animeTitle: AnimeTitle }> = ({
-    $animeTitle,
-}) => {
+export const TimeLineHeaders: React.FC = () => {
     const {
         data: { wikiBase },
         layout,
-    } = TIMELINE[$animeTitle];
+    } = useTimeline();
 
     return (
         <Headers className='headers'>
