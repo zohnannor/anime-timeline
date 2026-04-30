@@ -1,10 +1,9 @@
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
-import { TITLES } from '@timelines/registry';
-import { AnimeTitle } from '@timelines/types';
+import { AnimeTitle, TITLES } from '@timelines/types';
 
-const title = (animeTitle: string | null): animeTitle is AnimeTitle =>
+const isTitle = (animeTitle: string | null): animeTitle is AnimeTitle =>
     TITLES.includes(animeTitle as AnimeTitle);
 
 const createModalHandler =
@@ -42,7 +41,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(globalThis.location.search);
         const animeTitle = params.get('title');
-        if (title(animeTitle)) {
+        if (isTitle(animeTitle)) {
             return animeTitle;
         }
         globalThis.history.replaceState({}, '', `?title=csm`);

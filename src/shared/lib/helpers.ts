@@ -102,7 +102,7 @@ export const interpolateColor = (
     const colorCount = colorRange.length;
 
     if (colorCount < 2) {
-        throw new Error('At least 2 colors required in colorRange');
+        throwError('At least 2 colors required in colorRange');
     }
 
     // Handle single-value input range

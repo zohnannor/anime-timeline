@@ -1,12 +1,11 @@
 import { PropsWithChildren, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
 import { HEADERS_WIDTH } from '@timelines/index';
-import { TIMELINE } from '@timelines/registry';
 
 type PreviewProps = {
     $hasPicture: boolean;
@@ -41,7 +40,7 @@ type ChapterPreviewProps = React.ComponentProps<'div'> &
     PropsWithChildren<Omit<PreviewProps, '$offsetX'>>;
 
 export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
-    const { animeTitle } = useSettings();
+    const { maxHeight } = useTimeline();
     const previewRef = useRef<HTMLDivElement>(null);
     const { scrollX } = useWindowScroll();
 
@@ -51,7 +50,6 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
             return;
         }
 
-        const { maxHeight } = TIMELINE[animeTitle];
         const scaleToPx = (n: number) => n * (window.innerHeight / maxHeight);
         const pxToScale = (n: number) => n * (maxHeight / window.innerHeight);
 
@@ -68,7 +66,7 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
             : 0;
 
         element.style.setProperty('--left', scale(pxToScale(adjustX)));
-    }, [animeTitle, scrollX]);
+    }, [scrollX, maxHeight]);
 
     return <Preview ref={previewRef} {...props} />;
 };

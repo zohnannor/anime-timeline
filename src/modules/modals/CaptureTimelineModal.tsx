@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import { useToPng } from '@hugocxl/react-to-image';
 import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import { scale, toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
-import { TIMELINE } from '@timelines/registry';
 
 const ConfirmButton = styled.button`
     cursor: pointer;
@@ -39,14 +39,14 @@ export const CaptureTimelineModal: React.FC = () => {
         unboundChapterWidth,
         animeTitle,
     } = useSettings();
-    const [loading, setLoading] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
     const {
         maxHeight: height,
         maxWidth,
         data: { title },
-    } = TIMELINE[animeTitle];
+    } = useTimeline();
+    const [loading, setLoading] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
     const width = maxWidth(unboundChapterWidth);
 
     const [_, captureTimeline, __] = useToPng({
