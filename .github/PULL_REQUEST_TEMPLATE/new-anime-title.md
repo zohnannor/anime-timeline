@@ -6,7 +6,7 @@ Add a new timeline for: **[TITLE HERE]**
 
 ## Checklist
 
-- [ ] New title is wired into `TIMELINE` in [`src/constants.ts`](../../src/constants.ts)
+- [ ] New title is wired into `TIMELINE` in [`src/timelines/registry.ts`](../../src/timelines/registry.ts)
 - [ ] Timeline data is defined in [`src/timelines`](../../src/timelines) (re-using an existing file as a template, e.g. `csm.ts`, so keeping the same style and ordering)
 - [ ] All wiki / external links point to stable, well-maintained sources (see [Wiki Buddy list](https://getindie.wiki/listings/))
 - [ ] Images for this title are added under `assets/<title>` (PNG/JPG/JPEG)
