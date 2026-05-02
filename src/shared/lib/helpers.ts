@@ -19,7 +19,7 @@ export const toTitleCase = (string: string) =>
     );
 
 export const scale = (n: number) =>
-    `calc(${n} * calc(100 / var(--max-height)) * 1svh)`;
+    `calc(${n} * var(--scale-factor))`;
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
 
