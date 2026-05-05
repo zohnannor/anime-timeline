@@ -39,7 +39,7 @@ const SectionItemCover = withShadow(
         background-color: ${({ $backgroundColor }) => $backgroundColor};
         color: ${({ $color }) => $color};
         font-size: ${({ $blankFontSize }) => scale($blankFontSize)};
-        height: 100%;
+        flex-grow: 1;
         width: 100%;
 
         & > a {
@@ -175,7 +175,6 @@ const SectionItem = withCrossLines(
         position: relative;
         display: flex;
         flex-direction: column;
-        height: ${({ $height }) => scale($height)};
         transition: width 0.2s ease-in-out;
 
         ${({ $focusable }) =>
@@ -256,7 +255,7 @@ export const TimelineSectionItemComponent = ({
 
     const itemCover = (
         <SectionItemCover
-            className={`${type}Cover`}
+            className={`${type}SectionItemCover`}
             data-title={itemTitle}
             $invertBorder={!cover && backgroundColor === 'black'}
             $titleVisible={(!!cover || textColor === 'black') && titleVisible}
@@ -294,7 +293,7 @@ export const TimelineSectionItemComponent = ({
     return (
         <SectionItem
             id={sanitizeId(`${type}-${itemNumber}`)}
-            className={type}
+            className={`${type}SectionItem`}
             $width={itemWidth}
             $height={height}
             $crossLinesVisible={hovered}

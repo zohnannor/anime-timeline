@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */ // a lot of data for a title
+import { toWeight } from '@shared/lib/helpers';
 import { Add, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
@@ -14,7 +15,7 @@ import {
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
-const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+const EPISODE_HEIGHT = toWeight(0.33);
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;

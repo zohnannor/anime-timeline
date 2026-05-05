@@ -20,6 +20,7 @@ import { FLOATING_BUTTONS } from '@timelines/index';
 const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
+    height: 100svh;
     overflow: hidden;
     user-select: none;
 `;
