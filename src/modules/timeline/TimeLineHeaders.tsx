@@ -4,7 +4,7 @@ import { useTimeline } from '@shared/contexts/TimelineContext';
 import { HEADER_TITLES, scale } from '@shared/lib/helpers';
 import { typedKeys } from '@shared/lib/util';
 import { Link, withShadow } from '@shared/ui';
-import { HEADERS_WIDTH, TIMELINE_HEIGHT } from '@timelines/index';
+import { HEADERS_WIDTH } from '@timelines/index';
 
 type HeaderProps = {
     $height: number;
@@ -16,8 +16,8 @@ const Header = withShadow(
         position: relative;
         display: flex;
         width: 100%;
-        height: ${({ $height }) => scale($height)};
-        flex-direction: column;
+        flex-grow: ${({ $height }) => $height};
+        flex-basis: 0;
         justify-content: center;
         align-items: center;
         font-size: ${scale(60)};
@@ -40,11 +40,9 @@ const Header = withShadow(
 
 const Headers = styled.div`
     width: ${scale(HEADERS_WIDTH)};
-    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    height: 100svh;
     user-select: none;
 `;
 
@@ -54,34 +52,36 @@ export const TimeLineHeaders: React.FC = () => {
         layout,
     } = useTimeline();
 
+    const allKeys = typedKeys(layout);
+    const sections = allKeys.filter(section => section !== 'timeline');
+    const sectionAfterTimeline = allKeys.find(
+        (_, i) => allKeys[i - 1] === 'timeline',
+    );
+
     return (
         <Headers className='headers'>
-            {typedKeys(layout)
-                // TODO: add it correctly?
-                .filter(section => section !== 'timeline')
-                .map(
-                    section =>
-                        layout[section] && (
-                            <Header
-                                className={`${section}Header`}
-                                key={section}
-                                $height={
-                                    layout[section].height +
-                                    (section === 'chapter' ?
-                                        // TODO: see above
-                                        TIMELINE_HEIGHT
-                                    :   0)
-                                }
-                                $invertBorder
+            {sections.map(
+                section =>
+                    layout[section] && (
+                        <Header
+                            className={`${section}Header`}
+                            key={section}
+                            $height={
+                                layout[section].height +
+                                (section === sectionAfterTimeline ?
+                                    layout.timeline.height
+                                :   0)
+                            }
+                            $invertBorder
+                        >
+                            <Link
+                                href={`${wikiBase}${layout[section].sectionLink}`}
                             >
-                                <Link
-                                    href={`${wikiBase}${layout[section].sectionLink}`}
-                                >
-                                    {HEADER_TITLES[section]}
-                                </Link>
-                            </Header>
-                        ),
-                )}
+                                {HEADER_TITLES[section]}
+                            </Link>
+                        </Header>
+                    ),
+            )}
         </Headers>
     );
 };

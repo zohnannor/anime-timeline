@@ -16,7 +16,7 @@
         "styled-components": "^6.4.1",
         "varint": "^6.0.0"
     },
-    "packageManager": "yarn@4.12.0",
+    "packageManager": "yarn@4.14.1",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@types/node": "^25.6.0",
