@@ -18,8 +18,9 @@ export const toTitleCase = (string: string) =>
         (_, first: string, rest: string) => first.toUpperCase() + rest,
     );
 
-export const scale = (n: number) =>
-    `calc(${n} * var(--scale-factor))`;
+export const scale = (n: number) => `calc(${n} * var(--scale-factor))`;
+
+export const toWeight = (pct: number) => pct / (1 - pct);
 
 const isValidDate = (date: Date) => !isNaN(date.getTime());
 

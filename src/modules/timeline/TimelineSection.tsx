@@ -8,14 +8,15 @@ import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
 type ContainerProps = {
     $dir?: 'row' | 'column';
+    $height: number;
 };
 
-const TimelineContainer = styled.div.attrs<ContainerProps>({
-    className: 'timelineContainer',
-})`
+const TimelineContainer = styled.div<ContainerProps>`
     display: flex;
     flex-direction: ${({ $dir: dir }) => dir ?? 'row'};
     position: relative;
+    flex-grow: ${({ $height }) => $height};
+    flex-basis: 0;
 `;
 
 type TimelineSections = (
@@ -36,6 +37,8 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     if (type === 'timeline') {
         return <Timeline />;
     }
+
+    const { height } = timelineItem;
     if (type === 'season' && seasons === undefined) {
         return null;
     }
@@ -56,9 +59,19 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         : type === 'chapter' ? chapters
         : volumes;
 
+    const entityList = entities();
+
+    // do not create empty sections if there are no entities
+    if (entityList.length === 0) {
+        return null;
+    }
+
     return (
-        <TimelineContainer>
-            {entities().map((entity, idx) => (
+        <TimelineContainer
+            $height={height}
+            className={`${type}TimelineContainer`}
+        >
+            {entityList.map((entity, idx) => (
                 <TimelineSectionItemComponent
                     timelineSection={timelineItem}
                     entity={entity}

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */ // a lot of data for a title
+import { toWeight } from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
@@ -14,11 +15,10 @@ import {
 import { Arc, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 1600;
-const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
+const EPISODE_HEIGHT = toWeight(1 / 5);
 const VOLUME_HEIGHT = 1576;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = 200;
-const SAGA_HEIGHT = ARC_HEIGHT;
 
 const CHAPTERS_TOTAL = 108;
 type VolumesTotal = 13;
@@ -69,21 +69,13 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 focusable: true,
             },
         },
-        saga: {
-            type: 'saga',
-            height: SAGA_HEIGHT,
+        arc: {
+            type: 'arc',
+            height: ARC_HEIGHT,
             blankfontSize: 100,
             titleFontSize: 100,
             sectionLink: 'Part I',
-            wikiLink: () => 'unused',
-            subTimeline: {
-                type: 'arc',
-                height: ARC_HEIGHT,
-                blankfontSize: 100,
-                titleFontSize: 100,
-                sectionLink: 'Part I',
-                wikiLink: title => title,
-            },
+            wikiLink: title => title,
         },
         timeline: {
             type: 'timeline',
@@ -869,23 +861,18 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
-        sagas: [
+        arcs: [
             {
-                title: 'unused',
-                arcs: [
-                    {
-                        title: 'Part I',
-                        cover: null,
-                        chapters: { from: 1, to: 59 },
-                    },
-                    {
-                        title: 'Part II',
-                        cover: null,
-                        chapters: { from: 60, to: 108 },
-                    },
-                ] as const satisfies Tuple<Arc, ArcsTotal>,
+                title: 'Part I',
+                cover: null,
+                chapters: { from: 1, to: 59 },
             },
-        ],
+            {
+                title: 'Part II',
+                cover: null,
+                chapters: { from: 60, to: 108 },
+            },
+        ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
             {
                 title: 'Death Note (anime)',

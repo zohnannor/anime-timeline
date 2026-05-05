@@ -109,6 +109,11 @@ export type ResolvedSectionItem<T extends TimelineSection> = Omit<
 
 type ResolveSectionItem<S extends keyof TimelineSectionLayout> =
     S extends TimelineSection ? ResolvedSectionItem<S>
+    : S extends 'timeline' ?
+        {
+            type: 'timeline';
+            height: number;
+        }
     :   TimelineSectionLayout[S];
 
 type ResolvedTimelineSectionLayout = {
@@ -440,13 +445,16 @@ const resolveTimelineSectionLayout = (
     const layout = {} as ResolvedTimelineSectionLayout;
 
     // TODO: introduce the odering for sections
-    typedKeys(rawLayout).forEach(key => {
-        if (key === 'timeline') {
-            layout.timeline = rawLayout.timeline;
+    typedKeys(rawLayout).forEach(type => {
+        if (type === 'timeline') {
+            layout.timeline = {
+                type,
+                height: TIMELINE_HEIGHT,
+            };
             return;
         }
 
-        const rawItem = rawLayout[key];
+        const rawItem = rawLayout[type];
         if (rawItem === undefined) {
             return;
         }
@@ -456,7 +464,7 @@ const resolveTimelineSectionLayout = (
             resolved.subTimeline = resolveItem(rawItem.subTimeline);
         }
 
-        Object.assign(layout, { [key]: resolved });
+        Object.assign(layout, { [type]: resolved });
     });
 
     return [layout, templates];

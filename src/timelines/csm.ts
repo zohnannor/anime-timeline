@@ -1,13 +1,14 @@
 /* eslint-disable max-lines */ // a lot of data for a title
+import { toWeight } from '@shared/lib/helpers';
 import { pad, Tuple } from '@shared/lib/util';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
-const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+const EPISODE_HEIGHT = toWeight(1 / 3);
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
-const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
-const SAGA_HEIGHT = 150 + ARC_HEIGHT;
+const SAGA_HEIGHT = 150 + VOLUME_HEIGHT * 0.8;
+const ARC_HEIGHT = toWeight((VOLUME_HEIGHT * 0.8) / SAGA_HEIGHT);
 
 type VolumesTotal = 24;
 type SagasTotal = 2;
