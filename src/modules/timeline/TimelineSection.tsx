@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
 import { useTimeline } from '@shared/contexts/TimelineContext';
+import { scale } from '@shared/lib/helpers';
 import { ResolvedSectionItem } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
@@ -13,10 +14,9 @@ type ContainerProps = {
 
 const TimelineContainer = styled.div<ContainerProps>`
     display: flex;
-    flex-direction: ${({ $dir: dir }) => dir ?? 'row'};
+    flex-direction: ${({ $dir }) => $dir ?? 'row'};
     position: relative;
-    flex-grow: ${({ $height }) => $height};
-    flex-basis: 0;
+    height: ${({ $height }) => scale($height)};
 `;
 
 type TimelineSections = (

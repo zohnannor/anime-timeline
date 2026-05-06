@@ -16,8 +16,7 @@ const Header = withShadow(
         position: relative;
         display: flex;
         width: 100%;
-        flex-grow: ${({ $height }) => $height};
-        flex-basis: 0;
+        height: ${({ $height }) => scale($height)};
         justify-content: center;
         align-items: center;
         font-size: ${scale(60)};

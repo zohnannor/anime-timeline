@@ -20,8 +20,6 @@ export const toTitleCase = (string: string) =>
 
 export const scale = (n: number) => `calc(${n} * var(--scale-factor))`;
 
-export const toWeight = (pct: number) => pct / (1 - pct);
-
 const isValidDate = (date: Date) => !isNaN(date.getTime());
 
 export const tokyoDate = (dateStr: string): Date => {
