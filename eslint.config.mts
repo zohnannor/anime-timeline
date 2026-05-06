@@ -67,7 +67,10 @@ export default defineConfig([
             'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
             // `Boolean(x)` looks ugly
             'no-implicit-coercion': ['error', { allow: ['!!'] }],
-            // TODO: we have a bunch of `scale(N)` calls
+            // a lot of these are scale() numbers that are values tied to
+            // timeline maxHeight, so cannot be easily refactored. and anyway,
+            // this lint is too strict, flagging things like `0` and `1` in
+            // simple, obvious scenarios
             'no-magic-numbers': 'off',
             // common abbreviations
             'id-length': [

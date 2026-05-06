@@ -6,7 +6,6 @@ import {
     SettingsValues,
     useSettings,
 } from '@shared/contexts/SettingsContext';
-import { scale } from '@shared/lib/helpers';
 import { IconButton, Tooltip } from '@shared/ui';
 import { Icon } from '@timelines/types';
 
@@ -15,11 +14,11 @@ const ButtonSection = styled.div`
     position: fixed;
     background: rgba(0, 0, 0, 0.25);
     flex-direction: column;
-    padding: ${scale(25)};
-    border-radius: ${scale(40)};
-    gap: ${scale(40)};
-    top: ${scale(63)};
-    right: ${scale(63)};
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    gap: 0.8rem;
+    top: 1.26rem;
+    right: 1.26rem;
     z-index: 100;
 `;
 
@@ -28,10 +27,10 @@ const FloatingButtonTooltip = styled.div`
     white-space: nowrap;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: ${scale(40)};
-    padding: ${scale(25)};
-    font-size: ${scale(60)};
-    gap: ${scale(40)};
+    border-radius: 0.8rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    gap: 0.8rem;
 `;
 
 export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (
