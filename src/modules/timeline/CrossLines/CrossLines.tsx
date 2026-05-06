@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
-import { scale } from '@shared/lib/helpers';
 
 export type CrossLinesProps = {
     $crossLinesVisible?: boolean | undefined;
@@ -27,7 +26,7 @@ const CrossLine = styled.div<CrossLineProps>`
     position: relative;
     height: 200svh;
     top: -100svh;
-    box-shadow: 0 0 ${scale(6)} ${scale(6)} rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 0.12rem 0.12rem rgba(255, 0, 0, 0.8);
 
     &::after {
         content: '';

@@ -2,12 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { useTimeline } from '@shared/contexts/TimelineContext';
-import { scale } from '@shared/lib/helpers';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
 import { IconButton } from '@shared/ui';
-import { SCROLLER_WIDTH } from '@timelines/index';
 
 type ScrollHoverAreaProps = {
     $visible: boolean;
@@ -48,15 +46,15 @@ const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     transition: bottom 0.2s ease-in-out;
     pointer-events: auto;
     position: absolute;
-    bottom: ${scale(-190)};
-    height: ${scale(32)};
-    width: ${scale(SCROLLER_WIDTH)};
+    bottom: -3.8rem;
+    height: 0.65rem;
+    width: 26rem;
     background-color: white;
-    border: ${scale(3)} solid black;
-    border-radius: ${scale(16)};
+    border: 0.06rem solid black;
+    border-radius: 0.32rem;
     display: flex;
     align-items: center;
-    filter: drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 0 0.32rem rgba(0, 0, 0, 0.5));
 `;
 
 const IconScroller = styled(IconButton)`

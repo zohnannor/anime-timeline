@@ -3,7 +3,6 @@ import { PropsWithChildren, useSyncExternalStore } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
-import { scale } from '@shared/lib/helpers';
 import { HeaderButton } from '@shared/ui/Modal';
 
 const ShadowOverlay = styled.div`
@@ -50,13 +49,13 @@ const Header = styled.div`
     position: sticky;
     inset: 0;
     background: black;
-    padding: ${scale(100)};
-    border-bottom: ${scale(5)} solid #333;
+    padding: 2rem;
+    border-bottom: 0.1rem solid #333;
     z-index: 10;
 
     & svg {
-        height: ${scale(100)};
-        width: ${scale(100)};
+        height: 2rem;
+        width: 2rem;
     }
 `;
 
@@ -67,7 +66,7 @@ const Title = styled.h2`
 const HeaderButtonContainer = styled.div`
     display: flex;
     align-items: center;
-    gap: ${scale(50)};
+    gap: 1rem;
 `;
 
 type ModalProps = {

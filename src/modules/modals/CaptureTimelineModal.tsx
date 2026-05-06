@@ -5,14 +5,14 @@ import { useToPng } from '@hugocxl/react-to-image';
 import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
-import { scale, toTitleCase } from '@shared/lib/helpers';
+import { toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
 
 const ConfirmButton = styled.button`
     cursor: pointer;
     background-color: black;
     color: white;
-    font-size: ${scale(60)};
+    font-size: 1.25rem;
     border-color: white;
 `;
 
@@ -20,9 +20,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: ${scale(40)} ${scale(190)};
+    padding: 0.8rem 3.8rem;
     width: 50svw;
-    font-size: ${scale(75)};
+    font-size: 1.5rem;
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
         width: 80svw;

@@ -26,10 +26,9 @@ const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
     inset: 0;
     background-size: cover;
     background-position: center;
-    filter: blur(${scale(20)});
+    filter: blur(0.4rem);
     background-position: ${({ $offsetX, $offsetY }) =>
-        `${scale($offsetX ?? 0)}
-         ${scale($offsetY ?? 0)}`};
+        `${scale($offsetX ?? 0)} ${scale($offsetY ?? 0)}`};
 `;
 
 type ImageProps = {
@@ -37,7 +36,7 @@ type ImageProps = {
 };
 
 const Image = styled.img<ImageProps & Offset>`
-    filter: blur(${({ $loading }) => scale($loading ? 10 : 0)});
+    filter: blur(${({ $loading }) => $loading ? '0.2rem' : '0'});
     transition: filter 0.4s ease-in-out;
     object-position: ${({
         $offsetX = 0,

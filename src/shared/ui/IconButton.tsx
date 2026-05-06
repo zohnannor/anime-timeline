@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { scale } from '@shared/lib/helpers';
 import { Icon } from '@timelines/types';
 
 import { ThumbnailImage } from './ThumbnailImage';
@@ -18,20 +17,20 @@ const IconWrapper = styled.div<IconWrapperProps>`
     & img,
     & svg,
     & div {
-        width: ${scale(160)};
+        width: 3.2rem;
         height: auto;
         filter: ${({ $filter }) =>
-            $filter ?? `drop-shadow(0 0 ${scale(16)} rgba(0, 0, 0, 0.5))`};
+            $filter ?? `drop-shadow(0 0 0.32rem rgba(0, 0, 0, 0.5))`};
         pointer-events: none;
     }
 
     & svg {
         background: #c2c2c2;
-        border: ${scale(5)} solid black;
+        border: 0.1rem solid black;
         border-radius: 50%;
         box-sizing: border-box;
-        height: ${scale(160)};
-        padding: ${scale(20)};
+        height: 3.2rem;
+        padding: 0.4rem;
     }
 
     & div {
