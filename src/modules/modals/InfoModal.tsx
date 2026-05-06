@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
-import { scale } from '@shared/lib/helpers';
 import { Link, Modal } from '@shared/ui';
 import { ResolvedTimelineData } from '@timelines/resolved';
 
@@ -23,26 +22,26 @@ const Box = styled.div<BoxProps>`
     justify-content: center;
     width: 90vw;
     max-width: 90vw;
-    padding: ${scale(40)} ${scale(190)};
+    padding: 0.8rem 3.8rem;
     white-space: pre-line;
-    font-size: ${scale(75)};
+    font-size: 1.5rem;
 
     & a {
         text-decoration: underline dotted;
-        text-underline-offset: ${scale(10)};
-        text-decoration-thickness: ${scale(3)};
+        text-underline-offset: 0.2rem;
+        text-decoration-thickness: 0.06rem;
     }
 
     & kbd:has(kbd) {
-        margin: ${scale(20)};
+        margin: 0.4rem;
     }
 
     & kbd:not(:has(kbd)) {
         background-color: rgba(0, 0, 0, 0.5);
-        border: ${scale(3)} solid rgba(255, 255, 255, 0.5);
-        border-radius: ${scale(10)};
-        box-shadow: 0 ${scale(3)} 0 rgba(255, 255, 255, 0.5);
-        padding: ${scale(2)} ${scale(12)};
+        border: 0.06rem solid rgba(255, 255, 255, 0.5);
+        border-radius: 0.2rem;
+        box-shadow: 0 0.06rem 0 rgba(255, 255, 255, 0.5);
+        padding: 0.04rem 0.24rem;
         font-size: 0.8em;
         line-height: 1;
     }

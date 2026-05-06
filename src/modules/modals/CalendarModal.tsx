@@ -17,7 +17,6 @@ import {
     MONTHS,
     MONTHS_GRADIENT,
     sanitizeId,
-    scale,
     scrollToId,
 } from '@shared/lib/helpers';
 import { Modal, Tooltip } from '@shared/ui';
@@ -31,7 +30,7 @@ const getISODate = (date: Date): string => {
 const CalendarGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: ${scale(16)};
+    gap: 0.32rem;
 `;
 
 const DayName = styled.div`
@@ -66,41 +65,40 @@ const Day = styled.a<DayProps>`
         $isChapter ? $background : 'black'};
     cursor: ${({ $isChapter, $isEpisode }) =>
         $isChapter || $isEpisode ? 'pointer' : 'default'};
-    width: ${scale(200)};
-    height: ${scale(200)};
+    width: 4rem;
+    height: 4rem;
 
     ${({ $isToday, $background, $isChapter, $isEpisode, $isNextChapter }) =>
         $isNextChapter ?
             css`
-                border: ${scale(15)} solid ${$isChapter ? 'red' : $background};
+                border: 0.3rem solid ${$isChapter ? 'red' : $background};
                 animation: ${hueGlow} 2s linear infinite;
             `
         : $isToday ?
             css`
-                border: ${scale(15)} solid ${$isChapter ? 'red' : $background};
+                border: 0.3rem solid ${$isChapter ? 'red' : $background};
             `
         : $isEpisode ?
             css`
-                outline: ${scale(7)} dashed
-                    ${$isChapter ? 'black' : $background};
-                outline-offset: ${scale(-13)};
-                font-size: ${scale(45)};
+                outline: 0.14rem dashed ${$isChapter ? 'black' : $background};
+                outline-offset: -0.26rem;
+                font-size: 0.9rem;
             `
         :   null}
 
     &:focus {
         z-index: 1;
-        outline: ${scale(20)} solid red;
+        outline: 0.4rem solid red;
         animation: ${hueGlow} 2s linear infinite;
     }
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
-        font-size: ${scale(50)};
+        font-size: 1rem;
     }
 `;
 
 const CalendarContainer = styled.div`
-    padding: ${scale(100)};
+    padding: 2rem;
 `;
 
 const TooltipContent = styled.div`
@@ -108,10 +106,10 @@ const TooltipContent = styled.div`
     white-space: nowrap;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: ${scale(40)};
-    padding: ${scale(25)};
-    font-size: ${scale(60)};
-    gap: ${scale(40)};
+    border-radius: 0.8rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    gap: 0.8rem;
 `;
 
 type EventMap = Map<
