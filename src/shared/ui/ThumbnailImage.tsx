@@ -36,7 +36,7 @@ type ImageProps = {
 };
 
 const Image = styled.img<ImageProps & Offset>`
-    filter: blur(${({ $loading }) => $loading ? '0.2rem' : '0'});
+    filter: blur(${({ $loading }) => ($loading ? '0.2rem' : '0')});
     transition: filter 0.4s ease-in-out;
     object-position: ${({
         $offsetX = 0,
