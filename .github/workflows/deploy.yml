@@ -27,6 +27,7 @@ concurrency:
 jobs:
     build:
         runs-on: ubuntu-latest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         steps:
             - name: Checkout Code
               uses: actions/checkout@v4
