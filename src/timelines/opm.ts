@@ -21,7 +21,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 234;
+const CHAPTERS_TOTAL = 235;
 const VOLUMES_TOTAL = 42;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumexExtra = 6;
@@ -1781,6 +1781,12 @@ export const OPM_TIMELINE: Timeline = {
                     {
                         title: () => 'Interception',
                         date: 'April 23, 2026',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Suiko',
+                        date: 'May 7, 2026',
                         pages: 16,
                         cover: null,
                     },
