@@ -5,8 +5,17 @@ on:
         branches: ['main']
     push:
         branches: ['main']
+        paths-ignore:
+            - '**.md'
+            - '.github/ISSUE_TEMPLATE/**'
+            - '.github/PULL_REQUEST_TEMPLATE/**'
     workflow_dispatch:
         inputs:
+            preview:
+                description: 'Deploy a preview build'
+                required: false
+                default: false
+                type: boolean
             force_optimize:
                 description: 'Force image optimization (ignore cache)'
                 required: false
@@ -30,6 +39,7 @@ jobs:
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # Required for restore-mtime to find commit dates
+                  lfs: true
 
             - name: Restore file modification times
               uses: chetan/git-restore-mtime-action@v2
@@ -109,7 +119,7 @@ jobs:
     deploy:
         needs: build
         runs-on: ubuntu-latest
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' && github.event.inputs.preview == 'true'
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
