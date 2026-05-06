@@ -39,7 +39,7 @@ const SectionItemCover = withShadow(
         background-color: ${({ $backgroundColor }) => $backgroundColor};
         color: ${({ $color }) => $color};
         font-size: ${({ $blankFontSize }) => scale($blankFontSize)};
-        flex-grow: 1;
+        height: 100%;
         width: 100%;
 
         & > a {
@@ -175,6 +175,7 @@ const SectionItem = withCrossLines(
         position: relative;
         display: flex;
         flex-direction: column;
+        height: ${({ $height }) => scale($height)};
         transition: width 0.2s ease-in-out;
 
         ${({ $focusable }) =>

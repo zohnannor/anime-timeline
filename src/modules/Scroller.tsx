@@ -18,7 +18,7 @@ const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     position: fixed;
     z-index: 10;
     bottom: 0;
-    height: ${scale(250)};
+    height: 5rem;
     width: 100svw;
     display: flex;
     justify-content: center;
@@ -27,7 +27,7 @@ const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
         ${({ $visible }) =>
             $visible &&
             css`
-                bottom: ${scale(160)};
+                bottom: 3.2rem;
             `}
     }
 `;
