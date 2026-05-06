@@ -1,0 +1,103 @@
+name: Build Site
+
+on:
+    workflow_call:
+        inputs:
+            force_optimize:
+                type: boolean
+                default: false
+            strict_lint:
+                type: boolean
+                default: true
+            upload_type:
+                type: string
+                default: 'pages'
+                description: 'Artifact type: pages (deploy) or regular (preview)'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Required for restore-mtime to find commit dates
+                  lfs: true
+
+            - name: Restore file modification times
+              uses: chetan/git-restore-mtime-action@v2
+
+            - name: Determine force flag
+              id: force
+              run: |
+                  FORCE=${{ inputs.force_optimize }}
+                  echo "value=$FORCE" >> $GITHUB_OUTPUT
+
+            - name: Cache WebP Images
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      public/*
+                  key: webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}${{ steps.force.outputs.value == 'true' && format('-force-{0}', github.run_id) || '' }}
+                  restore-keys: |
+                      webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-
+                      webp-
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: 'yarn'
+
+            - name: Install Dependencies
+              run: yarn install --immutable
+
+            - name: Lint Project
+              run: yarn lint ${{ inputs.strict_lint && '--max-warnings 0' || '' }} # disallow warnings for prod
+
+            - name: Check formatting
+              run: yarn prettylint src # TODO: replace with biome?
+
+            - name: Install Linux dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y webp
+
+            - name: Install ImageMagick
+              uses: mfinelli/setup-imagemagick@v6
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: '3.x'
+
+            - name: Run image optimization
+              run: |
+                  FORCE_FLAG=$([[ "${{ steps.force.outputs.value }}" == "true" ]] && echo "--force" || echo "")
+                  echo "Running image optimization..."
+                  python -m bin.optimize-images --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
+              env:
+                  CPU: 2
+
+            - name: Build Project
+              run: yarn build
+
+            - name: Upload Build Artifacts
+              if: inputs.upload_type == 'pages'
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: './build'
+
+            - name: Upload Regular Artifact
+              if: inputs.upload_type == 'regular'
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-output
+                  path: './build'

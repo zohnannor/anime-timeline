@@ -1,0 +1,41 @@
+name: Deploy PR Preview
+
+on:
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - synchronize
+            - closed
+
+concurrency: preview-${{ github.ref }}
+
+jobs:
+    build:
+        uses: ./.github/workflows/build.yml
+        with:
+            strict_lint: false
+            upload_type: 'regular'
+
+    deploy-preview:
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
+        steps:
+            - name: Download build output
+              uses: actions/download-artifact@v4
+              with:
+                  name: build-output
+                  path: ./build
+
+            - name: Deploy preview
+              uses: rossjrw/pr-preview-action@v1
+              with:
+                  source-dir: ./build/
+                  preview-branch: gh-pages
+                  umbrella-dir: pr-preview
+                  action: auto
+                  qr-code: true
