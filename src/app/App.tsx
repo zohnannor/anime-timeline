@@ -20,7 +20,6 @@ import { FLOATING_BUTTONS } from '@timelines/index';
 const AppContainer = styled.div`
     display: flex;
     flex-direction: column;
-    height: 100svh;
     overflow: hidden;
     user-select: none;
 `;
@@ -91,7 +90,7 @@ const App: React.FC = () => {
         if (favicon && typeof icons.favicon === 'string') {
             favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, timeline, height]);
+    }, [animeTitle, height, timeline]);
 
     if (timeline === null) {
         return null;

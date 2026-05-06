@@ -45,6 +45,7 @@ const Timeframe = withCrossLines(
             background: ${({ $background }) => $background};
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)};
+            line-height: ${scale(TIMELINE_HEIGHT / 3)};
             transition: width 0.2s ease-in-out;
             cursor: ${({ $variant }) =>
                 $variant === 'days' ? 'pointer' : 'default'};
@@ -59,8 +60,7 @@ const TimeframeDate = styled.div`
 
 const TimelineWrapper = styled.div`
     display: flex;
-    flex-grow: ${TIMELINE_HEIGHT / 3};
-    flex-basis: 0;
+    height: ${TIMELINE_HEIGHT / 3};
 `;
 
 type Segment = {
