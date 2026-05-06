@@ -11,25 +11,72 @@ on:
 concurrency: preview-${{ github.ref }}
 
 jobs:
-    build:
-        uses: ./.github/workflows/build.yml
-        with:
-            strict_lint: false
-            upload_type: 'regular'
-
     deploy-preview:
-        needs: build
         runs-on: ubuntu-latest
         permissions:
             contents: read
             pages: write
             id-token: write
+        if: github.event.action != 'closed'
         steps:
-            - name: Download build output
-              uses: actions/download-artifact@v4
+            - name: Checkout
+              uses: actions/checkout@v4
               with:
-                  name: build-output
-                  path: ./build
+                  fetch-depth: 0
+                  lfs: true
+
+            - name: Restore file modification times
+              uses: chetan/git-restore-mtime-action@v2
+
+            - name: Cache WebP Images
+              uses: actions/cache@v4
+              with:
+                  path: public/*
+                  key: webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-${{ github.ref }}
+                  restore-keys: |
+                      webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-
+                      webp-
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: 'yarn'
+
+            - name: Install Dependencies
+              run: yarn install --immutable
+
+            - name: Lint Project
+              run: yarn lint
+              continue-on-error: true
+
+            - name: Check formatting
+              run: yarn prettylint src
+              continue-on-error: true
+
+            - name: Install Linux dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y webp
+
+            - name: Install ImageMagick
+              uses: mfinelli/setup-imagemagick@v6
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: '3.x'
+
+            - name: Run image optimization
+              run: python -m bin.optimize-images --all --cpu $CPU --color=always
+              env:
+                  CPU: 2
+
+            - name: Build Project
+              run: yarn build
 
             - name: Deploy preview
               uses: rossjrw/pr-preview-action@v1
