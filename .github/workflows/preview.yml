@@ -85,7 +85,7 @@ jobs:
                   CPU: 2
 
             - name: Build Project
-              run: yarn build
+              run: yarn build --base /anime-timeline/pr-preview/pr-${{ github.event.pull_request.number }}/
 
             - name: Deploy preview
               uses: rossjrw/pr-preview-action@v1
