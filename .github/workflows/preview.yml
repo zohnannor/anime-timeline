@@ -1,33 +1,25 @@
-name: Deploy Static Content to GitHub Pages
+name: Deploy PR Preview
 
 on:
-    push:
-        branches: ['main']
-        paths-ignore:
-            - '**.md'
-            - '.github/ISSUE_TEMPLATE/**'
-            - '.github/PULL_REQUEST_TEMPLATE/**'
-    workflow_dispatch:
-        inputs:
-            force_optimize:
-                description: 'Force image optimization (ignore cache)'
-                required: false
-                default: false
-                type: boolean
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - synchronize
+            - closed
 
 permissions:
-    contents: read
+    contents: write
     pages: write
     id-token: write
+    pull-requests: write
 
-concurrency:
-    group: 'pages'
-    cancel-in-progress: true
+concurrency: preview-${{ github.ref }}
 
 jobs:
-    build:
+    deploy-preview:
         runs-on: ubuntu-latest
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        if: github.event.action != 'closed'
         steps:
             - name: Checkout Code
               uses: actions/checkout@v4
@@ -51,10 +43,12 @@ jobs:
               run: yarn install --immutable
 
             - name: Lint Project
-              run: yarn lint --max-warnings 0 # disallow warnings for prod
+              run: yarn lint
+              continue-on-error: true
 
             - name: Check formatting
               run: yarn prettylint src # TODO: replace with biome?
+              continue-on-error: true
 
             - name: Cache WebP Images
               uses: actions/cache@v4
@@ -91,24 +85,13 @@ jobs:
                   CPU: 2
 
             - name: Build Project
-              run: yarn build
+              run: yarn build --base /anime-timeline/pr-preview/pr-${{ github.event.pull_request.number }}/
 
-            - name: Upload Build Artifacts
-              uses: actions/upload-pages-artifact@v3
+            - name: Deploy preview
+              uses: rossjrw/pr-preview-action@v1
               with:
-                  path: './build'
-
-    deploy:
-        needs: build
-        permissions:
-            pages: write
-            id-token: write
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-latest
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-        steps:
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v4
+                  source-dir: ./build
+                  preview-branch: gh-pages
+                  umbrella-dir: pr-preview
+                  action: auto
+                  qr-code: true
