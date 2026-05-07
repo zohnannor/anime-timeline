@@ -1,19 +1,19 @@
 import { useId } from 'react';
 
-import { useHoverContext } from '../providers/TouchHoverProvider';
-import { isMobileDevice } from '../util';
+import { useHoverContext } from '@shared/contexts/TouchHoverContext';
+import { isMobileDevice } from '@shared/lib/util';
 
 type Comparator = () => boolean;
 
 type Handlers = () =>
     | {
-          onMouseOver: (e: React.MouseEvent) => void;
+          onMouseOver: (_ev: React.MouseEvent) => void;
           onMouseOut: () => void;
       }
     | {
           onTouchStart: () => void;
           onTouchEnd: () => void;
-          onContextMenu: (e: React.MouseEvent) => void;
+          onContextMenu: (_ev: React.MouseEvent) => void;
           'data-hover-item': string;
       };
 
@@ -44,16 +44,16 @@ const useHover = (): UseHover => {
                     setIsLongPressMode(false);
                     document.body.style.overflow = '';
                 },
-                onContextMenu: (e: React.MouseEvent) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                onContextMenu: (ev: React.MouseEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
                 },
                 'data-hover-item': elementId,
             }
         :   {
-                onMouseOver: (e: React.MouseEvent) => {
+                onMouseOver: (ev: React.MouseEvent) => {
                     setHoveredItem(elementId);
-                    e.stopPropagation();
+                    ev.stopPropagation();
                 },
                 onMouseOut: () => setHoveredItem(null),
             };
