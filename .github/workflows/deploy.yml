@@ -1,22 +1,11 @@
 name: Deploy Static Content to GitHub Pages
 
 on:
-    pull_request:
-        branches: ['main']
     push:
         branches: ['main']
-    workflow_dispatch:
-        inputs:
-            force_optimize:
-                description: 'Force image optimization (ignore cache)'
-                required: false
-                default: false
-                type: boolean
 
 permissions:
-    contents: read
-    pages: write
-    id-token: write
+    contents: write
 
 concurrency:
     group: 'pages'
@@ -24,93 +13,28 @@ concurrency:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0 # Required for restore-mtime to find commit dates
-
-            - name: Restore file modification times
-              uses: chetan/git-restore-mtime-action@v2
-
-            - name: Determine force flag
-              id: force
-              run: |
-                  FORCE=false
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                    if [[ "${{ github.event.inputs.force_optimize }}" == "true" ]]; then
-                      FORCE=true
-                    fi
-                  else
-                    if [[ "${{ contains(github.event.head_commit.message, '[force-optimize]') }}" == "true" ]]; then
-                      FORCE=true
-                    fi
-                  fi
-                  echo "value=$FORCE" >> $GITHUB_OUTPUT
-
-            - name: Cache WebP Images
-              uses: actions/cache@v4
-              with:
-                  path: |
-                      public/*
-                  key: webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}${{ steps.force.outputs.value == 'true' && format('-force-{0}', github.run_id) || '' }}
-                  restore-keys: |
-                      webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-
-                      webp-
-
-            - name: Enable Corepack
-              run: corepack enable
-
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22
-                  cache: 'yarn'
-
-            - name: Install Dependencies
-              run: yarn install --immutable
-
-            - name: Lint Project
-              run: yarn lint --max-warnings 0 # disallow warnings for prod
-
-            - name: Check formatting
-              run: yarn prettylint src # TODO: replace with biome?
-
-            - name: Install Linux dependencies
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y webp
-
-            - name: Install ImageMagick
-              uses: mfinelli/setup-imagemagick@v6
-
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: '3.x'
-
-            - name: Run image optimization
-              run: |
-                  FORCE_FLAG=$([[ "${{ steps.force.outputs.value }}" == "true" ]] && echo "--force" || echo "")
-                  echo "Running image optimization..."
-                  python -m bin.optimize-images --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
-              env:
-                  CPU: 2
-
-            - name: Build Project
-              run: yarn build
-
-            - name: Upload Build Artifacts
-              uses: actions/upload-pages-artifact@v3
-              with:
-                  path: './build'
+        uses: ./.github/workflows/build.yml
+        with:
+            base_path: /anime-timeline/
+            force_condition: ${{ github.event.head_commit && contains(github.event.head_commit.message, '[force-optimize]') }}
 
     deploy:
         needs: build
         runs-on: ubuntu-latest
-        if: github.event_name == 'push'
         steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+
+            - name: Download build artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: build-output
+                  path: ./build
+
             - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v4
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: ./build
+                  branch: gh-pages
+                  clean-exclude: pr-preview/
+                  force: false

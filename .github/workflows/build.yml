@@ -1,0 +1,93 @@
+name: Build
+
+on:
+    workflow_call:
+        inputs:
+            base_path:
+                description: 'Base path for the build (e.g. /pr-preview/pr-123/)'
+                type: string
+                required: true
+            force_condition:
+                description: 'Expression evaluating to true/false for force optimization'
+                type: string
+                required: true
+            skip_errors:
+                description: 'Whether to continue on lint error'
+                type: boolean
+                required: false
+                default: false
+
+permissions:
+    contents: read
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0 # Required for restore-mtime to find commit dates
+
+            - name: Restore file modification times
+              uses: chetan/git-restore-mtime-action@v2
+
+            - name: Cache WebP Images
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      public/*
+                  key: webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}${{ inputs.force_condition == 'true' && format('-force-{0}', github.run_id) || '' }}
+                  restore-keys: |
+                      webp-${{ hashFiles('bin/optimize-images.py', 'assets/**') }}-
+                      webp-
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: 'yarn'
+
+            - name: Install Dependencies
+              run: yarn install --immutable
+
+            - name: Lint Project
+              run: yarn lint --max-warnings 0 # disallow warnings for prod
+              continue-on-error: ${{ inputs.skip_errors }}
+
+            - name: Check formatting
+              run: yarn prettylint src # TODO: replace with biome?
+              continue-on-error: ${{ inputs.skip_errors }}
+
+            - name: Install Linux dependencies
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y webp
+
+            - name: Install ImageMagick
+              uses: mfinelli/setup-imagemagick@v6
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: '3.x'
+
+            - name: Run image optimization
+              run: |
+                  FORCE_FLAG=$([[ "${{ inputs.force_condition }}" == "true" ]] && echo "--force" || echo "")
+                  echo "Running image optimization..."
+                  python -m bin.optimize-images --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
+              env:
+                  CPU: 2 # github runners have 2 cores
+
+            - name: Build Project
+              run: yarn build ${{ inputs.base_path && format('--base {0}', inputs.base_path) || '' }}
+
+            - name: Upload build artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-output
+                  path: ./build
