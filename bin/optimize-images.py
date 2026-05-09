@@ -6,6 +6,7 @@ import sys
 import subprocess
 import logging
 import shutil
+import time
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Callable, Final, final, override
@@ -229,6 +230,8 @@ class ImageProcessor:
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.thumb_out_dir.mkdir(parents=True, exist_ok=True)
         self.special_images = SPECIAL_IMAGES.get(title, set())
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
 
         self._check_commands()
 
@@ -265,8 +268,9 @@ class ImageProcessor:
         no_files_message: str,
         process_single: Callable[[Path], bool],
         image_kind: str,
-    ) -> None:
-        """Process a list of files"""
+        no_files_is_warning: bool = False,
+    ) -> bool:
+        """Process a list of files, returns `True` if all succeeded"""
 
         style = f"{Color.BRIGHT_MAGENTA}{Color.BOLD}"
         logging.info(colored("=" * 60, style))
@@ -274,11 +278,17 @@ class ImageProcessor:
         logging.info(colored("=" * 60, style))
 
         if not files:
-            logging.info(colored(no_files_message, Color.BRIGHT_YELLOW))
-            return
+            if no_files_is_warning:
+                logging.warning(colored(no_files_message, Color.BRIGHT_YELLOW))
+                self.warnings.append(no_files_message)
+            else:
+                logging.info(colored(no_files_message, Color.BRIGHT_YELLOW))
+            return True
 
+        start = time.perf_counter()
         with ThreadPoolExecutor(max_workers=self.config.cpu_count) as executor:
             results = list(executor.map(process_single, files))
+        elapsed = time.perf_counter() - start
 
         successful = sum(1 for r in results if r)
         status_color = (
@@ -291,7 +301,12 @@ class ImageProcessor:
                 f"Completed converting {successful}/{len(files)} {image_kind}",
                 status_color,
             )
+            + colored(
+                f" (took {_format_duration(elapsed)})", Color.BRIGHT_BLACK
+            )
         )
+
+        return successful == len(files)
 
     def process_single_file(
         self,
@@ -340,9 +355,9 @@ class ImageProcessor:
             )
             return True
         else:
-            logging.error(
-                f"{colored(fail_message, Color.BRIGHT_RED)}: {path.name}"
-            )
+            error_msg = f"{fail_message}: {path.name}"
+            logging.error(f"{colored(error_msg, Color.BRIGHT_RED)}")
+            self.errors.append(error_msg)
             if on_failure and dest.exists():
                 on_failure()
             return False
@@ -354,7 +369,7 @@ class ImageProcessor:
             path.with_suffix(ext).exists() for ext in [".png", ".jpg", ".jpeg"]
         )
 
-    def convert_orphan_images(self) -> None:
+    def convert_orphan_images(self) -> bool:
         """
         Handle orphan WebP/GIF in the source directory.
         - Local: losslessly convert to PNG, then delete the original orphan.
@@ -383,22 +398,18 @@ class ImageProcessor:
                     )
                     return True
                 except Exception as e:
-                    logging.error(
-                        colored(
-                            f"Failed to delete orphan {path}: {e}",
-                            Color.BRIGHT_RED,
-                        )
-                    )
+                    error_msg = f"Failed to delete orphan {path}: {e}"
+                    logging.error(colored(error_msg, Color.BRIGHT_RED))
+                    self.errors.append(error_msg)
                     return False
 
-            self.process_files(
+            return self.process_files(
                 header="Deleting orphan source images (CI)",
                 files=orphan_files,
                 no_files_message="No orphan sources to delete",
                 process_single=_delete_orphan_single,
                 image_kind="orphan images",
             )
-            return
 
         # Local: convert orphans to PNG and remove them from the source dir
         def _convert_orphan_single(path: Path) -> bool:
@@ -432,7 +443,7 @@ class ImageProcessor:
                     )
             return success
 
-        self.process_files(
+        return self.process_files(
             header="Converting orphan source images to PNG",
             files=orphan_files,
             no_files_message="No orphan source images to convert",
@@ -440,7 +451,7 @@ class ImageProcessor:
             image_kind="orphan images",
         )
 
-    def generate_thumbnails(self) -> None:
+    def generate_thumbnails(self) -> bool:
         """Generate thumbnails from originals"""
 
         def _generate_thumbnail_single(path: Path) -> bool:
@@ -470,15 +481,16 @@ class ImageProcessor:
                 fail_message="❌ Failed to generate thumbnail",
             )
 
-        self.process_files(
+        return self.process_files(
             header="Generating thumbnails",
             files=find_files(self.source_dir, ["png", "jpg", "jpeg"]),
             no_files_message="No source images found for thumbnail generation",
             process_single=_generate_thumbnail_single,
             image_kind="thumbnails",
+            no_files_is_warning=True,
         )
 
-    def process_special_images(self) -> None:
+    def process_special_images(self) -> bool:
         """Process special images with custom settings"""
 
         if not self.special_images:
@@ -488,7 +500,7 @@ class ImageProcessor:
                     Color.BRIGHT_YELLOW,
                 )
             )
-            return
+            return True
 
         def _process_special_single(filename: Path) -> bool:
             path = self.source_dir / filename
@@ -515,7 +527,7 @@ class ImageProcessor:
                 fail_message="❌ Failed to process special image",
             )
 
-        self.process_files(
+        return self.process_files(
             header="Processing special images",
             files=sorted([Path(p) for p in self.special_images]),
             no_files_message=f'No special images defined for title "{self.title}"',
@@ -523,7 +535,7 @@ class ImageProcessor:
             image_kind="special images",
         )
 
-    def process_main_images(self) -> None:
+    def process_main_images(self) -> bool:
         """Create optimized WebP versions (excluding special images)"""
 
         def _process_main_single(path: Path) -> bool:
@@ -569,7 +581,7 @@ class ImageProcessor:
                 fail_message="❌ Failed to optimize main image",
             )
 
-        self.process_files(
+        return self.process_files(
             header="Creating optimized WebP versions",
             files=[
                 p
@@ -579,6 +591,7 @@ class ImageProcessor:
             no_files_message="No main images to process",
             process_single=_process_main_single,
             image_kind="main images",
+            no_files_is_warning=True,
         )
 
     def get_size_report(self) -> None:
@@ -616,8 +629,9 @@ class ImageProcessor:
             size /= 1024.0
         return f"{size:.2f} TB"
 
-    def process_all(self) -> None:
-        """Run the complete image optimization pipeline"""
+    def process_all(self) -> str | None:
+        """Run the complete image optimization pipeline, returns name of first
+        failed step or `None`"""
 
         logging.info(f"📂 Title: {colored(self.title, Color.BRIGHT_CYAN)}")
         logging.info(
@@ -644,16 +658,20 @@ class ImageProcessor:
             f"Existing WebP files: {colored(str(webp_files), Color.BRIGHT_CYAN)}"
         )
 
-        self.convert_orphan_images()
-        logging.info("")
-        self.generate_thumbnails()
-        logging.info("")
-        self.process_special_images()
-        logging.info("")
-        self.process_main_images()
-        logging.info("")
+        steps: list[tuple[str, Callable[[], bool]]] = [
+            ("orphan conversion", self.convert_orphan_images),
+            ("thumbnail generation", self.generate_thumbnails),
+            ("special image processing", self.process_special_images),
+            ("main image optimization", self.process_main_images),
+        ]
+
+        for step_name, step_fn in steps:
+            if not step_fn():
+                return step_name
+            logging.info("")
 
         self.get_size_report()
+        return None
 
 
 def find_all_titles() -> list[str]:
@@ -682,10 +700,18 @@ def find_files(path: str | os.PathLike[str], patterns: list[str]) -> list[Path]:
     )
 
 
+def _format_duration(seconds: float) -> str:
+    """Format duration in seconds as "XXs" or "XXm XXs" if longer than 60
+    seconds"""
+    if seconds < 60:
+        return f"{seconds:.1f}s"
+    return f"{seconds // 60:.0f}m {seconds % 60:.0f}s"
+
+
 def process_single_title(
     title: str, config: Config, force_mode: bool = False
-) -> bool:
-    """Process a single title"""
+) -> tuple[bool, list[str], list[str]]:
+    """Process a single title, returns `(success, error_messages, warnings)`"""
 
     style = f"{Color.BRIGHT_CYAN}{Color.BOLD}"
     logging.info(colored("=" * 80, style))
@@ -693,13 +719,30 @@ def process_single_title(
     logging.info(colored("=" * 80, style))
     try:
         processor = ImageProcessor(title, config, force_mode)
-        processor.process_all()
-        return True
-    except Exception as e:
-        logging.error(
-            colored(f'❌ Error processing "{title}": {e}', Color.BRIGHT_RED)
+        title_start = time.perf_counter()
+        failed_step = processor.process_all()
+        title_elapsed = time.perf_counter() - title_start
+
+        logging.info(
+            colored(
+                f"Processed {title} in {_format_duration(title_elapsed)}",
+                Color.BRIGHT_BLACK,
+            )
         )
-        return False
+
+        if failed_step:
+            logging.error(
+                colored(
+                    f'❌ Error processing "{title}" during step: {failed_step}',
+                    Color.BRIGHT_RED,
+                )
+            )
+            return False, processor.errors, processor.warnings
+        return True, [], processor.warnings
+    except Exception as e:
+        msg = f'Error processing "{title}": {e}'
+        logging.error(colored(f"❌ {msg}", Color.BRIGHT_RED))
+        return False, [msg], []
 
 
 def main() -> None:
@@ -774,6 +817,8 @@ def main() -> None:
         logging.info(colored(f"Force mode: {args.force}", Color.BRIGHT_YELLOW))
         logging.info(colored(f"CPU count: {args.cpu}", Color.BRIGHT_YELLOW))
 
+        overall_start = time.perf_counter()
+
         source_count = 0
         webp_count = 0
         for title in titles:
@@ -794,9 +839,18 @@ def main() -> None:
         logging.info("")
 
         successes = 0
+        all_errors: dict[str, list[str]] = {}
+        all_warnings: dict[str, list[str]] = {}
         for title in titles:
-            if process_single_title(title, config, args.force):
+            ok, errors, warnings = process_single_title(
+                title, config, args.force
+            )
+            if ok:
                 successes += 1
+            else:
+                all_errors[title] = errors
+            if warnings:
+                all_warnings[title] = warnings
             logging.info("")
 
         final_color = (
@@ -804,14 +858,58 @@ def main() -> None:
             if successes == len(titles)
             else Color.BRIGHT_YELLOW
         )
+
+        overall_elapsed = time.perf_counter() - overall_start
         logging.info(
             colored(
                 f"✅ Successfully processed {successes}/{len(titles)} titles!",
                 final_color,
             )
+            + colored(
+                f" (took {_format_duration(overall_elapsed)})",
+                Color.BRIGHT_BLACK,
+            )
         )
+
+        if all_warnings:
+            logging.warning(colored("⚠️  Warnings:", Color.BRIGHT_YELLOW))
+            for title, title_warnings in all_warnings.items():
+                for w in title_warnings:
+                    logging.warning(
+                        colored(f"  {title}: {w}", Color.BRIGHT_YELLOW)
+                    )
+
+        if successes < len(titles):
+            logging.error(
+                colored(
+                    "❌ Errors encountered:",
+                    Color.BRIGHT_RED,
+                )
+            )
+            for title, title_errors in all_errors.items():
+                for err in title_errors:
+                    logging.error(
+                        colored(f"  {title}: {err}", Color.BRIGHT_RED)
+                    )
+            sys.exit(1)
+
     elif args.TITLE:
-        assert process_single_title(args.TITLE, config, args.force)
+        ok, errors, warnings = process_single_title(
+            args.TITLE, config, args.force
+        )
+        if warnings:
+            logging.warning(colored("⚠️  Warnings:", Color.BRIGHT_YELLOW))
+            for w in warnings:
+                logging.warning(
+                    colored(f"  {args.TITLE}: {w}", Color.BRIGHT_YELLOW)
+                )
+        if not ok:
+            logging.error(colored("❌ Errors encountered:", Color.BRIGHT_RED))
+            for err in errors:
+                logging.error(
+                    colored(f"  {args.TITLE}: {err}", Color.BRIGHT_RED)
+                )
+            sys.exit(1)
     else:
         parser.print_help()
 

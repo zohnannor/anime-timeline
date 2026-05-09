@@ -7,6 +7,12 @@ on:
             - reopened
             - synchronize
             - closed
+    workflow_dispatch:
+        inputs:
+            pr-number:
+                description: 'PR number(s) to remove preview for (comma-separated)'
+                required: true
+                type: string
 
 permissions:
     contents: write
@@ -16,7 +22,7 @@ concurrency: preview-${{ github.ref }}
 
 jobs:
     build:
-        if: github.event.action != 'closed'
+        if: github.event_name != 'workflow_dispatch' && github.event.action != 'closed'
         uses: ./.github/workflows/build.yml
         with:
             base_path: /anime-timeline/pr-preview/pr-${{ github.event.pull_request.number }}/
@@ -25,7 +31,7 @@ jobs:
 
     deploy:
         needs: build
-        if: ${{ always() && (github.event.action == 'closed' || needs.build.result == 'success') }}
+        if: ${{ github.event_name != 'workflow_dispatch' && always() && (github.event.action == 'closed' || needs.build.result == 'success') }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -50,3 +56,43 @@ jobs:
                   umbrella-dir: pr-preview
                   action: auto
                   qr-code: true
+
+    # GitHub Actions don't have a `replace` function, so we have to split the
+    # comma-separated list of PRs in a separate job and pass them to the next
+    split-prs:
+        if: github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-latest
+        outputs:
+            prs: ${{ steps.split.outputs.prs }}
+        steps:
+            - id: split
+              run: |
+                  PRS="${{ github.event.inputs.pr-number }}"
+                  IFS=',' read -ra ARR <<< "$PRS"
+                  JSON="["
+                  for i in "${!ARR[@]}"; do
+                      pr="$(echo "${ARR[$i]}" | xargs)"
+                      [ -n "$pr" ] || continue
+                      [ "$i" -gt 0 ] && JSON+=","
+                      JSON+="\"$pr\""
+                  done
+                  JSON+="]"
+                  echo "prs=$JSON" >> "$GITHUB_OUTPUT"
+
+    cleanup:
+        if: github.event_name == 'workflow_dispatch'
+        needs: split-prs
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                pr: ${{ fromJSON(needs.split-prs.outputs.prs) }}
+        steps:
+            - uses: actions/checkout@v6
+
+            - uses: rossjrw/pr-preview-action@v1
+              with:
+                  source-dir: .
+                  preview-branch: gh-pages
+                  umbrella-dir: pr-preview
+                  action: remove
+                  pr-number: ${{ matrix.pr }}

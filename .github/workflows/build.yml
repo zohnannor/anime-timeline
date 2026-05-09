@@ -82,6 +82,7 @@ jobs:
                   python -m bin.optimize-images --all $FORCE_FLAG --cpu $CPU --color=always # use pretty colors :)
               env:
                   CPU: 2 # github runners have 2 cores
+              continue-on-error: ${{ inputs.skip_errors }}
 
             - name: Build Project
               run: yarn build ${{ inputs.base_path && format('--base {0}', inputs.base_path) || '' }}
