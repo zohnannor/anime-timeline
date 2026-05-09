@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
-import { sum } from '@shared/lib/util';
+import { sum, typedEntries } from '@shared/lib/util';
 import { IconButton, Modal, Tooltip } from '@shared/ui';
 import {
     RefreshIcon,
@@ -16,9 +16,9 @@ import { HeaderButton } from '@shared/ui/Modal';
 import {
     ResolvedChapter,
     ResolvedEpisode,
-    ResolvedTimeline,
+    ResolvedTimelineData,
 } from '@timelines/resolved';
-import { AnimeTitle, Icon, TITLES } from '@timelines/types';
+import { AnimeTitle, Icon } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -100,48 +100,38 @@ type Sort = {
 } & SortData;
 
 const getSortStrategy = (
-    sorting: Sorting,
-    { data: { chapters, episodes } }: ResolvedTimeline,
     animeTitle: AnimeTitle,
-): SortData =>
-    (
-        ({
-            alphabetical: () => ({
-                type: 'string',
-                value: animeTitle,
-                badge: null,
-            }),
-            'chapter count': () => {
-                const count = totalChapterCount(chapters);
-                return {
-                    type: 'number',
-                    value: count,
-                    badge: `${count} chapters`,
-                };
-            },
-            'page count': () => {
-                const count = totalPageCount(chapters);
-                return {
-                    type: 'number',
-                    value: count,
-                    badge: `${count} pages`,
-                };
-            },
-            'recently updated': () => {
-                const time = recentlyUpdated(chapters, episodes);
-                return {
-                    type: 'number',
-                    value: time,
-                    badge: new Date(time).toLocaleDateString(undefined, {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }),
-                };
-            },
-            unsorted: () => ({ type: 'number', value: 0, badge: null }),
-        }) as Record<Sorting, () => SortData>
-    )[sorting]();
+    { chapters, episodes }: ResolvedTimelineData,
+    sorting: Sorting,
+): SortData => {
+    const variants = {
+        alphabetical: () =>
+            // note: sorting by anime title (code name) instead of actual title
+            ({ type: 'string', value: animeTitle, badge: null }),
+        'chapter count': () => {
+            const count = totalChapterCount(chapters);
+            return { type: 'number', value: count, badge: `${count} chapters` };
+        },
+        'page count': () => {
+            const count = totalPageCount(chapters);
+            return { type: 'number', value: count, badge: `${count} pages` };
+        },
+        'recently updated': () => {
+            const time = recentlyUpdated(chapters, episodes);
+            return {
+                type: 'number',
+                value: time,
+                badge: new Date(time).toLocaleDateString(undefined, {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                }),
+            };
+        },
+        unsorted: () => ({ type: 'number', value: 0, badge: null }),
+    } as Record<Sorting, () => SortData>;
+    return variants[sorting]();
+};
 
 const sortTitles = (titleA: Sort, titleB: Sort): number =>
     titleA.type === 'string' && titleB.type === 'string' ?
@@ -160,31 +150,18 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         loadAll().catch(() => console.error('Failed to load all timelines.'));
     }, [loadAll]);
 
-    const titles = useMemo(() => {
-        const result: Sort[] = [];
-
-        for (const animeTitle of TITLES) {
-            const loaded = timelines[animeTitle];
-            if (loaded === undefined) {
-                continue;
-            }
-            const {
-                data: {
-                    title,
-                    icons: { favicon },
-                },
-            } = loaded;
-
-            result.push({
-                animeTitle,
-                title,
-                icon: favicon,
-                ...getSortStrategy(sorting, loaded, animeTitle),
-            });
-        }
-
-        return result.toSorted(sortTitles);
-    }, [sorting, timelines]);
+    const titles = useMemo(
+        () =>
+            typedEntries(timelines)
+                .map(([animeTitle, { data }]) => ({
+                    animeTitle,
+                    title: data.title,
+                    icon: data.icons.favicon,
+                    ...getSortStrategy(animeTitle, data, sorting),
+                }))
+                .toSorted(sortTitles),
+        [sorting, timelines],
+    );
 
     if (!animeTitleSelectorOpen) {
         return null;
