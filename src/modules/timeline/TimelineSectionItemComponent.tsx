@@ -256,7 +256,7 @@ export const TimelineSectionItemComponent = ({
 
     const itemCover = (
         <SectionItemCover
-            className={`${type}Cover`}
+            className={`${type}SectionItemCover`}
             data-title={itemTitle}
             $invertBorder={!cover && backgroundColor === 'black'}
             $titleVisible={(!!cover || textColor === 'black') && titleVisible}
@@ -294,7 +294,7 @@ export const TimelineSectionItemComponent = ({
     return (
         <SectionItem
             id={sanitizeId(`${type}-${itemNumber}`)}
-            className={type}
+            className={`${type}SectionItem`}
             $width={itemWidth}
             $height={height}
             $crossLinesVisible={hovered}

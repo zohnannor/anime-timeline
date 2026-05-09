@@ -38,11 +38,10 @@ const Timeframe = withCrossLines(
                 },
             };
         })`
-            position: relative;
             display: flex;
+            position: relative;
             align-items: center;
             justify-content: center;
-            height: ${scale(TIMELINE_HEIGHT / 3)};
             background: ${({ $background }) => $background};
             color: black;
             font-size: ${scale(SMALL_FONT_SIZE)};
@@ -60,9 +59,8 @@ const TimeframeDate = styled.div`
 `;
 
 const TimelineWrapper = styled.div`
-    position: relative;
     display: flex;
-    height: ${scale(TIMELINE_HEIGHT / 3)};
+    height: ${TIMELINE_HEIGHT / 3};
 `;
 
 type Segment = {

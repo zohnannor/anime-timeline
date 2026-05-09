@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
-import { scale } from '@shared/lib/helpers';
 import { sum, typedEntries } from '@shared/lib/util';
 import { IconButton, Modal, Tooltip } from '@shared/ui';
 import {
@@ -26,10 +25,10 @@ const TooltipContent = styled.div`
     white-space: nowrap;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: ${scale(40)};
-    padding: ${scale(25)};
-    font-size: ${scale(60)};
-    gap: ${scale(40)};
+    border-radius: 0.8rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    gap: 0.8rem;
 `;
 
 const TitleButton = styled.div`
@@ -38,12 +37,12 @@ const TitleButton = styled.div`
     border-color: white;
     display: flex;
     align-items: center;
-    gap: ${scale(100)};
-    padding: ${scale(50)} 0;
+    gap: 2rem;
+    padding: 1rem 0;
     width: 100%;
 
     & > img {
-        width: ${scale(200)};
+        width: 4rem;
     }
 `;
 
@@ -51,10 +50,10 @@ const TitleContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: ${scale(40)} ${scale(190)};
+    padding: 0.8rem 3.8rem;
     width: 80svw;
-    max-width: ${scale(3000)};
-    font-size: ${scale(75)};
+    max-width: 60rem;
+    font-size: 1.5rem;
 `;
 
 const TitleWrapper = styled.div`

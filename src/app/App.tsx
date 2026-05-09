@@ -25,7 +25,7 @@ const AppContainer = styled.div`
 `;
 
 const App: React.FC = () => {
-    const { width } = useWindowSize();
+    const { width, height } = useWindowSize();
     const {
         infoBoxOpen,
         calendarOpen,
@@ -81,8 +81,8 @@ const App: React.FC = () => {
             maxHeight,
         } = timeline;
         document.documentElement.style.setProperty(
-            '--max-height',
-            `${maxHeight}`,
+            '--scale-factor',
+            `${height / maxHeight}px`,
         );
         document.title = `${title} Timeline`;
         const favicon =
@@ -90,7 +90,7 @@ const App: React.FC = () => {
         if (favicon && typeof icons.favicon === 'string') {
             favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }
-    }, [animeTitle, timeline]);
+    }, [animeTitle, height, timeline]);
 
     if (timeline === null) {
         return null;

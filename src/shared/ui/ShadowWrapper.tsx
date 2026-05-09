@@ -1,8 +1,6 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { scale } from '@shared/lib/helpers';
-
 type ShadowProps = {
     $invertBorder?: boolean | undefined;
 };
@@ -16,9 +14,9 @@ const Shadow = styled.div<ShadowProps>`
     position: absolute;
     width: 100%;
     height: 100%;
-    // TODO: replace with:
-    /* border: ${scale(5)} solid ${getShadowColor}; */
-    box-shadow: inset 0 0 0 ${scale(5)} ${getShadowColor};
+    // TODO: maybe replace with:
+    /* border: 0.1rem solid ${getShadowColor}; */
+    box-shadow: inset 0 0 0 0.1rem ${getShadowColor};
     pointer-events: none;
 `;
 

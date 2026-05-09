@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
-import { scale } from '@shared/lib/helpers';
 import { useSimpleHover } from '@shared/lib/hooks';
 
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -51,7 +50,7 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
 const TooltipContent = styled.div.attrs<TooltipContentProps>(
     ({ $placement }) => ({
         style: {
-            [OPPOSITE[$placement]]: scale(200),
+            [OPPOSITE[$placement]]: '4rem',
         },
     }),
 )`
