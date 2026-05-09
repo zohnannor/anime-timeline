@@ -53,9 +53,11 @@ export const TimeLineHeaders: React.FC = () => {
 
     const allKeys = typedKeys(layout);
     const sections = allKeys.filter(section => section !== 'timeline');
-    const sectionAfterTimeline = allKeys.find(
-        (_, i) => allKeys[i - 1] === 'timeline',
-    );
+    const timelineIndex = allKeys.indexOf('timeline');
+    const sectionAfterTimeline = allKeys[timelineIndex + 1];
+    const sectionBeforeTimeline = allKeys[timelineIndex - 1];
+    const sectionAdjacentToTimeline =
+        sectionAfterTimeline ?? sectionBeforeTimeline;
 
     return (
         <Headers className='headers'>
@@ -67,7 +69,7 @@ export const TimeLineHeaders: React.FC = () => {
                             key={section}
                             $height={
                                 layout[section].height +
-                                (section === sectionAfterTimeline ?
+                                (section === sectionAdjacentToTimeline ?
                                     layout.timeline.height
                                 :   0)
                             }
