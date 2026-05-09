@@ -41,7 +41,7 @@ def slugify(text: str) -> str:
     return re.sub(r"[\W_]+", "", text).lower()
 
 
-def update_registry(path: Path, slug: str, const_name: str, root: Path) -> None:
+def update_registry(path: Path, slug: str, root: Path) -> None:
     if not path.exists():
         print(
             colored(f"✘ Error: {path.relative_to(root)} not found", Color.RED)
@@ -50,36 +50,24 @@ def update_registry(path: Path, slug: str, const_name: str, root: Path) -> None:
 
     lines = path.read_text().splitlines()
 
-    # 1. Update Imports (Surgical sort)
-    import_line = f"import {{ {const_name} }} from '@timelines/{slug}';"
+    # Find the LOADERS object and insert a new entry
+    new_entry = f"    {slug}: () => import('@timelines/{slug}'),"
+    inserted = False
 
-    # Identify only the named timeline imports
-    timeline_indices = [
-        i for i, l in enumerate(lines) if "import {" in l and "@timelines/" in l
-    ]
+    for i, line in enumerate(lines):
+        if re.match(r"^};", line) and not inserted:
+            lines.insert(i, new_entry)
+            inserted = True
+            break
 
-    if not any(import_line in l for l in lines):
-        if timeline_indices:
-            # Extract existing lines
-            current_imports = [lines[i] for i in timeline_indices]
-            current_imports.append(import_line)
-            current_imports.sort()
-
-            # Replace the old block with the new sorted block
-            start, end = timeline_indices[0], timeline_indices[-1]
-            lines[start : end + 1] = current_imports
-        else:
-            # Fallback if no timeline imports exist yet
-            lines.insert(0, import_line)
-
-    # 2. Update resolveTimeline Object (Append to end)
-    new_entry = f"    {slug}: {const_name},"
-    if not any(f"{slug}:" in l for l in lines):
-        for i, line in enumerate(lines):
-            if "});" in line and i > 0:
-                # Insert before the closing bracket of resolveTimeline
-                lines.insert(i, new_entry)
-                break
+    if not inserted:
+        print(
+            colored(
+                f"✘ Error: Could not find LOADERS object in {path.relative_to(root)}",
+                Color.RED,
+            )
+        )
+        return
 
     _ = path.write_text("\n".join(lines) + "\n")
     print(colored(f"✔ Updated registry: {path.relative_to(root)}", Color.GREEN))
@@ -350,7 +338,7 @@ export const {const_name}: Timeline = {{
                 )
             )
 
-        update_registry(registry_file, slug, const_name, root)
+        update_registry(registry_file, slug, root)
         print(colored("✨ Done!", Color.BRIGHT_GREEN))
 
     except KeyboardInterrupt:

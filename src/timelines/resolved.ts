@@ -6,8 +6,6 @@ import {
     NonEmptyArray,
     sum,
     throwError,
-    typedEntries,
-    typedFromEntries,
     typedKeys,
     typedValues,
 } from '@shared/lib/util';
@@ -117,7 +115,7 @@ type ResolvedTimelineSectionLayout = {
     [S in keyof TimelineSectionLayout]: ResolveSectionItem<S>;
 };
 
-type ResolvedTimeline = {
+export type ResolvedTimeline = {
     layout: ResolvedTimelineSectionLayout;
     data: ResolvedTimelineData;
     maxHeight: number;
@@ -259,7 +257,6 @@ const resolveTimelineData = (
 
     if (rawSagas === undefined) {
         if (rawArcs !== undefined) {
-            resolveArcs(rawArcs, 0);
             arcs.push(...resolveArcs(rawArcs, 0));
         }
     } else {
@@ -465,7 +462,7 @@ const resolveTimelineSectionLayout = (
     return [layout, templates];
 };
 
-const resolve = ({
+export const resolveTimeline = ({
     layout: rawLayout,
     data: rawData,
 }: Timeline): ResolvedTimeline => {
@@ -483,15 +480,5 @@ const resolve = ({
 
     return { layout, data, maxHeight, maxWidth };
 };
-
-const resolveTimeline = <K extends PropertyKey>(
-    raw: Record<K, Timeline>,
-): Record<K, ResolvedTimeline> =>
-    typedFromEntries(
-        typedEntries(raw).map(([title, timeline]) => [
-            title,
-            resolve(timeline),
-        ]),
-    );
 
 export default resolveTimeline;
