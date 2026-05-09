@@ -101,48 +101,38 @@ type Sort = {
 } & SortData;
 
 const getSortStrategy = (
-    sorting: Sorting,
-    { chapters, episodes }: ResolvedTimelineData,
     animeTitle: AnimeTitle,
-): SortData =>
-    (
-        ({
-            alphabetical: () => ({
-                type: 'string',
-                value: animeTitle,
-                badge: null,
-            }),
-            'chapter count': () => {
-                const count = totalChapterCount(chapters);
-                return {
-                    type: 'number',
-                    value: count,
-                    badge: `${count} chapters`,
-                };
-            },
-            'page count': () => {
-                const count = totalPageCount(chapters);
-                return {
-                    type: 'number',
-                    value: count,
-                    badge: `${count} pages`,
-                };
-            },
-            'recently updated': () => {
-                const time = recentlyUpdated(chapters, episodes);
-                return {
-                    type: 'number',
-                    value: time,
-                    badge: new Date(time).toLocaleDateString(undefined, {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                    }),
-                };
-            },
-            unsorted: () => ({ type: 'number', value: 0, badge: null }),
-        }) as Record<Sorting, () => SortData>
-    )[sorting]();
+    { chapters, episodes }: ResolvedTimelineData,
+    sorting: Sorting,
+): SortData => {
+    const variants = {
+        alphabetical: () =>
+            // note: sorting by anime title (code name) instead of actual title
+            ({ type: 'string', value: animeTitle, badge: null }),
+        'chapter count': () => {
+            const count = totalChapterCount(chapters);
+            return { type: 'number', value: count, badge: `${count} chapters` };
+        },
+        'page count': () => {
+            const count = totalPageCount(chapters);
+            return { type: 'number', value: count, badge: `${count} pages` };
+        },
+        'recently updated': () => {
+            const time = recentlyUpdated(chapters, episodes);
+            return {
+                type: 'number',
+                value: time,
+                badge: new Date(time).toLocaleDateString(undefined, {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                }),
+            };
+        },
+        unsorted: () => ({ type: 'number', value: 0, badge: null }),
+    } as Record<Sorting, () => SortData>;
+    return variants[sorting]();
+};
 
 const sortTitles = (titleA: Sort, titleB: Sort): number =>
     titleA.type === 'string' && titleB.type === 'string' ?
@@ -161,18 +151,18 @@ export const AnimeTitleSelectorModal: React.FC = () => {
         loadAll().catch(() => console.error('Failed to load all timelines.'));
     }, [loadAll]);
 
-    const titles = useMemo(() => {
-        const result: Sort[] = typedEntries(timelines).map(
-            ([animeTitle, { data: timelineData }]) => ({
-                animeTitle,
-                title: timelineData.title,
-                icon: timelineData.icons.favicon,
-                ...getSortStrategy(sorting, timelineData, animeTitle),
-            }),
-        );
-
-        return result.toSorted(sortTitles);
-    }, [sorting, timelines]);
+    const titles = useMemo(
+        () =>
+            typedEntries(timelines)
+                .map(([animeTitle, { data }]) => ({
+                    animeTitle,
+                    title: data.title,
+                    icon: data.icons.favicon,
+                    ...getSortStrategy(animeTitle, data, sorting),
+                }))
+                .toSorted(sortTitles),
+        [sorting, timelines],
+    );
 
     if (!animeTitleSelectorOpen) {
         return null;
