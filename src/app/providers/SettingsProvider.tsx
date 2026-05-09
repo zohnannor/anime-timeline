@@ -1,11 +1,7 @@
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 import { Settings, SettingsContext } from '@shared/contexts/SettingsContext';
-import { TITLES } from '@timelines/registry';
 import { AnimeTitle } from '@timelines/types';
-
-const title = (animeTitle: string | null): animeTitle is AnimeTitle =>
-    TITLES.includes(animeTitle as AnimeTitle);
 
 const createModalHandler =
     (
@@ -21,7 +17,18 @@ const createModalHandler =
         setter(open);
     };
 
-export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
+type SettingsProviderProps = {
+    animeTitle: AnimeTitle;
+    animeTitleSelectorOpen?: boolean;
+};
+
+export const SettingsProvider: React.FC<
+    PropsWithChildren<SettingsProviderProps>
+> = ({
+    children,
+    animeTitle: initialAnimeTitle,
+    animeTitleSelectorOpen: initialAnimeTitleSelectorOpen = false,
+}) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
         const firstVisit =
@@ -39,16 +46,10 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         // default to true if not set (first visit), otherwise get from storage
         () => globalThis.localStorage.getItem('showTitles') !== 'false',
     );
-    const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
-        const params = new URLSearchParams(globalThis.location.search);
-        const animeTitle = params.get('title');
-        if (title(animeTitle)) {
-            return animeTitle;
-        }
-        globalThis.history.replaceState({}, '', `?title=csm`);
-        return 'csm';
-    });
-    const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
+    const [animeTitle, setAnimeTitle] = useState(initialAnimeTitle);
+    const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(
+        initialAnimeTitleSelectorOpen,
+    );
 
     useEffect(() => {
         const handlePopState = (ev: PopStateEvent) => {
@@ -85,6 +86,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
                 typeof title === 'function' ? title(animeTitle) : title;
             setAnimeTitle(theTitle);
             globalThis.history.replaceState({}, '', `?title=${theTitle}`);
+            globalThis.dispatchEvent(new Event('urlchange'));
         };
 
         const toggleShowTitles = (show: React.SetStateAction<boolean>) => {
