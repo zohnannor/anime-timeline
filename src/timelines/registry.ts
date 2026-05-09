@@ -8,6 +8,7 @@ import { EVA_TIMELINE } from '@timelines/eva';
 import { FP_TIMELINE } from '@timelines/fp';
 import { FRIEREN_TIMELINE } from '@timelines/frieren';
 import { HXH_TIMELINE } from '@timelines/hxh';
+import { JJK_TIMELINE } from '@timelines/jjk';
 import { JOJO_TIMELINE } from '@timelines/jojo';
 import { JR_TIMELINE } from '@timelines/jr';
 import { OPM_TIMELINE } from '@timelines/opm';
@@ -26,6 +27,7 @@ export const TIMELINE = resolveTimeline({
     hxh: HXH_TIMELINE,
     jojo: JOJO_TIMELINE,
     dhd: DHD_TIMELINE,
+    jjk: JJK_TIMELINE,
 });
 
 export const TITLES = typedKeyTuple(TIMELINE);
