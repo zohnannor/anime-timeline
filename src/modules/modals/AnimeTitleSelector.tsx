@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { scale } from '@shared/lib/helpers';
-import { sum } from '@shared/lib/util';
+import { sum, typedEntries } from '@shared/lib/util';
 import { IconButton, Modal, Tooltip } from '@shared/ui';
 import {
     RefreshIcon,
@@ -17,9 +17,9 @@ import { HeaderButton } from '@shared/ui/Modal';
 import {
     ResolvedChapter,
     ResolvedEpisode,
-    ResolvedTimeline,
+    ResolvedTimelineData,
 } from '@timelines/resolved';
-import { AnimeTitle, Icon, TITLES } from '@timelines/types';
+import { AnimeTitle, Icon } from '@timelines/types';
 
 const TooltipContent = styled.div`
     display: flex;
@@ -102,7 +102,7 @@ type Sort = {
 
 const getSortStrategy = (
     sorting: Sorting,
-    { data: { chapters, episodes } }: ResolvedTimeline,
+    { chapters, episodes }: ResolvedTimelineData,
     animeTitle: AnimeTitle,
 ): SortData =>
     (
@@ -162,27 +162,14 @@ export const AnimeTitleSelectorModal: React.FC = () => {
     }, [loadAll]);
 
     const titles = useMemo(() => {
-        const result: Sort[] = [];
-
-        for (const animeTitle of TITLES) {
-            const loaded = timelines[animeTitle];
-            if (loaded === undefined) {
-                continue;
-            }
-            const {
-                data: {
-                    title,
-                    icons: { favicon },
-                },
-            } = loaded;
-
-            result.push({
+        const result: Sort[] = typedEntries(timelines).map(
+            ([animeTitle, { data: timelineData }]) => ({
                 animeTitle,
-                title,
-                icon: favicon,
-                ...getSortStrategy(sorting, loaded, animeTitle),
-            });
-        }
+                title: timelineData.title,
+                icon: timelineData.icons.favicon,
+                ...getSortStrategy(sorting, timelineData, animeTitle),
+            }),
+        );
 
         return result.toSorted(sortTitles);
     }, [sorting, timelines]);
