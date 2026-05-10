@@ -54,6 +54,8 @@ export const DHD_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
+            numberProcessor: n =>
+                n <= CHAPTERS_TOTAL ? n.toString() : `X${n - CHAPTERS_TOTAL}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
