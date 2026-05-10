@@ -93,7 +93,7 @@ const Day = styled.a<DayProps>`
     }
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
-        font-size: 0.6rem;
+        font-size: 1rem;
         width: 2.5rem;
         height: 2.5rem;
 
