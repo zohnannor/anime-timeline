@@ -18,7 +18,9 @@ permissions:
     contents: write
     pull-requests: write
 
-concurrency: preview-${{ github.ref }}
+concurrency:
+    group: preview-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     build:
