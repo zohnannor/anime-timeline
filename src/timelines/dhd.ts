@@ -1487,7 +1487,7 @@ export const DHD_TIMELINE: Timeline = {
                 episodes: [],
             },
             { chapters: { from: 74, to: 120 } },
-            { chapters: { from: 121, to: 167 } },
+            { chapters: { from: 121, to: CHAPTERS_TOTAL } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             4: 3,
