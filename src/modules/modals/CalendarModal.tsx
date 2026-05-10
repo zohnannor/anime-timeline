@@ -93,12 +93,34 @@ const Day = styled.a<DayProps>`
     }
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
-        font-size: 1rem;
+        font-size: 0.6rem;
+        width: 2.5rem;
+        height: 2.5rem;
+
+        ${({ $isToday, $isEpisode, $isNextChapter }) =>
+            $isNextChapter || $isToday ?
+                css`
+                    border-width: 0.15rem;
+                `
+            : $isEpisode ?
+                css`
+                    outline-width: 0.07rem;
+                    outline-offset: -0.13rem;
+                `
+            :   null}
+
+        &:focus {
+            outline-width: 0.2rem;
+        }
     }
 `;
 
 const CalendarContainer = styled.div`
     padding: 2rem;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 1rem;
+    }
 `;
 
 const TooltipContent = styled.div`

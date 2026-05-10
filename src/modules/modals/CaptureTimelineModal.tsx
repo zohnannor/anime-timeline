@@ -14,6 +14,10 @@ const ConfirmButton = styled.button`
     color: white;
     font-size: 1.25rem;
     border-color: white;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: 1rem;
+    }
 `;
 
 const Container = styled.div`
@@ -26,6 +30,8 @@ const Container = styled.div`
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
         width: 80svw;
+        padding: 0.4rem 1rem;
+        font-size: 1rem;
     }
 `;
 

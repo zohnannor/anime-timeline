@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+
 export const IconWrapper = styled.div<{ $filter?: string | undefined }>`
     display: flex;
     align-items: center;
@@ -29,5 +31,19 @@ export const IconWrapper = styled.div<{ $filter?: string | undefined }>`
         height: 100%;
         position: absolute;
         inset: 0;
+    }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        & img,
+        & svg,
+        & div {
+            width: 2rem;
+        }
+
+        & svg {
+            height: 2rem;
+            padding: 0.25rem;
+            border-width: 0.06rem;
+        }
     }
 `;
