@@ -18,7 +18,8 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
-type VolumesTotal = 23;
+const CHAPTERS_TOTAL = 167;
+type VolumesTotal = 26;
 type SeasonsTotal = 4;
 
 const volumeTitle = (n: number) => `Volume ${n}`;
@@ -58,7 +59,12 @@ export const DHD_TIMELINE: Timeline = {
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Volumes and Chapters',
-            wikiLink: (_, n) => `Chapter ${n}`,
+            wikiLink: (_, n) =>
+                n < CHAPTERS_TOTAL + 1 ?
+                    n === CHAPTERS_TOTAL ?
+                        'Final Chapter'
+                    :   `Chapter ${n}`
+                :   `Bonus Curse ${n - CHAPTERS_TOTAL}`,
             focusable: true,
         },
         volume: {
@@ -1211,6 +1217,168 @@ export const DHD_TIMELINE: Timeline = {
                         title: () => 'All-Star Sayonara',
                         date: 'October 1, 2018',
                         pages: 33,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: () => 'Extra Curses (Volumes 1-8)',
+                cover: () => volumeCover(1),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 1',
+                        date: 'January 30, 2002',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 2',
+                        date: 'September 30, 2002',
+                        pages: 8,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 3',
+                        date: 'June 30, 2003',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 4',
+                        date: 'January 30, 2004',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 5',
+                        date: 'August 30, 2004',
+                        pages: 4,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 6',
+                        date: 'February 28, 2005',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 7',
+                        date: 'October 28, 2005',
+                        pages: 10,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 8',
+                        date: 'May 30, 2006',
+                        pages: 10,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: () => 'Extra Curses (Volumes 9-16)',
+                cover: () => volumeCover(9),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 9',
+                        date: 'January 30, 2007',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 10',
+                        date: 'July 30, 2007',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 11',
+                        date: 'February 29, 2008',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 12',
+                        date: 'September 30, 2008',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 13',
+                        date: 'May 29, 2009',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 14',
+                        date: 'January 29, 2010',
+                        pages: 10,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 15',
+                        date: 'November 30, 2010',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 16',
+                        date: 'October 28, 2011',
+                        pages: 12,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: () => 'Extra Curses (Volumes 17-24)',
+                cover: () => volumeCover(17),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 17',
+                        date: 'September 28, 2012',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 18',
+                        date: 'June 28, 2013',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 19',
+                        date: 'June 30, 2014',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 20',
+                        date: 'September 30, 2015',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 21',
+                        date: 'September 30, 2016',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 22',
+                        date: 'June 30, 2017',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 23',
+                        date: 'September 30, 2017',
+                        pages: 8,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 24',
+                        date: 'November 12, 2018',
+                        pages: 13,
                         cover: null,
                     },
                 ],

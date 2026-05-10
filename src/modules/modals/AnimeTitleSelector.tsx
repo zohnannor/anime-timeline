@@ -147,7 +147,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
     const [sorting, setSorting] = useState<Sorting>('unsorted');
 
     useEffect(() => {
-        loadAll().catch(() => console.error('Failed to load all timelines.'));
+        loadAll().catch((err: unknown) =>
+            console.error('Failed to load all timelines: ', err),
+        );
     }, [loadAll]);
 
     const titles = useMemo(
