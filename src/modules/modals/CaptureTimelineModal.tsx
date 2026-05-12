@@ -135,7 +135,8 @@ export const CaptureTimelineModal: React.FC = () => {
             filter: filterEl,
         });
 
-        setLoading(`processing full timeline image`);
+        downloadDataUrl(svgDataUrl, `${titleCase}_Timeline_${timestamp}.svg`);
+
         const fullImage = await loadImage(svgDataUrl);
 
         const cropTile = (i: number) => {
