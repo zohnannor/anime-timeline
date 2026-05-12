@@ -62,6 +62,76 @@ const loadImage = (src: string): Promise<HTMLImageElement> =>
         img.src = src;
     });
 
+const MAX_TILE_WIDTH = 8192;
+
+const captureTimelineSvg = async (
+    rootEl: HTMLElement,
+    width: number,
+    height: number,
+): Promise<string> => {
+    const docEl = document.documentElement;
+    const origScale = docEl.style.getPropertyValue('--scale-factor');
+
+    docEl.style.setProperty('--scale-factor', '1px');
+    await new Promise<void>(resolve => { requestAnimationFrame(() => { requestAnimationFrame(() => { resolve(); }); }); });
+
+    try {
+        return await toSvg(rootEl, {
+            width,
+            height,
+            backgroundColor: '#000',
+            filter: filterEl,
+        });
+    } finally {
+        docEl.style.setProperty('--scale-factor', origScale);
+        await new Promise<void>(resolve => { requestAnimationFrame(() => { resolve(); }); });
+    }
+};
+
+const downloadTilesFromSvg = async ({
+    svgDataUrl,
+    logicalWidth,
+    logicalHeight,
+    titleCase,
+    timestamp,
+    setLoading,
+    setError,
+}: {
+    svgDataUrl: string;
+    logicalWidth: number;
+    logicalHeight: number;
+    titleCase: string;
+    timestamp: string;
+    setLoading: (_: string | null) => void;
+    setError: (_: string | null) => void;
+}): Promise<void> => {
+    const fullImage = await loadImage(svgDataUrl);
+    const tileCount = Math.ceil(logicalWidth / MAX_TILE_WIDTH);
+
+    for (let i = 0; i < tileCount; i++) {
+        setLoading(`capturing tile ${i + 1}/${tileCount}`);
+
+        const srcX = i * MAX_TILE_WIDTH;
+        const srcWidth = Math.min(MAX_TILE_WIDTH, logicalWidth - srcX);
+
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = srcWidth;
+            canvas.height = logicalHeight;
+            const ctx = canvas.getContext('2d');
+            if (ctx === null) { throw new Error('canvas context unavailable'); }
+
+            ctx.drawImage(fullImage, srcX, 0, srcWidth, logicalHeight, 0, 0, srcWidth, logicalHeight);
+
+            const filename = `${titleCase}_Timeline_${String(i + 1).padStart(String(tileCount).length, '0')}_${timestamp}.png`;
+            downloadDataUrl(canvas.toDataURL(), filename);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : String(err));
+            return;
+        }
+    }
+};
+
 export const CaptureTimelineModal: React.FC = () => {
     const {
         captureTimelineModalOpen,
@@ -111,7 +181,7 @@ export const CaptureTimelineModal: React.FC = () => {
             return;
         }
 
-        setLoading(`rendering "${title}" timeline at full width`);
+        setLoading(`rendering "${title}" timeline at full resolution`);
         setError(null);
 
         const rootEl = document.querySelector<HTMLElement>('#root');
@@ -119,64 +189,23 @@ export const CaptureTimelineModal: React.FC = () => {
             return;
         }
 
-        const renderedHeight = globalThis.innerHeight;
-        const viewportWidth = globalThis.innerWidth;
-        const scaleFactor = renderedHeight / logicalHeight;
-        const renderedWidth = Math.ceil(logicalWidth * scaleFactor);
-        const tileCount = Math.ceil(renderedWidth / viewportWidth);
         const timestamp = new Date().toISOString();
         const titleCase = toTitleCase(animeTitle);
 
         setLoading(`rendering full timeline as SVG`);
-        const svgDataUrl = await toSvg(rootEl, {
-            width: renderedWidth,
-            height: renderedHeight,
-            backgroundColor: '#000',
-            filter: filterEl,
-        });
+        const svgDataUrl = await captureTimelineSvg(rootEl, logicalWidth, logicalHeight);
 
         downloadDataUrl(svgDataUrl, `${titleCase}_Timeline_${timestamp}.svg`);
 
-        const fullImage = await loadImage(svgDataUrl);
-
-        const cropTile = (i: number) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = viewportWidth;
-            canvas.height = renderedHeight;
-
-            const ctx = canvas.getContext('2d');
-            if (ctx === null) {
-                throw new Error('Failed to get canvas context');
-            }
-
-            ctx.drawImage(
-                fullImage,
-                i * viewportWidth,
-                0,
-                viewportWidth,
-                renderedHeight,
-                0,
-                0,
-                viewportWidth,
-                renderedHeight,
-            );
-
-            return canvas.toDataURL();
-        };
-
-        for (let i = 0; i < tileCount; i++) {
-            setLoading(`capturing tile ${i + 1}/${tileCount}`);
-
-            try {
-                const dataUrl = cropTile(i);
-                const filename = `${titleCase}_Timeline_${String(i + 1).padStart(String(tileCount).length, '0')}_${timestamp}.png`;
-                downloadDataUrl(dataUrl, filename);
-            } catch (err) {
-                setLoading(null);
-                setError(err instanceof Error ? err.message : String(err));
-                return;
-            }
-        }
+        await downloadTilesFromSvg({
+            svgDataUrl,
+            logicalWidth,
+            logicalHeight,
+            titleCase,
+            timestamp,
+            setLoading,
+            setError,
+        });
 
         setLoading(null);
     }, [captureTimeline, logicalWidth, logicalHeight, animeTitle, title]);

@@ -41,7 +41,6 @@ const Headers = styled.div`
     width: ${scale(HEADERS_WIDTH)};
     display: flex;
     flex-direction: column;
-    height: 100svh;
     user-select: none;
 `;
 
