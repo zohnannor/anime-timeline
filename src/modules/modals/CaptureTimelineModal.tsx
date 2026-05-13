@@ -74,17 +74,20 @@ export const CaptureTimelineModal: React.FC = () => {
 
     const width = maxWidth(unboundChapterWidth);
 
+    const scaleFactor = parseFloat(
+        document.documentElement.style.getPropertyValue('--scale-factor'),
+    );
+
     const [, captureSvg] = useToSvg({
         selector: '#root',
-        canvasWidth: width,
-        canvasHeight: height,
         width,
         height,
-        style: {
-            '--scale-factor': '1px',
-        } as Partial<CSSStyleDeclaration>,
         backgroundColor: '#000',
         filter,
+        style: {
+            transform: `scale(${1 / scaleFactor})`,
+            transformOrigin: 'top left',
+        },
         onStart: () => {
             setLoading(`starting "${title}" SVG timeline capture`);
             setError(null);
