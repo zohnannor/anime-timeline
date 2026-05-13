@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng, useToSvg } from '@hugocxl/react-to-image';
@@ -8,7 +8,13 @@ import { useTimeline } from '@shared/contexts/TimelineContext';
 import { toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
 
-const ConfirmButton = styled.button`
+const ButtonRow = styled.div`
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+`;
+
+const DownloadButton = styled.button`
     cursor: pointer;
     background-color: black;
     color: white;
@@ -32,7 +38,7 @@ const Container = styled.div`
 const isImg = (el: Node): el is HTMLImageElement =>
     el instanceof HTMLImageElement && el.getAttribute('src') !== null;
 
-const filterEl = (el: Node) =>
+const filter = (el: Node) =>
     !(el instanceof HTMLElement) ||
     !(
         [
@@ -50,18 +56,6 @@ const downloadDataUrl = (dataUrl: string, filename: string) => {
     link.download = filename;
     link.click();
 };
-
-const downloadBlob = (blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-    URL.revokeObjectURL(url);
-};
-
-const dataUrlToBlob = async (dataUrl: string): Promise<Blob> =>
-    (await fetch(dataUrl)).blob();
 
 export const CaptureTimelineModal: React.FC = () => {
     const {
@@ -84,45 +78,56 @@ export const CaptureTimelineModal: React.FC = () => {
         selector: '#root',
         canvasWidth: width,
         canvasHeight: height,
+        width,
+        height,
+        style: {
+            '--scale-factor': '1px',
+        } as Partial<CSSStyleDeclaration>,
         backgroundColor: '#000',
-        filter: filterEl,
-        onStart: () => setLoading(`rendering as SVG`),
+        filter,
+        onStart: () => {
+            setLoading(`starting "${title}" SVG timeline capture`);
+            setError(null);
+            console.debug(`Real dimensions: ${width}x${height}`);
+        },
         onSuccess: dataUrl => {
             const timestamp = new Date().toISOString();
-            const titleCase = toTitleCase(animeTitle);
-            downloadDataUrl(
-                dataUrl,
-                `${titleCase}_Timeline_${timestamp}.svg`,
-            );
-            setLoading(null);
+            const title = toTitleCase(animeTitle);
+            const filename = `${title}_Timeline_${timestamp}.svg`;
+            downloadDataUrl(dataUrl, filename);
+            setLoading(`saving "${filename}" SVG image`);
         },
-        onError: () => setLoading(null),
+        onLoading: () => setLoading(`rendering "${title}" timeline`),
+        onError: error => {
+            setLoading(null);
+            setError(error);
+        },
     });
 
-    const svgFallback = useCallback(() => captureSvg(), [captureSvg]);
-
-    const [, captureTimeline] = useToPng({
+    const [, capturePng] = useToPng({
         selector: '#root',
         canvasHeight: height,
         canvasWidth: width,
         backgroundColor: '#000',
         skipAutoScale: true,
-        filter: filterEl,
+        filter,
         onStart: () => {
-            setLoading(`starting "${title}" timeline capture`);
+            setLoading(`starting "${title}" PNG timeline capture`);
             setError(null);
             console.debug(`Real dimensions: ${width}x${height}`);
         },
-        onSuccess: async dataUrl => {
-            const filename = `${toTitleCase(
-                animeTitle,
-            )}_Timeline_${new Date().toISOString()}.png`;
-            const blob = await dataUrlToBlob(dataUrl);
-            downloadBlob(blob, filename);
-            setLoading(null);
+        onSuccess: dataUrl => {
+            const timestamp = new Date().toISOString();
+            const title = toTitleCase(animeTitle);
+            const filename = `${title}_Timeline_${timestamp}.png`;
+            downloadDataUrl(dataUrl, filename);
+            setLoading(`saving "${filename}" PNG image`);
         },
-        onLoading: () => setLoading('rendering timeline'),
-        onError: () => svgFallback(),
+        onLoading: () => setLoading(`rendering "${title}" timeline`),
+        onError: error => {
+            setLoading(null);
+            setError(error);
+        },
     });
 
     return (
@@ -138,16 +143,21 @@ export const CaptureTimelineModal: React.FC = () => {
         >
             <Container>
                 <h5>
-                    This will save a huge (50MB-100MB) PNG file. It is
-                    recommended to scroll to the end of the timeline to load all
-                    images. Your settings (visibility of titles and chapter
-                    width) will affect the rendered image, but some elements are
-                    not rendered anyway (UI). If something renders incorrectly,
-                    try Chrome browser.
+                    This will save a huge (20MB-200MB) image. It is recommended
+                    to scroll to the end of the timeline to load all images.
+                    Your settings (visibility of titles and chapter width) will
+                    affect the rendered image, but some elements are not
+                    rendered anyway (UI). If something renders incorrectly, try
+                    Chrome browser. If PNG rendering fails, try SVG.
                 </h5>
-                <ConfirmButton onClick={captureTimeline}>
-                    Yes, proceed
-                </ConfirmButton>
+                <ButtonRow>
+                    <DownloadButton onClick={capturePng}>
+                        Download PNG
+                    </DownloadButton>
+                    <DownloadButton onClick={captureSvg}>
+                        Download SVG
+                    </DownloadButton>
+                </ButtonRow>
                 <h6>(this might take a while)</h6>
                 {loading !== null && <div>Loading ({loading}...)</div>}
                 {error && <div style={{ color: 'red' }}>{error}</div>}
