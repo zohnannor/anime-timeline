@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng, useToSvg } from '@hugocxl/react-to-image';
@@ -97,6 +97,7 @@ export const CaptureTimelineModal: React.FC = () => {
     const captureRootRef = useRef<HTMLElement | null>(null);
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [capturing, setCapturing] = useState(false);
 
     const width = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
 
@@ -109,54 +110,60 @@ export const CaptureTimelineModal: React.FC = () => {
         captureRootRef.current = null;
     };
 
-    const config = (kind: 'svg' | 'png'): Parameters<typeof useToPng>[0] => ({
-        selector: kind === 'png' ? '#capture-root' : '#root',
-        height,
-        width,
-        canvasHeight: height,
-        canvasWidth: width,
-        backgroundColor: '#000',
-        skipAutoScale: true,
-        filter,
-        style:
-            kind === 'svg' ?
-                {
-                    transform: `scale(${1 / scaleFactor})`,
-                    transformOrigin: 'top left',
+    const config = useCallback(
+        (kind: 'svg' | 'png'): Parameters<typeof useToPng>[0] => ({
+            selector: kind === 'png' ? '#capture-root' : '#root',
+            height,
+            width,
+            canvasHeight: height,
+            canvasWidth: width,
+            backgroundColor: '#000',
+            skipAutoScale: true,
+            filter,
+            style:
+                kind === 'svg' ?
+                    {
+                        transform: `scale(${1 / scaleFactor})`,
+                        transformOrigin: 'top left',
+                    }
+                :   {},
+            onStart: () => {
+                setCapturing(true);
+                console.debug(`Real dimensions: ${width}x${height}`);
+                setLoading(
+                    `starting "${title}" ${kind.toUpperCase()} timeline capture`,
+                );
+                setError(null);
+                if (kind === 'png') {
+                    captureRootRef.current = preparePngClone();
                 }
-            :   {},
-        onStart: () => {
-            console.debug(`Real dimensions: ${width}x${height}`);
-            setLoading(
-                `starting "${title}" ${kind.toUpperCase()} timeline capture`,
-            );
-            setError(null);
-            if (kind === 'png') {
-                captureRootRef.current = preparePngClone();
-            }
-        },
-        onSuccess: dataUrl => {
-            if (kind === 'png') {
-                // false-positive: it is not accessed
-                // eslint-disable-next-line react-hooks/refs
-                cleanupClone();
-            }
-            const timestamp = new Date().toISOString();
-            const title = toTitleCase(animeTitle);
-            const filename = `${title}_Timeline_${timestamp}.${kind}`;
-            downloadDataUrl(dataUrl, filename);
-            setLoading(`saving "${filename}" image`);
-        },
-        onLoading: () =>
-            setLoading(`rendering "${title}" ${kind.toUpperCase()} timeline`),
-        onError: error => {
-            if (kind === 'png') {
-                cleanupClone();
-            }
-            setLoading(null);
-            setError(error);
-        },
-    });
+            },
+            onSuccess: dataUrl => {
+                if (kind === 'png') {
+                    cleanupClone();
+                }
+                const timestamp = new Date().toISOString();
+                const title = toTitleCase(animeTitle);
+                const filename = `${title}_Timeline_${timestamp}.${kind}`;
+                downloadDataUrl(dataUrl, filename);
+                setLoading(`saving "${filename}" image`);
+                setCapturing(false);
+            },
+            onLoading: () =>
+                setLoading(
+                    `rendering "${title}" ${kind.toUpperCase()} timeline`,
+                ),
+            onError: error => {
+                if (kind === 'png') {
+                    cleanupClone();
+                }
+                setCapturing(false);
+                setLoading(null);
+                setError(error);
+            },
+        }),
+        [animeTitle, height, scaleFactor, title, width],
+    );
 
     const [, captureSvg] = useToSvg(config('svg'));
     const [, capturePng] = useToPng(config('png'));
@@ -167,6 +174,7 @@ export const CaptureTimelineModal: React.FC = () => {
             onClose={() => {
                 cleanupClone();
                 setCaptureTimelineModalOpen(false);
+                setCapturing(false);
                 setLoading(null);
                 setError(null);
             }}
@@ -183,16 +191,10 @@ export const CaptureTimelineModal: React.FC = () => {
                     Chrome browser. If PNG rendering fails, try SVG.
                 </h5>
                 <ButtonRow>
-                    <DownloadButton
-                        onClick={capturePng}
-                        disabled={loading !== null}
-                    >
+                    <DownloadButton onClick={capturePng} disabled={capturing}>
                         Download PNG
                     </DownloadButton>
-                    <DownloadButton
-                        onClick={captureSvg}
-                        disabled={loading !== null}
-                    >
+                    <DownloadButton onClick={captureSvg} disabled={capturing}>
                         Download SVG
                     </DownloadButton>
                 </ButtonRow>
