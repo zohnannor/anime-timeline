@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styled, { css } from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import {

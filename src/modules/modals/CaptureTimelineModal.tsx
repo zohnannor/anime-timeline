@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { useToPng, useToSvg } from '@hugocxl/react-to-image';
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT, SCALE_FACTOR_PROPERTY } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { toTitleCase } from '@shared/lib/helpers';
@@ -36,18 +36,20 @@ const Container = styled.div`
     }
 `;
 
+const OVERLAY_CLASSES = [
+    'floatingButtons',
+    'scrollerHoverArea',
+    'crosslines',
+    'tooltipContent',
+] as const;
+
 const isImg = (el: Node): el is HTMLImageElement =>
     el instanceof HTMLImageElement && el.getAttribute('src') !== null;
 
-const filter = (el: Node) =>
+const filter = (el: HTMLElement) =>
     !(el instanceof HTMLElement) ||
     !(
-        [
-            'floatingButtons',
-            'scrollerHoverArea',
-            'crosslines',
-            'tooltipContent',
-        ].some(cls => el.classList.contains(cls)) ||
+        OVERLAY_CLASSES.some(cls => el.classList.contains(cls)) ||
         (isImg(el) && el.complete && el.naturalWidth === 0)
     );
 
@@ -56,6 +58,23 @@ const downloadDataUrl = (dataUrl: string, filename: string) => {
     link.href = dataUrl;
     link.download = filename;
     link.click();
+};
+
+const preparePngClone = () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const root = document.getElementById('root')!;
+    const clone = root.cloneNode(true) as typeof root;
+    clone.id = 'capture-root';
+    clone.style.setProperty(SCALE_FACTOR_PROPERTY, '1px');
+    const classNames = OVERLAY_CLASSES.map(cls => `.${cls}`).join(', ');
+    for (const el of clone.querySelectorAll<HTMLElement>(
+        `${classNames}, img[src]`,
+    )) {
+        if (!filter(el)) {
+            el.remove();
+        }
+    }
+    return document.body.appendChild(clone);
 };
 
 export const CaptureTimelineModal: React.FC = () => {
@@ -70,13 +89,14 @@ export const CaptureTimelineModal: React.FC = () => {
         maxWidth,
         data: { title },
     } = useTimeline();
+    const captureRootRef = useRef<HTMLElement | null>(null);
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const width = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
 
     const scaleFactor = parseFloat(
-        document.documentElement.style.getPropertyValue('--scale-factor'),
+        document.documentElement.style.getPropertyValue(SCALE_FACTOR_PROPERTY),
     );
 
     const [, captureSvg] = useToSvg({
@@ -109,7 +129,9 @@ export const CaptureTimelineModal: React.FC = () => {
     });
 
     const [, capturePng] = useToPng({
-        selector: '#root',
+        selector: '#capture-root',
+        height,
+        width,
         canvasHeight: height,
         canvasWidth: width,
         backgroundColor: '#000',
@@ -118,9 +140,12 @@ export const CaptureTimelineModal: React.FC = () => {
         onStart: () => {
             setLoading(`starting "${title}" PNG timeline capture`);
             setError(null);
+            captureRootRef.current = preparePngClone();
             console.debug(`Real dimensions: ${width}x${height}`);
         },
         onSuccess: dataUrl => {
+            captureRootRef.current?.remove();
+            captureRootRef.current = null;
             const timestamp = new Date().toISOString();
             const title = toTitleCase(animeTitle);
             const filename = `${title}_Timeline_${timestamp}.png`;
@@ -129,6 +154,8 @@ export const CaptureTimelineModal: React.FC = () => {
         },
         onLoading: () => setLoading(`rendering "${title}" timeline`),
         onError: error => {
+            captureRootRef.current?.remove();
+            captureRootRef.current = null;
             setLoading(null);
             setError(error);
         },
@@ -138,6 +165,8 @@ export const CaptureTimelineModal: React.FC = () => {
         <Modal
             isOpen={captureTimelineModalOpen}
             onClose={() => {
+                captureRootRef.current?.remove();
+                captureRootRef.current = null;
                 setCaptureTimelineModalOpen(false);
                 setLoading(null);
                 setError(null);

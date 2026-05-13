@@ -91,7 +91,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
         () => () => {
             /* empty */
         },
-        () => document.querySelector('#modal'),
+        () => document.getElementById('modal'),
         () => null,
     );
 
