@@ -7,6 +7,7 @@ import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { toTitleCase } from '@shared/lib/helpers';
 import { Modal } from '@shared/ui';
+import { HEADERS_WIDTH } from '@timelines/index';
 
 const ButtonRow = styled.div`
     display: flex;
@@ -72,7 +73,7 @@ export const CaptureTimelineModal: React.FC = () => {
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const width = maxWidth(unboundChapterWidth);
+    const width = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
 
     const scaleFactor = parseFloat(
         document.documentElement.style.getPropertyValue('--scale-factor'),
