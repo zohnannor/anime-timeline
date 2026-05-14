@@ -55,9 +55,10 @@ const Box = styled.div<BoxProps>`
             text-underline-offset: 0.12rem;
             text-decoration-thickness: 0.05rem;
 
-        & kbd:not(:has(kbd)) {
-            border-width: 0.05rem;
-            box-shadow: 0 0.05rem 0 rgba(255, 255, 255, 0.5);
+            & kbd:not(:has(kbd)) {
+                border-width: 0.05rem;
+                box-shadow: 0 0.05rem 0 rgba(255, 255, 255, 0.5);
+            }
         }
     }
 `;
