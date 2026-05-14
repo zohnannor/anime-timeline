@@ -100,15 +100,15 @@ export const OPM_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: n =>
-                n > CHAPTERS_TOTAL ?
-                    `X${n - CHAPTERS_TOTAL}`
-                :   `${n}\n(${
+                n <= CHAPTERS_TOTAL ?
+                    `${n}\n(${
                         n -
                         VOLUME_RELEASE_SPLIT_CHAPTERS.findLastIndex(
                             ch => n >= ch + 1,
                         ) -
                         1
-                    })`,
+                    })`
+                :   `X${n - CHAPTERS_TOTAL}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 40,

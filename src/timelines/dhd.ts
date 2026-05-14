@@ -62,7 +62,7 @@ export const DHD_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Volumes and Chapters',
+            sectionLink: 'Volumes and Chapters#List_of_Volumes',
             wikiLink: (_, n) =>
                 n <= CHAPTERS_TOTAL ?
                     n === CHAPTERS_TOTAL ?
@@ -77,9 +77,11 @@ export const DHD_TIMELINE: Timeline = {
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Volumes and Chapters',
+            sectionLink: 'Volumes and Chapters#List_of_Volumes',
             wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ? `Volume ${n}` : 'Volumes and Chapters',
+                n <= VOLUMES_TOTAL ?
+                    `Volume ${n}`
+                :   'Volumes and Chapters#List_of_Volumes',
         },
     },
     data: {

@@ -33,8 +33,8 @@ type ApiResponse = {
 };
 
 const PROXY_URL = 'https://api.allorigins.win/raw?url=';
-const MANGA_API_URL =
-    'https://jumpg-webapi.tokyo-cdn.com/api/title_detailV3?title_id=100037&clang=eng';
+const mangaApiUrl = (titleId: number) =>
+    `https://jumpg-webapi.tokyo-cdn.com/api/title_detailV3?title_id=${titleId}&clang=eng`;
 
 const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
     buf: buffer,
@@ -131,7 +131,7 @@ export default async (): Promise<Date | null> => {
     try {
         // eslint-disable-next-line react-x/purity
         const response = await fetch(
-            `${PROXY_URL}${encodeURIComponent(MANGA_API_URL)}`,
+            `${PROXY_URL}${encodeURIComponent(mangaApiUrl(100037))}`,
         );
         const buffer = new Uint8Array(await response.arrayBuffer());
         const reader = createProtobufReader(buffer);
