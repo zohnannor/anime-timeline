@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Tuple } from '@shared/lib/util';
+import { Add, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
@@ -19,7 +19,9 @@ const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
 const CHAPTERS_TOTAL = 167;
-type VolumesTotal = 26;
+const VOLUMES_TOTAL = 23;
+type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesExtra = 3;
 type SeasonsTotal = 4;
 
 const volumeTitle = (n: number) => `Volume ${n}`;
@@ -62,7 +64,7 @@ export const DHD_TIMELINE: Timeline = {
             titleFontSize: 45,
             sectionLink: 'Volumes and Chapters',
             wikiLink: (_, n) =>
-                n < CHAPTERS_TOTAL + 1 ?
+                n <= CHAPTERS_TOTAL ?
                     n === CHAPTERS_TOTAL ?
                         'Final Chapter'
                     :   `Chapter ${n}`
@@ -76,7 +78,8 @@ export const DHD_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Volumes and Chapters',
-            wikiLink: (_, n) => `Volume ${n}`,
+            wikiLink: (_, n) =>
+                n <= VOLUMES_TOTAL ? `Volume ${n}` : 'Volumes and Chapters',
         },
     },
     data: {
@@ -1224,7 +1227,7 @@ export const DHD_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: () => 'Extra Curses (Volumes 1-8)',
+                title: () => 'Bonus Curses (Volumes 1-8)',
                 cover: () => volumeCover(1),
                 chapters: [
                     {
@@ -1278,7 +1281,7 @@ export const DHD_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: () => 'Extra Curses (Volumes 9-16)',
+                title: () => 'Bonus Curses (Volumes 9-16)',
                 cover: () => volumeCover(9),
                 chapters: [
                     {
@@ -1332,7 +1335,7 @@ export const DHD_TIMELINE: Timeline = {
                 ],
             },
             {
-                title: () => 'Extra Curses (Volumes 17-24)',
+                title: () => 'Bonus Curses (Volumes 17-24)',
                 cover: () => volumeCover(17),
                 chapters: [
                     {
@@ -1385,7 +1388,7 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
         seasons: [
             {
                 title: 'Dorohedoro - Season 1',
