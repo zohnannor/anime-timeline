@@ -55,7 +55,10 @@ export const EVA_TIMELINE: Timeline = {
             wikiLink: (title, n) =>
                 `Volume_${
                     CHAPTER_STOPS.filter(stop => n > stop).length + 1
-                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(' ', '_')}`,
+                }_(Neon_Genesis_Evangelion)#Stage_${n}:_${title.replaceAll(
+                    ' ',
+                    '_',
+                )}`,
         },
         arc: {
             type: 'arc',

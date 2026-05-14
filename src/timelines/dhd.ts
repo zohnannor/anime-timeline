@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Tuple } from '@shared/lib/util';
+import { Add, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
@@ -18,7 +18,10 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
-type VolumesTotal = 23;
+const CHAPTERS_TOTAL = 167;
+const VOLUMES_TOTAL = 23;
+type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesExtra = 3;
 type SeasonsTotal = 4;
 
 const volumeTitle = (n: number) => `Volume ${n}`;
@@ -53,12 +56,19 @@ export const DHD_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
+            numberProcessor: n =>
+                n <= CHAPTERS_TOTAL ? n.toString() : `X${n - CHAPTERS_TOTAL}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Volumes and Chapters',
-            wikiLink: (_, n) => `Chapter ${n}`,
+            sectionLink: 'Volumes and Chapters#List_of_Volumes',
+            wikiLink: (_, n) =>
+                n <= CHAPTERS_TOTAL ?
+                    n === CHAPTERS_TOTAL ?
+                        'Final Chapter'
+                    :   `Chapter ${n}`
+                :   `Bonus Curse ${n - CHAPTERS_TOTAL}`,
             focusable: true,
         },
         volume: {
@@ -67,8 +77,11 @@ export const DHD_TIMELINE: Timeline = {
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Volumes and Chapters',
-            wikiLink: (_, n) => `Volume ${n}`,
+            sectionLink: 'Volumes and Chapters#List_of_Volumes',
+            wikiLink: (_, n) =>
+                n <= VOLUMES_TOTAL ?
+                    `Volume ${n}`
+                :   'Volumes and Chapters#List_of_Volumes',
         },
     },
     data: {
@@ -1215,7 +1228,169 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
+            {
+                title: () => 'Bonus Curses (Volumes 1-8)',
+                cover: () => volumeCover(1),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 1',
+                        date: 'January 30, 2002',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 2',
+                        date: 'September 30, 2002',
+                        pages: 8,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 3',
+                        date: 'June 30, 2003',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 4',
+                        date: 'January 30, 2004',
+                        pages: 20,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 5',
+                        date: 'August 30, 2004',
+                        pages: 4,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 6',
+                        date: 'February 28, 2005',
+                        pages: 18,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 7',
+                        date: 'October 28, 2005',
+                        pages: 10,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 8',
+                        date: 'May 30, 2006',
+                        pages: 10,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: () => 'Bonus Curses (Volumes 9-16)',
+                cover: () => volumeCover(9),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 9',
+                        date: 'January 30, 2007',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 10',
+                        date: 'July 30, 2007',
+                        pages: 16,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 11',
+                        date: 'February 29, 2008',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 12',
+                        date: 'September 30, 2008',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 13',
+                        date: 'May 29, 2009',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 14',
+                        date: 'January 29, 2010',
+                        pages: 10,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 15',
+                        date: 'November 30, 2010',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 16',
+                        date: 'October 28, 2011',
+                        pages: 12,
+                        cover: null,
+                    },
+                ],
+            },
+            {
+                title: () => 'Bonus Curses (Volumes 17-24)',
+                cover: () => volumeCover(17),
+                chapters: [
+                    {
+                        title: () => 'Bonus Curse 17',
+                        date: 'September 28, 2012',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 18',
+                        date: 'June 28, 2013',
+                        pages: 14,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 19',
+                        date: 'June 30, 2014',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 20',
+                        date: 'September 30, 2015',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 21',
+                        date: 'September 30, 2016',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 22',
+                        date: 'June 30, 2017',
+                        pages: 12,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 23',
+                        date: 'September 30, 2017',
+                        pages: 8,
+                        cover: null,
+                    },
+                    {
+                        title: () => 'Bonus Curse 24',
+                        date: 'November 12, 2018',
+                        pages: 13,
+                        cover: null,
+                    },
+                ],
+            },
+        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
         seasons: [
             {
                 title: 'Dorohedoro - Season 1',
@@ -1317,7 +1492,7 @@ export const DHD_TIMELINE: Timeline = {
                 episodes: [],
             },
             { chapters: { from: 74, to: 120 } },
-            { chapters: { from: 121, to: 167 } },
+            { chapters: { from: 121, to: CHAPTERS_TOTAL } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             4: 3,
