@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import {
     SETTINGS_FUNCTIONS,
     SettingsValues,
@@ -20,6 +21,14 @@ const ButtonSection = styled.div`
     top: 1.26rem;
     right: 1.26rem;
     z-index: 100;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 0.3rem;
+        border-radius: 0.5rem;
+        gap: 0.4rem;
+        top: 0.6rem;
+        right: 0.6rem;
+    }
 `;
 
 const FloatingButtonTooltip = styled.div`
@@ -31,6 +40,12 @@ const FloatingButtonTooltip = styled.div`
     padding: 0.5rem;
     font-size: 1.2rem;
     gap: 0.8rem;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: 0.8rem;
+        padding: 0.3rem;
+        gap: 0.4rem;
+    }
 `;
 
 export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (

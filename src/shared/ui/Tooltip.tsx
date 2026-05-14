@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSimpleHover } from '@shared/lib/hooks';
 
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -73,6 +74,10 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
                 transform-origin: ${OPPOSITE[$placement]};
                 transition: all 0.2s ease-in-out;
             `}
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: 0.8rem;
+    }
 `;
 
 export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({

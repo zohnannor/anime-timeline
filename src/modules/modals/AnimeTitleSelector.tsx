@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { sum, typedEntries } from '@shared/lib/util';
@@ -44,6 +45,15 @@ const TitleButton = styled.div`
     & > img {
         width: 4rem;
     }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        gap: 1rem;
+        padding: 0.5rem 0;
+
+        & > img {
+            width: 2.5rem;
+        }
+    }
 `;
 
 const TitleContainer = styled.div`
@@ -54,6 +64,12 @@ const TitleContainer = styled.div`
     width: 80svw;
     max-width: 60rem;
     font-size: 1.5rem;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 0.4rem 1rem;
+        width: 90svw;
+        font-size: 1rem;
+    }
 `;
 
 const TitleWrapper = styled.div`

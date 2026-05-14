@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config/ui';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { useWindowScroll } from '@shared/lib/hooks';
 import useMousePosition from '@shared/lib/hooks/useMousePosition';
@@ -27,6 +28,18 @@ const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
             css`
                 bottom: 3.2rem;
             `}
+    }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        height: 3rem;
+
+        & > div {
+            ${({ $visible }) =>
+                $visible &&
+                css`
+                    bottom: 2rem;
+                `}
+        }
     }
 `;
 
@@ -55,6 +68,13 @@ const ScrollerWrapper = styled.div.attrs<ScrollProps>(({ $offset }) => {
     display: flex;
     align-items: center;
     filter: drop-shadow(0 0 0.32rem rgba(0, 0, 0, 0.5));
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        height: 0.4rem;
+        width: 16rem;
+        bottom: -2.5rem;
+        border-width: 0.05rem;
+    }
 `;
 
 const IconScroller = styled(IconButton)`
