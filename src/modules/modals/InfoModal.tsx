@@ -2,6 +2,7 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { Link, Modal } from '@shared/ui';
@@ -44,6 +45,21 @@ const Box = styled.div<BoxProps>`
         padding: 0.04rem 0.24rem;
         font-size: 0.8em;
         line-height: 1;
+    }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 0.4rem 1rem;
+        font-size: 1rem;
+
+        & a {
+            text-underline-offset: 0.12rem;
+            text-decoration-thickness: 0.05rem;
+
+            & kbd:not(:has(kbd)) {
+                border-width: 0.05rem;
+                box-shadow: 0 0.05rem 0 rgba(255, 255, 255, 0.5);
+            }
+        }
     }
 `;
 

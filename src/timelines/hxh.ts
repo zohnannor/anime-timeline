@@ -22,7 +22,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 const CHAPTERS_TOTAL = 410;
 const VOLUMES_TOTAL = 39;
 type VolumesTotal = typeof VOLUMES_TOTAL;
-type VolumexExtra = 1;
+type VolumesExtra = 1;
 type ArcsTotal = 7;
 type SeasonsTotal = 2;
 
@@ -70,16 +70,16 @@ export const HXH_TIMELINE: Timeline = {
             fit: 'contain',
             backgroundColor: 'white',
             numberProcessor: n =>
-                n > CHAPTERS_TOTAL ?
-                    String.fromCharCode(
+                n <= CHAPTERS_TOTAL ?
+                    n.toString()
+                :   String.fromCharCode(
                         n - CHAPTERS_TOTAL - 1 + 'A'.charCodeAt(0),
-                    )
-                :   n.toString(),
+                    ),
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Volumes and Chapters',
             wikiLink: (title, n) =>
-                n > CHAPTERS_TOTAL ? title : `Chapter ${n}`,
+                n <= CHAPTERS_TOTAL ? `Chapter ${n}` : title,
             focusable: true,
         },
         volume: {
@@ -2815,7 +2815,7 @@ export const HXH_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumexExtra>>,
+        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
         arcs: [
             {
                 title: 'Hunter Exam',

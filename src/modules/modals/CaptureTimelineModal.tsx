@@ -22,6 +22,10 @@ const DownloadButton = styled.button`
     font-size: 1.25rem;
     border-color: white;
 
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: 1rem;
+    }
+
     &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
@@ -38,6 +42,8 @@ const Container = styled.div`
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {
         width: 80svw;
+        padding: 0.4rem 1rem;
+        font-size: 1rem;
     }
 `;
 

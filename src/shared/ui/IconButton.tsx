@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { Icon } from '@timelines/types';
 
 import { ThumbnailImage } from './ThumbnailImage';
@@ -37,6 +38,20 @@ const IconWrapper = styled.div<IconWrapperProps>`
         height: 100%;
         position: absolute;
         inset: 0;
+    }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        & img,
+        & svg,
+        & div {
+            width: 2rem;
+        }
+
+        & svg {
+            height: 2rem;
+            padding: 0.25rem;
+            border-width: 0.06rem;
+        }
     }
 `;
 

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 
 export type CrossLinesProps = {
@@ -27,6 +28,10 @@ const CrossLine = styled.div<CrossLineProps>`
     height: 200svh;
     top: -100svh;
     box-shadow: 0 0 0.12rem 0.12rem rgba(255, 0, 0, 0.8);
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        box-shadow: 0 0 0.08rem 0.08rem rgba(255, 0, 0, 0.8);
+    }
 
     &::after {
         content: '';

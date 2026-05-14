@@ -3,6 +3,7 @@ import { PropsWithChildren, useSyncExternalStore } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { HeaderButton } from '@shared/ui/Modal';
 
 const ShadowOverlay = styled.div`
@@ -33,7 +34,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
     ${({ $mobileFullscreen }) =>
         $mobileFullscreen &&
         css`
-            @media (max-width: 480px) {
+            @media (max-width: ${MOBILE_BREAKPOINT}px) {
                 height: 100svh;
                 max-height: 100svh;
                 inset: 0;
@@ -57,16 +58,34 @@ const Header = styled.div`
         height: 2rem;
         width: 2rem;
     }
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 1rem;
+        border-bottom-width: 0.06rem;
+
+        & svg {
+            height: 1.2rem;
+            width: 1.2rem;
+        }
+    }
 `;
 
 const Title = styled.h2`
     margin: 0;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        font-size: 1rem;
+    }
 `;
 
 const HeaderButtonContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        gap: 0.5rem;
+    }
 `;
 
 type ModalProps = {
