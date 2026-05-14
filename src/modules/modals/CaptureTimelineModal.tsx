@@ -47,6 +47,31 @@ const Container = styled.div`
     }
 `;
 
+const RadioGroup = styled.div`
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+`;
+
+const RadioLabel = styled.label`
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+`;
+
+const RadioInput = styled.input`
+    accent-color: black;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+`;
+
+const ErrorText = styled.div`
+    color: red;
+`;
+
 const OVERLAY_CLASSES = [
     'floatingButtons',
     'scrollerHoverArea',
@@ -71,12 +96,12 @@ const downloadDataUrl = (dataUrl: string, filename: string) => {
     link.click();
 };
 
-const preparePngClone = () => {
+const preparePngClone = (captureScaleFactor: number) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const root = document.getElementById('root')!;
     const clone = root.cloneNode(true) as typeof root;
     clone.id = 'capture-root';
-    clone.style.setProperty(SCALE_FACTOR_PROPERTY, '1px');
+    clone.style.setProperty(SCALE_FACTOR_PROPERTY, `${captureScaleFactor}px`);
     const classNames = OVERLAY_CLASSES.map(cls => `.${cls}`).join(', ');
     for (const el of clone.querySelectorAll<HTMLElement>(
         `${classNames}, img[src]`,
@@ -88,28 +113,32 @@ const preparePngClone = () => {
     return document.body.appendChild(clone);
 };
 
-export const CaptureTimelineModal: React.FC = () => {
-    const {
-        captureTimelineModalOpen,
-        setCaptureTimelineModalOpen,
-        unboundChapterWidth,
-        animeTitle,
-    } = useSettings();
-    const {
-        maxHeight: height,
-        maxWidth,
-        data: { title },
-    } = useTimeline();
+type HookOpts = {
+    fullWidth: number;
+    maxHeight: number;
+    animeTitle: string;
+    title: string;
+};
+
+const useCaptureTimeline = ({
+    animeTitle,
+    title,
+    fullWidth,
+    maxHeight,
+}: HookOpts) => {
     const captureRootRef = useRef<HTMLElement | null>(null);
     const [loading, setLoading] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [capturing, setCapturing] = useState(false);
-
-    const width = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
+    const [atViewportHeight, setAtViewportHeight] = useState(false);
 
     const scaleFactor = parseFloat(
         document.documentElement.style.getPropertyValue(SCALE_FACTOR_PROPERTY),
     );
+    const scaledWidth = Math.round(fullWidth * scaleFactor);
+    const scaledHeight = Math.round(maxHeight * scaleFactor);
+    const width = atViewportHeight ? scaledWidth : fullWidth;
+    const height = atViewportHeight ? scaledHeight : maxHeight;
 
     const cleanupClone = () => {
         captureRootRef.current?.remove();
@@ -127,7 +156,7 @@ export const CaptureTimelineModal: React.FC = () => {
             skipAutoScale: true,
             filter,
             style:
-                kind === 'svg' ?
+                kind === 'svg' && !atViewportHeight ?
                     {
                         transform: `scale(${1 / scaleFactor})`,
                         transformOrigin: 'top left',
@@ -135,13 +164,18 @@ export const CaptureTimelineModal: React.FC = () => {
                 :   {},
             onStart: () => {
                 setCapturing(true);
-                console.debug(`Real dimensions: ${width}x${height}`);
+                console.debug(`Real dimensions: ${fullWidth}x${maxHeight}`);
+                console.debug(
+                    `Viewport dimensions: ${scaledWidth}x${scaledHeight}`,
+                );
                 setLoading(
                     `starting "${title}" ${kind.toUpperCase()} timeline capture`,
                 );
                 setError(null);
                 if (kind === 'png') {
-                    captureRootRef.current = preparePngClone();
+                    captureRootRef.current = preparePngClone(
+                        atViewportHeight ? scaleFactor : 1,
+                    );
                 }
             },
             onSuccess: dataUrl => {
@@ -171,21 +205,80 @@ export const CaptureTimelineModal: React.FC = () => {
                 console.warn('Image failed during capture:', args);
             },
         }),
-        [animeTitle, height, scaleFactor, title, width],
+        [
+            animeTitle,
+            atViewportHeight,
+            fullWidth,
+            height,
+            maxHeight,
+            scaleFactor,
+            scaledHeight,
+            scaledWidth,
+            title,
+            width,
+        ],
     );
 
     const [, captureSvg] = useToSvg(config('svg'));
     const [, capturePng] = useToPng(config('png'));
 
+    const resetCapture = () => {
+        cleanupClone();
+        setCapturing(false);
+        setLoading(null);
+        setError(null);
+    };
+
+    return {
+        capturePng,
+        captureSvg,
+        capturing,
+        loading,
+        error,
+        atViewportHeight,
+        setAtViewportHeight,
+        resetCapture,
+        width,
+        height,
+        scaledWidth,
+        scaledHeight,
+    };
+};
+
+export const CaptureTimelineModal: React.FC = () => {
+    const {
+        captureTimelineModalOpen,
+        setCaptureTimelineModalOpen,
+        unboundChapterWidth,
+        animeTitle,
+    } = useSettings();
+    const {
+        maxHeight,
+        maxWidth,
+        data: { title },
+    } = useTimeline();
+
+    const fullWidth = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
+
+    const {
+        capturePng,
+        captureSvg,
+        capturing,
+        loading,
+        error,
+        atViewportHeight,
+        setAtViewportHeight,
+        resetCapture,
+        scaledWidth,
+        scaledHeight,
+    } = useCaptureTimeline({ fullWidth, maxHeight, animeTitle, title });
+
     return (
         <Modal
             isOpen={captureTimelineModalOpen}
             onClose={() => {
-                cleanupClone();
+                resetCapture();
                 setCaptureTimelineModalOpen(false);
-                setCapturing(false);
-                setLoading(null);
-                setError(null);
             }}
             title='Are you sure?'
             $bgColor='rgba(0, 0, 0, 0.85)'
@@ -199,6 +292,26 @@ export const CaptureTimelineModal: React.FC = () => {
                     rendered anyway (UI). If something renders incorrectly, try
                     Chrome browser. If PNG rendering fails, try SVG.
                 </h5>
+                <RadioGroup>
+                    <RadioLabel>
+                        <RadioInput
+                            type='radio'
+                            name='captureMode'
+                            checked={!atViewportHeight}
+                            onChange={() => setAtViewportHeight(false)}
+                        />
+                        Full resolution ({fullWidth}x{maxHeight})
+                    </RadioLabel>
+                    <RadioLabel>
+                        <RadioInput
+                            type='radio'
+                            name='captureMode'
+                            checked={atViewportHeight}
+                            onChange={() => setAtViewportHeight(true)}
+                        />
+                        Viewport height ({scaledWidth}x{scaledHeight})
+                    </RadioLabel>
+                </RadioGroup>
                 <ButtonRow>
                     <DownloadButton onClick={capturePng} disabled={capturing}>
                         Download PNG
@@ -209,7 +322,7 @@ export const CaptureTimelineModal: React.FC = () => {
                 </ButtonRow>
                 <h6>(this might take a while)</h6>
                 {loading !== null && <div>Loading ({loading}...)</div>}
-                {error && <div style={{ color: 'red' }}>{error}</div>}
+                {error && <ErrorText>{error}</ErrorText>}
             </Container>
         </Modal>
     );
