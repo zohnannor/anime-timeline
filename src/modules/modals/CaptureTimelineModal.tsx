@@ -161,6 +161,9 @@ export const CaptureTimelineModal: React.FC = () => {
                 setLoading(null);
                 setError(error);
             },
+            onImageErrorHandler: (...args: unknown[]) => {
+                console.warn('Image failed during capture:', args);
+            },
         }),
         [animeTitle, height, scaleFactor, title, width],
     );
