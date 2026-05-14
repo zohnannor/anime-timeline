@@ -32,8 +32,11 @@ export const TimelineProvider: React.FC<PropsWithChildren> = ({ children }) => {
                     [animeTitle]: timeline,
                 }));
             })
-            .catch(() => {
-                console.error(`Failed to load \`${animeTitle}\` timeline`);
+            .catch((err: unknown) => {
+                console.error(
+                    `Failed to load \`${animeTitle}\` timeline:`,
+                    err,
+                );
             });
 
         return () => {

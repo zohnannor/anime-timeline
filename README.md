@@ -124,4 +124,5 @@ On Arch Linux, install `imagemagick` and `libwebp-utils` packages.
 
 ### License
 
-This project is licensed under the MIT License. See the [`LICENSE`](./LICENSE) file for details.
+This project is licensed under the MIT License. See the [`LICENSE`](./LICENSE)
+file for details.
