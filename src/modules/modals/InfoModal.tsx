@@ -2,7 +2,7 @@ import CSS from 'csstype';
 import React from 'react';
 import styled from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { Link, Modal } from '@shared/ui';

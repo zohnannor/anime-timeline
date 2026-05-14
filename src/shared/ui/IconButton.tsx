@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { Icon } from '@timelines/types';
 
 import { ThumbnailImage } from './ThumbnailImage';

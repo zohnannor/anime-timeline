@@ -3,7 +3,7 @@ import { PropsWithChildren, useSyncExternalStore } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { HeaderButton } from '@shared/ui/Modal';
 
 const ShadowOverlay = styled.div`
@@ -110,7 +110,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
         () => () => {
             /* empty */
         },
-        () => document.querySelector('#modal'),
+        () => document.getElementById('modal'),
         () => null,
     );
 

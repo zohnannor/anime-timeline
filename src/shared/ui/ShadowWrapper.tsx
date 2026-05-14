@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
+import { scale } from '@shared/lib/helpers';
 
 type ShadowProps = {
     $invertBorder?: boolean | undefined;
@@ -18,7 +19,7 @@ const Shadow = styled.div<ShadowProps>`
     height: 100%;
     // TODO: maybe replace with:
     /* border: 0.1rem solid ${getShadowColor}; */
-    box-shadow: inset 0 0 0 0.1rem ${getShadowColor};
+    box-shadow: inset 0 0 0 ${scale(5)} ${getShadowColor};
     pointer-events: none;
 
     @media (max-width: ${MOBILE_BREAKPOINT}px) {

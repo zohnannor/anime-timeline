@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 
 export const IconWrapper = styled.div<{ $filter?: string | undefined }>`
     display: flex;

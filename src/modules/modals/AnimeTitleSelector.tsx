@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { sum, typedEntries } from '@shared/lib/util';

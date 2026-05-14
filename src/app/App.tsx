@@ -10,11 +10,11 @@ import {
 } from '@modules/modals';
 import { Scroller } from '@modules/Scroller';
 import { TimeLineHeaders, TimelineSection } from '@modules/timeline';
-import { MOBILE_BREAKPOINT } from '@shared/config/ui';
+import { MOBILE_BREAKPOINT, SCALE_FACTOR_PROPERTY } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
 import { typedValues } from '@shared/lib/util';
-import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { FLOATING_BUTTONS } from '@timelines/index';
 
 const AppContainer = styled.div`
@@ -81,7 +81,7 @@ const App: React.FC = () => {
             maxHeight,
         } = timeline;
         document.documentElement.style.setProperty(
-            '--scale-factor',
+            SCALE_FACTOR_PROPERTY,
             `${height / maxHeight}px`,
         );
         document.title = `${title} Timeline`;
