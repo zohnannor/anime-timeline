@@ -24,7 +24,7 @@ type SeasonsTotal = 5;
 const CHAPTERS_TOTAL = 235;
 const VOLUMES_TOTAL = 42;
 type VolumesTotal = typeof VOLUMES_TOTAL;
-type VolumexExtra = 6;
+type VolumesExtra = 6;
 type SagasTotal = 4;
 
 const volumeCover = (n: number) =>
@@ -2058,7 +2058,7 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumexExtra>>,
+        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
         sagas: [
             {
                 title: 'Introduction',
