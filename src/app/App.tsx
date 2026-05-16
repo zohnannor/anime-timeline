@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { FloatingButton, FloatingButtons } from '@modules/FloatingButtons';
@@ -14,8 +14,8 @@ import { MOBILE_BREAKPOINT, SCALE_FACTOR_PROPERTY } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimelineContext } from '@shared/contexts/TimelineContext';
 import { useGlobalShortcuts, useWindowSize } from '@shared/lib/hooks';
-import { typedValues } from '@shared/lib/util';
-import { FLOATING_BUTTONS } from '@timelines/index';
+import { isMobileDevice, typedValues } from '@shared/lib/util';
+import { getFloatingButtons } from '@timelines/index';
 
 const AppContainer = styled.div`
     display: flex;
@@ -71,6 +71,15 @@ const App: React.FC = () => {
 
     useGlobalShortcuts();
 
+    const floatingButtons = useMemo(
+        () =>
+            getFloatingButtons(
+                isMobileDevice(),
+                timeline?.data.volumes.some(vol => vol.extra) ?? false,
+            ),
+        [timeline],
+    );
+
     useEffect(() => {
         if (timeline === null) {
             return;
@@ -111,7 +120,7 @@ const App: React.FC = () => {
             <AppContainer className='appContainer'>
                 {renderUi && (
                     <FloatingButtons>
-                        {FLOATING_BUTTONS.map(({ icon, title, option }) => (
+                        {floatingButtons.map(({ icon, title, option }) => (
                             <FloatingButton
                                 key={icon}
                                 icon={icons[icon]}

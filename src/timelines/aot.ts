@@ -6,6 +6,7 @@ import {
     CameraIcon,
     EmptyIcon,
     ExpandIcon,
+    ExtraIcon,
     FitIcon,
     InfoIcon,
     ListIcon,
@@ -1988,6 +1989,7 @@ export const AOT_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

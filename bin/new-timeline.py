@@ -136,9 +136,7 @@ def create_new_timeline(title: str | None = None) -> None:
             )
         )
 
-        volumes_objects = "\n".join(
-            [
-                f"""
+        volumes_objects = "\n".join([f"""
             {{
                 title: volumeTitle,
                 cover: volumeCover,
@@ -150,30 +148,15 @@ def create_new_timeline(title: str | None = None) -> None:
                         cover: null,
                     }},
                 ],
-            }},""".strip(
-                    "\n"
-                )
-            ]
-            * volumes
-        )
-        arc_objects = "\n".join(
-            [
-                f"""
+            }},""".strip("\n")] * volumes)
+        arc_objects = "\n".join([f"""
             {{
                 title: 'Name...',
                 cover: 'filename',
                 offset: {{ x: 0, y: 0 }},
                 chapters: {{ from: 1, }},
-            }},""".strip(
-                    "\n"
-                )
-            ]
-            * arcs
-        )
-        season_objects = (
-            "\n".join(
-                [
-                    f"""
+            }},""".strip("\n")] * arcs)
+        season_objects = "\n".join([f"""
             {{
                 title: '{title} (Anime)',
                 cover: () => 'filename',
@@ -188,15 +171,7 @@ def create_new_timeline(title: str | None = None) -> None:
                         chapters: {{ from: 1, to: 1 }},
                     }},
                 ],
-            }},""".strip(
-                        "\n"
-                    )
-                ]
-                * seasons
-            )
-            if seasons != 0
-            else ""
-        )
+            }},""".strip("\n")] * seasons) if seasons != 0 else ""
         seasons_data = (
             f"""seasons: [
 {season_objects}

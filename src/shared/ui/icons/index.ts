@@ -3,6 +3,7 @@ export { CalendarIcon } from './calendar';
 export { CameraIcon } from './camera';
 export { EmptyIcon } from './empty';
 export { ExpandIcon } from './expand';
+export { ExtraIcon } from './extra';
 export { FitIcon } from './fit';
 export { InfoIcon } from './info';
 export { ListIcon } from './list';

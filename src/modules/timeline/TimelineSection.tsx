@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { Timeline } from '@modules/timeline/Timeline';
 import { TimelineSectionItemComponent } from '@modules/timeline/TimelineSectionItemComponent';
+import { useSettings } from '@shared/contexts/SettingsContext';
 import { useTimeline } from '@shared/contexts/TimelineContext';
 import { scale } from '@shared/lib/helpers';
 import { ResolvedSectionItem } from '@timelines/resolved';
@@ -33,6 +34,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
     const {
         data: { episodes, seasons, sagas, arcs, chapters, volumes },
     } = useTimeline();
+    const { showExtraChapters } = useSettings();
 
     if (type === 'timeline') {
         return <Timeline />;
@@ -56,8 +58,11 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         : type === 'arc' ?
             parentNumber ? (arcs ?? []).filter(arc => arc.saga === parentNumber)
             :   (arcs ?? [])
-        : type === 'chapter' ? chapters
-        : volumes;
+        : type === 'chapter' ?
+            showExtraChapters ? chapters
+            :   chapters.filter(ch => !ch.extra)
+        : showExtraChapters ? volumes
+        : volumes.filter(vol => !vol.extra);
 
     const entityList = entities();
 

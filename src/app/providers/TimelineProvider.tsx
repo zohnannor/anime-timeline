@@ -10,8 +10,8 @@ import { useSettings } from '@shared/contexts/SettingsContext';
 import { TimelineContext } from '@shared/contexts/TimelineContext';
 import { throwError, typedFromEntries } from '@shared/lib/util';
 import { loadTimeline } from '@timelines/registry';
-import { AnimeTitle, TITLES } from '@timelines/types';
 import { ResolvedTimeline } from '@timelines/resolved';
+import { AnimeTitle, TITLES } from '@timelines/types';
 
 export const TimelineProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const { animeTitle } = useSettings();

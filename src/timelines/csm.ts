@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
+import { ExtraIcon } from '@shared/ui/icons';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
@@ -1848,6 +1849,7 @@ export const CSM_TIMELINE: Timeline = {
             'toggle-cross-lines': 'pochita6',
             'open-chapter-calendar': 'pochita4',
             'toggle-always-show-titles': 'pochita5',
+            'toggle-extra-chapters': ExtraIcon, // has no extra chapters
             'capture-timeline': 'pochita7',
         },
         socialLinks: [

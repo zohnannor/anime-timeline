@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Add, Tuple } from '@shared/lib/util';
+import { Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -1228,6 +1229,8 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => 'Bonus Curses (Volumes 1-8)',
                 cover: () => volumeCover(1),
@@ -1390,7 +1393,7 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         seasons: [
             {
                 title: 'Dorohedoro - Season 1',
@@ -1512,6 +1515,7 @@ export const DHD_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

@@ -72,6 +72,7 @@ export type Icons = {
     'toggle-cross-lines': Icon;
     'open-chapter-calendar': Icon;
     'toggle-always-show-titles': Icon;
+    'toggle-extra-chapters': Icon;
     'capture-timeline': Icon;
 };
 
@@ -83,6 +84,7 @@ export type SocialLink = {
 export type TimelineData = {
     title: string;
     volumes: NonEmptyArray<Volume>;
+    extraChapters?: NonEmptyArray<Volume>;
 } & ExactUnion<
     | { sagas: NonEmptyArray<Saga> }
     | { arcs: NonEmptyArray<Arc> }

@@ -5,6 +5,7 @@ import {
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -3178,6 +3179,7 @@ export const BERSERK_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

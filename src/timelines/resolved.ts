@@ -42,11 +42,13 @@ export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> & {
     date: Date;
     width: WidthResolver;
     volume: number;
+    extra?: boolean;
 } & ResolvedTemplates;
 
 type ResolvedVolume = Omit<Volume, 'title' | 'cover' | 'chapters'> & {
     cover: string | null;
     width: WidthResolver;
+    extra?: boolean;
 } & ResolvedTemplates;
 
 type ResolvedArc = Omit<Arc, 'chapters'> & {
@@ -124,7 +126,10 @@ export type ResolvedTimeline = {
     layout: ResolvedTimelineSectionLayout;
     data: ResolvedTimelineData;
     maxHeight: number;
-    maxWidth: WidthResolver;
+    maxWidth: (
+        _unboundChapterWidth: boolean,
+        _showExtraChapters?: boolean,
+    ) => number;
 };
 
 const DEFAULT_VOLUME_WIDTH = 1000;
@@ -143,6 +148,7 @@ const resolveTimelineData = (
     {
         title,
         volumes: rawVolumes,
+        extraChapters: rawExtraChapters,
         sagas: rawSagas,
         arcs: rawArcs,
         seasons: rawSeasons,
@@ -169,10 +175,16 @@ const resolveTimelineData = (
 
     let globalChapterIdx = 0;
 
+    const allRawVolumes: Volume[] = [
+        ...rawVolumes,
+        ...(rawExtraChapters ?? []),
+    ];
+
     for (const [
         volumeIdx,
         { title: rawTitle, cover: rawCover, chapters: rawChapters },
-    ] of rawVolumes.entries()) {
+    ] of allRawVolumes.entries()) {
+        const extra = volumeIdx >= rawVolumes.length;
         const volumeNumber = volumeIdx + 1;
         const pagesInVolume = sum(rawChapters.map(ch => ch.pages));
 
@@ -204,6 +216,7 @@ const resolveTimelineData = (
                         chapterWidthBounded
                     ),
                 volume: volumeIdx,
+                ...(extra ? { extra } : {}),
                 title,
                 number: chapterTemplates.numberProcessor(chapterNumber, title),
                 wikiLink: chapterTemplates.wikiLink(title, chapterNumber),
@@ -225,6 +238,7 @@ const resolveTimelineData = (
             cover: maybeEntityCallback(rawCover, volumeNumber, title),
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
+            ...(extra ? { extra } : {}),
             title: volumeTemplates.titleProcessor(title, volumeNumber),
             number: volumeTemplates.numberProcessor(volumeNumber, title),
             wikiLink: volumeTemplates.wikiLink(title, volumeNumber),
@@ -483,8 +497,13 @@ export const resolveTimeline = ({
                 .filter(sec => sec.type !== 'timeline')
                 .map(sec => sec.height),
         ) + TIMELINE_HEIGHT;
-    const maxWidth: WidthResolver = unboundChapterWidth =>
-        sum(data.volumes.map(vol => vol.width(unboundChapterWidth)));
+    const maxWidth = (unboundChapterWidth: boolean, showExtraChapters = true) =>
+        sum(
+            (showExtraChapters ?
+                data.volumes
+            :   data.volumes.filter(vol => !vol.extra)
+            ).map(vol => vol.width(unboundChapterWidth)),
+        );
 
     return { layout, data, maxHeight, maxWidth };
 };

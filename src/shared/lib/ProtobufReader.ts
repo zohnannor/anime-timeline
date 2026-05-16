@@ -1,5 +1,6 @@
-import { throwError } from '@shared/lib/util';
 import * as varint from 'varint';
+
+import { throwError } from '@shared/lib/util';
 
 type ProtobufReader = {
     buf: Uint8Array;
