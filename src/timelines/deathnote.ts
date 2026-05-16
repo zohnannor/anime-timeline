@@ -21,7 +21,8 @@ const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = 200;
 
 const CHAPTERS_TOTAL = 108;
-type VolumesTotal = 13;
+type VolumesTotal = 12;
+type VolumesExtra = 1;
 type ArcsTotal = 2;
 type SeasonsTotal = 1;
 
@@ -836,6 +837,8 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                     },
                 ],
             },
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => 'How to Read',
                 cover: () => 'How_to_Read_13',
@@ -860,7 +863,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         arcs: [
             {
                 title: 'Part I',
