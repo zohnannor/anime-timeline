@@ -20,7 +20,6 @@ const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
-const CHAPTERS_TOTAL = 410;
 const VOLUMES_TOTAL = 39;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumesExtra = 1;
@@ -70,17 +69,14 @@ export const HXH_TIMELINE: Timeline = {
             height: CHAPTER_HEIGHT,
             fit: 'contain',
             backgroundColor: 'white',
-            numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ?
-                    n.toString()
-                :   String.fromCharCode(
-                        n - CHAPTERS_TOTAL - 1 + 'A'.charCodeAt(0),
-                    ),
+            numberProcessor: (n, _, extra) =>
+                extra ?
+                    String.fromCharCode(n - 1 + 'A'.charCodeAt(0))
+                :   n.toString(),
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (title, n) =>
-                n <= CHAPTERS_TOTAL ? `Chapter ${n}` : title,
+            wikiLink: (title, n, extra) => (extra ? title : `Chapter ${n}`),
             focusable: true,
         },
         volume: {
@@ -2859,7 +2855,7 @@ export const HXH_TIMELINE: Timeline = {
                 title: 'Succession Contest',
                 cover: 'Hunter_x_Hunter_Succession_Contest_arc',
                 offset: { x: 0, y: 5090 },
-                chapters: { from: 340, to: CHAPTERS_TOTAL },
+                chapters: { from: 340 },
             },
         ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
@@ -3935,7 +3931,7 @@ export const HXH_TIMELINE: Timeline = {
                     },
                 ],
             },
-            { chapters: { from: 340, to: CHAPTERS_TOTAL } },
+            { chapters: { from: 340 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             6: 8,

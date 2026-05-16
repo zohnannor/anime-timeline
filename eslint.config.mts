@@ -54,6 +54,7 @@ export default defineConfig([
             'max-statements': ['error', 30, { ignoreTopLevelFunctions: true }],
             complexity: ['error', 35],
             'max-lines': ['error', 1000],
+            'max-params': ['error', 5], // gets in a way with callbacks
             'capitalized-comments': 'off', // not important, style preference
             'no-inline-comments': 'off', // useful
             // unfortunately, it can't enforce sorting the keys like in the

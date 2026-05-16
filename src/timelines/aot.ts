@@ -20,7 +20,6 @@ const VOLUME_HEIGHT = 1511;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 
-const CHAPTERS_TOTAL = 139;
 type VolumesTotal = 34;
 type VolumesExtra = 1;
 type ArcsTotal = 9;
@@ -73,17 +72,19 @@ export const AOT_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: (n, title) =>
-                n <= CHAPTERS_TOTAL ? n.toString() : title,
+            numberProcessor: (n, title, extra) =>
+                extra ? title : n.toString(),
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Attack on Titan chapters',
-            wikiLink: (title, n) =>
-                n <= CHAPTERS_TOTAL ? `Chapter ${n}`
-                : n === CHAPTERS_TOTAL + 1 ? `${title} (Chapter)`
-                : title,
+            wikiLink: (title, n, extra) =>
+                extra ?
+                    n === 1 ?
+                        `${title} (Chapter)`
+                    :   title
+                :   `Chapter ${n}`,
             focusable: true,
         },
         volume: {

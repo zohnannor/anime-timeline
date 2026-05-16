@@ -19,7 +19,6 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
-const CHAPTERS_TOTAL = 167;
 const VOLUMES_TOTAL = 23;
 type VolumesTotal = typeof VOLUMES_TOTAL;
 type VolumesExtra = 3;
@@ -57,19 +56,16 @@ export const DHD_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ? n.toString() : `X${n - CHAPTERS_TOTAL}`,
+            numberProcessor: (n, _, extra) => (extra ? `X${n}` : n.toString()),
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Volumes and Chapters#List_of_Volumes',
-            wikiLink: (_, n) =>
-                n <= CHAPTERS_TOTAL ?
-                    n === CHAPTERS_TOTAL ?
-                        'Final Chapter'
-                    :   `Chapter ${n}`
-                :   `Bonus Curse ${n - CHAPTERS_TOTAL}`,
+            wikiLink: (_, n, extra) =>
+                extra ? `Bonus Curse ${n}`
+                : n === 167 ? 'Final Chapter'
+                : `Chapter ${n}`,
             focusable: true,
         },
         volume: {
@@ -1495,7 +1491,7 @@ export const DHD_TIMELINE: Timeline = {
                 episodes: [],
             },
             { chapters: { from: 74, to: 120 } },
-            { chapters: { from: 121, to: CHAPTERS_TOTAL } },
+            { chapters: { from: 121 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             4: 3,

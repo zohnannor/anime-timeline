@@ -183,7 +183,7 @@ export const Timeline: React.FC = () => {
         () =>
             showExtraChapters ? chapters : (
                 asNonEmpty(
-                    chapters.filter(chapter => !chapter.extra),
+                    chapters.filter(ch => !ch.extra),
                     'visibleChapters',
                 )
             ),
