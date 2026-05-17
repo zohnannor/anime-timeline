@@ -22,8 +22,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const VOLUMES_TOTAL = 42;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 42;
 type VolumesExtra = 6;
 type SagasTotal = 4;
 
@@ -46,7 +45,7 @@ const chapterLink = (title: string, n: number, extra: boolean): string =>
         : n <= 138 ? `Chapter ${n - 4} (Online)`
         : n <= 139 ? `Chapter ${n}`
         : `Chapter ${n - 5} (Online)`
-    : title;
+    :   title;
 const VOLUME_RELEASE_SPLIT_CHAPTERS = [84, 90, 96, 117, 138] as const;
 
 export const OPM_TIMELINE: Timeline = {
@@ -57,7 +56,7 @@ export const OPM_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'One-Punch Man (anime)',
-            wikiLink: title => `Animated_Media#${title.replaceAll(' ', '_')}`,
+            wikiLink: title => `Animated Media#${title.replaceAll(' ', '_')}`,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -114,7 +113,7 @@ export const OPM_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 40,
             titleFontSize: 40,
-            sectionLink: 'Chapters_and_Volumes#Volume_List',
+            sectionLink: 'Chapters and Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
         },
@@ -125,11 +124,9 @@ export const OPM_TIMELINE: Timeline = {
             titleFontSize: 100,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
-            sectionLink: 'Chapters_and_Volumes#Volume_List',
-            wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ?
-                    `Volume ${n}`
-                :   'Chapters_and_Volumes#Volume_List',
+            sectionLink: 'Chapters and Volumes#Volume_List',
+            wikiLink: (_, n, extra) =>
+                !extra ? `Volume ${n}` : 'Chapters and Volumes#Volume_List',
         },
     },
     data: {

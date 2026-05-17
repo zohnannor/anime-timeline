@@ -247,17 +247,18 @@ const resolveTimelineData = (
             typeof rawTitle === 'number' ?
                 (volumeChapters[rawTitle - 1]?.title ??
                 throwError(`Chapter ${rawTitle - 1} not found`))
-            : rawTitle !== undefined ? maybeCallback(rawTitle, volumeNumber)
-            : volumeNumber.toString();
+            : rawTitle !== undefined ?
+                maybeCallback(rawTitle, volumeNumber, extra)
+            :   volumeNumber.toString();
         // unprocessed `title` passed to `rawCover` and `wikiLink` - intentional
         volumes.push({
-            cover: maybeEntityCallback(rawCover, volumeNumber, title),
+            cover: maybeEntityCallback(rawCover, volumeNumber, title, extra),
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
             extra,
-            title: volumeTemplates.titleProcessor(title, volumeNumber),
-            number: volumeTemplates.numberProcessor(volumeNumber, title),
-            wikiLink: volumeTemplates.wikiLink(title, volumeNumber),
+            title: volumeTemplates.titleProcessor(title, volumeNumber, extra),
+            number: volumeTemplates.numberProcessor(volumeNumber, title, extra),
+            wikiLink: volumeTemplates.wikiLink(title, volumeNumber, extra),
         });
     }
 

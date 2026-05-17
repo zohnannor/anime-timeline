@@ -19,8 +19,7 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
-const VOLUMES_TOTAL = 23;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 23;
 type VolumesExtra = 3;
 type SeasonsTotal = 4;
 
@@ -45,7 +44,7 @@ export const DHD_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Dorohedoro_(Anime)#Episodes',
+                sectionLink: 'Dorohedoro (Anime)#Episodes',
                 wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
@@ -77,10 +76,8 @@ export const DHD_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Volumes and Chapters#List_of_Volumes',
-            wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ?
-                    `Volume ${n}`
-                :   'Volumes and Chapters#List_of_Volumes',
+            wikiLink: (_, n, extra) =>
+                !extra ? `Volume ${n}` : 'Volumes and Chapters#List_of_Volumes',
         },
     },
     data: {

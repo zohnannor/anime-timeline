@@ -36,14 +36,14 @@ export const JOJO_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             numberProcessor: n => (n - 6).toString(),
-            sectionLink: "JoJo's_Bizarre_Adventure:_The_Animation#Seasons",
+            sectionLink: "JoJo's Bizarre Adventure: The Animation#Seasons",
             wikiLink: (title, n) =>
                 n <= 2 ?
-                    title.replaceAll(': ', '_(Season)#').replaceAll(' ', '_')
+                    title.replaceAll(': ', ' (Season)#').replaceAll(' ', '_')
                 : n <= 11 ?
                     title
                         .replace("JoJo's Bizarre Adventure: ", '')
-                        .replace(' - ', '_(Anime)#')
+                        .replace(' - ', ' (Anime)#')
                         .replaceAll(' ', '_')
                 :   title.replace(": JoJo's Bizarre Adventure", ' (Anime)'),
             subTimeline: {
@@ -53,7 +53,7 @@ export const JOJO_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: "JoJo's_Bizarre_Adventure:_The_Animation#Seasons",
+                sectionLink: "JoJo's Bizarre Adventure: The Animation#Seasons",
                 wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },

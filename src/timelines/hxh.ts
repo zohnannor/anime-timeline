@@ -20,17 +20,17 @@ const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
-const VOLUMES_TOTAL = 39;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 39;
 type VolumesExtra = 1;
 type ArcsTotal = 7;
 type SeasonsTotal = 2;
 
-const volumeCover = (n: number) =>
-    n <= VOLUMES_TOTAL ?
-        n === 35 ? `Volume${n}cover`
-        : `Volume_${n}_cover`
-    : `Volume_0_cover`;
+const volumeCover = (n: number, _title?: string, extra?: boolean) =>
+    !extra ?
+        n === 35 ?
+            `Volume${n}cover`
+        :   `Volume_${n}_cover`
+    :   `Volume_0_cover`;
 
 export const HXH_TIMELINE: Timeline = {
     layout: {
@@ -71,12 +71,13 @@ export const HXH_TIMELINE: Timeline = {
             fit: 'contain',
             backgroundColor: 'white',
             numberProcessor: (n, _, extra) =>
-                !extra ? n.toString()
-                : String.fromCharCode(n - 1 + 'A'.charCodeAt(0)),
+                !extra ?
+                    n.toString()
+                :   String.fromCharCode(n - 1 + 'A'.charCodeAt(0)),
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (title, n, extra) => !extra ? `Chapter ${n}` : title,
+            wikiLink: (title, n, extra) => (!extra ? `Chapter ${n}` : title),
             focusable: true,
         },
         volume: {
@@ -84,15 +85,12 @@ export const HXH_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             defaultCoverPosition: 'top',
             numberProcessor: n => n.toString(),
-            titleProcessor: (title, n) =>
-                n > VOLUMES_TOTAL ?
-                    `${title}\n(Volume 0)`
-                :   `${title}\n(Volume ${n})`,
+            titleProcessor: (title, n, extra) =>
+                `${title}\n(Volume ${!extra ? n : 0})`,
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ? `Volume ${n}` : `Volume 0`,
+            wikiLink: (_, n, extra) => `Volume ${!extra ? n : 0}`,
         },
     },
     data: {

@@ -89,7 +89,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
+            sectionLink: 'List of Death Note chapters#List_of_volumes',
             wikiLink: (title: string, n: number): string =>
                 n <= 21 ? `Chapter ${n}`
                     // first one is in 0..21
@@ -106,7 +106,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
+            sectionLink: 'List of Death Note chapters#List_of_volumes',
             wikiLink: title =>
                 CHAPTER_LINK_EXCEPTIONS.includes(title) ?
                     `${title} (volume)`

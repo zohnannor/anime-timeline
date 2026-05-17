@@ -45,7 +45,7 @@ export const JR_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 50,
                 titleFontSize: 50,
-                sectionLink: 'Jigokuraku_(anime)#Episodes',
+                sectionLink: 'Jigokuraku (anime)#Episodes',
                 wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
