@@ -92,7 +92,6 @@ def create_new_timeline(title: str | None = None) -> None:
             print(colored("Error: Title is required.", Color.RED))
             sys.exit(1)
 
-        title_urlsafe = title.replace(" ", "_")
         suggested_slug = slugify(title)
         slug_input = ask(f"Enter URL slug [{suggested_slug}]")
         slug = slug_input if slug_input else suggested_slug
@@ -115,6 +114,13 @@ def create_new_timeline(title: str | None = None) -> None:
         volumes = (
             int(number_of_volumes) if number_of_volumes else suggested_volumes
         )
+        if volumes < 1:
+            print(
+                colored(
+                    "Error: Number of volumes must be at least 1.", Color.RED
+                )
+            )
+            sys.exit(1)
 
         suggested_arcs = 1
         number_of_arcs = ask(f"Enter number of arcs [{suggested_arcs}]")
@@ -128,6 +134,14 @@ def create_new_timeline(title: str | None = None) -> None:
             int(number_of_seasons) if number_of_seasons else suggested_seasons
         )
 
+        suggested_extra = 0
+        number_of_extra = ask(
+            f"Enter number of extra chapters [{suggested_extra}]"
+        )
+        extra_volumes = (
+            int(number_of_extra) if number_of_extra else suggested_extra
+        )
+
         # File Operations
         assets_dir.mkdir(parents=True, exist_ok=True)
         print(
@@ -136,9 +150,7 @@ def create_new_timeline(title: str | None = None) -> None:
             )
         )
 
-        volumes_objects = "\n".join(
-            [
-                f"""
+        volumes_objects = "\n".join([f"""
             {{
                 title: volumeTitle,
                 cover: volumeCover,
@@ -150,30 +162,15 @@ def create_new_timeline(title: str | None = None) -> None:
                         cover: null,
                     }},
                 ],
-            }},""".strip(
-                    "\n"
-                )
-            ]
-            * volumes
-        )
-        arc_objects = "\n".join(
-            [
-                f"""
+            }},""".strip("\n")] * volumes)
+        arc_objects = "\n".join([f"""
             {{
                 title: 'Name...',
                 cover: 'filename',
                 offset: {{ x: 0, y: 0 }},
-                chapters: {{ from: 1, }},
-            }},""".strip(
-                    "\n"
-                )
-            ]
-            * arcs
-        )
-        season_objects = (
-            "\n".join(
-                [
-                    f"""
+                chapters: {{ from: 1 }},
+            }},""".strip("\n")] * arcs)
+        season_objects = "\n".join([f"""
             {{
                 title: '{title} (Anime)',
                 cover: () => 'filename',
@@ -188,44 +185,134 @@ def create_new_timeline(title: str | None = None) -> None:
                         chapters: {{ from: 1, to: 1 }},
                     }},
                 ],
-            }},""".strip(
-                        "\n"
-                    )
-                ]
-                * seasons
-            )
-            if seasons != 0
-            else ""
-        )
-        seasons_data = (
-            f"""seasons: [
-{season_objects}
-            ] as const satisfies Tuple<Season, SeasonsTotal>,"""
-            if seasons != 0
-            else ""
-        )
+            }},""".strip("\n")] * seasons) if seasons != 0 else ""
         season_layout = (
             f"""season: {{
-                type: 'season',
-                height: SEASON_HEIGHT,
-                blankfontSize: 250,
-                titleFontSize: 100,
-                numberProcessor: n => (n - 1).toString(),
-                sectionLink: '{title} (Anime)',
-                wikiLink: title => title,
-                subTimeline: {{
-                    type: 'episode',
-                    height: EPISODE_HEIGHT,
-                    scale: 1.2,
-                    titleProcessor: (title, n) => `${{title}}\\n(Episode ${{n}})`,
-                    blankfontSize: 42,
-                    titleFontSize: 42,
-                    sectionLink: '{title_urlsafe}_(Anime)#Episodes',
-                    wikiLink: (_, n) => `Episode ${{n}}`,
-                    focusable: true,
-                }},
-            }},\n       """
+            type: 'season',
+            height: SEASON_HEIGHT,
+            blankfontSize: 250,
+            titleFontSize: 100,
+            numberProcessor: n => (n - 1).toString(),
+            sectionLink: '{title} (Anime)',
+            wikiLink: title => title,
+            subTimeline: {{
+                type: 'episode',
+                height: EPISODE_HEIGHT,
+                scale: 1.2,
+                titleProcessor: (title, n) => `${{title}}\\n(Episode ${{n}})`,
+                blankfontSize: 42,
+                titleFontSize: 42,
+                sectionLink: '{title} (Anime)#Episodes',
+                wikiLink: (_, n) => `Episode ${{n}}`,
+                focusable: true,
+            }},
+        }},
+        """
             if seasons != 0
+            else ""
+        )
+
+        extra_volumes_objects = "\n".join([f"""
+            {{
+                title: volumeTitle,
+                cover: volumeCover,
+                chapters: [
+                    {{
+                        title: chapterTitle,
+                        date: 'January 1, 1970',
+                        pages: 100,
+                        cover: null,
+                    }},
+                ],
+            }},""".strip("\n")] * extra_volumes) if extra_volumes else ""
+
+        def wrap(count: int, content: str) -> str:
+            return ("\n" + content + "\n        ") if count else ""
+
+        volumes_body = wrap(volumes, volumes_objects)
+        arcs_body = wrap(arcs, arc_objects)
+        seasons_body = wrap(seasons, season_objects)
+        extra_body = wrap(extra_volumes, extra_volumes_objects)
+        seasons_data = (
+            f"        seasons: [{seasons_body}] as const satisfies Tuple<Season, SeasonsTotal>,\n"
+            if seasons
+            else ""
+        )
+        extra_data = (
+            f"        extraChapters: [{extra_body}] as const satisfies Tuple<Volume, VolumesExtra>,\n"
+            if extra_volumes
+            else ""
+        )
+
+        extra_type = (
+            "type VolumesExtra = {};\n".format(extra_volumes)
+            if extra_volumes
+            else ""
+        )
+
+        type_list = ", ".join(
+            filter(
+                None,
+                [
+                    "Arc" if arcs else None,
+                    "Season" if seasons else None,
+                    "Timeline",
+                    "Volume",
+                ],
+            )
+        )
+        season_constants = (
+            f"""
+const SEASON_HEIGHT = 742;
+const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+"""
+            if seasons
+            else ""
+        )
+        type_seasons = (
+            f"""
+type SeasonsTotal = {seasons};"""
+            if seasons
+            else ""
+        )
+        arcs_type = (
+            f"""
+type ArcsTotal = {arcs};"""
+            if arcs
+            else ""
+        )
+        arc_height = (
+            f"""
+const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;"""
+            if arcs
+            else ""
+        )
+        volume_funcs = f"""const volumeTitle = (n: number) => `Volume ${{n}}`;
+const volumeCover = (n: number) => `Volume_${{pad(n)}}`;
+const chapterTitle = (n: number) => `Chapter ${{n}}`;
+"""
+        episode_func = (
+            f"""const episodeCover = (n: number) => n.toString();\n\n"""
+            if seasons
+            else "\n"
+        )
+        arc_layout = (
+            f"""arc: {{
+            type: 'arc',
+            height: ARC_HEIGHT,
+            titleProcessor: title => `${{title}} arc`,
+            blankfontSize: 100,
+            titleFontSize: 100,
+            sectionLink: 'Story Arcs',
+            wikiLink: title => title,
+        }},
+        """
+            if arcs
+            else ""
+        )
+        arcs_data = (
+            f"        arcs: [{arcs_body}] as const satisfies Tuple<Arc, ArcsTotal>,\n"
+            if arcs
             else ""
         )
 
@@ -237,41 +324,23 @@ import {{
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
     ListIcon,
     TitleIcon,
 }} from '@shared/ui/icons';
-import {{ Arc, Season, Timeline, Volume }} from '@timelines/types';
-
-const SEASON_HEIGHT = 742;
-const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
+import {{ {type_list} }} from '@timelines/types';
+{season_constants}
 const VOLUME_HEIGHT = 1579;
-const CHAPTER_HEIGHT = 100;
-const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
+const CHAPTER_HEIGHT = 100;{arc_height}
 
 type VolumesTotal = {volumes};
-type ArcsTotal = {arcs};
-type SeasonsTotal = {seasons};
-
-const volumeTitle = (n: number) => `Volume ${{n}}`;
-const volumeCover = (n: number) => `Volume_${{pad(n)}}`;
-const chapterTitle = (n: number) => `Chapter ${{n}}`;
-const episodeCover = (n: number) => n.toString();
-
-export const {const_name}: Timeline = {{
+{extra_type}{arcs_type}{type_seasons}
+{volume_funcs}{episode_func}export const {const_name}: Timeline = {{
     layout: {{
-        {season_layout}arc: {{
-            type: 'arc',
-            height: ARC_HEIGHT,
-            titleProcessor: title => `${{title}} arc`,
-            blankfontSize: 100,
-            titleFontSize: 100,
-            sectionLink: 'Story Arcs',
-            wikiLink: title => title,
-        }},
-        timeline: {{
+        {season_layout}{arc_layout}timeline: {{
             type: 'timeline',
         }},
         chapter: {{
@@ -281,7 +350,7 @@ export const {const_name}: Timeline = {{
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: '{title_urlsafe}_(Manga)#Chapters',
+            sectionLink: '{title} (Manga)#Chapters',
             wikiLink: (_, n) => `Chapter ${{n}}`,
             focusable: true,
         }},
@@ -292,20 +361,14 @@ export const {const_name}: Timeline = {{
             titleProcessor: (title, n) => `${{title}}\\n(Volume ${{n}})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: '{title_urlsafe}_(Manga)#Chapters',
+            sectionLink: '{title} (Manga)#Chapters',
             wikiLink: (_, n) => `Volume ${{n}}`,
         }},
     }},
     data: {{
         title: '{title}',
-        volumes: [
-{volumes_objects}
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
-        arcs: [
-{arc_objects}
-        ] as const satisfies Tuple<Arc, ArcsTotal>,
-        {seasons_data}
-        splitChapters: {{}},
+        volumes: [{volumes_body}] as const satisfies Tuple<Volume, VolumesTotal>,
+{arcs_data}{seasons_data}{extra_data}        splitChapters: {{}},
         wikiBase: '{wiki_base}',
         icons: {{
             favicon: EmptyIcon,
@@ -314,6 +377,7 @@ export const {const_name}: Timeline = {{
             'read-info': InfoIcon,
             'toggle-unbound-chapter-width': ExpandIcon,
             'toggle-cross-lines': FitIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
             'capture-timeline': CameraIcon,

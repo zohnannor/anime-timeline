@@ -12,8 +12,12 @@ type Offset = { x: number; y: number };
 
 export type Range = { from: number; to?: number };
 
-export type Callback<T> = (_n: number) => T;
-export type EntityCallback<T> = (_n: number, _title: string) => T;
+export type Callback<T> = (_n: number, _extra: boolean) => T;
+export type EntityCallback<T> = (
+    _n: number,
+    _title: string,
+    _extra: boolean,
+) => T;
 
 type CoverOffset<C> = ExactUnion<
     { cover: C; offset: Offset } | { cover: null }
@@ -72,6 +76,7 @@ export type Icons = {
     'toggle-cross-lines': Icon;
     'open-chapter-calendar': Icon;
     'toggle-always-show-titles': Icon;
+    'toggle-extra-chapters': Icon;
     'capture-timeline': Icon;
 };
 
@@ -83,6 +88,7 @@ export type SocialLink = {
 export type TimelineData = {
     title: string;
     volumes: NonEmptyArray<Volume>;
+    extraChapters?: NonEmptyArray<Volume>;
 } & ExactUnion<
     | { sagas: NonEmptyArray<Saga> }
     | { arcs: NonEmptyArray<Arc> }
@@ -123,11 +129,11 @@ export type TimelineSectionItem<T extends TimelineSection> = {
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (_title: string, _n: number) => string;
-    numberProcessor?: (_number: number, _title: string) => string;
+    titleProcessor?: (_title: string, _n: number, _extra: boolean) => string;
+    numberProcessor?: (_n: number, _title: string, _extra: boolean) => string;
     height: number;
     sectionLink: string;
-    wikiLink: (_title: string, _n: number) => string;
+    wikiLink: (_title: string, _n: number, _extra: boolean) => string;
     focusable?: boolean;
 } & (T extends keyof SubtimelinesMap ?
     { subTimeline: TimelineSectionItem<SubtimelinesMap[T]> }

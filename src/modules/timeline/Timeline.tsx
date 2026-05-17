@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { withCrossLines } from '@modules/timeline/CrossLines';
 import { useSettings } from '@shared/contexts/SettingsContext';
+import { useTimeline } from '@shared/contexts/TimelineContext';
 import {
     chapterDatesByMonth,
     chapterDatesByYear,
@@ -15,11 +16,10 @@ import {
     scrollToId,
 } from '@shared/lib/helpers';
 import { useHover } from '@shared/lib/hooks';
-import { map, NonEmptyArray, sum } from '@shared/lib/util';
+import { asNonEmpty, map, NonEmptyArray, sum } from '@shared/lib/util';
 import { withShadow } from '@shared/ui';
 import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
 import { ResolvedChapter } from '@timelines/resolved';
-import { useTimeline } from '@shared/contexts/TimelineContext';
 
 type DayProps = {
     $width: number;
@@ -174,26 +174,37 @@ const toSegments = <T extends ResolvedChapter>(
     });
 
 export const Timeline: React.FC = () => {
-    const { unboundChapterWidth } = useSettings();
+    const { unboundChapterWidth, showExtraChapters } = useSettings();
     const {
         data: { chapters },
     } = useTimeline();
 
+    const visibleChapters = useMemo(
+        () =>
+            !showExtraChapters ?
+                asNonEmpty(
+                    chapters.filter(ch => !ch.extra),
+                    'visibleChapters',
+                )
+            :   chapters,
+        [chapters, showExtraChapters],
+    );
+
     const daysSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            map(chapters, ({ width, date, number }) => ({
+            map(visibleChapters, ({ width, date, number }) => ({
                 width: width(unboundChapterWidth),
                 colorValue: date.getDate(),
                 label: date.getDate().toString(),
                 chapterNumber: number,
             })),
-        [chapters, unboundChapterWidth],
+        [visibleChapters, unboundChapterWidth],
     );
 
     const monthsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
             toSegments(
-                chapterDatesByMonth(chapters),
+                chapterDatesByMonth(visibleChapters),
                 ({ date, number }) => {
                     const month = date.getMonth();
                     return {
@@ -204,13 +215,13 @@ export const Timeline: React.FC = () => {
                 },
                 unboundChapterWidth,
             ),
-        [chapters, unboundChapterWidth],
+        [visibleChapters, unboundChapterWidth],
     );
 
     const yearsSegments: NonEmptyArray<Segment> = useMemo(
         () =>
             toSegments(
-                chapterDatesByYear(chapters),
+                chapterDatesByYear(visibleChapters),
                 ({ date, number }) => {
                     const year = date.getFullYear();
                     return {
@@ -221,7 +232,7 @@ export const Timeline: React.FC = () => {
                 },
                 unboundChapterWidth,
             ),
-        [chapters, unboundChapterWidth],
+        [visibleChapters, unboundChapterWidth],
     );
     const yearRange = useMemo(() => {
         const years = yearsSegments.map(seg => seg.colorValue);

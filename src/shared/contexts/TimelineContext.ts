@@ -1,8 +1,8 @@
 import { createContext, use } from 'react';
 
-import { AnimeTitle } from '@timelines/types';
-import { ResolvedTimeline } from '@timelines/resolved';
 import { throwError } from '@shared/lib/util';
+import { ResolvedTimeline } from '@timelines/resolved';
+import { AnimeTitle } from '@timelines/types';
 
 export type TimelineContextValue = {
     timeline: ResolvedTimeline | null;

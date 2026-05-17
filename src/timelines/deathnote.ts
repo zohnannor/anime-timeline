@@ -5,6 +5,7 @@ import {
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -19,8 +20,8 @@ const VOLUME_HEIGHT = 1576;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = 200;
 
-const CHAPTERS_TOTAL = 108;
-type VolumesTotal = 13;
+type VolumesTotal = 12;
+type VolumesExtra = 1;
 type ArcsTotal = 2;
 type SeasonsTotal = 1;
 
@@ -82,13 +83,13 @@ export const DEATHNOTE_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: (n, title) =>
-                n <= CHAPTERS_TOTAL ? n.toString() : title,
+            numberProcessor: (n, title, extra) =>
+                !extra ? n.toString() : title,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
+            sectionLink: 'List of Death Note chapters#List_of_volumes',
             wikiLink: (title: string, n: number): string =>
                 n <= 21 ? `Chapter ${n}`
                     // first one is in 0..21
@@ -105,7 +106,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'List_of_Death_Note_chapters#List_of_volumes',
+            sectionLink: 'List of Death Note chapters#List_of_volumes',
             wikiLink: title =>
                 CHAPTER_LINK_EXCEPTIONS.includes(title) ?
                     `${title} (volume)`
@@ -835,6 +836,8 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                     },
                 ],
             },
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => 'How to Read',
                 cover: () => 'How_to_Read_13',
@@ -859,7 +862,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         arcs: [
             {
                 title: 'Part I',
@@ -1154,6 +1157,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

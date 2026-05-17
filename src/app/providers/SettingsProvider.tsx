@@ -38,6 +38,9 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         // default to true if not set (first visit), otherwise get from storage
         () => globalThis.localStorage.getItem('showTitles') !== 'false',
     );
+    const [showExtraChapters, setShowExtraChapters] = useState(
+        () => globalThis.localStorage.getItem('showExtraChapters') !== 'false',
+    );
     const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
         const params = new URLSearchParams(globalThis.location.search);
         const animeTitle = params.get('title');
@@ -92,6 +95,18 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             globalThis.localStorage.setItem('showTitles', doShow.toString());
         };
 
+        const toggleShowExtraChapters = (
+            show: React.SetStateAction<boolean>,
+        ) => {
+            const doShow =
+                typeof show === 'function' ? show(showExtraChapters) : show;
+            setShowExtraChapters(doShow);
+            globalThis.localStorage.setItem(
+                'showExtraChapters',
+                doShow.toString(),
+            );
+        };
+
         return {
             showCrosslines,
             setShowCrosslines,
@@ -106,6 +121,8 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             ),
             showTitles,
             setShowTitles: toggleShowTitles,
+            showExtraChapters,
+            setShowExtraChapters: toggleShowExtraChapters,
             captureTimelineModalOpen,
             setCaptureTimelineModalOpen: createModalHandler(
                 'captureTimelineModalOpen',
@@ -120,18 +137,15 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             ),
         };
     }, [
-        showCrosslines,
-        infoBoxOpen,
-        setInfoBoxOpen,
-        unboundChapterWidth,
-        calendarOpen,
-        setCalendarOpen,
-        showTitles,
-        captureTimelineModalOpen,
-        setCaptureTimelineModalOpen,
         animeTitle,
         animeTitleSelectorOpen,
-        setAnimeTitleSelectorOpen,
+        calendarOpen,
+        captureTimelineModalOpen,
+        infoBoxOpen,
+        showCrosslines,
+        showExtraChapters,
+        showTitles,
+        unboundChapterWidth,
     ]);
 
     return <SettingsContext value={context}>{children}</SettingsContext>;

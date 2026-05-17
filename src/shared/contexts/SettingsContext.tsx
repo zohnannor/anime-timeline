@@ -13,6 +13,8 @@ export type Settings = {
     setCalendarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     showTitles: boolean;
     setShowTitles: React.Dispatch<React.SetStateAction<boolean>>;
+    showExtraChapters: boolean;
+    setShowExtraChapters: React.Dispatch<React.SetStateAction<boolean>>;
     captureTimelineModalOpen: boolean;
     setCaptureTimelineModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     animeTitle: AnimeTitle;
@@ -49,6 +51,7 @@ export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     unboundChapterWidth: 'setUnboundChapterWidth',
     calendarOpen: 'setCalendarOpen',
     showTitles: 'setShowTitles',
+    showExtraChapters: 'setShowExtraChapters',
     captureTimelineModalOpen: 'setCaptureTimelineModalOpen',
     animeTitleSelectorOpen: 'setAnimeTitleSelectorOpen',
 };
@@ -68,6 +71,8 @@ export const SettingsContext = createContext<Settings>({
     setCalendarOpen: dummy,
     showTitles: true,
     setShowTitles: dummy,
+    showExtraChapters: true,
+    setShowExtraChapters: dummy,
     captureTimelineModalOpen: false,
     setCaptureTimelineModalOpen: dummy,
     animeTitle: 'csm',

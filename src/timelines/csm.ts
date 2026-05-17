@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */ // a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
+import { ExtraIcon } from '@shared/ui/icons';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
 const SEASON_HEIGHT = 742;
@@ -33,7 +34,7 @@ export const CSM_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Chainsaw_Man_(Anime)#Episodes',
+                sectionLink: 'Chainsaw Man (Anime)#Episodes',
                 wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
@@ -66,7 +67,7 @@ export const CSM_TIMELINE: Timeline = {
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
+            sectionLink: 'Chainsaw Man (Manga)#Chapters',
             wikiLink: (_, n) => `Chapter ${n}`,
             focusable: true,
         },
@@ -77,7 +78,7 @@ export const CSM_TIMELINE: Timeline = {
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Chainsaw_Man_(Manga)#Chapters',
+            sectionLink: 'Chainsaw Man (Manga)#Chapters',
             wikiLink: (_, n) => `Volume ${n}`,
         },
     },
@@ -1848,6 +1849,7 @@ export const CSM_TIMELINE: Timeline = {
             'toggle-cross-lines': 'pochita6',
             'open-chapter-calendar': 'pochita4',
             'toggle-always-show-titles': 'pochita5',
+            'toggle-extra-chapters': ExtraIcon, // has no extra chapters
             'capture-timeline': 'pochita7',
         },
         socialLinks: [

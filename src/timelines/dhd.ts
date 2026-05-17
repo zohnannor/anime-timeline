@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Add, Tuple } from '@shared/lib/util';
+import { Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -18,9 +19,7 @@ const EPISODE_HEIGHT = SEASON_HEIGHT * 0.2;
 const VOLUME_HEIGHT = 1425;
 const CHAPTER_HEIGHT = 100;
 
-const CHAPTERS_TOTAL = 167;
-const VOLUMES_TOTAL = 23;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 23;
 type VolumesExtra = 3;
 type SeasonsTotal = 4;
 
@@ -45,7 +44,7 @@ export const DHD_TIMELINE: Timeline = {
                 titleProcessor: (title, n) => `${title}\n(Episode ${n})`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Dorohedoro_(Anime)#Episodes',
+                sectionLink: 'Dorohedoro (Anime)#Episodes',
                 wikiLink: (_, n) => `Episode ${n}`,
                 focusable: true,
             },
@@ -56,19 +55,18 @@ export const DHD_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ? n.toString() : `X${n - CHAPTERS_TOTAL}`,
+            numberProcessor: (n, _, extra) => (!extra ? n.toString() : `X${n}`),
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Volumes and Chapters#List_of_Volumes',
-            wikiLink: (_, n) =>
-                n <= CHAPTERS_TOTAL ?
-                    n === CHAPTERS_TOTAL ?
+            wikiLink: (_, n, extra) =>
+                !extra ?
+                    n === 167 ?
                         'Final Chapter'
                     :   `Chapter ${n}`
-                :   `Bonus Curse ${n - CHAPTERS_TOTAL}`,
+                :   `Bonus Curse ${n}`,
             focusable: true,
         },
         volume: {
@@ -78,10 +76,8 @@ export const DHD_TIMELINE: Timeline = {
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'Volumes and Chapters#List_of_Volumes',
-            wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ?
-                    `Volume ${n}`
-                :   'Volumes and Chapters#List_of_Volumes',
+            wikiLink: (_, n, extra) =>
+                !extra ? `Volume ${n}` : 'Volumes and Chapters#List_of_Volumes',
         },
     },
     data: {
@@ -1228,6 +1224,8 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => 'Bonus Curses (Volumes 1-8)',
                 cover: () => volumeCover(1),
@@ -1390,7 +1388,7 @@ export const DHD_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         seasons: [
             {
                 title: 'Dorohedoro - Season 1',
@@ -1492,7 +1490,7 @@ export const DHD_TIMELINE: Timeline = {
                 episodes: [],
             },
             { chapters: { from: 74, to: 120 } },
-            { chapters: { from: 121, to: CHAPTERS_TOTAL } },
+            { chapters: { from: 121 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             4: 3,
@@ -1512,6 +1510,7 @@ export const DHD_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

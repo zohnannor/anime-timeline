@@ -250,6 +250,7 @@ export const CaptureTimelineModal: React.FC = () => {
         captureTimelineModalOpen,
         setCaptureTimelineModalOpen,
         unboundChapterWidth,
+        showExtraChapters,
         animeTitle,
     } = useSettings();
     const {
@@ -258,7 +259,8 @@ export const CaptureTimelineModal: React.FC = () => {
         data: { title },
     } = useTimeline();
 
-    const fullWidth = maxWidth(unboundChapterWidth) + HEADERS_WIDTH;
+    const fullWidth =
+        maxWidth(unboundChapterWidth, showExtraChapters) + HEADERS_WIDTH;
 
     const {
         capturePng,

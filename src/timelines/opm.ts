@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Add, Tuple } from '@shared/lib/util';
+import { Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -21,9 +22,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-const CHAPTERS_TOTAL = 235;
-const VOLUMES_TOTAL = 42;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 42;
 type VolumesExtra = 6;
 type SagasTotal = 4;
 
@@ -37,15 +36,16 @@ const episodeCover = (n: number) =>
     : n <= 24 ? `Season2Ep${n - 12}pics`
     : n <= 29 ? `OPMS3Ep${n - 24}`
     : `One-Punch_Man_Episode_${n}`;
-const chapterLink = (title: string, n: number): string =>
-    n <= 118 ? `Chapter ${n}`
-    : n <= 126 ? `Chapter ${n - 4} (Online)`
-    : n <= 129 ? `Chapter ${n - 3} (Online)`
-    : n <= 130 ? `Chapter ${n}`
-    : n <= 138 ? `Chapter ${n - 4} (Online)`
-    : n <= 139 ? `Chapter ${n}`
-    : n <= CHAPTERS_TOTAL ? `Chapter ${n - 5} (Online)`
-    : title;
+const chapterLink = (title: string, n: number, extra: boolean): string =>
+    !extra ?
+        n <= 118 ? `Chapter ${n}`
+        : n <= 126 ? `Chapter ${n - 4} (Online)`
+        : n <= 129 ? `Chapter ${n - 3} (Online)`
+        : n <= 130 ? `Chapter ${n}`
+        : n <= 138 ? `Chapter ${n - 4} (Online)`
+        : n <= 139 ? `Chapter ${n}`
+        : `Chapter ${n - 5} (Online)`
+    :   title;
 const VOLUME_RELEASE_SPLIT_CHAPTERS = [84, 90, 96, 117, 138] as const;
 
 export const OPM_TIMELINE: Timeline = {
@@ -56,7 +56,7 @@ export const OPM_TIMELINE: Timeline = {
             blankfontSize: 250,
             titleFontSize: 100,
             sectionLink: 'One-Punch Man (anime)',
-            wikiLink: title => `Animated_Media#${title.replaceAll(' ', '_')}`,
+            wikiLink: title => `Animated Media#${title.replaceAll(' ', '_')}`,
             subTimeline: {
                 type: 'episode',
                 height: EPISODE_HEIGHT,
@@ -99,8 +99,8 @@ export const OPM_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ?
+            numberProcessor: (n, _, extra) =>
+                !extra ?
                     `${n}\n(${
                         n -
                         VOLUME_RELEASE_SPLIT_CHAPTERS.findLastIndex(
@@ -108,12 +108,12 @@ export const OPM_TIMELINE: Timeline = {
                         ) -
                         1
                     })`
-                :   `X${n - CHAPTERS_TOTAL}`,
+                :   `X${n}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 40,
             titleFontSize: 40,
-            sectionLink: 'Chapters_and_Volumes#Volume_List',
+            sectionLink: 'Chapters and Volumes#Volume_List',
             wikiLink: chapterLink,
             focusable: true,
         },
@@ -124,11 +124,9 @@ export const OPM_TIMELINE: Timeline = {
             titleFontSize: 100,
             defaultCoverPosition: 'top',
             titleProcessor: (title, n) => `${title}\n(Volume ${n})`,
-            sectionLink: 'Chapters_and_Volumes#Volume_List',
-            wikiLink: (_, n) =>
-                n <= VOLUMES_TOTAL ?
-                    `Volume ${n}`
-                :   'Chapters_and_Volumes#Volume_List',
+            sectionLink: 'Chapters and Volumes#Volume_List',
+            wikiLink: (_, n, extra) =>
+                !extra ? `Volume ${n}` : 'Chapters and Volumes#Volume_List',
         },
     },
     data: {
@@ -1792,7 +1790,8 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-            // REMEMBER TO INCREMENT THE `CHAPTERS_TOTAL` CONSTANT AT THE TOP
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => 'Volume 1-5 Extras',
                 cover: () => 'Volume_1',
@@ -2058,7 +2057,7 @@ export const OPM_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         sagas: [
             {
                 title: 'Introduction',
@@ -2196,7 +2195,7 @@ export const OPM_TIMELINE: Timeline = {
                         title: 'Neo Heroes Uprising',
                         cover: 'Neo_Heroes_Uprising_Arc',
                         offset: { x: 0, y: 550 },
-                        chapters: { from: 219 + 5, to: CHAPTERS_TOTAL },
+                        chapters: { from: 219 + 5 },
                     },
                     // {
                     //     title: 'Robot Invasion',
@@ -2485,7 +2484,7 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             { chapters: { from: 117, to: 161 } },
-            { chapters: { from: 162, to: CHAPTERS_TOTAL } },
+            { chapters: { from: 162 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             18: 5,
@@ -2512,6 +2511,7 @@ export const OPM_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

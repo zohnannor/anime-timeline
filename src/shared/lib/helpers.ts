@@ -26,10 +26,10 @@ const isValidDate = (date: Date) => !isNaN(date.getTime());
 
 export const tokyoDate = (dateStr: string): Date => {
     const date = new Date(`${dateStr.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
-    if (isValidDate(date)) {
-        return date;
+    if (!isValidDate(date)) {
+        return throwError(`Invalid date: ${dateStr}`);
     }
-    return throwError(`Invalid date: ${dateStr}`);
+    return date;
 };
 
 export type Chunk<T> = NonEmptyArray<T>;

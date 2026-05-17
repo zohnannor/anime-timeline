@@ -5,6 +5,7 @@ import {
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -54,7 +55,7 @@ export const BERSERK_TIMELINE: Timeline = {
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,
-                sectionLink: 'Berserk_(1997_Anime)#Episodes',
+                sectionLink: 'Berserk (1997 Anime)#Episodes',
                 wikiLink: (_, n) =>
                     n <= 25 ?
                         `Episode ${n} (1997 Anime)`
@@ -69,7 +70,7 @@ export const BERSERK_TIMELINE: Timeline = {
             titleProcessor: title => `${title} Arc`,
             blankfontSize: 100,
             titleFontSize: 100,
-            sectionLink: 'Releases_(Manga)#Arcs',
+            sectionLink: 'Releases (Manga)#Arcs',
             wikiLink: title => title,
         },
         timeline: {
@@ -83,7 +84,7 @@ export const BERSERK_TIMELINE: Timeline = {
             numberProcessor: chapterNumber,
             blankfontSize: 45,
             titleFontSize: 45,
-            sectionLink: 'Releases_(Manga)#Volumes',
+            sectionLink: 'Releases (Manga)#Volumes',
             wikiLink: (_, n) => `Episode ${chapterNumber(n)} (Manga)`,
             focusable: true,
         },
@@ -93,8 +94,8 @@ export const BERSERK_TIMELINE: Timeline = {
             defaultCoverPosition: 'top',
             blankfontSize: 500,
             titleFontSize: 100,
-            sectionLink: 'Releases_(Manga)#Volumes',
-            wikiLink: (_, n) => `Releases_(Manga)#vol${n}`,
+            sectionLink: 'Releases (Manga)#Volumes',
+            wikiLink: (_, n) => `Releases (Manga)#vol${n}`,
         },
     },
     data: {
@@ -3178,6 +3179,7 @@ export const BERSERK_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

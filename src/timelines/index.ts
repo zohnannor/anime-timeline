@@ -1,5 +1,4 @@
 import { SettingsValues } from '@shared/contexts/SettingsContext';
-import { isMobileDevice } from '@shared/lib/util';
 import { Icons } from '@timelines/types';
 
 export const SCROLLER_WIDTH = 1300;
@@ -10,11 +9,16 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export const FLOATING_BUTTONS: {
+export type FloatingButtonConfig = {
     icon: Exclude<keyof Icons, 'favicon' | 'scroller'>;
     title: string;
     option: keyof SettingsValues;
-}[] = [
+};
+
+export const getFloatingButtons = (
+    isMobileDevice: boolean,
+    hasExtraChapters: boolean,
+): FloatingButtonConfig[] => [
     {
         icon: 'select-title',
         title: 'Select Manga/Anime Title',
@@ -27,15 +31,15 @@ export const FLOATING_BUTTONS: {
         option: 'unboundChapterWidth',
     },
     // include cross-lines button only on desktop
-    ...(isMobileDevice() ?
-        []
-    :   [
+    ...(!isMobileDevice ?
+        [
             {
                 icon: 'toggle-cross-lines',
                 title: 'Toggle cross-lines',
                 option: 'showCrosslines',
             } as const,
-        ]),
+        ]
+    :   []),
     {
         icon: 'open-chapter-calendar',
         title: 'Open chapter calendar',
@@ -46,6 +50,16 @@ export const FLOATING_BUTTONS: {
         title: 'Toggle always show titles',
         option: 'showTitles',
     },
+    // include extra chapters button only if the title has extra chapters
+    ...(hasExtraChapters ?
+        [
+            {
+                icon: 'toggle-extra-chapters',
+                title: 'Toggle extra chapters visibility',
+                option: 'showExtraChapters',
+            } as const,
+        ]
+    :   []),
     {
         icon: 'capture-timeline',
         title: 'Capture timeline (Save as a PNG)',

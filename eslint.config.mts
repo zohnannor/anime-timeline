@@ -54,6 +54,7 @@ export default defineConfig([
             'max-statements': ['error', 30, { ignoreTopLevelFunctions: true }],
             complexity: ['error', 35],
             'max-lines': ['error', 1000],
+            'max-params': ['error', 5], // gets in a way with callbacks
             'capitalized-comments': 'off', // not important, style preference
             'no-inline-comments': 'off', // useful
             // unfortunately, it can't enforce sorting the keys like in the
@@ -62,6 +63,7 @@ export default defineConfig([
             'no-ternary': 'off', // we love ternaries
             'no-shadow': 'off', // shadowing is useful
             'no-undefined': 'off', // no-shadow-restricted-names covers reassign
+            'no-negated-condition': 'off', // reads better im many cases
             'no-nested-ternary': 'off', // we LOVE ternaries
             // allow only in for loops
             'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],

@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */ // a lot of data for a title
-import { Add, Tuple } from '@shared/lib/util';
+import { Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
+    ExtraIcon,
     ExpandIcon,
     FitIcon,
     InfoIcon,
@@ -19,17 +20,17 @@ const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
-const CHAPTERS_TOTAL = 410;
-const VOLUMES_TOTAL = 39;
-type VolumesTotal = typeof VOLUMES_TOTAL;
+type VolumesTotal = 39;
 type VolumesExtra = 1;
 type ArcsTotal = 7;
 type SeasonsTotal = 2;
 
-const volumeCover = (n: number) =>
-    n > VOLUMES_TOTAL ? `Volume_0_cover`
-    : n === 35 ? `Volume${n}cover`
-    : `Volume_${n}_cover`;
+const volumeCover = (n: number, _title?: string, extra?: boolean) =>
+    !extra ?
+        n === 35 ?
+            `Volume${n}cover`
+        :   `Volume_${n}_cover`
+    :   `Volume_0_cover`;
 
 export const HXH_TIMELINE: Timeline = {
     layout: {
@@ -69,17 +70,14 @@ export const HXH_TIMELINE: Timeline = {
             height: CHAPTER_HEIGHT,
             fit: 'contain',
             backgroundColor: 'white',
-            numberProcessor: n =>
-                n <= CHAPTERS_TOTAL ?
+            numberProcessor: (n, _, extra) =>
+                !extra ?
                     n.toString()
-                :   String.fromCharCode(
-                        n - CHAPTERS_TOTAL - 1 + 'A'.charCodeAt(0),
-                    ),
+                :   String.fromCharCode(n - 1 + 'A'.charCodeAt(0)),
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (title, n) =>
-                n <= CHAPTERS_TOTAL ? `Chapter ${n}` : title,
+            wikiLink: (title, n, extra) => (!extra ? `Chapter ${n}` : title),
             focusable: true,
         },
         volume: {
@@ -87,15 +85,12 @@ export const HXH_TIMELINE: Timeline = {
             height: VOLUME_HEIGHT,
             defaultCoverPosition: 'top',
             numberProcessor: n => n.toString(),
-            titleProcessor: (title, n) =>
-                n > VOLUMES_TOTAL ?
-                    `${title}\n(Volume 0)`
-                :   `${title}\n(Volume ${n})`,
+            titleProcessor: (title, n, extra) =>
+                `${title}\n(Volume ${!extra ? n : 0})`,
             blankfontSize: 500,
             titleFontSize: 100,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (_, n) =>
-                n > VOLUMES_TOTAL ? `Volume 0` : `Volume ${n}`,
+            wikiLink: (_, n, extra) => `Volume ${!extra ? n : 0}`,
         },
     },
     data: {
@@ -2796,7 +2791,8 @@ export const HXH_TIMELINE: Timeline = {
                     },
                 ],
             },
-            // REMEMBER TO INCREMENT THE `CHAPTERS_TOTAL` CONSTANT
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: () => "Kurapika's Memories",
                 cover: volumeCover,
@@ -2815,7 +2811,7 @@ export const HXH_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, Add<VolumesTotal, VolumesExtra>>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         arcs: [
             {
                 title: 'Hunter Exam',
@@ -2857,7 +2853,7 @@ export const HXH_TIMELINE: Timeline = {
                 title: 'Succession Contest',
                 cover: 'Hunter_x_Hunter_Succession_Contest_arc',
                 offset: { x: 0, y: 5090 },
-                chapters: { from: 340, to: CHAPTERS_TOTAL },
+                chapters: { from: 340 },
             },
         ] as const satisfies Tuple<Arc, ArcsTotal>,
         seasons: [
@@ -3933,7 +3929,7 @@ export const HXH_TIMELINE: Timeline = {
                     },
                 ],
             },
-            { chapters: { from: 340, to: CHAPTERS_TOTAL } },
+            { chapters: { from: 340 } },
         ] as const satisfies Tuple<Season, SeasonsTotal>,
         splitChapters: {
             6: 8,
@@ -4020,6 +4016,7 @@ export const HXH_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [

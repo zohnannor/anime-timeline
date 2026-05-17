@@ -6,6 +6,7 @@ import {
     CameraIcon,
     EmptyIcon,
     ExpandIcon,
+    ExtraIcon,
     FitIcon,
     InfoIcon,
     ListIcon,
@@ -19,13 +20,12 @@ const VOLUME_HEIGHT = 1511;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 
-const CHAPTERS_TOTAL = 139;
-type VolumesTotal = 35;
+type VolumesTotal = 34;
+type VolumesExtra = 1;
 type ArcsTotal = 9;
 type SeasonsTotal = 8;
 
-const volumeTitle = (n: number) =>
-    `Volume ${n}${n <= 34 ? '' : '\n(Side Stories)'}`;
+const volumeTitle = (n: number) => (n <= 34 ? `Volume ${n}` : 'Side Stories');
 const volumeCover = (n: number) =>
     n === 1 ? `Volume_${n}_Cover` : `SnK_-_Manga_Volume_${n}`;
 const episodeCover = (n: number) => `Attack_on_Titan_-_Episode_${n}_Title_Card`;
@@ -72,16 +72,16 @@ export const AOT_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: (n, title) =>
-                n <= CHAPTERS_TOTAL ? n.toString() : title,
+            numberProcessor: (n, title, extra) =>
+                !extra ? n.toString() : title,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Attack on Titan chapters',
-            wikiLink: (title, n) =>
-                n <= CHAPTERS_TOTAL ? `Chapter ${n}`
-                : n === CHAPTERS_TOTAL + 1 ? `${title} (Chapter)`
+            wikiLink: (title, n, extra) =>
+                !extra ? `Chapter ${n}`
+                : n === 1 ? `${title} (Chapter)`
                 : title,
             focusable: true,
         },
@@ -1136,6 +1136,8 @@ export const AOT_TIMELINE: Timeline = {
                     },
                 ],
             },
+        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        extraChapters: [
             {
                 title: volumeTitle,
                 cover: volumeCover,
@@ -1160,7 +1162,7 @@ export const AOT_TIMELINE: Timeline = {
                     },
                 ],
             },
-        ] as const satisfies Tuple<Volume, VolumesTotal>,
+        ] as const satisfies Tuple<Volume, VolumesExtra>,
         arcs: [
             {
                 title: 'Prologue',
@@ -1988,6 +1990,7 @@ export const AOT_TIMELINE: Timeline = {
             'toggle-cross-lines': FitIcon,
             'open-chapter-calendar': CalendarIcon,
             'toggle-always-show-titles': TitleIcon,
+            'toggle-extra-chapters': ExtraIcon,
             'capture-timeline': CameraIcon,
         },
         socialLinks: [
