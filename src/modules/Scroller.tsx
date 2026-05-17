@@ -15,10 +15,11 @@ type ScrollHoverAreaProps = {
 const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
     position: fixed;
+    left: 0;
+    right: 0;
     z-index: 10;
     bottom: 0;
     height: 5rem;
-    width: 100svw;
     display: flex;
     justify-content: center;
 

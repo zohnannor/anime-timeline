@@ -69,7 +69,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
 }) => (
     <IconWrapper $filter={filter} {...props}>
         {typeof Icon === 'string' ?
-            <ThumbnailImage {...props} animeTitle={animeTitle} src={Icon} />
-        :   <Icon {...props} />}
+            <ThumbnailImage animeTitle={animeTitle} src={Icon} />
+        :   <Icon />}
     </IconWrapper>
 );
