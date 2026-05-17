@@ -38,14 +38,15 @@ const episodeCover = (n: number) =>
     : n <= 29 ? `OPMS3Ep${n - 24}`
     : `One-Punch_Man_Episode_${n}`;
 const chapterLink = (title: string, n: number, extra: boolean): string =>
-    extra ? title
-    : n <= 118 ? `Chapter ${n}`
-    : n <= 126 ? `Chapter ${n - 4} (Online)`
-    : n <= 129 ? `Chapter ${n - 3} (Online)`
-    : n <= 130 ? `Chapter ${n}`
-    : n <= 138 ? `Chapter ${n - 4} (Online)`
-    : n <= 139 ? `Chapter ${n}`
-    : `Chapter ${n - 5} (Online)`;
+    !extra ?
+        n <= 118 ? `Chapter ${n}`
+        : n <= 126 ? `Chapter ${n - 4} (Online)`
+        : n <= 129 ? `Chapter ${n - 3} (Online)`
+        : n <= 130 ? `Chapter ${n}`
+        : n <= 138 ? `Chapter ${n - 4} (Online)`
+        : n <= 139 ? `Chapter ${n}`
+        : `Chapter ${n - 5} (Online)`
+    : title;
 const VOLUME_RELEASE_SPLIT_CHAPTERS = [84, 90, 96, 117, 138] as const;
 
 export const OPM_TIMELINE: Timeline = {
@@ -100,15 +101,15 @@ export const OPM_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: (n, _, extra) =>
-                extra ?
-                    `X${n}`
-                :   `${n}\n(${
+                !extra ?
+                    `${n}\n(${
                         n -
                         VOLUME_RELEASE_SPLIT_CHAPTERS.findLastIndex(
                             ch => n >= ch + 1,
                         ) -
                         1
-                    })`,
+                    })`
+                :   `X${n}`,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 40,

@@ -181,12 +181,12 @@ export const Timeline: React.FC = () => {
 
     const visibleChapters = useMemo(
         () =>
-            showExtraChapters ? chapters : (
+            !showExtraChapters ?
                 asNonEmpty(
                     chapters.filter(ch => !ch.extra),
                     'visibleChapters',
                 )
-            ),
+            :   chapters,
         [chapters, showExtraChapters],
     );
 

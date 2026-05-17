@@ -56,16 +56,18 @@ export const DHD_TIMELINE: Timeline = {
         chapter: {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
-            numberProcessor: (n, _, extra) => (extra ? `X${n}` : n.toString()),
+            numberProcessor: (n, _, extra) => (!extra ? n.toString() : `X${n}`),
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'Volumes and Chapters#List_of_Volumes',
             wikiLink: (_, n, extra) =>
-                extra ? `Bonus Curse ${n}`
-                : n === 167 ? 'Final Chapter'
-                : `Chapter ${n}`,
+                !extra ?
+                    n === 167 ?
+                        'Final Chapter'
+                    :   `Chapter ${n}`
+                :   `Bonus Curse ${n}`,
             focusable: true,
         },
         volume: {

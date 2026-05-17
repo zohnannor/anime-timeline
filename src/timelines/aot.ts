@@ -73,18 +73,16 @@ export const AOT_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: (n, title, extra) =>
-                extra ? title : n.toString(),
+                !extra ? n.toString() : title,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Attack on Titan chapters',
             wikiLink: (title, n, extra) =>
-                extra ?
-                    n === 1 ?
-                        `${title} (Chapter)`
-                    :   title
-                :   `Chapter ${n}`,
+                !extra ? `Chapter ${n}`
+                : n === 1 ? `${title} (Chapter)`
+                : title,
             focusable: true,
         },
         volume: {

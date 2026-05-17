@@ -231,28 +231,27 @@ export const TimelineSectionItemComponent = ({
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
-        type === 'season' && cover === null ?
-            // don't add link to seasons without cover (speculation)
-            title
-        :   <Link
+        type !== 'season' || cover !== null ?
+            <Link
                 href={`${wikiBase}${wikiLink}`}
                 style={{
                     whiteSpace: 'pre-wrap',
                     textAlign: 'center',
                 }}
             >
-                {cover === null ?
-                    type === 'episode' || type === 'volume' ?
-                        itemNumber
-                    :   itemTitle
-                :   <ThumbnailImage
+                {cover !== null ?
+                    <ThumbnailImage
                         src={cover}
                         $offsetX={offset?.x}
                         $offsetY={offset?.y}
                         $defaultPosition={defaultCoverPosition}
                     />
-                }
-            </Link>;
+                : type === 'episode' || type === 'volume' ?
+                    itemNumber
+                :   itemTitle}
+            </Link>
+            // don't add link to seasons without cover (speculation)
+        :   title;
 
     const itemCover = (
         <SectionItemCover

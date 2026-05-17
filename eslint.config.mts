@@ -63,6 +63,7 @@ export default defineConfig([
             'no-ternary': 'off', // we love ternaries
             'no-shadow': 'off', // shadowing is useful
             'no-undefined': 'off', // no-shadow-restricted-names covers reassign
+            'no-negated-condition': 'off', // reads better im many cases
             'no-nested-ternary': 'off', // we LOVE ternaries
             // allow only in for loops
             'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],

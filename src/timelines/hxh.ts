@@ -27,9 +27,10 @@ type ArcsTotal = 7;
 type SeasonsTotal = 2;
 
 const volumeCover = (n: number) =>
-    n > VOLUMES_TOTAL ? `Volume_0_cover`
-    : n === 35 ? `Volume${n}cover`
-    : `Volume_${n}_cover`;
+    n <= VOLUMES_TOTAL ?
+        n === 35 ? `Volume${n}cover`
+        : `Volume_${n}_cover`
+    : `Volume_0_cover`;
 
 export const HXH_TIMELINE: Timeline = {
     layout: {
@@ -70,13 +71,12 @@ export const HXH_TIMELINE: Timeline = {
             fit: 'contain',
             backgroundColor: 'white',
             numberProcessor: (n, _, extra) =>
-                extra ?
-                    String.fromCharCode(n - 1 + 'A'.charCodeAt(0))
-                :   n.toString(),
+                !extra ? n.toString()
+                : String.fromCharCode(n - 1 + 'A'.charCodeAt(0)),
             blankfontSize: 45,
             titleFontSize: 45,
             sectionLink: 'List of Volumes and Chapters',
-            wikiLink: (title, n, extra) => (extra ? title : `Chapter ${n}`),
+            wikiLink: (title, n, extra) => !extra ? `Chapter ${n}` : title,
             focusable: true,
         },
         volume: {
@@ -92,7 +92,7 @@ export const HXH_TIMELINE: Timeline = {
             titleFontSize: 100,
             sectionLink: 'List of Volumes and Chapters',
             wikiLink: (_, n) =>
-                n > VOLUMES_TOTAL ? `Volume 0` : `Volume ${n}`,
+                n <= VOLUMES_TOTAL ? `Volume ${n}` : `Volume 0`,
         },
     },
     data: {

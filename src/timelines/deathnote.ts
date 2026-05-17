@@ -84,7 +84,7 @@ export const DEATHNOTE_TIMELINE: Timeline = {
             type: 'chapter',
             height: CHAPTER_HEIGHT,
             numberProcessor: (n, title, extra) =>
-                extra ? title : n.toString(),
+                !extra ? n.toString() : title,
             fit: 'contain',
             backgroundColor: 'white',
             blankfontSize: 45,

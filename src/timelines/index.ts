@@ -31,15 +31,15 @@ export const getFloatingButtons = (
         option: 'unboundChapterWidth',
     },
     // include cross-lines button only on desktop
-    ...(isMobileDevice ?
-        []
-    :   [
+    ...(!isMobileDevice ?
+        [
             {
                 icon: 'toggle-cross-lines',
                 title: 'Toggle cross-lines',
                 option: 'showCrosslines',
             } as const,
-        ]),
+        ]
+    :   []),
     {
         icon: 'open-chapter-calendar',
         title: 'Open chapter calendar',

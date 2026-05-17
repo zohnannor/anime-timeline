@@ -85,7 +85,7 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
     content,
     placement,
     animation = 'fade',
-    visible,
+    visible = false,
 }) => {
     const [hovered, handlers] = useSimpleHover();
 
@@ -93,12 +93,12 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
         <TooltipWrapper
             className='tooltipWrapper'
             $placement={placement}
-            {...(visible === undefined ? handlers() : {})}
+            {...(visible ? handlers() : {})}
         >
             <TooltipContent
                 className='tooltipContent'
                 $animation={animation}
-                $visible={visible ?? hovered()}
+                $visible={visible || hovered()}
                 $placement={placement}
             >
                 {content}
