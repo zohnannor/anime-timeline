@@ -127,9 +127,9 @@ const useCaptureTimeline = ({
     fullWidth,
     maxHeight,
 }: HookOptions) => {
-    const captureRootRef = useRef<HTMLElement | undefined>(undefined);
-    const [loading, setLoading] = useState<string | undefined>();
-    const [error, setError] = useState<string | undefined>();
+    const captureRootRef = useRef<HTMLElement>(undefined);
+    const [loading, setLoading] = useState<string>();
+    const [error, setError] = useState<string>();
     const [capturing, setCapturing] = useState(false);
     const [atViewportHeight, setAtViewportHeight] = useState(false);
 

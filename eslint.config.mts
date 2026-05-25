@@ -1,5 +1,4 @@
 import importPlugin from 'eslint-plugin-import';
-import perfectionist from 'eslint-plugin-perfectionist';
 import react from 'eslint-plugin-react';
 import reactDom from 'eslint-plugin-react-dom';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -25,7 +24,6 @@ export default defineConfig([
     reactRefresh.configs.vite,
     reactX.configs['strict-type-checked'],
     unicorn.configs['all'],
-    perfectionist.configs['recommended-natural'],
 
     {
         files: ['**/*.{ts,tsx}'],
@@ -49,7 +47,7 @@ export default defineConfig([
         },
         rules: {
             'no-undef': 'off', // enfored by typescript
-            'sort-imports': 'off', // perfectionist handles this
+            'sort-imports': 'off', // import/internal-regex does this better
             'one-var': ['error', 'never'], // invert it: disallow one-var style
             'max-lines-per-function': [
                 'error',
@@ -192,43 +190,20 @@ export default defineConfig([
             ],
             'unicorn/no-keyword-prefix': 'off', // quite useless
 
-            'perfectionist/sort-objects': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-imports': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-named-imports': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-array-includes': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-intersection-types': [
-                'off',
-                { type: 'unsorted' },
-            ],
-            'perfectionist/sort-jsx-props': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-modules': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-object-types': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-union-types': ['off', { type: 'unsorted' }],
-            'perfectionist/sort-sets': ['off', { type: 'unsorted' }],
-
             // enabling additional rules (feel free to configure or remove)
 
-            'import/named': 'error',
-            'import/default': 'error',
-            'import/namespace': 'error',
             'import/no-namespace': 'error',
-            'import/export': 'error',
             'import/no-mutable-exports': 'error',
-            'import/extensions': 'error',
-            'import/no-restricted-paths': 'error',
             'import/no-relative-packages': 'error',
             'import/consistent-type-specifier-style': 'off',
-            'import/no-self-import': 'error',
             'import/no-cycle': 'error',
             'import/no-named-default': 'error',
             'import/no-named-as-default-member': 'error',
             'import/no-anonymous-default-export': 'error',
-            'import/no-unused-modules': 'error',
             'import/no-commonjs': 'error',
             'import/no-amd': 'error',
             'import/no-duplicates': 'error',
             'import/first': 'error',
-            'import/max-dependencies': ['error', { max: 20 }],
             'import/no-extraneous-dependencies': 'error',
             'import/no-absolute-path': 'error',
             'import/no-nodejs-modules': 'error',
@@ -251,7 +226,6 @@ export default defineConfig([
             'import/no-useless-path-segments': 'error',
             'import/no-import-module-exports': 'error',
             'import/no-empty-named-blocks': 'error',
-            'import/no-deprecated': 'error',
 
             'react/boolean-prop-naming': 'error',
             'react/button-has-type': 'error',
@@ -289,44 +263,29 @@ export default defineConfig([
             'react/no-adjacent-inline-elements': 'error',
             'react/no-arrow-function-lifecycle': 'error',
             'react/no-danger': 'error',
-            'react/no-did-mount-set-state': 'error',
-            'react/no-did-update-set-state': 'error',
             'react/no-invalid-html-attribute': 'error',
             'react/no-multi-comp': ['error', { ignoreStateless: true }],
             'react/no-namespace': 'error',
             'react/no-object-type-as-default-prop': 'error',
-            'react/no-set-state': 'error',
             'react/no-this-in-sfc': 'error',
-            'react/no-typos': 'error',
             'react/no-unstable-nested-components': 'error',
             'react/no-unused-class-component-methods': 'error',
             'react/no-unused-prop-types': 'error',
-            'react/no-unused-state': 'error',
-            'react/no-will-update-set-state': 'error',
             'react/prefer-es6-class': 'error',
             'react/prefer-exact-props': 'error',
-            'react/prefer-read-only-props': 'error',
             'react/prefer-stateless-function': 'error',
             'react/require-default-props': 'error',
-            'react/require-optimization': 'error',
-            'react/sort-comp': 'error',
             'react/sort-prop-types': 'error',
-            'react/state-in-constructor': 'error',
-            'react/static-property-placement': 'error',
             'react/style-prop-object': 'error',
             'react/void-dom-elements-no-children': 'error',
 
             '@typescript-eslint/consistent-type-exports': 'off',
             '@typescript-eslint/consistent-type-imports': 'off',
-            '@typescript-eslint/member-ordering': 'error',
             '@typescript-eslint/method-signature-style': 'error',
             '@typescript-eslint/no-import-type-side-effects': 'off',
-            '@typescript-eslint/no-unnecessary-parameter-property-assignment':
-                'error',
             '@typescript-eslint/no-unnecessary-qualifier': 'error',
             '@typescript-eslint/no-useless-empty-export': 'error',
             '@typescript-eslint/prefer-enum-initializers': 'error',
-            '@typescript-eslint/prefer-readonly': 'error',
             '@typescript-eslint/prefer-ts-expect-error': 'error',
             '@typescript-eslint/strict-boolean-expressions': 'error',
             '@typescript-eslint/switch-exhaustiveness-check': 'error',

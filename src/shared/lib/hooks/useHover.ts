@@ -12,7 +12,7 @@ type Handlers<T> = (_item: T) => {
 type UseHover<T> = [Comparator<T>, Handlers<T>];
 
 const useHover = <T extends string | number>(): UseHover<T> => {
-    const [hoveredItem, setHoveredItem] = useState<T | undefined>();
+    const [hoveredItem, setHoveredItem] = useState<T>();
 
     const hovered = (item: T) => hoveredItem === item;
 

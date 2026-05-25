@@ -1,9 +1,9 @@
-export const Link: React.FC<React.ComponentPropsWithoutRef<'a'>> = ({
-    href,
-    children,
-    style,
-    className,
-}) => (
+export const Link: React.FC<
+    Pick<
+        React.ComponentPropsWithoutRef<'a'>,
+        'href' | 'children' | 'style' | 'className'
+    >
+> = ({ href, children, style, className }) => (
     <a
         href={href}
         target='_blank'

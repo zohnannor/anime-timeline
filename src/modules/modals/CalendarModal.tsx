@@ -186,7 +186,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
             const date = new Date(month);
             date.setDate(dayNumber);
             const dateString = getISODate(date);
-            const event = chapterDateMap.get(dateString) ?? undefined;
+            const event = chapterDateMap.get(dateString);
             const isChapter = event !== undefined && 'chapter' in event;
             const isEpisode = event !== undefined && 'episode' in event;
             const isEvent = isChapter || isEpisode;
@@ -295,7 +295,9 @@ export const CalendarModal: React.FC = () => {
     // CSM has finished publication, this is no longer necessary. commented out
     // for now, but will be re-enabled if needed in the future for other ongoing
     // titles on Manga Plus.
-    /* const [nextChapterDate, setNextChapterDate] = useState<Date | undefined>(undefined);
+    /* const [nextChapterDate, setNextChapterDate] = useState<Date >(
+        undefined,
+    );
 
     useEffect(() => {
         // `useEffect` awaits the promise

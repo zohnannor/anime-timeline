@@ -86,7 +86,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover<string>();
     const { setCalendarOpen } = useSettings();
-    const lastClickedChapter = useRef<string | undefined>(undefined);
+    const lastClickedChapter = useRef<string>(undefined);
 
     const openCalendarForChapter = useCallback(
         (chapterNumber: string) => {

@@ -191,14 +191,14 @@ const SectionItem = withCrossLines(
 );
 
 type TimelineSectionItemProps<T extends TimelineSectionType> = {
-    readonly timelineSection: NonNullable<
-        ResolvedSectionItem<TimelineSectionType>
-    >;
-    readonly entity: ResolvedTimelineEntity[T];
-    readonly num: number;
+    timelineSection: NonNullable<ResolvedSectionItem<TimelineSectionType>>;
+    entity: ResolvedTimelineEntity[T];
+    num: number;
 };
 
-export const TimelineSectionItemComponent = ({
+export const TimelineSectionItemComponent: React.FC<
+    TimelineSectionItemProps<TimelineSectionType>
+> = ({
     timelineSection: {
         type,
         fit = 'cover',
@@ -214,7 +214,7 @@ export const TimelineSectionItemComponent = ({
     },
     entity,
     num,
-}: TimelineSectionItemProps<TimelineSectionType>) => {
+}) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines } = useSettings();
     const {

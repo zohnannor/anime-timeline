@@ -82,7 +82,9 @@ export const getDocumentPosition = (element: HTMLElement) => {
     while (current) {
         x += current.offsetLeft + current.clientLeft;
         y += current.offsetTop + current.clientTop;
-        current = current.offsetParent as HTMLElement | undefined;
+        current = (current.offsetParent ?? undefined) as
+            | HTMLElement
+            | undefined;
     }
 
     return { x, y, width: element.offsetWidth };

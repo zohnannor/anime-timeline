@@ -56,8 +56,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     useEffect(() => {
         const handlePopState = (ev: PopStateEvent) => {
-            const state =
-                (ev.state as Record<string, boolean> | undefined) ?? {};
+            const state = (ev.state ?? {}) as Record<string, boolean>;
             const modalStates: {
                 key: keyof Settings;
                 setter: React.Dispatch<React.SetStateAction<boolean>>;

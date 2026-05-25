@@ -1558,7 +1558,8 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                cover: undefined,
+                title: 1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Ultimate Armor',

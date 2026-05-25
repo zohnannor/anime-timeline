@@ -89,13 +89,13 @@ const totalPageCount = (chapters: readonly ResolvedChapter[]) =>
     sum(chapters.map(ch => ch.pages));
 const recentlyUpdated = (
     chapters: readonly ResolvedChapter[],
-    episodes: ResolvedEpisode[] | undefined,
+    episodes: ResolvedEpisode[],
 ) =>
     Math.max(
         ...chapters.map(ch => ch.date.getTime()),
-        ...(episodes
-            ?.filter(ep => ep.date < new Date())
-            .map(ep => ep.date.getTime()) ?? []),
+        ...episodes
+            .filter(ep => ep.date < new Date())
+            .map(ep => ep.date.getTime()),
     );
 
 type Sorting =

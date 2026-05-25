@@ -27,7 +27,6 @@
         "csstype": "^3.2.3",
         "eslint": "9.39.4",
         "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-perfectionist": "^5.9.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-dom": "^4.2.3",
         "eslint-plugin-react-hooks": "^7.1.1",
