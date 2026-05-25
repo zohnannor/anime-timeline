@@ -1788,6 +1788,12 @@ export const OPM_TIMELINE: Timeline = {
                         pages: 16,
                         cover: null,
                     },
+                    {
+                        title: () => 'Cover',
+                        date: 'May 21, 2026',
+                        pages: 18,
+                        cover: null,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
