@@ -5,13 +5,13 @@ import { ResolvedTimeline } from '@timelines/resolved';
 import { AnimeTitle } from '@timelines/types';
 
 export type TimelineContextValue = {
-    timeline: ResolvedTimeline | null;
+    timeline: ResolvedTimeline | undefined;
     timelines: Partial<Record<AnimeTitle, ResolvedTimeline>>;
     loadAll: () => Promise<void>;
 };
 
 export const TimelineContext = createContext<TimelineContextValue>({
-    timeline: null,
+    timeline: undefined,
     timelines: {},
     loadAll: async () => {
         /* empty */

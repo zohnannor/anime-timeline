@@ -1,12 +1,13 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
+/* eslint-disable max-lines */
 import { pad, Tuple } from '@shared/lib/util';
 import {
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
-    ExtraIcon,
     ExpandIcon,
+    ExtraIcon,
     FitIcon,
     InfoIcon,
     ListIcon,
@@ -310,32 +311,32 @@ export const EVA_TIMELINE: Timeline = {
         arcs: [
             {
                 title: 'Intro',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 1, to: 15 },
             },
             {
                 title: 'Action',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 16, to: 31 },
             },
             {
                 title: 'Descent',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 32, to: 51 },
             },
             {
                 title: 'Bitter End',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 52, to: 72 },
             },
             {
                 title: 'End of TV',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 73, to: 74 },
             },
             {
                 title: 'Movies',
-                cover: null,
+                cover: undefined,
                 chapters: { from: 75 },
             },
         ] as const satisfies Tuple<Arc, ArcsTotal>,
@@ -347,39 +348,39 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () =>
                             'Angel Attack (使徒、襲来 / Shito, Shūrai)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 38,
                     },
                     {
                         title: () => 'Reunion (再会 / Saikai)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 27,
                     },
                     {
                         title: () =>
                             'Unit-01, Lift Off (初号機、出撃 / Shogōki, Rifuto Ofu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 27,
                     },
                     {
                         title: () => 'Silence... (沈黙… / Chinmoku...)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 25,
                     },
                     {
                         title: () =>
                             'What Was Seen In The Well Of Light (光の淵に見たもの / Hikari no Fuchi ni Mitamono)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 30,
                     },
                     {
                         title: () => 'I...Cry... (ボクハナク / Boku wa Naku)',
-                        cover: null,
+                        cover: undefined,
                         date: 'August 29, 1995',
                         pages: 25,
                     },
@@ -393,42 +394,42 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () =>
                             'Closing Hearts (閉じゆく心 / Toji Yuku Kokoro)',
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 29,
                     },
                     {
                         title: () =>
                             "Shinji's Mood (シンジご機嫌ななめ / Shinji Gokigen Naname)",
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 18,
                     },
                     {
                         title: () =>
                             'The Trials of a True Fan (マニアの受難 / Mania no Junan)',
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'Shonen and Knife (ナイフと少年 / Naifu to Shōnen)',
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 25,
                     },
                     {
                         title: () =>
                             'Third Child Wandering (さまよえるサード・チルドレン / Samayoeru Sādo Chirudoren)',
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 29,
                     },
                     {
                         title: () =>
                             'Fumbling Towards Kindness (やさしさの輪郭 / Yasashisa no Katachi)',
-                        cover: null,
+                        cover: undefined,
                         date: 'March 5, 1996',
                         pages: 29,
                     },
@@ -440,48 +441,48 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'White Scars (白い傷跡 / Shiroi Kizuato)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 25,
                     },
                     {
                         title: () =>
                             'The Warped Room (歪んだ部屋 / Yuganda Heya)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 24,
                     },
                     {
                         title: () =>
                             'What Her Crimson Eyes Believe (紅い瞳の信じるものは / Akai Hitomi no Shinjirumono wa)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 27,
                     },
                     {
                         title: () =>
                             'Abandoned Memories (棄てられた記憶 / Suterareta Kioku)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 24,
                     },
                     {
                         title: () =>
                             "The Night Before Battle (決戦前夜 / Kessen Zen'ya)",
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 24,
                     },
                     {
                         title: () => 'Blood Battle (血戦! / Kessen!)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 16,
                     },
                     {
                         title: () =>
                             'The Moon Inside the Darkness (闇の中の月 / Yami no Naka no Tsuki)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 29, 1996',
                         pages: 39,
                     },
@@ -495,47 +496,47 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () =>
                             'Asuka Comes To Japan (アスカ、来日 / Asuka, Rainichi)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 33,
                     },
                     {
                         title: () =>
                             'The Uninvited (招かれざる者 / Manekarezarumono)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'Asuka Attacks (アスカ攻撃 / Asuka Atakku)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'Try, Try Again (トライ・アゲイン / Torai Agein)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 31,
                     },
                     {
                         title: () => 'Dissonance (不協和音 / Disonansu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 31,
                     },
                     {
                         title: () => 'Shall We Dance? (Shall we dance?)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 28,
                     },
                     {
                         title: () =>
                             'One Moment, One Heart (瞬間、心、重ねて / Shunkan, Kokoro, Kasanete)',
-                        cover: null,
+                        cover: undefined,
                         date: 'October 17, 1997',
                         pages: 28,
                     },
@@ -547,47 +548,47 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'The Party (パーティー / Pātī)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'Follow Back Along Your Scar (傷跡をたどれば / Kizuato o Tadoreba)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 29,
                     },
                     {
                         title: () => 'Centopath (墓標 / Bohyō)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 33,
                     },
                     {
                         title: () =>
                             'Catch The G-Shock (受け止めろ 重力攻撃! / Catch The G-Shock!)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'NERV Blackout (ネルフ、停電 / Nerufu, Teiden)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 31,
                     },
                     {
                         title: () =>
                             "The Abyss of Truth (真実の深淵 / Shinjitsu no Shin'en)",
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 25,
                     },
                     {
                         title: () => 'Aquarium (アクアリウム / Akuariumu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 17, 1999',
                         pages: 27,
                     },
@@ -601,46 +602,46 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () =>
                             'The Fourth Child (四人目の適格者 / Yoninme no Tekikakusha)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 38,
                     },
                     {
                         title: () =>
                             'Light, Then Shadow (光、そして影 / Hikari, Soshite Kage)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 27,
                     },
                     {
                         title: () => 'Confession (告白 / Kokuhaku)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 57 - 27,
                     },
                     {
                         title: () => 'The Gift (ギフト / Gifuto)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 27,
                     },
                     {
                         title: () => 'Ambush (迎撃 / Geigeki)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 57 - 27,
                     },
                     {
                         title: () =>
                             'The Dummy System (ダミーシステム / Damī Shisutemu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 23,
                     },
                     {
                         title: () =>
                             'Staining the Twilight Black (黄昏を黒に染めて… / Tasogare o Kuro ni Somete...)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 15, 2000',
                         pages: 48 - 23,
                     },
@@ -652,52 +653,52 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Fist (フィスト / Fisuto)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 31,
                     },
                     {
                         title: () => 'Ashen Skies (灰色の空 / Hai-iro no Sora)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 49 - 31,
                     },
                     {
                         title: () => 'Cross-Examination (尋問 / Jinmon)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 29,
                     },
                     {
                         title: () => 'Atonement (贖罪 / Shokuzai)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 29,
                     },
                     {
                         title: () =>
                             "A Man's Battle (男の戦い / Otoko no Tatakai)",
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 27,
                     },
                     {
                         title: () =>
                             'The Awakening, Part 1 (覚醒・前編 / Kakusei, Zenpen)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 32,
                     },
                     {
                         title: () =>
                             'The Awakening, Part 2 (覚醒・後編 / Kakusei, Kōhen)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 22,
                     },
                     {
                         title: () => 'Eradication (消滅 / Shōmetsu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 1, 2001',
                         pages: 47 - 22,
                     },
@@ -709,52 +710,52 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => '…Kiss (•••Kiss)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 33,
                     },
                     {
                         title: () =>
                             'Into the Heart… (心の中へ… / Kokoro no Naka e...)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 25,
                     },
                     {
                         title: () => 'Mother (MOTHER)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 20,
                     },
                     {
                         title: () => 'Flashback (回想 / Kaisō)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 25,
                     },
                     {
                         title: () =>
                             'A Giant Made of Light (光の巨人 / Hikari no Kyojin)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 21,
                     },
                     {
                         title: () =>
                             'The Birth of NERV (ネルフ誕生 / Nerufu Tanjō)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 21,
                     },
                     {
                         title: () => 'Message (伝言 / Dengon)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 24,
                     },
                     {
                         title: () => 'Of Jealousy (ジェラシー / Jerashī)',
-                        cover: null,
+                        cover: undefined,
                         date: 'December 19, 2002',
                         pages: 29,
                     },
@@ -768,43 +769,43 @@ export const EVA_TIMELINE: Timeline = {
                     {
                         title: () =>
                             'The Fifth Child (フィフス・チルドレン / Fifusu Chirudoren)',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 33,
                     },
                     {
                         title: () => 'Rejection (拒絶 / Kyozetsu)',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 27,
                     },
                     {
                         title: () => 'Pride',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 26,
                     },
                     {
                         title: () => 'Doll',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 27,
                     },
                     {
                         title: () => 'The Spear of Longinus',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 25,
                     },
                     {
                         title: () => 'Distance',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 25,
                     },
                     {
                         title: () => 'Returning Fire',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2004',
                         pages: 27,
                     },
@@ -816,43 +817,43 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Tears',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 33,
                     },
                     {
                         title: () => 'I Want to Become One',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 23,
                     },
                     {
                         title: () => 'Without Reaching Your Heart',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 27,
                     },
                     {
                         title: () => 'Twisted Night',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 26,
                     },
                     {
                         title: () => 'Mixing',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 20,
                     },
                     {
                         title: () => 'Tainted Blood',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 21,
                     },
                     {
                         title: () => 'A Gathering of Nothingness',
-                        cover: null,
+                        cover: undefined,
                         date: 'February 25, 2006',
                         pages: 22,
                     },
@@ -865,37 +866,37 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Descendent of Adam',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 30,
                     },
                     {
                         title: () => 'The Last Messenger',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 27,
                     },
                     {
                         title: () => 'Reaching the Boundary',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 29,
                     },
                     {
                         title: () => 'Memories Within My Palm',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 27,
                     },
                     {
                         title: () => 'Broken Heart',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 26,
                     },
                     {
                         title: () => 'Final Enemy',
-                        cover: null,
+                        cover: undefined,
                         date: 'June 19, 2007',
                         pages: 15 + 12,
                     },
@@ -907,43 +908,43 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Genocide',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 22 + 4,
                     },
                     {
                         title: () => 'Father and Child',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 26,
                     },
                     {
                         title: () => 'The Promised Time',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 28,
                     },
                     {
                         title: () => 'Encounter',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 13 + 17,
                     },
                     {
                         title: () => 'Enemy From The Sky',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 19,
                     },
                     {
                         title: () => 'The Last Instruction',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 24,
                     },
                     {
                         title: () => 'Call And Response',
-                        cover: null,
+                        cover: undefined,
                         date: 'April 3, 2010',
                         pages: 25,
                     },
@@ -955,43 +956,43 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Calling',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 29 + 16,
                     },
                     {
                         title: () => 'Betrayal',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 26,
                     },
                     {
                         title: () => 'The Ceremony Begins',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 21,
                     },
                     {
                         title: () => 'Rejection',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 17,
                     },
                     {
                         title: () => 'Black Moon',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 22,
                     },
                     {
                         title: () => 'Face-To-Face',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 15 + 18,
                     },
                     {
                         title: () => 'Memories Of Summer',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 2, 2012',
                         pages: 23,
                     },
@@ -1003,43 +1004,43 @@ export const EVA_TIMELINE: Timeline = {
                 chapters: [
                     {
                         title: () => 'Where Light Returns',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 22,
                     },
                     {
                         title: () => 'Birthday',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 24,
                     },
                     {
                         title: () => 'Sea of Life',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 24,
                     },
                     {
                         title: () => 'Palms',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 15 + 20,
                     },
                     {
                         title: () => 'Thank You ∞ Goodbye',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 11,
                     },
                     {
                         title: () => 'The Journey Begins',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 25,
                     },
                     {
                         title: () => 'Eden In Summer',
-                        cover: null,
+                        cover: undefined,
                         date: 'November 20, 2014',
                         pages: 33,
                     },

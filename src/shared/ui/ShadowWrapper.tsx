@@ -10,7 +10,7 @@ type ShadowProps = {
 
 // vscode-styled-components (ts-styled-plugin) extension formats this
 // incorrectly and complains afterwards when this function is inlined
-const getShadowColor = ({ $invertBorder }: ShadowProps) =>
+const getShadowColor = ({ $invertBorder = false }: ShadowProps) =>
     $invertBorder ? '#fff' : '#000';
 
 const Shadow = styled.div<ShadowProps>`

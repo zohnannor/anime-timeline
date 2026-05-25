@@ -67,14 +67,14 @@ export const ThumbnailImage: React.FC<
         ...rest
     } = props;
 
-    const realSrc = `./${animeTitle}/${src}.webp`;
-    const thumbnailSrc = `./${animeTitle}-thumbnails/${src}.webp`;
+    const realSource = `./${animeTitle}/${src}.webp`;
+    const thumbnailSource = `./${animeTitle}-thumbnails/${src}.webp`;
 
     return (
         <>
             <Image
                 className='thumbnailImage'
-                src={realSrc}
+                src={realSource}
                 alt=''
                 loading='lazy'
                 $loading={loading}
@@ -88,9 +88,9 @@ export const ThumbnailImage: React.FC<
             {loading && (
                 <Thumbnail
                     className='thumbnail'
-                    $thumbnail={thumbnailSrc}
-                    $offsetX={$offsetX ? -$offsetX : $offsetX}
-                    $offsetY={$offsetY ? -$offsetY : $offsetY}
+                    $thumbnail={thumbnailSource}
+                    $offsetX={$offsetX !== undefined ? -$offsetX : $offsetX}
+                    $offsetY={$offsetY !== undefined ? -$offsetY : $offsetY}
                     $defaultPosition={$defaultPosition}
                     draggable={false}
                 />

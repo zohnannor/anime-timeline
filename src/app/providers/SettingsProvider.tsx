@@ -12,10 +12,12 @@ const createModalHandler =
         setter: React.Dispatch<React.SetStateAction<boolean>>,
     ) =>
     (open: React.SetStateAction<boolean>) => {
-        if (open) {
-            globalThis.history.pushState({ [stateKey]: true }, '');
-        } else if (globalThis.history.state?.[stateKey]) {
-            globalThis.history.back();
+        if (typeof open === 'boolean') {
+            if (open) {
+                globalThis.history.pushState({ [stateKey]: true }, '');
+            } else if (globalThis.history.state?.[stateKey] !== undefined) {
+                globalThis.history.back();
+            }
         }
         setter(open);
     };
@@ -42,8 +44,8 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         () => globalThis.localStorage.getItem('showExtraChapters') !== 'false',
     );
     const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
-        const params = new URLSearchParams(globalThis.location.search);
-        const animeTitle = params.get('title');
+        const parameters = new URLSearchParams(globalThis.location.search);
+        const animeTitle = parameters.get('title');
         if (isTitle(animeTitle)) {
             return animeTitle;
         }
@@ -55,7 +57,7 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     useEffect(() => {
         const handlePopState = (ev: PopStateEvent) => {
             const state =
-                (ev.state as Record<string, boolean> | undefined | null) ?? {};
+                (ev.state as Record<string, boolean> | undefined) ?? {};
             const modalStates: {
                 key: keyof Settings;
                 setter: React.Dispatch<React.SetStateAction<boolean>>;

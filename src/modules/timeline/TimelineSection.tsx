@@ -20,35 +20,38 @@ const TimelineContainer = styled.div<ContainerProps>`
     height: ${({ $height }) => scale($height)};
 `;
 
-type TimelineSections = (
-    | {
-          [K in TimelineSectionType]: ResolvedSectionItem<K>;
-      }[TimelineSectionType]
-    | {
-          type: 'timeline';
-      }
-) & { parentNumber?: number };
+type TimelineSectionProps = {
+    item:
+        | NonNullable<ResolvedSectionItem<TimelineSectionType>>
+        | {
+              type: 'timeline';
+              height: number;
+          };
+    parentNumber?: number;
+};
 
-export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
-    const { type, parentNumber } = timelineItem;
+export const TimelineSection: React.FC<TimelineSectionProps> = ({
+    item,
+    parentNumber,
+}) => {
     const {
         data: { episodes, seasons, sagas, arcs, chapters, volumes },
     } = useTimeline();
     const { showExtraChapters } = useSettings();
 
+    const { type, height } = item;
     if (type === 'timeline') {
         return <Timeline />;
     }
 
-    const { height } = timelineItem;
     if (type === 'season' && seasons === undefined) {
-        return null;
+        return <></>;
     }
     if (type === 'saga' && sagas === undefined) {
-        return null;
+        return <></>;
     }
     if (type === 'arc' && arcs === undefined) {
-        return null;
+        return <></>;
     }
 
     const entities = () =>
@@ -56,7 +59,8 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         : type === 'season' ? (seasons ?? [])
         : type === 'saga' ? (sagas ?? [])
         : type === 'arc' ?
-            parentNumber ? (arcs ?? []).filter(arc => arc.saga === parentNumber)
+            parentNumber !== undefined ?
+                (arcs ?? []).filter(arc => arc.saga === parentNumber)
             :   (arcs ?? [])
         : type === 'chapter' ?
             showExtraChapters ? chapters
@@ -68,7 +72,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
 
     // do not create empty sections if there are no entities
     if (entityList.length === 0) {
-        return null;
+        return <></>;
     }
 
     return (
@@ -78,7 +82,7 @@ export const TimelineSection: React.FC<TimelineSections> = timelineItem => {
         >
             {entityList.map((entity, idx) => (
                 <TimelineSectionItemComponent
-                    timelineSection={timelineItem}
+                    timelineSection={item}
                     entity={entity}
                     num={idx + 1}
                     key={`${entity.title}-${idx + 1}`}

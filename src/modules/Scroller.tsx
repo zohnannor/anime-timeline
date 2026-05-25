@@ -125,10 +125,10 @@ export const Scroller = () => {
         const stopDrag = () => setDragging(false);
 
         body.addEventListener('mousemove', handleDrag);
-        window.addEventListener('mouseup', stopDrag);
+        globalThis.addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
-            window.removeEventListener('mouseup', stopDrag);
+            globalThis.removeEventListener('mouseup', stopDrag);
         };
     }, [body, dragging, updateScrollerHandle]);
 

@@ -106,8 +106,8 @@ type Sorting =
     | 'recently updated';
 
 type SortData =
-    | { type: 'string'; value: string; badge: string | null }
-    | { type: 'number'; value: number; badge: string | null };
+    | { type: 'string'; value: string; badge: string | undefined }
+    | { type: 'number'; value: number; badge: string | undefined };
 
 type Sort = {
     animeTitle: AnimeTitle;
@@ -123,7 +123,7 @@ const getSortStrategy = (
     const variants = {
         alphabetical: () =>
             // note: sorting by anime title (code name) instead of actual title
-            ({ type: 'string', value: animeTitle, badge: null }),
+            ({ type: 'string', value: animeTitle, badge: undefined }),
         'chapter count': () => {
             const count = totalChapterCount(chapters);
             return { type: 'number', value: count, badge: `${count} chapters` };
@@ -144,7 +144,7 @@ const getSortStrategy = (
                 }),
             };
         },
-        unsorted: () => ({ type: 'number', value: 0, badge: null }),
+        unsorted: () => ({ type: 'number', value: 0, badge: undefined }),
     } as Record<Sorting, () => SortData>;
     return variants[sorting]();
 };
@@ -164,7 +164,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
 
     useEffect(() => {
         loadAll().catch((err: unknown) =>
-            console.error('Failed to load all timelines: ', err),
+            console.error('Failed to load all timelines:', err),
         );
     }, [loadAll]);
 
@@ -182,7 +182,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
     );
 
     if (!animeTitleSelectorOpen) {
-        return null;
+        return <></>;
     }
 
     const nextSorting = {
@@ -208,7 +208,7 @@ export const AnimeTitleSelectorModal: React.FC = () => {
             title='Select a manga/anime title'
             additionalButtons={
                 <HeaderButton
-                    onClick={() => setSorting(cur => nextSorting[cur])}
+                    onClick={() => setSorting(current => nextSorting[current])}
                 >
                     <Tooltip
                         placement='bottom'
@@ -236,7 +236,9 @@ export const AnimeTitleSelectorModal: React.FC = () => {
                         />
                         <TitleWrapper>
                             {title}
-                            {badge && <BadgeWrapper>{badge}</BadgeWrapper>}
+                            {badge !== undefined && (
+                                <BadgeWrapper>{badge}</BadgeWrapper>
+                            )}
                         </TitleWrapper>
                     </TitleButton>
                 ))}

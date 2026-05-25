@@ -20,14 +20,14 @@ export type EntityCallback<T> = (
 ) => T;
 
 type CoverOffset<C> = ExactUnion<
-    { cover: C; offset: Offset } | { cover: null }
+    { cover: C; offset: Offset } | { cover: undefined }
 >;
 
 export type Chapter = {
     title: Callback<string>;
     date: string;
     pages: number;
-    cover: string | null;
+    cover: string | undefined;
 };
 
 export type Volume = ExactUnion<
@@ -35,7 +35,7 @@ export type Volume = ExactUnion<
           title: Callback<string> | number;
           cover: EntityCallback<string>;
       }
-    | { cover: null }
+    | { cover: undefined }
 > & {
     chapters: NonEmptyArray<Chapter>;
 };

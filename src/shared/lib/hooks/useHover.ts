@@ -12,7 +12,7 @@ type Handlers<T> = (_item: T) => {
 type UseHover<T> = [Comparator<T>, Handlers<T>];
 
 const useHover = <T extends string | number>(): UseHover<T> => {
-    const [hoveredItem, setHoveredItem] = useState<T | null>(null);
+    const [hoveredItem, setHoveredItem] = useState<T | undefined>();
 
     const hovered = (item: T) => hoveredItem === item;
 
@@ -31,12 +31,10 @@ const useHover = <T extends string | number>(): UseHover<T> => {
 
     const handlers = (item: T) => ({
         onMouseOver: (ev: React.MouseEvent) => {
-            if (item) {
-                setHoveredItem(item);
-            }
+            setHoveredItem(item);
             ev.stopPropagation();
         },
-        onMouseOut: () => setHoveredItem(null),
+        onMouseOut: () => setHoveredItem(undefined),
     });
 
     return [hovered, handlers];

@@ -22,10 +22,7 @@ import {
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 
-const getISODate = (date: Date): string => {
-    const iso = date.toISOString();
-    return iso.substring(0, 10);
-};
+const getISODate = (date: Date): string => date.toISOString().slice(0, 10);
 
 const CalendarGrid = styled.div`
     display: grid;
@@ -84,7 +81,7 @@ const Day = styled.a<DayProps>`
                 outline-offset: -0.26rem;
                 font-size: 0.9rem;
             `
-        :   null}
+        :   undefined}
 
     &:focus {
         z-index: 1;
@@ -107,7 +104,7 @@ const Day = styled.a<DayProps>`
                     outline-width: 0.07rem;
                     outline-offset: -0.13rem;
                 `
-            :   null}
+            :   undefined}
 
         &:focus {
             outline-width: 0.2rem;
@@ -145,10 +142,10 @@ type MonthComponentProps = {
     month: Date;
     currentDate: Date;
     chapterDateMap: EventMap;
-    nextChapterDate: Date | null;
+    nextChapterDate: Date | undefined;
     onDayClick: (
         _ev: React.MouseEvent,
-        _event: { chapter: string } | { episode: [string, number] } | null,
+        _event: { chapter: string } | { episode: [string, number] } | undefined,
     ) => void;
 };
 
@@ -181,29 +178,29 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
 
         const days: React.JSX.Element[] = [];
 
-        for (let i = 0; i < lastDay; i++) {
-            days.push(<div key={`empty-${month.getTime()}-${i}`} />);
+        for (let idx = 0; idx < lastDay; idx++) {
+            days.push(<div key={`empty-${month.getTime()}-${idx}`} />);
         }
 
-        for (let dayN = 1; dayN <= monthEnd.getDate(); dayN++) {
+        for (let dayNumber = 1; dayNumber <= monthEnd.getDate(); dayNumber++) {
             const date = new Date(month);
-            date.setDate(dayN);
-            const dateStr = getISODate(date);
-            const event = chapterDateMap.get(dateStr) ?? null;
-            const isChapter = event !== null && 'chapter' in event;
-            const isEpisode = event !== null && 'episode' in event;
+            date.setDate(dayNumber);
+            const dateString = getISODate(date);
+            const event = chapterDateMap.get(dateString) ?? undefined;
+            const isChapter = event !== undefined && 'chapter' in event;
+            const isEpisode = event !== undefined && 'episode' in event;
             const isEvent = isChapter || isEpisode;
-            const chapterNumber = isChapter ? event.chapter : null;
-            const episodeNumber = isEpisode ? event.episode : null;
+            const chapterNumber = isChapter ? event.chapter : undefined;
+            const episodeNumber = isEpisode ? event.episode : undefined;
             const isToday = date.toDateString() === currentDate.toDateString();
             const isNextChapter =
                 date.toDateString() === nextChapterDate?.toDateString();
 
-            const dayColor = interpolateColor(dayN, [1, 31], DAYS_GRADIENT)
+            const dayColor = interpolateColor(dayNumber, [1, 31], DAYS_GRADIENT)
                 .toString(16)
                 .padStart(6, '0');
 
-            const dayKey = `day-${chapterNumber ?? `${dateStr}-no-chapter`}`;
+            const dayKey = `day-${chapterNumber ?? `${dateString}-no-chapter`}`;
 
             let day = (
                 <Day
@@ -218,9 +215,11 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     onClick={ev => onDayClick(ev, event)}
                     tabIndex={isEvent ? -1 : undefined}
                 >
-                    <span>{dayN}</span>
-                    {chapterNumber !== null && <span>#{chapterNumber}</span>}
-                    {episodeNumber !== null && (
+                    <span>{dayNumber}</span>
+                    {chapterNumber !== undefined && (
+                        <span>#{chapterNumber}</span>
+                    )}
+                    {episodeNumber !== undefined && (
                         <span>
                             E{episodeNumber[0]} (S{episodeNumber[1]})
                         </span>
@@ -266,6 +265,24 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     },
 );
 
+const getMonthsBetween = (start: Date, end: Date) => {
+    const months = [];
+    const current = new Date(start);
+    current.setDate(1);
+
+    const endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999);
+
+    // false positive: mutated by `setMonth`
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (current <= endDate) {
+        months.push(new Date(current));
+        current.setMonth(current.getMonth() + 1);
+    }
+
+    return months;
+};
+
 export const CalendarModal: React.FC = () => {
     const { calendarOpen, setCalendarOpen } = useSettings();
     const {
@@ -278,7 +295,7 @@ export const CalendarModal: React.FC = () => {
     // CSM has finished publication, this is no longer necessary. commented out
     // for now, but will be re-enabled if needed in the future for other ongoing
     // titles on Manga Plus.
-    /* const [nextChapterDate, setNextChapterDate] = useState<Date | null>(null);
+    /* const [nextChapterDate, setNextChapterDate] = useState<Date | undefined>(undefined);
 
     useEffect(() => {
         // `useEffect` awaits the promise
@@ -289,7 +306,7 @@ export const CalendarModal: React.FC = () => {
             }
             // fetch from Manga Plus only for csm
             if (animeTitle !== 'csm') {
-                setNextChapterDate(null);
+                setNextChapterDate(undefined);
                 return;
             }
             setNextChapterDate(await fetchNextChapterDate());
@@ -298,11 +315,8 @@ export const CalendarModal: React.FC = () => {
 
     useEffect(() => {
         if (calendarOpen && modalRef.current) {
-            if (scrolledToBottom) {
-                modalRef.current.scrollTop = 0;
-            } else {
-                modalRef.current.scrollTop = modalRef.current.scrollHeight;
-            }
+            modalRef.current.scrollTop =
+                scrolledToBottom ? 0 : modalRef.current.scrollHeight;
         }
     }, [calendarOpen, scrolledToBottom]);
 
@@ -312,37 +326,19 @@ export const CalendarModal: React.FC = () => {
 
     const eventMap = useMemo(() => {
         const map: EventMap = new Map();
-        chapters.forEach(({ date, number }) => {
-            const dateStr = getISODate(date);
-            map.set(dateStr, { ...map.get(dateStr), chapter: number });
-        });
-        episodes.forEach(({ date, number, season }) => {
-            const dateStr = getISODate(date);
-            map.set(dateStr, {
-                ...map.get(dateStr),
+        for (const { date, number } of chapters) {
+            const dateString = getISODate(date);
+            map.set(dateString, { ...map.get(dateString), chapter: number });
+        }
+        for (const { date, number, season } of episodes) {
+            const dateString = getISODate(date);
+            map.set(dateString, {
+                ...map.get(dateString),
                 episode: [number, season],
             });
-        });
+        }
         return map;
     }, [chapters, episodes]);
-
-    const getMonthsBetween = (start: Date, end: Date) => {
-        const months = [];
-        const current = new Date(start);
-        current.setDate(1);
-
-        const endDate = new Date(end);
-        endDate.setHours(23, 59, 59, 999);
-
-        // false positive: mutated by `setMonth`
-        // eslint-disable-next-line no-unmodified-loop-condition
-        while (current <= endDate) {
-            months.push(new Date(current));
-            current.setMonth(current.getMonth() + 1);
-        }
-
-        return months;
-    };
 
     // see comment above for why this is commented out
     /* const furthestDate =
@@ -361,10 +357,13 @@ export const CalendarModal: React.FC = () => {
     const handleDayClick = useCallback(
         (
             ev: React.MouseEvent,
-            event: { chapter: string } | { episode: [string, number] } | null,
+            event:
+                | { chapter: string }
+                | { episode: [string, number] }
+                | undefined,
         ) => {
             ev.preventDefault();
-            if (event === null) {
+            if (event === undefined) {
                 return;
             }
 
@@ -411,7 +410,7 @@ export const CalendarModal: React.FC = () => {
                         key={`month-${month.toISOString()}`}
                         month={month}
                         currentDate={currentDate}
-                        nextChapterDate={null /* nextChapterDate */}
+                        nextChapterDate={undefined /* nextChapterDate */}
                         chapterDateMap={eventMap}
                         onDayClick={handleDayClick}
                     />

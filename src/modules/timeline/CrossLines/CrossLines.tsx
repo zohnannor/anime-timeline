@@ -4,7 +4,7 @@ import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 
 export type CrossLinesProps = {
-    $crossLinesVisible?: boolean | undefined;
+    $crossLinesVisible: boolean;
 };
 
 const CrossLinesWrapper = styled.div<CrossLinesProps>`

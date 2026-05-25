@@ -86,7 +86,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover<string>();
     const { setCalendarOpen } = useSettings();
-    const lastClickedChapter = useRef<string | null>(null);
+    const lastClickedChapter = useRef<string | undefined>(undefined);
 
     const openCalendarForChapter = useCallback(
         (chapterNumber: string) => {
@@ -97,13 +97,13 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 
     useEffect(() => {
-        if (lastClickedChapter.current === null) {
+        if (lastClickedChapter.current === undefined) {
             return;
         }
 
         scrollToId(`day-${lastClickedChapter.current}`);
 
-        lastClickedChapter.current = null;
+        lastClickedChapter.current = undefined;
     }, [setCalendarOpen]);
 
     return (
@@ -247,7 +247,7 @@ export const Timeline: React.FC = () => {
                 segments={yearsSegments}
                 colorInterpolation={{
                     inputRange: yearRange,
-                    outputGradient: [0x888888, 0xffffff],
+                    outputGradient: [0x88_88_88, 0xff_ff_ff],
                 }}
                 variant='years'
             />

@@ -46,7 +46,7 @@ export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> & {
 } & ResolvedTemplates;
 
 type ResolvedVolume = Omit<Volume, 'title' | 'cover' | 'chapters'> & {
-    cover: string | null;
+    cover: string | undefined;
     width: WidthResolver;
     extra: boolean;
 } & ResolvedTemplates;
@@ -65,13 +65,13 @@ export type ResolvedEpisode = Omit<
     'title' | 'cover' | 'chapters' | 'date'
 > & {
     date: Date;
-    cover: string | null;
+    cover: string | undefined;
     width: WidthResolver;
     season: number;
 } & ResolvedTemplates;
 
 type ResolvedSeason = Omit<Season, 'cover' | 'chapters' | 'episodes'> & {
-    cover: string | null;
+    cover: string | undefined;
     width: WidthResolver;
 } & ResolvedTemplates;
 
@@ -274,7 +274,7 @@ const resolveTimelineData = (
                 const arcNumber = arcIdx + 1;
                 const title = arcTemplates.titleProcessor(rawTitle, arcNumber);
                 return {
-                    ...(cover !== null ? { cover, offset } : { cover }),
+                    ...(cover !== undefined ? { cover, offset } : { cover }),
                     width: unboundChapterWidth =>
                         sum(
                             chapters
@@ -348,9 +348,9 @@ const resolveTimelineData = (
                 :   `SEASON ${number}`;
             seasons.push({
                 width: widthBasedOnPages(chaptersRange),
-                ...(rawCover !== undefined && rawCover !== null ?
+                ...(rawCover !== undefined ?
                     { cover: maybeCallback(rawCover, seasonNumber), offset }
-                :   { cover: null }),
+                :   { cover: undefined }),
                 title,
                 number,
                 wikiLink: seasonTemplates.wikiLink(title, seasonNumber),
@@ -376,12 +376,12 @@ const resolveTimelineData = (
                     :   maybeCallback(rawTitle, episodeNumber);
                 episodes.push({
                     date: tokyoDate(rawDate),
-                    ...(rawCover !== null ?
+                    ...(rawCover !== undefined ?
                         {
                             cover: maybeCallback(rawCover, episodeNumber),
                             offset,
                         }
-                    :   { cover: null }),
+                    :   { cover: undefined }),
                     width: widthBasedOnPages(chaptersRange),
                     season: seasonNumber,
                     title: episodeTemplates.titleProcessor(
@@ -455,7 +455,7 @@ const resolveTimelineSectionLayout = (
                     extra ?? false,
                 ),
             numberProcessor: (n, title, extra) =>
-                (numberProcessor ?? (num => num.toString()))(
+                (numberProcessor ?? (number => number.toString()))(
                     n,
                     title,
                     extra ?? false,
@@ -481,18 +481,18 @@ const resolveTimelineSectionLayout = (
     const layout = {} as ResolvedTimelineSectionLayout;
 
     // TODO: introduce the odering for sections
-    typedKeys(rawLayout).forEach(type => {
+    for (const type of typedKeys(rawLayout)) {
         if (type === 'timeline') {
             layout.timeline = {
                 type,
                 height: TIMELINE_HEIGHT,
             };
-            return;
+            continue;
         }
 
         const rawItem = rawLayout[type];
         if (rawItem === undefined) {
-            return;
+            continue;
         }
 
         const resolved = resolveItem(rawItem);
@@ -501,7 +501,7 @@ const resolveTimelineSectionLayout = (
         }
 
         Object.assign(layout, { [type]: resolved });
-    });
+    }
 
     return [layout, templates];
 };

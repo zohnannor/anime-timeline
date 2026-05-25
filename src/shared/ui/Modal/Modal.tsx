@@ -1,5 +1,5 @@
 import CSS from 'csstype';
-import { PropsWithChildren, useSyncExternalStore } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import styled, { css } from 'styled-components';
 
@@ -31,7 +31,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
     user-select: none;
     max-height: 90svh;
 
-    ${({ $mobileFullscreen }) =>
+    ${({ $mobileFullscreen = false }) =>
         $mobileFullscreen &&
         css`
             @media (max-width: ${MOBILE_BREAKPOINT}px) {
@@ -106,16 +106,10 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
     $bgColor,
     $mobileFullscreen,
 }) => {
-    const modalElement = useSyncExternalStore(
-        () => () => {
-            /* empty */
-        },
-        () => document.getElementById('modal'),
-        () => null,
-    );
+    const modalElement = useMemo(() => document.getElementById('modal'), []);
 
     if (!isOpen || !modalElement) {
-        return null;
+        return <></>;
     }
 
     return ReactDOM.createPortal(

@@ -1,4 +1,3 @@
-import { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import { MOBILE_BREAKPOINT } from '@shared/config';
@@ -8,28 +7,8 @@ import {
     useSettings,
 } from '@shared/contexts/SettingsContext';
 import { IconButton, Tooltip } from '@shared/ui';
-import { Icon } from '@timelines/types';
-
-const ButtonSection = styled.div`
-    display: flex;
-    position: fixed;
-    background: rgba(0, 0, 0, 0.25);
-    flex-direction: column;
-    padding: 0.5rem;
-    border-radius: 0.8rem;
-    gap: 0.8rem;
-    top: 1.26rem;
-    right: 1.26rem;
-    z-index: 100;
-
-    @media (max-width: ${MOBILE_BREAKPOINT}px) {
-        padding: 0.3rem;
-        border-radius: 0.5rem;
-        gap: 0.4rem;
-        top: 0.6rem;
-        right: 0.6rem;
-    }
-`;
+import { FloatingButtonConfig } from '@timelines/index';
+import { Icon, Icons } from '@timelines/types';
 
 const FloatingButtonTooltip = styled.div`
     display: flex;
@@ -48,10 +27,6 @@ const FloatingButtonTooltip = styled.div`
     }
 `;
 
-export const FloatingButtons: React.FC<PropsWithChildren> = ({ children }) => (
-    <ButtonSection className='floatingButtons'>{children}</ButtonSection>
-);
-
 const FloatingIconButton = styled(IconButton)`
     position: relative;
     cursor: pointer;
@@ -66,11 +41,7 @@ type ButtonProps = {
     option: keyof SettingsValues;
 };
 
-export const FloatingButton: React.FC<ButtonProps> = ({
-    icon,
-    title,
-    option,
-}) => {
+const FloatingButton: React.FC<ButtonProps> = ({ icon, title, option }) => {
     const settings = useSettings();
     const value = settings[option];
     const setter = settings[SETTINGS_FUNCTIONS[option]];
@@ -97,3 +68,45 @@ export const FloatingButton: React.FC<ButtonProps> = ({
         </Tooltip>
     );
 };
+
+const ButtonSection = styled.div`
+    display: flex;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.25);
+    flex-direction: column;
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    gap: 0.8rem;
+    top: 1.26rem;
+    right: 1.26rem;
+    z-index: 100;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}px) {
+        padding: 0.3rem;
+        border-radius: 0.5rem;
+        gap: 0.4rem;
+        top: 0.6rem;
+        right: 0.6rem;
+    }
+`;
+
+type FloatingButtonsProps = {
+    buttons: FloatingButtonConfig[];
+    icons: Icons;
+};
+
+export const FloatingButtons: React.FC<FloatingButtonsProps> = ({
+    buttons,
+    icons,
+}) => (
+    <ButtonSection className='floatingButtons'>
+        {buttons.map(({ icon, title, option }) => (
+            <FloatingButton
+                key={icon}
+                icon={icons[icon]}
+                option={option}
+                title={title}
+            />
+        ))}
+    </ButtonSection>
+);

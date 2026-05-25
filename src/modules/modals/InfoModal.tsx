@@ -17,7 +17,7 @@ type BoxProps = {
 const Box = styled.div<BoxProps>`
     display: flex;
     flex-direction: ${({ $dir }) => $dir ?? 'row'};
-    flex-wrap: ${({ $wrap }) => ($wrap ? 'wrap' : 'nowrap')};
+    flex-wrap: ${({ $wrap = false }) => ($wrap ? 'wrap' : 'nowrap')};
     gap: 1ch;
     align-items: ${({ $align }) => $align ?? 'center'};
     justify-content: center;
@@ -74,12 +74,12 @@ type InlineLinkGroupProps = {
 
 const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     display: flex;
-    gap: ${({ $gap }) => ($gap ? '0 1ch' : '0')};
+    gap: ${({ $gap = false }) => ($gap ? '0 1ch' : '0')};
     flex-wrap: wrap;
 `;
 
 type Keys = {
-    keys: string[];
+    readonly keys: string[];
 };
 
 const KeyboardShortcut: React.FC<Keys> = ({ keys }) => (
@@ -201,7 +201,7 @@ const infoModalContent = ({
             intellectual property on this site.
         </Box>
 
-        {socialLinks.length !== 0 && (
+        {socialLinks.length > 0 && (
             <Box $dir='column'>
                 <h3>Official Links:</h3>
                 {socialLinks.map(({ name, url }) => (
