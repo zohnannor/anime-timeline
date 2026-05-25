@@ -1,9 +1,9 @@
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
 import { pad, Tuple } from '@shared/lib/util';
 import { ExtraIcon } from '@shared/ui/icons';
 import { Saga, Season, Timeline, Volume } from '@timelines/types';
 
-const SEASON_HEIGHT = 742;
+/* eslint-disable max-lines */ const SEASON_HEIGHT = 742;
 const EPISODE_HEIGHT = SEASON_HEIGHT * 0.33;
 const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
@@ -1557,7 +1557,8 @@ export const CSM_TIMELINE: Timeline = {
                 ],
             },
             {
-                cover: null,
+                title: 1,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Ultimate Armor',
