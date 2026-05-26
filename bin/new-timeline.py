@@ -159,7 +159,7 @@ def create_new_timeline(title: str | None = None) -> None:
                         title: chapterTitle,
                         date: 'January 1, 1970',
                         pages: 100,
-                        cover: null,
+                        cover: undefined,
                     }},
                 ],
             }},""".strip("\n")] * volumes)
@@ -221,7 +221,7 @@ def create_new_timeline(title: str | None = None) -> None:
                         title: chapterTitle,
                         date: 'January 1, 1970',
                         pages: 100,
-                        cover: null,
+                        cover: undefined,
                     }},
                 ],
             }},""".strip("\n")] * extra_volumes) if extra_volumes else ""
@@ -317,15 +317,16 @@ const chapterTitle = (n: number) => `Chapter ${{n}}`;
         )
 
         ts_content = f"""
-/* eslint-disable max-lines */ // a lot of data for a title
+// a lot of data for a title
+/* eslint-disable max-lines */
 import {{ pad, Tuple }} from '@shared/lib/util';
 import {{
     ArrowRangeIcon,
     CalendarIcon,
     CameraIcon,
     EmptyIcon,
-    ExtraIcon,
     ExpandIcon,
+    ExtraIcon,
     FitIcon,
     InfoIcon,
     ListIcon,
