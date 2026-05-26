@@ -7,9 +7,9 @@ import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
 import { HEADERS_WIDTH } from '@timelines/index';
 
-type PreviewProps = {
+type PreviewProps = Readonly<{
     $hasPicture: boolean;
-};
+}>;
 
 const Preview = styled.div<PreviewProps>`
     display: flex;
@@ -36,10 +36,11 @@ const Preview = styled.div<PreviewProps>`
     }
 `;
 
-type ChapterPreviewProps = React.ComponentProps<'div'> &
-    PropsWithChildren<Omit<PreviewProps, '$offsetX'>>;
+type ChapterPreviewProps = Readonly<Omit<PreviewProps, '$offsetX'>>;
 
-export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
+export const ChapterPreview: React.FC<
+    PropsWithChildren<ChapterPreviewProps>
+> = ({ $hasPicture, children }) => {
     const { maxHeight } = useTimeline();
     const previewRef = useRef<HTMLDivElement>(null);
     const { scrollX } = useWindowScroll();
@@ -68,5 +69,9 @@ export const ChapterPreview: React.FC<ChapterPreviewProps> = props => {
         element.style.setProperty('--left', scale(pxToScale(adjustX)));
     }, [scrollX, maxHeight]);
 
-    return <Preview ref={previewRef} {...props} />;
+    return (
+        <Preview className='preview' ref={previewRef} $hasPicture={$hasPicture}>
+            {children}
+        </Preview>
+    );
 };

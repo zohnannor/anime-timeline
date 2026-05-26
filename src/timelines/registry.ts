@@ -19,10 +19,10 @@ export const TIMELINE_LOADERS = {
 
 const getModule = (
     title: AnimeTitle,
-    mod: Record<string, unknown>,
+    module: Record<string, unknown>,
 ): Timeline => {
     const key = `${title.toUpperCase()}_TIMELINE`;
-    const timeline = mod[key];
+    const timeline = module[key];
     if (timeline === undefined) {
         throwError(`\`@timelines/${title}\` doesn't export \`${key}\``);
     }
@@ -38,8 +38,8 @@ export const loadTimeline = async (
     if (cached !== undefined) {
         return cached;
     }
-    const mod = await TIMELINE_LOADERS[title]();
-    const timeline = resolveTimeline(getModule(title, mod));
+    const module = await TIMELINE_LOADERS[title]();
+    const timeline = resolveTimeline(getModule(title, module));
     timelineCache.set(title, timeline);
     return timeline;
 };

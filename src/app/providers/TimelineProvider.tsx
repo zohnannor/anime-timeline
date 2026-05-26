@@ -59,7 +59,7 @@ export const TimelineProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     const context = useMemo(
         () => ({
-            timeline: timelines[animeTitle] ?? null,
+            timeline: timelines[animeTitle],
             timelines,
             loadAll,
         }),

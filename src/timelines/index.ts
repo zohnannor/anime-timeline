@@ -9,16 +9,16 @@ export const SMALL_FONT_SIZE = 45;
 
 export const TIMELINE_HEIGHT = 200;
 
-export type FloatingButtonConfig = {
+export type FloatingButtonConfig = Readonly<{
     icon: Exclude<keyof Icons, 'favicon' | 'scroller'>;
     title: string;
     option: keyof SettingsValues;
-};
+}>;
 
 export const getFloatingButtons = (
     isMobileDevice: boolean,
     hasExtraChapters: boolean,
-): FloatingButtonConfig[] => [
+): readonly FloatingButtonConfig[] => [
     {
         icon: 'select-title',
         title: 'Select Manga/Anime Title',

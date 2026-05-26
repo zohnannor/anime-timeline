@@ -110,29 +110,30 @@ const preparePngClone = (captureScaleFactor: number) => {
             el.remove();
         }
     }
-    return document.body.appendChild(clone);
+    document.body.append(clone);
+    return clone;
 };
 
-type HookOpts = {
+type HookOptions = Readonly<{
     fullWidth: number;
     maxHeight: number;
     animeTitle: string;
     title: string;
-};
+}>;
 
 const useCaptureTimeline = ({
     animeTitle,
     title,
     fullWidth,
     maxHeight,
-}: HookOpts) => {
-    const captureRootRef = useRef<HTMLElement | null>(null);
-    const [loading, setLoading] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+}: HookOptions) => {
+    const captureRootRef = useRef<HTMLElement>(undefined);
+    const [loading, setLoading] = useState<string>();
+    const [error, setError] = useState<string>();
     const [capturing, setCapturing] = useState(false);
     const [atViewportHeight, setAtViewportHeight] = useState(false);
 
-    const scaleFactor = parseFloat(
+    const scaleFactor = Number.parseFloat(
         document.documentElement.style.getPropertyValue(SCALE_FACTOR_PROPERTY),
     );
     const scaledWidth = Math.round(fullWidth * scaleFactor);
@@ -142,7 +143,7 @@ const useCaptureTimeline = ({
 
     const cleanupClone = () => {
         captureRootRef.current?.remove();
-        captureRootRef.current = null;
+        captureRootRef.current = undefined;
     };
 
     const config = useCallback(
@@ -171,7 +172,7 @@ const useCaptureTimeline = ({
                 setLoading(
                     `starting "${title}" ${kind.toUpperCase()} timeline capture`,
                 );
-                setError(null);
+                setError(undefined);
                 if (kind === 'png') {
                     captureRootRef.current = preparePngClone(
                         atViewportHeight ? scaleFactor : 1,
@@ -198,7 +199,7 @@ const useCaptureTimeline = ({
                     cleanupClone();
                 }
                 setCapturing(false);
-                setLoading(null);
+                setLoading(undefined);
                 setError(error);
             },
             onImageErrorHandler: (...args: unknown[]) => {
@@ -225,8 +226,8 @@ const useCaptureTimeline = ({
     const resetCapture = () => {
         cleanupClone();
         setCapturing(false);
-        setLoading(null);
-        setError(null);
+        setLoading(undefined);
+        setError(undefined);
     };
 
     return {
@@ -323,8 +324,8 @@ export const CaptureTimelineModal: React.FC = () => {
                     </DownloadButton>
                 </ButtonRow>
                 <h6>(this might take a while)</h6>
-                {loading !== null && <div>Loading ({loading}...)</div>}
-                {error && <ErrorText>{error}</ErrorText>}
+                {loading !== undefined && <div>Loading ({loading}...)</div>}
+                {error !== undefined && <ErrorText>{error}</ErrorText>}
             </Container>
         </Modal>
     );

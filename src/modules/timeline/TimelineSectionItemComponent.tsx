@@ -15,9 +15,9 @@ import {
 } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
-type SectionItemCoverProps = {
-    $titleVisible?: boolean;
-    $invertBorder?: boolean;
+type SectionItemCoverProps = Readonly<{
+    $titleVisible: boolean;
+    $invertBorder: boolean;
     $blankFontSize: number;
     $titleFontSize: number;
     $fit: CSS.Property.ObjectFit;
@@ -25,7 +25,7 @@ type SectionItemCoverProps = {
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
-};
+}>;
 
 const SectionItemCover = withShadow(
     // a comment to have a line break, otherwise syntax highlighting breaks
@@ -156,11 +156,11 @@ const SectionItemCover = withShadow(
     `,
 );
 
-type SectionItemProps = {
+type SectionItemProps = Readonly<{
     $width: number;
     $height: number;
     $focusable: boolean;
-};
+}>;
 
 const SectionItem = withCrossLines(
     // a pretty long comment with a lot of words to force good code formatting
@@ -190,13 +190,15 @@ const SectionItem = withCrossLines(
     `,
 );
 
-type TimelineSectionItemProps<T extends TimelineSectionType> = {
-    timelineSection: ResolvedSectionItem<T>;
+type TimelineSectionItemProps<T extends TimelineSectionType> = Readonly<{
+    timelineSection: NonNullable<ResolvedSectionItem<TimelineSectionType>>;
     entity: ResolvedTimelineEntity[T];
     num: number;
-};
+}>;
 
-export const TimelineSectionItemComponent = ({
+export const TimelineSectionItemComponent: React.FC<
+    TimelineSectionItemProps<TimelineSectionType>
+> = ({
     timelineSection: {
         type,
         fit = 'cover',
@@ -212,7 +214,7 @@ export const TimelineSectionItemComponent = ({
     },
     entity,
     num,
-}: TimelineSectionItemProps<TimelineSectionType>) => {
+}) => {
     const [hoveredItem, hoverHandlers] = useHover<string>();
     const { unboundChapterWidth, showTitles, showCrosslines } = useSettings();
     const {
@@ -222,8 +224,8 @@ export const TimelineSectionItemComponent = ({
     const { number: itemNumber, title, width, wikiLink } = entity;
 
     const itemWidth = width(unboundChapterWidth);
-    const cover = 'cover' in entity ? entity.cover : null;
-    const offset = 'offset' in entity ? entity.offset : null;
+    const cover = 'cover' in entity ? entity.cover : undefined;
+    const offset = 'offset' in entity ? entity.offset : undefined;
     const itemTitle = type === 'chapter' ? itemNumber : title;
 
     const hovered = hoveredItem(itemNumber);
@@ -231,7 +233,7 @@ export const TimelineSectionItemComponent = ({
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
-        type !== 'season' || cover !== null ?
+        type !== 'season' || cover !== undefined ?
             <Link
                 href={`${wikiBase}${wikiLink}`}
                 style={{
@@ -239,7 +241,7 @@ export const TimelineSectionItemComponent = ({
                     textAlign: 'center',
                 }}
             >
-                {cover !== null ?
+                {cover !== undefined ?
                     <ThumbnailImage
                         src={cover}
                         $offsetX={offset?.x}
@@ -257,8 +259,10 @@ export const TimelineSectionItemComponent = ({
         <SectionItemCover
             className={`${type}SectionItemCover`}
             data-title={itemTitle}
-            $invertBorder={!cover && backgroundColor === 'black'}
-            $titleVisible={(!!cover || textColor === 'black') && titleVisible}
+            $invertBorder={cover === undefined && backgroundColor === 'black'}
+            $titleVisible={
+                (cover !== undefined || textColor === 'black') && titleVisible
+            }
             $blankFontSize={blankfontSize}
             $titleFontSize={titleFontSize}
             $fit={fit}
@@ -272,8 +276,8 @@ export const TimelineSectionItemComponent = ({
     );
 
     const chapterPreview = (
-        <ChapterPreview className='preview' $hasPicture={!!cover}>
-            {cover && <ThumbnailImage src={cover} />}
+        <ChapterPreview $hasPicture={cover !== undefined}>
+            {cover !== undefined && <ThumbnailImage src={cover} />}
             {title}
         </ChapterPreview>
     );
@@ -303,7 +307,7 @@ export const TimelineSectionItemComponent = ({
         >
             {itemCoverTooltip}
             {nestedTimeline && (
-                <TimelineSection parentNumber={num} {...nestedTimeline} />
+                <TimelineSection parentNumber={num} item={nestedTimeline} />
             )}
         </SectionItem>
     );

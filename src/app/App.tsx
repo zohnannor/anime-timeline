@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { FloatingButton, FloatingButtons } from '@modules/FloatingButtons';
+import { FloatingButtons } from '@modules/FloatingButtons';
 import {
     AnimeTitleSelectorModal,
     CalendarModal,
@@ -81,7 +81,7 @@ const App: React.FC = () => {
     );
 
     useEffect(() => {
-        if (timeline === null) {
+        if (timeline === undefined) {
             return;
         }
 
@@ -101,8 +101,8 @@ const App: React.FC = () => {
         }
     }, [animeTitle, height, timeline]);
 
-    if (timeline === null) {
-        return null;
+    if (timeline === undefined) {
+        return <></>;
     }
 
     const {
@@ -119,19 +119,10 @@ const App: React.FC = () => {
             <InfoModal />
             <AppContainer className='appContainer'>
                 {renderUi && (
-                    <FloatingButtons>
-                        {floatingButtons.map(({ icon, title, option }) => (
-                            <FloatingButton
-                                key={icon}
-                                icon={icons[icon]}
-                                title={title}
-                                option={option}
-                            />
-                        ))}
-                    </FloatingButtons>
+                    <FloatingButtons buttons={floatingButtons} icons={icons} />
                 )}
                 {typedValues(layout).map(item => (
-                    <TimelineSection key={item.type} {...item} />
+                    <TimelineSection key={item.type} item={item} />
                 ))}
                 {renderUi && width > MOBILE_BREAKPOINT && <Scroller />}
             </AppContainer>

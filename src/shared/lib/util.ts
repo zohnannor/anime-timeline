@@ -7,6 +7,8 @@ export type Enumerate<
     Acc extends readonly number[] = readonly [],
 > = Acc['length'] extends N ? Acc : Enumerate<N, readonly [...Acc, number]>;
 
+// already readonly plus it's recursive, false positive
+// eslint-disable-next-line functional/type-declaration-immutability
 type Map<Arr extends readonly unknown[], Ty> =
     Arr extends readonly [infer _Head, ...infer Tail] ?
         readonly [Ty, ...Map<Tail, Ty>]
@@ -67,39 +69,41 @@ export const pad = (n: number) => String(n).padStart(2, '0');
 export const sum = (arr: readonly number[]) =>
     arr.reduce((acc, x) => acc + x, 0);
 
-export const clamp = (val: number, min: number, max: number) =>
-    Math.min(Math.max(val, min), max);
+export const clamp = (value: number, min: number, max: number) =>
+    Math.min(Math.max(value, min), max);
 
 export const isMobileDevice = () =>
-    ('ontouchstart' in window || navigator.maxTouchPoints > 0) &&
-    window.matchMedia('(pointer: coarse)').matches;
+    ('ontouchstart' in globalThis || navigator.maxTouchPoints > 0) &&
+    globalThis.matchMedia('(pointer: coarse)').matches;
 
 export const getDocumentPosition = (element: HTMLElement) => {
     let x = 0;
     let y = 0;
-    let current: HTMLElement | null = element;
+    let current: HTMLElement | undefined = element;
 
     while (current) {
         x += current.offsetLeft + current.clientLeft;
         y += current.offsetTop + current.clientTop;
-        current = current.offsetParent as HTMLElement | null;
+        current = (current.offsetParent ?? undefined) as
+            | HTMLElement
+            | undefined;
     }
 
     return { x, y, width: element.offsetWidth };
 };
 
-export const typedEntries = <T extends object>(obj: T) =>
-    Object.entries(obj) as [keyof T, NonNullable<T[keyof T]>][];
+export const typedEntries = <T extends object>(object: T) =>
+    Object.entries(object) as [keyof T, NonNullable<T[keyof T]>][];
 
 export const typedFromEntries = <K extends PropertyKey, T>(
-    obj: Iterable<readonly [K, T]>,
-) => Object.fromEntries(obj) as Record<K, T>;
+    object: Iterable<readonly [K, T]>,
+) => Object.fromEntries(object) as Record<K, T>;
 
-export const typedValues = <T extends object>(obj: T) =>
-    Object.values(obj) as NonNullable<T[keyof T]>[];
+export const typedValues = <T extends object>(object: T) =>
+    Object.values(object) as NonNullable<T[keyof T]>[];
 
-export const typedKeys = <T extends object>(obj: T) =>
-    Object.keys(obj) as (keyof T)[];
+export const typedKeys = <T extends object>(object: T) =>
+    Object.keys(object) as (keyof T)[];
 
-export const typedKeyTuple = <T extends object>(obj: T) =>
-    Object.keys(obj) as [keyof T, ...(keyof T)[]];
+export const typedKeyTuple = <T extends object>(object: T) =>
+    Object.keys(object) as [keyof T, ...(keyof T)[]];

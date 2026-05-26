@@ -4,15 +4,15 @@ import { isMobileDevice } from '@shared/lib/util';
 
 type Comparator<T> = (_item: T) => boolean;
 
-type Handlers<T> = (_item: T) => {
+type Handlers<T> = (_item: T) => Readonly<{
     onMouseOver: (_ev: React.MouseEvent) => void;
     onMouseOut: () => void;
-};
+}>;
 
-type UseHover<T> = [Comparator<T>, Handlers<T>];
+type UseHover<T> = readonly [Comparator<T>, Handlers<T>];
 
 const useHover = <T extends string | number>(): UseHover<T> => {
-    const [hoveredItem, setHoveredItem] = useState<T | null>(null);
+    const [hoveredItem, setHoveredItem] = useState<T>();
 
     const hovered = (item: T) => hoveredItem === item;
 
@@ -31,18 +31,16 @@ const useHover = <T extends string | number>(): UseHover<T> => {
 
     const handlers = (item: T) => ({
         onMouseOver: (ev: React.MouseEvent) => {
-            if (item) {
-                setHoveredItem(item);
-            }
+            setHoveredItem(item);
             ev.stopPropagation();
         },
-        onMouseOut: () => setHoveredItem(null),
+        onMouseOut: () => setHoveredItem(undefined),
     });
 
     return [hovered, handlers];
 };
 
-type UseSimpleHover<T> = [
+type UseSimpleHover<T> = readonly [
     () => ReturnType<Comparator<T>>,
     () => ReturnType<Handlers<T>>,
 ];

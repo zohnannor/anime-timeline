@@ -22,12 +22,14 @@ export const toTitleCase = (string: string) =>
 export const scale = (n: number) =>
     `calc(${n} * var(${SCALE_FACTOR_PROPERTY}))`;
 
-const isValidDate = (date: Date) => !isNaN(date.getTime());
+const isValidDate = (date: Date) => !Number.isNaN(date.getTime());
 
-export const tokyoDate = (dateStr: string): Date => {
-    const date = new Date(`${dateStr.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`); // Tokyo timezone
+export const tokyoDate = (dateString: string): Date => {
+    const date = new Date(
+        `${dateString.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`, // Tokyo timezone
+    );
     if (!isValidDate(date)) {
-        return throwError(`Invalid date: ${dateStr}`);
+        return throwError(`Invalid date: ${dateString}`);
     }
     return date;
 };
@@ -39,29 +41,24 @@ const INIT_SENTINEL = Symbol('init-sentinel');
 const chunks = <T>(
     array: readonly T[],
     getKey: (_el: T) => number,
-): NonEmptyArray<Chunk<T>> =>
-    asNonEmpty(
-        array.reduce<{
-            list: Mutable<Chunk<T>>[];
-            prev: number | typeof INIT_SENTINEL;
-        }>(
-            (acc, el) => {
-                const key = getKey(el);
-                const lastGroup = acc.list.at(-1);
+): NonEmptyArray<Chunk<T>> => {
+    const list: Mutable<Chunk<T>>[] = [];
+    let previous: number | typeof INIT_SENTINEL = INIT_SENTINEL;
 
-                if (lastGroup && key === acc.prev) {
-                    lastGroup.push(el);
-                } else {
-                    acc.list.push([el]);
-                    acc.prev = key;
-                }
+    for (const el of array) {
+        const key = getKey(el);
+        const lastGroup = list.at(-1);
 
-                return acc;
-            },
-            { list: [], prev: INIT_SENTINEL },
-        ).list,
-        'chunk',
-    );
+        if (lastGroup && key === previous) {
+            lastGroup.push(el);
+        } else {
+            list.push([el]);
+            previous = key;
+        }
+    }
+
+    return asNonEmpty(list, 'chunk');
+};
 
 // TODO: move into `ResolvedTimeline`?
 export const chapterDatesByMonth = (chapters: NonEmptyArray<ResolvedChapter>) =>
@@ -150,9 +147,9 @@ export const interpolateColor = (
 };
 
 export const MONTHS_GRADIENT = [
-    0xd3e3f4, 0xf2e97e, 0xb3cd53, 0xface8a,
+    0xd3_e3_f4, 0xf2_e9_7e, 0xb3_cd_53, 0xfa_ce_8a,
 ] as const;
-export const DAYS_GRADIENT = [0xed8581, 0x9df697] as const;
+export const DAYS_GRADIENT = [0xed_85_81, 0x9d_f6_97] as const;
 
 export const MONTHS = [
     'January',

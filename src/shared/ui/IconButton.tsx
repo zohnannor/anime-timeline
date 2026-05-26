@@ -5,9 +5,9 @@ import { Icon } from '@timelines/types';
 
 import { ThumbnailImage } from './ThumbnailImage';
 
-type IconWrapperProps = {
+type IconWrapperProps = Readonly<{
     $filter: string | undefined;
-};
+}>;
 
 const IconWrapper = styled.div<IconWrapperProps>`
     display: flex;
@@ -55,11 +55,12 @@ const IconWrapper = styled.div<IconWrapperProps>`
     }
 `;
 
-type IconButtonProps = {
+type IconButtonProps = Readonly<{
     icon: Icon;
     filter?: string | undefined;
     animeTitle?: string;
-} & React.HTMLAttributes<HTMLDivElement>;
+}> &
+    Readonly<React.HTMLAttributes<HTMLDivElement>>;
 
 export const IconButton: React.FC<IconButtonProps> = ({
     icon: Icon,

@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { MOBILE_BREAKPOINT } from '@shared/config';
 import { scale } from '@shared/lib/helpers';
 
-type ShadowProps = {
+type ShadowProps = Readonly<{
     $invertBorder?: boolean | undefined;
-};
+}>;
 
 // vscode-styled-components (ts-styled-plugin) extension formats this
 // incorrectly and complains afterwards when this function is inlined
-const getShadowColor = ({ $invertBorder }: ShadowProps) =>
+const getShadowColor = ({ $invertBorder = false }: ShadowProps) =>
     $invertBorder ? '#fff' : '#000';
 
 const Shadow = styled.div<ShadowProps>`

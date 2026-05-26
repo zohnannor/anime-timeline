@@ -21,11 +21,11 @@ import { withShadow } from '@shared/ui';
 import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
 import { ResolvedChapter } from '@timelines/resolved';
 
-type DayProps = {
+type DayProps = Readonly<{
     $width: number;
     $background: string;
     $variant: string;
-};
+}>;
 
 const Timeframe = withCrossLines(
     withShadow(
@@ -63,21 +63,21 @@ const TimelineWrapper = styled.div`
     height: ${TIMELINE_HEIGHT / 3};
 `;
 
-type Segment = {
+type Segment = Readonly<{
     width: number;
     colorValue: number;
     label: string;
     chapterNumber: string;
-};
+}>;
 
-type TimelineSegmentProps = {
+type TimelineSegmentProps = Readonly<{
     segments: NonEmptyArray<Segment>;
-    colorInterpolation: {
+    colorInterpolation: Readonly<{
         inputRange: readonly [number, number];
         outputGradient: NonEmptyArray<number>;
-    };
+    }>;
     variant: 'years' | 'months' | 'days';
-};
+}>;
 
 const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     segments,
@@ -86,7 +86,7 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 }) => {
     const [hoveredSegment, hoverHandlers] = useHover<string>();
     const { setCalendarOpen } = useSettings();
-    const lastClickedChapter = useRef<string | null>(null);
+    const lastClickedChapter = useRef<string>(undefined);
 
     const openCalendarForChapter = useCallback(
         (chapterNumber: string) => {
@@ -97,13 +97,13 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     );
 
     useEffect(() => {
-        if (lastClickedChapter.current === null) {
+        if (lastClickedChapter.current === undefined) {
             return;
         }
 
         scrollToId(`day-${lastClickedChapter.current}`);
 
-        lastClickedChapter.current = null;
+        lastClickedChapter.current = undefined;
     }, [setCalendarOpen]);
 
     return (
@@ -247,7 +247,7 @@ export const Timeline: React.FC = () => {
                 segments={yearsSegments}
                 colorInterpolation={{
                     inputRange: yearRange,
-                    outputGradient: [0x888888, 0xffffff],
+                    outputGradient: [0x88_88_88, 0xff_ff_ff],
                 }}
                 variant='years'
             />

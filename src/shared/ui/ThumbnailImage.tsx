@@ -5,15 +5,15 @@ import styled from 'styled-components';
 import { useSettings } from '@shared/contexts/SettingsContext';
 import { scale } from '@shared/lib/helpers';
 
-type Offset = {
+type Offset = Readonly<{
     $offsetX?: number | undefined;
     $offsetY?: number | undefined;
     $defaultPosition?: CSS.Property.ObjectPosition | undefined;
-};
+}>;
 
-type ThumbnailProps = {
+type ThumbnailProps = Readonly<{
     $thumbnail: string;
-};
+}>;
 
 const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
     ({ $thumbnail }) => ({
@@ -31,9 +31,9 @@ const Thumbnail = styled.div.attrs<ThumbnailProps & Offset>(
         `${scale($offsetX ?? 0)} ${scale($offsetY ?? 0)}`};
 `;
 
-type ImageProps = {
+type ImageProps = Readonly<{
     $loading: boolean;
-};
+}>;
 
 const Image = styled.img<ImageProps & Offset>`
     filter: blur(${({ $loading }) => ($loading ? scale(10) : '0')});
@@ -48,10 +48,10 @@ const Image = styled.img<ImageProps & Offset>`
         :   $defaultPosition};
 `;
 
-type ThumbnailImageProps = {
+type ThumbnailImageProps = Readonly<{
     animeTitle?: string | undefined;
     src: string;
-};
+}>;
 
 export const ThumbnailImage: React.FC<
     React.ComponentProps<'img'> & Offset & ThumbnailImageProps
@@ -67,14 +67,14 @@ export const ThumbnailImage: React.FC<
         ...rest
     } = props;
 
-    const realSrc = `./${animeTitle}/${src}.webp`;
-    const thumbnailSrc = `./${animeTitle}-thumbnails/${src}.webp`;
+    const realSource = `./${animeTitle}/${src}.webp`;
+    const thumbnailSource = `./${animeTitle}-thumbnails/${src}.webp`;
 
     return (
         <>
             <Image
                 className='thumbnailImage'
-                src={realSrc}
+                src={realSource}
                 alt=''
                 loading='lazy'
                 $loading={loading}
@@ -88,9 +88,9 @@ export const ThumbnailImage: React.FC<
             {loading && (
                 <Thumbnail
                     className='thumbnail'
-                    $thumbnail={thumbnailSrc}
-                    $offsetX={$offsetX ? -$offsetX : $offsetX}
-                    $offsetY={$offsetY ? -$offsetY : $offsetY}
+                    $thumbnail={thumbnailSource}
+                    $offsetX={$offsetX !== undefined ? -$offsetX : $offsetX}
+                    $offsetY={$offsetY !== undefined ? -$offsetY : $offsetY}
                     $defaultPosition={$defaultPosition}
                     draggable={false}
                 />

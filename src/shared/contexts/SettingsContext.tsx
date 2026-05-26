@@ -2,7 +2,7 @@ import { createContext, use } from 'react';
 
 import { AnimeTitle } from '@timelines/types';
 
-export type Settings = {
+export type Settings = Readonly<{
     showCrosslines: boolean;
     setShowCrosslines: React.Dispatch<React.SetStateAction<boolean>>;
     infoBoxOpen: boolean;
@@ -21,7 +21,7 @@ export type Settings = {
     setAnimeTitle: React.Dispatch<React.SetStateAction<AnimeTitle>>;
     animeTitleSelectorOpen: boolean;
     setAnimeTitleSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}>;
 
 // ☝🤓
 
@@ -29,21 +29,21 @@ type Setter<T extends string> =
     T extends `${infer First}${infer Rest}` ? `set${Uppercase<First>}${Rest}`
     :   never;
 
-export type SettingsValues = {
+export type SettingsValues = Readonly<{
     [Key in keyof Settings as Settings[Key] extends boolean ?
         Setter<Key> extends keyof Settings ?
             Key
         :   never
     :   never]: Settings[Key];
-};
+}>;
 
-type SettingsValuesSetters = {
+type SettingsValuesSetters = Readonly<{
     [Key in keyof Settings as Settings[Key] extends boolean ?
         Setter<Key> extends keyof Settings ?
             Key
         :   never
     :   never]: Setter<Key>;
-};
+}>;
 
 export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {
     showCrosslines: 'setShowCrosslines',

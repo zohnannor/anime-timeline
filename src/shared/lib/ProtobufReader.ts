@@ -1,37 +1,35 @@
-import * as varint from 'varint';
+import { decode as varintDecode } from 'varint';
 
 import { throwError } from '@shared/lib/util';
 
+// mutates its state
+// eslint-disable-next-line functional/type-declaration-immutability
 type ProtobufReader = {
     buf: Uint8Array;
     pos: number;
     len: number;
-    u32(): number;
-    string(): string;
+    u32: () => number;
+    string: () => string;
 };
 
-type Title = {
+type Title = Readonly<{
     titleId?: number;
     name?: string;
     author?: string;
     portraitImageUrl?: string;
     titleUpdateStatus?: number;
-};
+}>;
 
-type TitleDetailView = {
+type TitleDetailView = Readonly<{
     title?: Title;
     titleImageUrl?: string;
     overview?: string;
     nextTimeStamp?: number;
-};
+}>;
 
-type SuccessResponse = {
-    titleDetailView?: TitleDetailView;
-};
+type SuccessResponse = Readonly<{ titleDetailView?: TitleDetailView }>;
 
-type ApiResponse = {
-    Ok?: SuccessResponse;
-};
+type ApiResponse = Readonly<{ Ok?: SuccessResponse }>;
 
 const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 const mangaApiUrl = (titleId: number) =>
@@ -42,8 +40,8 @@ const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
     pos: 0,
     len: buffer.length,
     u32() {
-        const value = varint.decode(this.buf, this.pos);
-        this.pos += varint.decode.bytes ?? 0;
+        const value = varintDecode(this.buf, this.pos);
+        this.pos += varintDecode.bytes ?? 0;
         return value;
     },
     string() {
@@ -51,17 +49,17 @@ const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
         const start = this.pos;
         const end = start + length;
         this.pos += length;
-        return String.fromCharCode(...this.buf.slice(start, end));
+        return String.fromCodePoint(...this.buf.slice(start, end));
     },
 });
 
 type FieldDecoder<T> = (_reader: ProtobufReader) => T[keyof T];
 
-type FieldDescriptor<T> = {
+type FieldDescriptor<T> = Readonly<{
     tag: number;
     property: keyof T;
     decoder: FieldDecoder<T>;
-};
+}>;
 
 const decodeMessage = <T>(
     reader: ProtobufReader,
@@ -128,11 +126,10 @@ const decodeApiResponse = (
         },
     ]);
 
-export default async (): Promise<Date | null> => {
+const protobufReader = async (): Promise<Date | undefined> => {
     try {
-        // eslint-disable-next-line react-x/purity
         const response = await fetch(
-            `${PROXY_URL}${encodeURIComponent(mangaApiUrl(100037))}`,
+            `${PROXY_URL}${encodeURIComponent(mangaApiUrl(100_037))}`,
         );
         const buffer = new Uint8Array(await response.arrayBuffer());
         const reader = createProtobufReader(buffer);
@@ -145,8 +142,10 @@ export default async (): Promise<Date | null> => {
         console.debug('protobuf result:', result);
 
         return new Date(nextTimeStamp * 1000);
-    } catch (error) {
-        console.error('Error fetching next chapter date:', error);
-        return null;
+    } catch (err) {
+        console.error('Error fetching next chapter date:', err);
+        return undefined;
     }
 };
+
+export default protobufReader;

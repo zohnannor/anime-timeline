@@ -1,14 +1,16 @@
-export const Link: React.FC<React.ComponentPropsWithoutRef<'a'>> = ({
-    href,
-    children,
-    ...rest
-}) => (
+export const Link: React.FC<
+    Pick<
+        React.ComponentPropsWithoutRef<'a'>,
+        'href' | 'children' | 'style' | 'className'
+    >
+> = ({ href, children, style, className }) => (
     <a
         href={href}
         target='_blank'
         rel='noopener noreferrer'
         draggable={false}
-        {...rest}
+        style={style}
+        className={className}
     >
         {children}
     </a>

@@ -8,9 +8,9 @@ import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
 import { IconButton } from '@shared/ui';
 
-type ScrollHoverAreaProps = {
+type ScrollHoverAreaProps = Readonly<{
     $visible: boolean;
-};
+}>;
 
 const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
@@ -44,9 +44,9 @@ const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     }
 `;
 
-type ScrollProps = {
+type ScrollProps = Readonly<{
     $offset: number;
-};
+}>;
 
 // otherwise syntax highlighting breaks
 // eslint-disable-next-line arrow-body-style
@@ -125,10 +125,10 @@ export const Scroller = () => {
         const stopDrag = () => setDragging(false);
 
         body.addEventListener('mousemove', handleDrag);
-        window.addEventListener('mouseup', stopDrag);
+        globalThis.addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
-            window.removeEventListener('mouseup', stopDrag);
+            globalThis.removeEventListener('mouseup', stopDrag);
         };
     }, [body, dragging, updateScrollerHandle]);
 
