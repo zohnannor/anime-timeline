@@ -6,9 +6,9 @@ import { typedKeys } from '@shared/lib/util';
 import { Link, withShadow } from '@shared/ui';
 import { HEADERS_WIDTH } from '@timelines/index';
 
-type HeaderProps = {
+type HeaderProps = Readonly<{
     $height: number;
-};
+}>;
 
 const Header = withShadow(
     // a comment to have a line break, otherwise syntax highlighting breaks

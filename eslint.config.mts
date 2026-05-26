@@ -1,3 +1,4 @@
+import functional from 'eslint-plugin-functional';
 import importPlugin from 'eslint-plugin-import';
 import react from 'eslint-plugin-react';
 import reactDom from 'eslint-plugin-react-dom';
@@ -28,6 +29,7 @@ export default defineConfig([
     {
         files: ['**/*.{ts,tsx}'],
         plugins: {
+            functional,
             import: importPlugin,
         },
         languageOptions: {
@@ -190,6 +192,27 @@ export default defineConfig([
             ],
             'unicorn/no-keyword-prefix': 'off', // quite useless
 
+            'functional/type-declaration-immutability': [
+                'error',
+                {
+                    rules: [
+                        {
+                            identifiers: '.+',
+                            immutability: 'ReadonlyShallow',
+                            comparator: 'AtLeast',
+                        },
+                    ],
+                },
+            ],
+            'no-restricted-syntax': [
+                'error',
+                {
+                    selector: 'TSPropertySignature[readonly=true]',
+                    message:
+                        'Use the `Readonly<T>` utility type instead of the `readonly` keyword.',
+                },
+            ],
+
             // enabling additional rules (feel free to configure or remove)
 
             'import/no-namespace': 'error',
@@ -278,6 +301,9 @@ export default defineConfig([
             'react/sort-prop-types': 'error',
             'react/style-prop-object': 'error',
             'react/void-dom-elements-no-children': 'error',
+            'react/self-closing-comp': 'error',
+            'react/jsx-boolean-value': ['error', 'never'],
+            'react/jsx-fragments': ['error', 'syntax'],
 
             '@typescript-eslint/consistent-type-exports': 'off',
             '@typescript-eslint/consistent-type-imports': 'off',

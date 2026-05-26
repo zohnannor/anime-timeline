@@ -3,6 +3,7 @@ import {
     asNonEmpty,
     EmptyObject,
     ExactUnion,
+    Mutable,
     NonEmptyArray,
     sum,
     throwError,
@@ -32,97 +33,112 @@ import {
 
 type WidthResolver = (_unboundChapterWidth: boolean) => number;
 
-type ResolvedTemplates = {
+type ResolvedTemplates = Readonly<{
     title: string;
     number: string;
     wikiLink: string;
-};
+}>;
 
-export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> & {
-    date: Date;
-    width: WidthResolver;
-    volume: number;
-    extra: boolean;
-} & ResolvedTemplates;
+export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> &
+    Readonly<{
+        date: Date;
+        width: WidthResolver;
+        volume: number;
+        extra: boolean;
+    }> &
+    ResolvedTemplates;
 
-type ResolvedVolume = Omit<Volume, 'title' | 'cover' | 'chapters'> & {
-    cover: string | undefined;
-    width: WidthResolver;
-    extra: boolean;
-} & ResolvedTemplates;
+type ResolvedVolume = Omit<Volume, 'title' | 'cover' | 'chapters'> &
+    Readonly<{
+        cover: string | undefined;
+        width: WidthResolver;
+        extra: boolean;
+    }> &
+    ResolvedTemplates;
 
-type ResolvedArc = Omit<Arc, 'chapters'> & {
-    width: WidthResolver;
-    saga: number;
-} & ResolvedTemplates;
+type ResolvedArc = Omit<Arc, 'chapters'> &
+    Readonly<{
+        width: WidthResolver;
+        saga: number;
+    }> &
+    ResolvedTemplates;
 
-type ResolvedSaga = Omit<Saga, 'chapters' | 'arcs'> & {
-    width: WidthResolver;
-} & ResolvedTemplates;
+type ResolvedSaga = Omit<Saga, 'chapters' | 'arcs'> &
+    Readonly<{
+        width: WidthResolver;
+    }> &
+    ResolvedTemplates;
 
 export type ResolvedEpisode = Omit<
     Episode,
     'title' | 'cover' | 'chapters' | 'date'
-> & {
-    date: Date;
-    cover: string | undefined;
-    width: WidthResolver;
-    season: number;
-} & ResolvedTemplates;
+> &
+    Readonly<{
+        date: Date;
+        cover: string | undefined;
+        width: WidthResolver;
+        season: number;
+    }> &
+    ResolvedTemplates;
 
-type ResolvedSeason = Omit<Season, 'cover' | 'chapters' | 'episodes'> & {
-    cover: string | undefined;
-    width: WidthResolver;
-} & ResolvedTemplates;
+type ResolvedSeason = Omit<Season, 'cover' | 'chapters' | 'episodes'> &
+    Readonly<{
+        cover: string | undefined;
+        width: WidthResolver;
+    }> &
+    ResolvedTemplates;
 
-export type ResolvedTimelineEntity = {
+export type ResolvedTimelineEntity = Readonly<{
     season: ResolvedSeason;
     episode: ResolvedEpisode;
     saga: ResolvedSaga;
     arc: ResolvedArc;
     chapter: ResolvedChapter;
     volume: ResolvedVolume;
-};
+}>;
 
-export type ResolvedTimelineData = {
-    title: string;
-    chapters: NonEmptyArray<ResolvedChapter>;
-    volumes: NonEmptyArray<ResolvedVolume>;
-} & ExactUnion<
-    | { arcs: NonEmptyArray<ResolvedArc> }
-    | { sagas: NonEmptyArray<ResolvedSaga>; arcs: NonEmptyArray<ResolvedArc> }
-    | EmptyObject<'saga' | 'arc'>
-> & {
-        episodes: ResolvedEpisode[];
-        seasons?: ResolvedSeason[];
-        wikiBase: string;
-        icons: Icons;
-        socialLinks: SocialLink[];
-    };
+export type ResolvedTimelineData = Readonly<
+    {
+        title: string;
+        chapters: NonEmptyArray<ResolvedChapter>;
+        volumes: NonEmptyArray<ResolvedVolume>;
+    } & ExactUnion<
+        | { arcs: NonEmptyArray<ResolvedArc> }
+        | {
+              sagas: NonEmptyArray<ResolvedSaga>;
+              arcs: NonEmptyArray<ResolvedArc>;
+          }
+        | EmptyObject<'saga' | 'arc'>
+    > & {
+            episodes: readonly ResolvedEpisode[];
+            seasons?: readonly ResolvedSeason[];
+            wikiBase: string;
+            icons: Icons;
+            socialLinks: readonly SocialLink[];
+        }
+>;
 
 export type ResolvedSectionItem<T extends TimelineSection> = Omit<
     TimelineSectionItem<T>,
     'titleProcessor' | 'numberProcessor' | 'wikiLink' | 'subTimeline'
-> & {
-    subTimeline?: T extends keyof SubtimelinesMap ?
-        ResolvedSectionItem<SubtimelinesMap[T]>
-    :   never;
-};
+> &
+    Readonly<{
+        subTimeline?: T extends keyof SubtimelinesMap ?
+            ResolvedSectionItem<SubtimelinesMap[T]>
+        :   never;
+    }>;
 
-type ResolveSectionItem<S extends keyof TimelineSectionLayout> =
+type ResolveSectionItem<S extends keyof TimelineSectionLayout> = Readonly<
     S extends TimelineSection ? ResolvedSectionItem<S>
-    : S extends 'timeline' ?
-        {
-            type: 'timeline';
-            height: number;
-        }
-    :   TimelineSectionLayout[S];
+    : S extends 'timeline' ? { type: 'timeline'; height: number }
+    : TimelineSectionLayout[S]
+>;
 
-type ResolvedTimelineSectionLayout = {
+type ResolvedTimelineSectionLayout = Readonly<{
     [S in keyof TimelineSectionLayout]: ResolveSectionItem<S>;
-};
+}>;
 
-export type ResolvedTimeline = {
+export type ResolvedTimeline = Readonly<{
     layout: ResolvedTimelineSectionLayout;
     data: ResolvedTimelineData;
     maxHeight: number;
@@ -130,7 +146,7 @@ export type ResolvedTimeline = {
         _unboundChapterWidth: boolean,
         _showExtraChapters: boolean,
     ) => number;
-};
+}>;
 
 const DEFAULT_VOLUME_WIDTH = 1000;
 const DEFAULT_VOLUME_PAGES = 180;
@@ -416,19 +432,21 @@ const resolveTimelineData = (
     };
 };
 
-type Templates = {
+type Templates = Readonly<{
     titleProcessor: (_title: string, _n: number, _extra?: boolean) => string;
     numberProcessor: (_n: number, _title: string, _extra?: boolean) => string;
     wikiLink: (_title: string, _n: number, _extra?: boolean) => string;
-};
+}>;
 
-type ItemTemplates = Partial<Record<'season' | 'episode', Templates>> &
-    Record<Exclude<TimelineSection, 'season' | 'episode'>, Templates>;
+type ItemTemplates = Readonly<
+    Partial<Record<'season' | 'episode', Templates>> &
+        Record<Exclude<TimelineSection, 'season' | 'episode'>, Templates>
+>;
 
 const resolveTimelineSectionLayout = (
     rawLayout: TimelineSectionLayout,
 ): [ResolvedTimelineSectionLayout, ItemTemplates] => {
-    const templates = {} as ItemTemplates;
+    const templates = {} as Mutable<ItemTemplates>;
 
     const resolveItem = <T extends TimelineSection>({
         type,
@@ -478,7 +496,7 @@ const resolveTimelineSectionLayout = (
         } as ResolvedSectionItem<T>;
     };
 
-    const layout = {} as ResolvedTimelineSectionLayout;
+    const layout = {} as Mutable<ResolvedTimelineSectionLayout>;
 
     // TODO: introduce the odering for sections
     for (const type of typedKeys(rawLayout)) {
@@ -495,10 +513,12 @@ const resolveTimelineSectionLayout = (
             continue;
         }
 
-        const resolved = resolveItem(rawItem);
-        if (rawItem.subTimeline) {
-            resolved.subTimeline = resolveItem(rawItem.subTimeline);
-        }
+        const resolved: ResolvedSectionItem<TimelineSection> = {
+            ...resolveItem(rawItem),
+            ...(rawItem.subTimeline !== undefined ?
+                { subTimeline: resolveItem(rawItem.subTimeline) }
+            :   {}),
+        };
 
         Object.assign(layout, { [type]: resolved });
     }

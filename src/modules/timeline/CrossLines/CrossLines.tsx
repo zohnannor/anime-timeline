@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components';
 import { MOBILE_BREAKPOINT } from '@shared/config';
 import { useSettings } from '@shared/contexts/SettingsContext';
 
-export type CrossLinesProps = {
+export type CrossLinesProps = Readonly<{
     $crossLinesVisible: boolean;
-};
+}>;
 
 const CrossLinesWrapper = styled.div<CrossLinesProps>`
     position: absolute;
@@ -19,9 +19,9 @@ const CrossLinesWrapper = styled.div<CrossLinesProps>`
     justify-content: space-between;
 `;
 
-type CrossLineProps = {
+type CrossLineProps = Readonly<{
     $side: 'left' | 'right';
-};
+}>;
 
 const CrossLine = styled.div<CrossLineProps>`
     position: relative;

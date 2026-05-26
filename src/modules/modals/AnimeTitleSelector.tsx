@@ -89,7 +89,7 @@ const totalPageCount = (chapters: readonly ResolvedChapter[]) =>
     sum(chapters.map(ch => ch.pages));
 const recentlyUpdated = (
     chapters: readonly ResolvedChapter[],
-    episodes: ResolvedEpisode[],
+    episodes: readonly ResolvedEpisode[],
 ) =>
     Math.max(
         ...chapters.map(ch => ch.date.getTime()),
@@ -105,15 +105,17 @@ type Sorting =
     | 'page count'
     | 'recently updated';
 
-type SortData =
+type SortData = Readonly<
     | { type: 'string'; value: string; badge: string | undefined }
-    | { type: 'number'; value: number; badge: string | undefined };
+    | { type: 'number'; value: number; badge: string | undefined }
+>;
 
-type Sort = {
-    animeTitle: AnimeTitle;
-    title: string;
-    icon: Icon;
-} & SortData;
+type Sort = SortData &
+    Readonly<{
+        animeTitle: AnimeTitle;
+        title: string;
+        icon: Icon;
+    }>;
 
 const getSortStrategy = (
     animeTitle: AnimeTitle,

@@ -14,10 +14,10 @@ const ShadowOverlay = styled.div`
     cursor: pointer;
 `;
 
-type ModalContainerProps = {
+type ModalContainerProps = Readonly<{
     $bgColor?: CSS.Property.Color | undefined;
     $mobileFullscreen?: boolean | undefined;
-};
+}>;
 
 const ModalContainer = styled.div<ModalContainerProps>`
     position: fixed;
@@ -88,13 +88,14 @@ const HeaderButtonContainer = styled.div`
     }
 `;
 
-type ModalProps = {
+type ModalProps = Readonly<{
     isOpen: boolean;
     onClose: () => void;
     title: string;
     modalRef?: React.RefObject<HTMLDivElement | null>;
     additionalButtons?: React.ReactNode;
-} & ModalContainerProps;
+}> &
+    ModalContainerProps;
 
 export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
     isOpen,

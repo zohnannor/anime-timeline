@@ -4,11 +4,11 @@ import { throwError } from '@shared/lib/util';
 import { ResolvedTimeline } from '@timelines/resolved';
 import { AnimeTitle } from '@timelines/types';
 
-export type TimelineContextValue = {
+export type TimelineContextValue = Readonly<{
     timeline: ResolvedTimeline | undefined;
     timelines: Partial<Record<AnimeTitle, ResolvedTimeline>>;
     loadAll: () => Promise<void>;
-};
+}>;
 
 export const TimelineContext = createContext<TimelineContextValue>({
     timeline: undefined,

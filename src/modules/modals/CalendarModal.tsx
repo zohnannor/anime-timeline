@@ -34,21 +34,21 @@ const DayName = styled.div`
     text-align: center;
 `;
 
-type MonthProps = {
+type MonthProps = Readonly<{
     $color: string;
-};
+}>;
 
 const Month = styled.div<MonthProps>`
     color: ${({ $color: $background }) => $background};
 `;
 
-type DayProps = {
+type DayProps = Readonly<{
     $isChapter: boolean;
     $isEpisode: boolean;
     $isToday: boolean;
     $isNextChapter: boolean;
     $background: string;
-};
+}>;
 
 const Day = styled.a<DayProps>`
     display: flex;
@@ -138,7 +138,7 @@ type EventMap = Map<
     | { chapter: string; episode: [string, number] }
 >;
 
-type MonthComponentProps = {
+type MonthComponentProps = Readonly<{
     month: Date;
     currentDate: Date;
     chapterDateMap: EventMap;
@@ -147,7 +147,7 @@ type MonthComponentProps = {
         _ev: React.MouseEvent,
         _event: { chapter: string } | { episode: [string, number] } | undefined,
     ) => void;
-};
+}>;
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     // so that react/display-name doesn't complain

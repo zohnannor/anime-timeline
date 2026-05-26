@@ -2,6 +2,8 @@ import { decode as varintDecode } from 'varint';
 
 import { throwError } from '@shared/lib/util';
 
+// mutates its state
+// eslint-disable-next-line functional/type-declaration-immutability
 type ProtobufReader = {
     buf: Uint8Array;
     pos: number;
@@ -10,28 +12,24 @@ type ProtobufReader = {
     string: () => string;
 };
 
-type Title = {
+type Title = Readonly<{
     titleId?: number;
     name?: string;
     author?: string;
     portraitImageUrl?: string;
     titleUpdateStatus?: number;
-};
+}>;
 
-type TitleDetailView = {
+type TitleDetailView = Readonly<{
     title?: Title;
     titleImageUrl?: string;
     overview?: string;
     nextTimeStamp?: number;
-};
+}>;
 
-type SuccessResponse = {
-    titleDetailView?: TitleDetailView;
-};
+type SuccessResponse = Readonly<{ titleDetailView?: TitleDetailView }>;
 
-type ApiResponse = {
-    Ok?: SuccessResponse;
-};
+type ApiResponse = Readonly<{ Ok?: SuccessResponse }>;
 
 const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 const mangaApiUrl = (titleId: number) =>
@@ -57,11 +55,11 @@ const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
 
 type FieldDecoder<T> = (_reader: ProtobufReader) => T[keyof T];
 
-type FieldDescriptor<T> = {
+type FieldDescriptor<T> = Readonly<{
     tag: number;
     property: keyof T;
     decoder: FieldDecoder<T>;
-};
+}>;
 
 const decodeMessage = <T>(
     reader: ProtobufReader,

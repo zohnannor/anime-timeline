@@ -21,11 +21,11 @@ import { withShadow } from '@shared/ui';
 import { SMALL_FONT_SIZE, TIMELINE_HEIGHT } from '@timelines/index';
 import { ResolvedChapter } from '@timelines/resolved';
 
-type DayProps = {
+type DayProps = Readonly<{
     $width: number;
     $background: string;
     $variant: string;
-};
+}>;
 
 const Timeframe = withCrossLines(
     withShadow(
@@ -63,21 +63,21 @@ const TimelineWrapper = styled.div`
     height: ${TIMELINE_HEIGHT / 3};
 `;
 
-type Segment = {
+type Segment = Readonly<{
     width: number;
     colorValue: number;
     label: string;
     chapterNumber: string;
-};
+}>;
 
-type TimelineSegmentProps = {
+type TimelineSegmentProps = Readonly<{
     segments: NonEmptyArray<Segment>;
-    colorInterpolation: {
+    colorInterpolation: Readonly<{
         inputRange: readonly [number, number];
         outputGradient: NonEmptyArray<number>;
-    };
+    }>;
     variant: 'years' | 'months' | 'days';
-};
+}>;
 
 const TimelineSegment: React.FC<TimelineSegmentProps> = ({
     segments,

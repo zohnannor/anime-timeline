@@ -35,11 +35,11 @@ const FloatingIconButton = styled(IconButton)`
     }
 `;
 
-type ButtonProps = {
+type ButtonProps = Readonly<{
     icon: Icon;
     title: string;
     option: keyof SettingsValues;
-};
+}>;
 
 const FloatingButton: React.FC<ButtonProps> = ({ icon, title, option }) => {
     const settings = useSettings();
@@ -90,10 +90,10 @@ const ButtonSection = styled.div`
     }
 `;
 
-type FloatingButtonsProps = {
-    buttons: FloatingButtonConfig[];
+type FloatingButtonsProps = Readonly<{
+    buttons: readonly FloatingButtonConfig[];
     icons: Icons;
-};
+}>;
 
 export const FloatingButtons: React.FC<FloatingButtonsProps> = ({
     buttons,

@@ -7,28 +7,16 @@ import { useSimpleHover } from '@shared/lib/hooks';
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 type TooltipAnimation = 'fade' | 'grow';
 
-type TooltipProps = {
-    placement: TooltipPlacement;
-    content: React.ReactNode;
-    animation?: TooltipAnimation;
-    visible?: boolean;
-};
-
-type TooltipWrapperProps = {
-    $placement: TooltipPlacement;
-};
-
-type TooltipContentProps = TooltipWrapperProps & {
-    $visible: boolean;
-    $animation?: TooltipAnimation;
-};
-
 const OPPOSITE: Record<TooltipPlacement, TooltipPlacement> = {
     top: 'bottom',
     bottom: 'top',
     left: 'right',
     right: 'left',
 };
+
+type TooltipWrapperProps = Readonly<{
+    $placement: TooltipPlacement;
+}>;
 
 const TooltipWrapper = styled.div<TooltipWrapperProps>`
     position: relative;
@@ -47,6 +35,12 @@ const TooltipWrapper = styled.div<TooltipWrapperProps>`
             align-items: center;
         `}
 `;
+
+type TooltipContentProps = Readonly<{
+    $visible: boolean;
+    $animation?: TooltipAnimation;
+}> &
+    TooltipWrapperProps;
 
 const TooltipContent = styled.div.attrs<TooltipContentProps>(
     ({ $placement }) => ({
@@ -79,6 +73,13 @@ const TooltipContent = styled.div.attrs<TooltipContentProps>(
         font-size: 0.8rem;
     }
 `;
+
+type TooltipProps = Readonly<{
+    placement: TooltipPlacement;
+    content: React.ReactNode;
+    animation?: TooltipAnimation;
+    visible?: boolean;
+}>;
 
 export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
     children,

@@ -7,6 +7,8 @@ export type Enumerate<
     Acc extends readonly number[] = readonly [],
 > = Acc['length'] extends N ? Acc : Enumerate<N, readonly [...Acc, number]>;
 
+// already readonly plus it's recursive, false positive
+// eslint-disable-next-line functional/type-declaration-immutability
 type Map<Arr extends readonly unknown[], Ty> =
     Arr extends readonly [infer _Head, ...infer Tail] ?
         readonly [Ty, ...Map<Tail, Ty>]

@@ -8,9 +8,9 @@ import useMousePosition from '@shared/lib/hooks/useMousePosition';
 import { clamp } from '@shared/lib/util';
 import { IconButton } from '@shared/ui';
 
-type ScrollHoverAreaProps = {
+type ScrollHoverAreaProps = Readonly<{
     $visible: boolean;
-};
+}>;
 
 const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     pointer-events: none;
@@ -44,9 +44,9 @@ const ScrollerHoverArea = styled.div<ScrollHoverAreaProps>`
     }
 `;
 
-type ScrollProps = {
+type ScrollProps = Readonly<{
     $offset: number;
-};
+}>;
 
 // otherwise syntax highlighting breaks
 // eslint-disable-next-line arrow-body-style

@@ -15,7 +15,7 @@ import {
 } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
-type SectionItemCoverProps = {
+type SectionItemCoverProps = Readonly<{
     $titleVisible: boolean;
     $invertBorder: boolean;
     $blankFontSize: number;
@@ -25,7 +25,7 @@ type SectionItemCoverProps = {
     $color: CSS.Property.Color;
     $scale: number;
     $sidewaysText: boolean;
-};
+}>;
 
 const SectionItemCover = withShadow(
     // a comment to have a line break, otherwise syntax highlighting breaks
@@ -156,11 +156,11 @@ const SectionItemCover = withShadow(
     `,
 );
 
-type SectionItemProps = {
+type SectionItemProps = Readonly<{
     $width: number;
     $height: number;
     $focusable: boolean;
-};
+}>;
 
 const SectionItem = withCrossLines(
     // a pretty long comment with a lot of words to force good code formatting
@@ -190,11 +190,11 @@ const SectionItem = withCrossLines(
     `,
 );
 
-type TimelineSectionItemProps<T extends TimelineSectionType> = {
+type TimelineSectionItemProps<T extends TimelineSectionType> = Readonly<{
     timelineSection: NonNullable<ResolvedSectionItem<TimelineSectionType>>;
     entity: ResolvedTimelineEntity[T];
     num: number;
-};
+}>;
 
 export const TimelineSectionItemComponent: React.FC<
     TimelineSectionItemProps<TimelineSectionType>

@@ -26,6 +26,7 @@
         "@vitejs/plugin-react": "^6.0.1",
         "csstype": "^3.2.3",
         "eslint": "9.39.4",
+        "eslint-plugin-functional": "^9.0.5",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-dom": "^4.2.3",

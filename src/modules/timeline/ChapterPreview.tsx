@@ -7,9 +7,9 @@ import { useWindowScroll } from '@shared/lib/hooks';
 import { getDocumentPosition } from '@shared/lib/util';
 import { HEADERS_WIDTH } from '@timelines/index';
 
-type PreviewProps = {
+type PreviewProps = Readonly<{
     $hasPicture: boolean;
-};
+}>;
 
 const Preview = styled.div<PreviewProps>`
     display: flex;

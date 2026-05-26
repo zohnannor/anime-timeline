@@ -8,10 +8,10 @@ import { scale } from '@shared/lib/helpers';
 import { ResolvedSectionItem } from '@timelines/resolved';
 import { TimelineSection as TimelineSectionType } from '@timelines/types';
 
-type ContainerProps = {
+type ContainerProps = Readonly<{
     $dir?: 'row' | 'column';
     $height: number;
-};
+}>;
 
 const TimelineContainer = styled.div<ContainerProps>`
     display: flex;
@@ -20,15 +20,15 @@ const TimelineContainer = styled.div<ContainerProps>`
     height: ${({ $height }) => scale($height)};
 `;
 
-type TimelineSectionProps = {
+type TimelineSectionProps = Readonly<{
     item:
         | NonNullable<ResolvedSectionItem<TimelineSectionType>>
-        | {
+        | Readonly<{
               type: 'timeline';
               height: number;
-          };
+          }>;
     parentNumber?: number;
-};
+}>;
 
 export const TimelineSection: React.FC<TimelineSectionProps> = ({
     item,

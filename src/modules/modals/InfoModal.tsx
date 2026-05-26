@@ -8,11 +8,11 @@ import { useTimeline } from '@shared/contexts/TimelineContext';
 import { Link, Modal } from '@shared/ui';
 import { ResolvedTimelineData } from '@timelines/resolved';
 
-type BoxProps = {
+type BoxProps = Readonly<{
     $dir?: 'row' | 'column';
     $wrap?: boolean;
     $align?: CSS.Property.JustifyContent;
-};
+}>;
 
 const Box = styled.div<BoxProps>`
     display: flex;
@@ -68,9 +68,9 @@ const ListContainer = styled.ul`
     padding-left: 1.5em;
 `;
 
-type InlineLinkGroupProps = {
+type InlineLinkGroupProps = Readonly<{
     $gap?: boolean;
-};
+}>;
 
 const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     display: flex;
@@ -78,9 +78,9 @@ const InlineLinkGroup = styled.span<InlineLinkGroupProps>`
     flex-wrap: wrap;
 `;
 
-type Keys = {
-    readonly keys: string[];
-};
+type Keys = Readonly<{
+    keys: readonly string[];
+}>;
 
 const KeyboardShortcut: React.FC<Keys> = ({ keys }) => (
     <kbd>

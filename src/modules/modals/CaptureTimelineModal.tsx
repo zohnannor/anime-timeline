@@ -114,12 +114,12 @@ const preparePngClone = (captureScaleFactor: number) => {
     return clone;
 };
 
-type HookOptions = {
+type HookOptions = Readonly<{
     fullWidth: number;
     maxHeight: number;
     animeTitle: string;
     title: string;
-};
+}>;
 
 const useCaptureTimeline = ({
     animeTitle,
