@@ -2764,6 +2764,13 @@ export const BERSERK_TIMELINE: Timeline = {
                         pages: 22,
                         cover: undefined,
                     },
+                    {
+                        title: () =>
+                            'The Shifting Water Mirror and the Afterglow of the Ethereal Flames',
+                        date: '12 June 2026',
+                        pages: 25,
+                        cover: undefined,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
