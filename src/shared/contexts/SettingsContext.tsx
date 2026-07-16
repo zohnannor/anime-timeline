@@ -30,19 +30,23 @@ type Setter<T extends string> =
     :   never;
 
 export type SettingsValues = Readonly<{
-    [Key in keyof Settings as Settings[Key] extends boolean ?
-        Setter<Key> extends keyof Settings ?
-            Key
+    [
+        Key in keyof Settings as Settings[Key] extends boolean ?
+            Setter<Key> extends keyof Settings ?
+                Key
+            :   never
         :   never
-    :   never]: Settings[Key];
+    ]: Settings[Key];
 }>;
 
 type SettingsValuesSetters = Readonly<{
-    [Key in keyof Settings as Settings[Key] extends boolean ?
-        Setter<Key> extends keyof Settings ?
-            Key
+    [
+        Key in keyof Settings as Settings[Key] extends boolean ?
+            Setter<Key> extends keyof Settings ?
+                Key
+            :   never
         :   never
-    :   never]: Setter<Key>;
+    ]: Setter<Key>;
 }>;
 
 export const SETTINGS_FUNCTIONS: SettingsValuesSetters = {

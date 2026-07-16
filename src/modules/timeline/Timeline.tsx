@@ -163,12 +163,12 @@ const TimelineSegment: React.FC<TimelineSegmentProps> = ({
 const toSegments = <T extends ResolvedChapter>(
     chunks: NonEmptyArray<Chunk<T>>,
     getMeta: (_first: T) => Omit<Segment, 'width'>,
-    unboundChapterWidth: boolean,
+    isChapterWidthUnbound: boolean,
 ): NonEmptyArray<Segment> =>
     map(chunks, group => {
         const [first] = group;
         return {
-            width: sum(group.map(({ width }) => width(unboundChapterWidth))),
+            width: sum(group.map(({ width }) => width(isChapterWidthUnbound))),
             ...getMeta(first),
         };
     });
@@ -192,10 +192,10 @@ export const Timeline: React.FC = () => {
 
     const daysSegments: NonEmptyArray<Segment> = useMemo(
         () =>
-            map(visibleChapters, ({ width, date, number }) => ({
+            map(visibleChapters, ({ width, date: { day }, number }) => ({
                 width: width(unboundChapterWidth),
-                colorValue: date.getDate(),
-                label: date.getDate().toString(),
+                colorValue: day,
+                label: day.toString(),
                 chapterNumber: number,
             })),
         [visibleChapters, unboundChapterWidth],
@@ -205,14 +205,11 @@ export const Timeline: React.FC = () => {
         () =>
             toSegments(
                 chapterDatesByMonth(visibleChapters),
-                ({ date, number }) => {
-                    const month = date.getMonth();
-                    return {
-                        colorValue: (month + 1) % 12,
-                        label: MONTHS[month] ?? 'Invalid month',
-                        chapterNumber: number,
-                    };
-                },
+                ({ date: { month }, number }) => ({
+                    colorValue: month % 12,
+                    label: MONTHS[month - 1] ?? 'Invalid month',
+                    chapterNumber: number,
+                }),
                 unboundChapterWidth,
             ),
         [visibleChapters, unboundChapterWidth],
@@ -222,14 +219,11 @@ export const Timeline: React.FC = () => {
         () =>
             toSegments(
                 chapterDatesByYear(visibleChapters),
-                ({ date, number }) => {
-                    const year = date.getFullYear();
-                    return {
-                        colorValue: year,
-                        label: year.toString(),
-                        chapterNumber: number,
-                    };
-                },
+                ({ date: { year }, number }) => ({
+                    colorValue: year,
+                    label: year.toString(),
+                    chapterNumber: number,
+                }),
                 unboundChapterWidth,
             ),
         [visibleChapters, unboundChapterWidth],

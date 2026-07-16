@@ -3197,7 +3197,7 @@ export const BERSERK_TIMELINE: Timeline = {
             },
             {
                 name: 'SkullKnight.net',
-                url: 'http://www.skullknight.net/',
+                url: 'https://www.skullknight.net/',
             },
             {
                 name: 'The Berserk Exhibition',

@@ -82,7 +82,7 @@ const OVERLAY_CLASSES = [
 const isImg = (el: Node): el is HTMLImageElement =>
     el instanceof HTMLImageElement && el.getAttribute('src') !== null;
 
-const filter = (el: HTMLElement) =>
+const shouldIncludeElement = (el: HTMLElement) =>
     !(el instanceof HTMLElement) ||
     !(
         OVERLAY_CLASSES.some(cls => el.classList.contains(cls)) ||
@@ -106,7 +106,7 @@ const preparePngClone = (captureScaleFactor: number) => {
     for (const el of clone.querySelectorAll<HTMLElement>(
         `${classNames}, img[src]`,
     )) {
-        if (!filter(el)) {
+        if (!shouldIncludeElement(el)) {
             el.remove();
         }
     }
@@ -133,7 +133,7 @@ const useCaptureTimeline = ({
     const [capturing, setCapturing] = useState(false);
     const [atViewportHeight, setAtViewportHeight] = useState(false);
 
-    const scaleFactor = Number.parseFloat(
+    const scaleFactor = Number(
         document.documentElement.style.getPropertyValue(SCALE_FACTOR_PROPERTY),
     );
     const scaledWidth = Math.round(fullWidth * scaleFactor);
@@ -155,7 +155,7 @@ const useCaptureTimeline = ({
             canvasWidth: width,
             backgroundColor: '#000',
             skipAutoScale: true,
-            filter,
+            filter: shouldIncludeElement,
             style:
                 kind === 'svg' && !atViewportHeight ?
                     {
@@ -183,7 +183,7 @@ const useCaptureTimeline = ({
                 if (kind === 'png') {
                     cleanupClone();
                 }
-                const timestamp = new Date().toISOString();
+                const timestamp = Temporal.Now.instant().toString();
                 const title = toTitleCase(animeTitle);
                 const filename = `${title}_Timeline_${timestamp}.${kind}`;
                 downloadDataUrl(dataUrl, filename);

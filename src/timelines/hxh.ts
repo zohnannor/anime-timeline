@@ -26,8 +26,8 @@ type VolumesExtra = 1;
 type ArcsTotal = 7;
 type SeasonsTotal = 2;
 
-const volumeCover = (n: number, _title: string, extra: boolean) =>
-    !extra ?
+const volumeCover = (n: number, _title: string, isExtra: boolean) =>
+    !isExtra ?
         n === 35 ?
             `Volume${n}cover`
         :   `Volume_${n}_cover`
@@ -4031,7 +4031,7 @@ export const HXH_TIMELINE: Timeline = {
             },
             {
                 name: 'Anime (2011)',
-                url: 'http://www.crunchyroll.com/hunter-x-hunter',
+                url: 'https://www.crunchyroll.com/hunter-x-hunter',
             },
         ],
     },

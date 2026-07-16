@@ -90,13 +90,17 @@ const totalPageCount = (chapters: readonly ResolvedChapter[]) =>
 const recentlyUpdated = (
     chapters: readonly ResolvedChapter[],
     episodes: readonly ResolvedEpisode[],
-) =>
-    Math.max(
-        ...chapters.map(ch => ch.date.getTime()),
+): Temporal.PlainDate => {
+    const now = Temporal.Now.plainDateISO();
+    const sorted = [
+        ...chapters.map(ch => ch.date),
         ...episodes
-            .filter(ep => ep.date < new Date())
-            .map(ep => ep.date.getTime()),
-    );
+            .map(ep => ep.date)
+            .filter(date => Temporal.PlainDate.compare(date, now) <= 0),
+    ].toSorted((left, right) => Temporal.PlainDate.compare(left, right));
+
+    return sorted.at(-1) ?? now;
+};
 
 type Sorting =
     | 'unsorted'
@@ -108,6 +112,7 @@ type Sorting =
 type SortData = Readonly<
     | { type: 'string'; value: string; badge: string | undefined }
     | { type: 'number'; value: number; badge: string | undefined }
+    | { type: 'date'; value: Temporal.PlainDate; badge: string | undefined }
 >;
 
 type Sort = SortData &
@@ -135,11 +140,11 @@ const getSortStrategy = (
             return { type: 'number', value: count, badge: `${count} pages` };
         },
         'recently updated': () => {
-            const time = recentlyUpdated(chapters, episodes);
+            const date = recentlyUpdated(chapters, episodes);
             return {
-                type: 'number',
-                value: time,
-                badge: new Date(time).toLocaleDateString(undefined, {
+                type: 'date',
+                value: date,
+                badge: date.toLocaleString(undefined, {
                     month: 'long',
                     day: 'numeric',
                     year: 'numeric',
@@ -156,6 +161,8 @@ const sortTitles = (titleA: Sort, titleB: Sort): number =>
         titleA.value.localeCompare(titleB.value)
     : titleA.type === 'number' && titleB.type === 'number' ?
         titleB.value - titleA.value
+    : titleA.type === 'date' && titleB.type === 'date' ?
+        Temporal.PlainDate.compare(titleB.value, titleA.value)
     :   0;
 
 export const AnimeTitleSelectorModal: React.FC = () => {

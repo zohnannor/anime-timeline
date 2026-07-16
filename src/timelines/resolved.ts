@@ -31,7 +31,7 @@ import {
     Volume,
 } from '@timelines/types';
 
-type WidthResolver = (_unboundChapterWidth: boolean) => number;
+type WidthResolver = (_isChapterWidthUnbound: boolean) => number;
 
 type ResolvedTemplates = Readonly<{
     title: string;
@@ -41,7 +41,7 @@ type ResolvedTemplates = Readonly<{
 
 export type ResolvedChapter = Omit<Chapter, 'title' | 'date'> &
     Readonly<{
-        date: Date;
+        date: Temporal.PlainDate;
         width: WidthResolver;
         volume: number;
         extra: boolean;
@@ -74,7 +74,7 @@ export type ResolvedEpisode = Omit<
     'title' | 'cover' | 'chapters' | 'date'
 > &
     Readonly<{
-        date: Date;
+        date: Temporal.PlainDate;
         cover: string | undefined;
         width: WidthResolver;
         season: number;
@@ -98,24 +98,23 @@ export type ResolvedTimelineEntity = Readonly<{
 }>;
 
 export type ResolvedTimelineData = Readonly<
-    {
-        title: string;
-        chapters: NonEmptyArray<ResolvedChapter>;
-        volumes: NonEmptyArray<ResolvedVolume>;
-    } & ExactUnion<
+    ExactUnion<
+        | EmptyObject<'saga' | 'arc'>
         | { arcs: NonEmptyArray<ResolvedArc> }
         | {
               sagas: NonEmptyArray<ResolvedSaga>;
               arcs: NonEmptyArray<ResolvedArc>;
           }
-        | EmptyObject<'saga' | 'arc'>
     > & {
-            episodes: readonly ResolvedEpisode[];
-            seasons?: readonly ResolvedSeason[];
-            wikiBase: string;
-            icons: Icons;
-            socialLinks: readonly SocialLink[];
-        }
+        title: string;
+        chapters: NonEmptyArray<ResolvedChapter>;
+        volumes: NonEmptyArray<ResolvedVolume>;
+        episodes: readonly ResolvedEpisode[];
+        seasons?: readonly ResolvedSeason[];
+        wikiBase: string;
+        icons: Icons;
+        socialLinks: readonly SocialLink[];
+    }
 >;
 
 export type ResolvedSectionItem<T extends TimelineSection> = Omit<
@@ -143,8 +142,8 @@ export type ResolvedTimeline = Readonly<{
     data: ResolvedTimelineData;
     maxHeight: number;
     maxWidth: (
-        _unboundChapterWidth: boolean,
-        _showExtraChapters: boolean,
+        _isChapterWidthUnbound: boolean,
+        _shouldShowExtraChapters: boolean,
     ) => number;
 }>;
 
@@ -154,20 +153,19 @@ const DEFAULT_VOLUME_PAGES = 180;
 const maybeCallback = <T>(
     fn: Callback<T> | T,
     n: number,
-    extra?: boolean,
+    isExtra?: boolean,
 ): T =>
-    typeof fn === 'function' ? (fn as Callback<T>)(n, extra ?? false) : fn;
+    typeof fn === 'function' ? (fn as Callback<T>)(n, isExtra ?? false) : fn;
 const maybeEntityCallback = <T>(
     fn: EntityCallback<T> | T,
     n: number,
     title: string,
-    extra?: boolean,
+    isExtra?: boolean,
 ): T =>
     typeof fn === 'function' ?
-        (fn as EntityCallback<T>)(n, title, extra ?? false)
+        (fn as EntityCallback<T>)(n, title, isExtra ?? false)
     :   fn;
 
-// eslint-disable-next-line max-lines-per-function, max-statements
 const resolveTimelineData = (
     {
         title,
@@ -189,6 +187,7 @@ const resolveTimelineData = (
         season: seasonTemplates,
         volume: volumeTemplates,
     }: ItemTemplates,
+    // eslint-disable-next-line max-lines-per-function, max-statements
 ): ResolvedTimelineData => {
     const chapters: ResolvedChapter[] = [];
     const volumes: ResolvedVolume[] = [];
@@ -209,7 +208,7 @@ const resolveTimelineData = (
         volumeIdx,
         { title: rawTitle, cover: rawCover, chapters: rawChapters },
     ] of allRawVolumes.entries()) {
-        const extra = volumeIdx >= rawVolumes.length;
+        const isExtra = volumeIdx >= rawVolumes.length;
         const volumeNumber = volumeIdx + 1;
         const pagesInVolume = sum(rawChapters.map(ch => ch.pages));
 
@@ -223,8 +222,8 @@ const resolveTimelineData = (
             // eslint-disable-next-line no-plusplus
             const chapterNumber = globalChapterIdx++ + 1;
             const localNumber =
-                !extra ? chapterNumber : chapterNumber - mainChaptersTotal;
-            const titleString = maybeCallback(rawTitle, localNumber, extra);
+                !isExtra ? chapterNumber : chapterNumber - mainChaptersTotal;
+            const titleString = maybeCallback(rawTitle, localNumber, isExtra);
             const chapterWidthUnbound =
                 pages * (DEFAULT_VOLUME_WIDTH / DEFAULT_VOLUME_PAGES) * 1.05;
             const chapterWidthBounded =
@@ -233,7 +232,7 @@ const resolveTimelineData = (
             const title = chapterTemplates.titleProcessor(
                 titleString,
                 localNumber,
-                extra,
+                isExtra,
             );
             volumeChapters.push({
                 date: tokyoDate(rawDate),
@@ -244,14 +243,18 @@ const resolveTimelineData = (
                         chapterWidthBounded
                     ),
                 volume: volumeIdx,
-                extra,
+                extra: isExtra,
                 title,
                 number: chapterTemplates.numberProcessor(
                     localNumber,
                     title,
-                    extra,
+                    isExtra,
                 ),
-                wikiLink: chapterTemplates.wikiLink(title, localNumber, extra),
+                wikiLink: chapterTemplates.wikiLink(
+                    title,
+                    localNumber,
+                    isExtra,
+                ),
             });
         }
         chapters.push(...volumeChapters);
@@ -264,17 +267,21 @@ const resolveTimelineData = (
                 (volumeChapters[rawTitle - 1]?.title ??
                 throwError(`Chapter ${rawTitle - 1} not found`))
             : rawTitle !== undefined ?
-                maybeCallback(rawTitle, volumeNumber, extra)
+                maybeCallback(rawTitle, volumeNumber, isExtra)
             :   volumeNumber.toString();
         // unprocessed `title` passed to `rawCover` and `wikiLink` - intentional
         volumes.push({
-            cover: maybeEntityCallback(rawCover, volumeNumber, title, extra),
+            cover: maybeEntityCallback(rawCover, volumeNumber, title, isExtra),
             width: unboundChapterWidth =>
                 unboundChapterWidth ? unboundVolumeWidth : DEFAULT_VOLUME_WIDTH,
-            extra,
-            title: volumeTemplates.titleProcessor(title, volumeNumber, extra),
-            number: volumeTemplates.numberProcessor(volumeNumber, title, extra),
-            wikiLink: volumeTemplates.wikiLink(title, volumeNumber, extra),
+            extra: isExtra,
+            title: volumeTemplates.titleProcessor(title, volumeNumber, isExtra),
+            number: volumeTemplates.numberProcessor(
+                volumeNumber,
+                title,
+                isExtra,
+            ),
+            wikiLink: volumeTemplates.wikiLink(title, volumeNumber, isExtra),
         });
     }
 
@@ -418,12 +425,10 @@ const resolveTimelineData = (
         title,
         chapters: asNonEmpty(chapters, 'chapters'),
         volumes: asNonEmpty(volumes, 'volumes'),
-        ...(rawSagas !== undefined || rawArcs !== undefined ?
-            { arcs: asNonEmpty(arcs, 'arcs') }
-        :   {}),
-        ...(rawSagas !== undefined ?
-            { sagas: asNonEmpty(sagas, 'sagas') }
-        :   {}),
+        ...((rawSagas !== undefined || rawArcs !== undefined) && {
+            arcs: asNonEmpty(arcs, 'arcs'),
+        }),
+        ...(rawSagas !== undefined && { sagas: asNonEmpty(sagas, 'sagas') }),
         episodes,
         seasons,
         wikiBase,
@@ -433,9 +438,9 @@ const resolveTimelineData = (
 };
 
 type Templates = Readonly<{
-    titleProcessor: (_title: string, _n: number, _extra?: boolean) => string;
-    numberProcessor: (_n: number, _title: string, _extra?: boolean) => string;
-    wikiLink: (_title: string, _n: number, _extra?: boolean) => string;
+    titleProcessor: (_title: string, _n: number, _isExtra?: boolean) => string;
+    numberProcessor: (_n: number, _title: string, _isExtra?: boolean) => string;
+    wikiLink: (_title: string, _n: number, _isExtra?: boolean) => string;
 }>;
 
 type ItemTemplates = Readonly<
@@ -515,9 +520,9 @@ const resolveTimelineSectionLayout = (
 
         const resolved: ResolvedSectionItem<TimelineSection> = {
             ...resolveItem(rawItem),
-            ...(rawItem.subTimeline !== undefined ?
-                { subTimeline: resolveItem(rawItem.subTimeline) }
-            :   {}),
+            ...(rawItem.subTimeline !== undefined && {
+                subTimeline: resolveItem(rawItem.subTimeline),
+            }),
         };
 
         Object.assign(layout, { [type]: resolved });
@@ -539,12 +544,15 @@ export const resolveTimeline = ({
                 .filter(sec => sec.type !== 'timeline')
                 .map(sec => sec.height),
         ) + TIMELINE_HEIGHT;
-    const maxWidth = (unboundChapterWidth: boolean, showExtraChapters = true) =>
+    const maxWidth = (
+        isChapterWidthUnbound: boolean,
+        shouldShowExtraChapters = true,
+    ) =>
         sum(
-            (!showExtraChapters ?
+            (!shouldShowExtraChapters ?
                 data.volumes.filter(vol => !vol.extra)
             :   data.volumes
-            ).map(vol => vol.width(unboundChapterWidth)),
+            ).map(vol => vol.width(isChapterWidthUnbound)),
         );
 
     return { layout, data, maxHeight, maxWidth };

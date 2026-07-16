@@ -19,10 +19,12 @@ import {
     sanitizeId,
     scrollToId,
 } from '@shared/lib/helpers';
+import { range } from '@shared/lib/util';
 import { Modal, Tooltip } from '@shared/ui';
 import { HeaderButton } from '@shared/ui/Modal';
 
-const getISODate = (date: Date): string => date.toISOString().slice(0, 10);
+const getISODate = (plainDate: Temporal.PlainDate): string =>
+    plainDate.toString();
 
 const CalendarGrid = styled.div`
     display: grid;
@@ -139,19 +141,19 @@ type EventMap = Map<
 >;
 
 type MonthComponentProps = Readonly<{
-    month: Date;
-    currentDate: Date;
+    month: Temporal.PlainDate;
+    currentDate: Temporal.PlainDate;
     chapterDateMap: EventMap;
-    nextChapterDate: Date | undefined;
+    nextChapterDate: Temporal.PlainDate | undefined;
     onDayClick: (
         _ev: React.MouseEvent,
-        _event: { chapter: string } | { episode: [string, number] } | undefined,
+        _event: undefined | { episode: [string, number] } | { chapter: string },
     ) => void;
 }>;
 
 const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     // so that react/display-name doesn't complain
-    // eslint-disable-next-line prefer-arrow-callback, max-statements
+    // eslint-disable-next-line prefer-arrow-callback
     function MonthComponent({
         month,
         currentDate,
@@ -159,16 +161,12 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         nextChapterDate,
         onDayClick,
     }) {
-        const monthStart = new Date(month);
-        monthStart.setDate(1);
-        const monthEnd = new Date(month);
-        monthEnd.setMonth(month.getMonth() + 1);
-        monthEnd.setDate(0);
-        const startDay = monthStart.getDay();
+        const monthStart = month.with({ day: 1 });
+        const startDay = monthStart.dayOfWeek === 7 ? 0 : monthStart.dayOfWeek;
         const lastDay = startDay === 0 ? 6 : startDay - 1;
 
-        const monthNumber = month.getMonth();
-        const year = month.getFullYear();
+        const monthNumber = month.month - 1;
+        const { year } = month;
 
         const monthColor = interpolateColor(
             (monthNumber + 1) % 12,
@@ -179,22 +177,21 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
         const days: React.JSX.Element[] = [];
 
         for (let idx = 0; idx < lastDay; idx++) {
-            days.push(<div key={`empty-${month.getTime()}-${idx}`} />);
+            days.push(<div key={`empty-${month.toString()}-${idx}`} />);
         }
 
-        for (let dayNumber = 1; dayNumber <= monthEnd.getDate(); dayNumber++) {
-            const date = new Date(month);
-            date.setDate(dayNumber);
+        for (let dayNumber = 1; dayNumber <= month.daysInMonth; dayNumber++) {
+            const date = month.with({ day: dayNumber });
             const dateString = getISODate(date);
             const event = chapterDateMap.get(dateString);
             const isChapter = event !== undefined && 'chapter' in event;
             const isEpisode = event !== undefined && 'episode' in event;
             const isEvent = isChapter || isEpisode;
             const chapterNumber = isChapter ? event.chapter : undefined;
-            const episodeNumber = isEpisode ? event.episode : undefined;
-            const isToday = date.toDateString() === currentDate.toDateString();
+            const episodeData = isEpisode ? event.episode : undefined;
+            const isToday = date.equals(currentDate);
             const isNextChapter =
-                date.toDateString() === nextChapterDate?.toDateString();
+                nextChapterDate !== undefined && date.equals(nextChapterDate);
 
             const dayColor = interpolateColor(dayNumber, [1, 31], DAYS_GRADIENT)
                 .toString(16)
@@ -219,9 +216,9 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                     {chapterNumber !== undefined && (
                         <span>#{chapterNumber}</span>
                     )}
-                    {episodeNumber !== undefined && (
+                    {episodeData !== undefined && (
                         <span>
-                            E{episodeNumber[0]} (S{episodeNumber[1]})
+                            E{episodeData[0]} (S{episodeData[1]})
                         </span>
                     )}
                 </Day>
@@ -252,7 +249,7 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
                         day => (
                             <DayName
                                 className='dayName'
-                                key={`dayname-${day}-${month.getTime()}`}
+                                key={`dayname-${day}-${month.toString()}`}
                             >
                                 {day}
                             </DayName>
@@ -265,22 +262,20 @@ const MonthComponent: React.FC<MonthComponentProps> = React.memo(
     },
 );
 
-const getMonthsBetween = (start: Date, end: Date) => {
-    const months = [];
-    const current = new Date(start);
-    current.setDate(1);
+const getMonthsBetween = (
+    start: Temporal.PlainDate,
+    end: Temporal.PlainDate,
+) => {
+    const currentStart = start.with({ day: 1 });
+    const currentEnd = end.with({ day: 1 });
 
-    const endDate = new Date(end);
-    endDate.setHours(23, 59, 59, 999);
+    const totalMonths = currentStart.until(currentEnd, {
+        largestUnit: 'months',
+    }).months;
 
-    // false positive: mutated by `setMonth`
-    // eslint-disable-next-line no-unmodified-loop-condition
-    while (current <= endDate) {
-        months.push(new Date(current));
-        current.setMonth(current.getMonth() + 1);
-    }
-
-    return months;
+    return range(0, totalMonths + 1).map(offset =>
+        currentStart.add({ months: offset }),
+    );
 };
 
 export const CalendarModal: React.FC = () => {
@@ -322,7 +317,7 @@ export const CalendarModal: React.FC = () => {
         }
     }, [calendarOpen, scrolledToBottom]);
 
-    const currentDate = useMemo(() => new Date(), []);
+    const currentDate = useMemo(() => Temporal.Now.plainDateISO(), []);
     const [first] = chapters;
     const startDate = first.date;
 
@@ -360,9 +355,7 @@ export const CalendarModal: React.FC = () => {
         (
             ev: React.MouseEvent,
             event:
-                | { chapter: string }
-                | { episode: [string, number] }
-                | undefined,
+                undefined | { chapter: string } | { episode: [string, number] },
         ) => {
             ev.preventDefault();
             if (event === undefined) {
@@ -409,7 +402,7 @@ export const CalendarModal: React.FC = () => {
             <CalendarContainer>
                 {months.map(month => (
                     <MonthComponent
-                        key={`month-${month.toISOString()}`}
+                        key={`month-${month.toString()}`}
                         month={month}
                         currentDate={currentDate}
                         nextChapterDate={undefined /* nextChapterDate */}

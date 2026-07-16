@@ -43,11 +43,11 @@ type ButtonProps = Readonly<{
 
 const FloatingButton: React.FC<ButtonProps> = ({ icon, title, option }) => {
     const settings = useSettings();
-    const value = settings[option];
+    const isEnabled = settings[option];
     const setter = settings[SETTINGS_FUNCTIONS[option]];
 
     const filter =
-        value ?
+        isEnabled ?
             'drop-shadow(0 0 3px white) drop-shadow(0 0 5px white)'
         :   undefined;
 

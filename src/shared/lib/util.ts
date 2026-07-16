@@ -43,7 +43,7 @@ export type Mutable<T> = {
     -readonly [K in keyof T]: T[K];
 };
 
-const notEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
+const isNotEmpty = <T>(arr: readonly T[]): arr is NonEmptyArray<T> =>
     arr.length > 0;
 
 export const throwError = (message: string): never => {
@@ -54,7 +54,7 @@ export const asNonEmpty = <T>(
     arr: readonly T[],
     name: string,
 ): NonEmptyArray<T> =>
-    notEmpty(arr) ? arr : throwError(`Expected non-empty array \`${name}\``);
+    isNotEmpty(arr) ? arr : throwError(`Expected non-empty array \`${name}\``);
 
 export const range = (start: number, end: number) =>
     Array.from({ length: end - start }, (_, idx) => idx + start);
@@ -74,7 +74,7 @@ export const clamp = (value: number, min: number, max: number) =>
 
 export const isMobileDevice = () =>
     ('ontouchstart' in globalThis || navigator.maxTouchPoints > 0) &&
-    globalThis.matchMedia('(pointer: coarse)').matches;
+    matchMedia('(pointer: coarse)').matches;
 
 export const getDocumentPosition = (element: HTMLElement) => {
     let x = 0;
@@ -85,8 +85,7 @@ export const getDocumentPosition = (element: HTMLElement) => {
         x += current.offsetLeft + current.clientLeft;
         y += current.offsetTop + current.clientTop;
         current = (current.offsetParent ?? undefined) as
-            | HTMLElement
-            | undefined;
+            HTMLElement | undefined;
     }
 
     return { x, y, width: element.offsetWidth };

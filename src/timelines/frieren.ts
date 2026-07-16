@@ -1445,7 +1445,7 @@ export const FRIEREN_TIMELINE: Timeline = {
         socialLinks: [
             {
                 name: 'Official Frieren Website',
-                url: 'http://frieren-anime.jp/',
+                url: 'https://frieren-anime.jp/',
             },
             {
                 name: 'Official Frieren Twitter',

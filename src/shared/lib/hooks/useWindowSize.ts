@@ -7,14 +7,14 @@ const useWindowSize = () => {
     }));
 
     useLayoutEffect(() => {
-        const handleSize = () => {
+        const observer = new ResizeObserver(() => {
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
-        };
-        window.addEventListener('resize', handleSize);
-        return () => window.removeEventListener('resize', handleSize);
+        });
+        observer.observe(document.documentElement);
+        return () => observer.disconnect();
     }, []);
 
     return windowSize;

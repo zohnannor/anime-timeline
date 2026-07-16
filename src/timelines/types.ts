@@ -12,11 +12,11 @@ type Offset = Readonly<{ x: number; y: number }>;
 
 export type Range = Readonly<{ from: number; to?: number }>;
 
-export type Callback<T> = (_n: number, _extra: boolean) => T;
+export type Callback<T> = (_n: number, _isExtra: boolean) => T;
 export type EntityCallback<T> = (
     _n: number,
     _title: string,
-    _extra: boolean,
+    _isExtra: boolean,
 ) => T;
 
 type CoverOffset<C> = Readonly<
@@ -62,11 +62,11 @@ export type Episode = Readonly<{
 
 export type Season = Readonly<
     ExactUnion<
-        | ({
+        | (CoverOffset<Callback<string>> & {
               title: string;
               chapters: Range;
               episodes: Episode[];
-          } & CoverOffset<Callback<string>>)
+          })
         | { chapters: Range }
     >
 >;
@@ -94,21 +94,20 @@ export type SocialLink = Readonly<{
 }>;
 
 export type TimelineData = Readonly<
-    {
+    ExactUnion<
+        | EmptyObject<'saga' | 'arc'>
+        | { sagas: NonEmptyArray<Saga> }
+        | { arcs: NonEmptyArray<Arc> }
+    > & {
         title: string;
         volumes: NonEmptyArray<Volume>;
         extraChapters?: NonEmptyArray<Volume>;
-    } & ExactUnion<
-        | { sagas: NonEmptyArray<Saga> }
-        | { arcs: NonEmptyArray<Arc> }
-        | EmptyObject<'saga' | 'arc'>
-    > & {
-            seasons?: NonEmptyArray<Season>;
-            splitChapters: Record<number, number>;
-            wikiBase: string;
-            icons: Icons;
-            socialLinks: readonly SocialLink[];
-        }
+        seasons?: NonEmptyArray<Season>;
+        splitChapters: Record<number, number>;
+        wikiBase: string;
+        icons: Icons;
+        socialLinks: readonly SocialLink[];
+    }
 >;
 
 export type Timeline = Readonly<{
@@ -121,12 +120,7 @@ export const TITLES = typedKeyTuple(TIMELINE_LOADERS);
 export type AnimeTitle = (typeof TITLES)[number];
 
 export type TimelineSection =
-    | 'season'
-    | 'episode'
-    | 'saga'
-    | 'arc'
-    | 'chapter'
-    | 'volume';
+    'season' | 'episode' | 'saga' | 'arc' | 'chapter' | 'volume';
 
 export type SubtimelinesMap = Readonly<{
     season: 'episode';
@@ -142,11 +136,11 @@ export type TimelineSectionItem<T extends TimelineSection> = Readonly<{
     sidewaysText?: boolean;
     blankfontSize: number;
     titleFontSize: number;
-    titleProcessor?: (_title: string, _n: number, _extra: boolean) => string;
-    numberProcessor?: (_n: number, _title: string, _extra: boolean) => string;
+    titleProcessor?: (_title: string, _n: number, _isExtra: boolean) => string;
+    numberProcessor?: (_n: number, _title: string, _isExtra: boolean) => string;
     height: number;
     sectionLink: string;
-    wikiLink: (_title: string, _n: number, _extra: boolean) => string;
+    wikiLink: (_title: string, _n: number, _isExtra: boolean) => string;
     focusable?: boolean;
 }> &
     Readonly<
@@ -156,17 +150,16 @@ export type TimelineSectionItem<T extends TimelineSection> = Readonly<{
     >;
 
 export type TimelineSectionLayout = Readonly<
-    {
-        season?: TimelineSectionItem<'season'>;
-    } & ExactUnion<
+    ExactUnion<
+        | EmptyObject<'saga' | 'arc'>
         | { saga: TimelineSectionItem<'saga'> }
         | { arc: TimelineSectionItem<'arc'> }
-        | EmptyObject<'saga' | 'arc'>
     > & {
-            chapter: TimelineSectionItem<'chapter'>;
-            volume: TimelineSectionItem<'volume'>;
-            timeline: {
-                type: 'timeline';
-            };
-        }
+        season?: TimelineSectionItem<'season'>;
+        chapter: TimelineSectionItem<'chapter'>;
+        volume: TimelineSectionItem<'volume'>;
+        timeline: {
+            type: 'timeline';
+        };
+    }
 >;

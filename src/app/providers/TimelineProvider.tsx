@@ -20,11 +20,11 @@ export const TimelineProvider: React.FC<PropsWithChildren> = ({ children }) => {
     >({});
 
     useEffect(() => {
-        let cancelled = false;
+        let isCancelled = false;
 
         loadTimeline(animeTitle)
             .then(timeline => {
-                if (cancelled) {
+                if (isCancelled) {
                     return;
                 }
                 setTimelines(current => ({
@@ -40,7 +40,7 @@ export const TimelineProvider: React.FC<PropsWithChildren> = ({ children }) => {
             });
 
         return () => {
-            cancelled = true;
+            isCancelled = true;
         };
     }, [animeTitle]);
 

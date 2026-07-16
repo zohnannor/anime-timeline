@@ -7,9 +7,8 @@ const useMousePosition = () => {
         const updateMousePosition = (ev: MouseEvent) => {
             setMousePosition({ x: ev.clientX, y: ev.clientY });
         };
-        globalThis.addEventListener('mousemove', updateMousePosition);
-        return () =>
-            globalThis.removeEventListener('mousemove', updateMousePosition);
+        addEventListener('mousemove', updateMousePosition);
+        return () => removeEventListener('mousemove', updateMousePosition);
     }, []);
 
     return mousePosition;

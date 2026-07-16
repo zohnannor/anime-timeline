@@ -125,23 +125,23 @@ export const Scroller = () => {
         const stopDrag = () => setDragging(false);
 
         body.addEventListener('mousemove', handleDrag);
-        globalThis.addEventListener('mouseup', stopDrag);
+        addEventListener('mouseup', stopDrag);
         return () => {
             body.removeEventListener('mousemove', handleDrag);
-            globalThis.removeEventListener('mouseup', stopDrag);
+            removeEventListener('mouseup', stopDrag);
         };
     }, [body, dragging, updateScrollerHandle]);
 
     const handleScrollerClick = (ev: React.MouseEvent) =>
         updateScrollerHandle(ev.nativeEvent);
 
-    const scrollerVisible =
+    const isScrollerVisible =
         dragging || scrolling || mouseY > window.innerHeight - 100;
 
     return (
         <ScrollerHoverArea
             className='scrollerHoverArea'
-            $visible={scrollerVisible}
+            $visible={isScrollerVisible}
         >
             <ScrollerWrapper
                 className='scroller'

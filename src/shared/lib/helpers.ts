@@ -24,14 +24,20 @@ export const scale = (n: number) =>
 
 const isValidDate = (date: Date) => !Number.isNaN(date.getTime());
 
-export const tokyoDate = (dateString: string): Date => {
+export const tokyoDate = (dateString: string): Temporal.PlainDate => {
+    // `PlainDate` cannot parse '%m %d, %Y' format
+    // eslint-disable-next-line unicorn/prefer-temporal
     const date = new Date(
         `${dateString.replaceAll(/st|nd|rd|th/gu, '')} GMT+9`, // Tokyo timezone
     );
     if (!isValidDate(date)) {
         return throwError(`Invalid date: ${dateString}`);
     }
-    return date;
+    return new Temporal.PlainDate(
+        date.getUTCFullYear(),
+        date.getUTCMonth() + 1,
+        date.getUTCDate(),
+    );
 };
 
 export type Chunk<T> = NonEmptyArray<T>;
@@ -62,21 +68,17 @@ const chunks = <T>(
 
 // TODO: move into `ResolvedTimeline`?
 export const chapterDatesByMonth = (chapters: NonEmptyArray<ResolvedChapter>) =>
-    chunks(
-        chapters,
-        chapter =>
-            chapter.date.getFullYear() + 1 + (chapter.date.getMonth() + 1) * 12,
-    );
+    chunks(chapters, ({ date }) => date.year + 1 + date.month * 12);
 
 // TODO: move into `ResolvedTimeline`?
 export const chapterDatesByYear = (chapters: NonEmptyArray<ResolvedChapter>) =>
-    chunks(chapters, chapter => chapter.date.getFullYear() + 1);
+    chunks(chapters, ({ date }) => date.year + 1);
 
 export const sanitizeId = (id: string) => id.replaceAll(/[^\w]/gu, '-');
 
 export const scrollToId = (id: string) => {
     const sanitizedId = sanitizeId(id);
-    const element = document.querySelector(`#${sanitizedId}`);
+    const element = document.querySelector<HTMLElement>(`#${sanitizedId}`);
     if (element) {
         console.debug(`Scrolling to \`#${sanitizedId}\``);
         element.scrollIntoView({
@@ -84,7 +86,7 @@ export const scrollToId = (id: string) => {
             block: 'center',
             inline: 'center',
         });
-        (element as HTMLElement).focus({ preventScroll: false });
+        element.focus({ preventScroll: false });
     } else {
         console.warn(`No element found for \`#${sanitizedId}\``);
     }

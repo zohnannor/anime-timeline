@@ -11,26 +11,25 @@ const createModalHandler =
         stateKey: keyof Settings,
         setter: React.Dispatch<React.SetStateAction<boolean>>,
     ) =>
-    (open: React.SetStateAction<boolean>) => {
-        if (typeof open === 'boolean') {
-            if (open) {
-                globalThis.history.pushState({ [stateKey]: true }, '');
-            } else if (globalThis.history.state?.[stateKey] !== undefined) {
-                globalThis.history.back();
+    (isOpen: React.SetStateAction<boolean>) => {
+        if (typeof isOpen === 'boolean') {
+            if (isOpen) {
+                history.pushState({ [stateKey]: true }, '');
+            } else if (history.state?.[stateKey] !== undefined) {
+                history.back();
             }
         }
-        setter(open);
+        setter(isOpen);
     };
 
 export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [showCrosslines, setShowCrosslines] = useState(false);
     const [infoBoxOpen, setInfoBoxOpen] = useState(() => {
-        const firstVisit =
-            globalThis.localStorage.getItem('firstVisit') === null;
-        if (firstVisit) {
-            globalThis.localStorage.setItem('firstVisit', 'false');
+        const isFirstVisit = localStorage.getItem('firstVisit') === null;
+        if (isFirstVisit) {
+            localStorage.setItem('firstVisit', 'false');
         }
-        return firstVisit;
+        return isFirstVisit;
     });
     const [unboundChapterWidth, setUnboundChapterWidth] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
@@ -38,18 +37,18 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         useState(false);
     const [showTitles, setShowTitles] = useState(
         // default to true if not set (first visit), otherwise get from storage
-        () => globalThis.localStorage.getItem('showTitles') !== 'false',
+        () => localStorage.getItem('showTitles') !== 'false',
     );
     const [showExtraChapters, setShowExtraChapters] = useState(
-        () => globalThis.localStorage.getItem('showExtraChapters') !== 'false',
+        () => localStorage.getItem('showExtraChapters') !== 'false',
     );
     const [animeTitle, setAnimeTitle] = useState<AnimeTitle>(() => {
-        const parameters = new URLSearchParams(globalThis.location.search);
+        const parameters = new URLSearchParams(location.search);
         const animeTitle = parameters.get('title');
         if (isTitle(animeTitle)) {
             return animeTitle;
         }
-        globalThis.history.replaceState({}, '', `?title=csm`);
+        history.replaceState({}, '', `?title=csm`);
         return 'csm';
     });
     const [animeTitleSelectorOpen, setAnimeTitleSelectorOpen] = useState(false);
@@ -78,8 +77,8 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             }
         };
 
-        globalThis.addEventListener('popstate', handlePopState);
-        return () => globalThis.removeEventListener('popstate', handlePopState);
+        addEventListener('popstate', handlePopState);
+        return () => removeEventListener('popstate', handlePopState);
     }, []);
 
     const context = useMemo(() => {
@@ -87,24 +86,31 @@ export const SettingsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             const theTitle =
                 typeof title === 'function' ? title(animeTitle) : title;
             setAnimeTitle(theTitle);
-            globalThis.history.replaceState({}, '', `?title=${theTitle}`);
+            history.replaceState({}, '', `?title=${theTitle}`);
         };
 
-        const toggleShowTitles = (show: React.SetStateAction<boolean>) => {
-            const doShow = typeof show === 'function' ? show(showTitles) : show;
-            setShowTitles(doShow);
-            globalThis.localStorage.setItem('showTitles', doShow.toString());
+        const toggleShowTitles = (
+            shouldShow: React.SetStateAction<boolean>,
+        ) => {
+            const shouldShowResolved =
+                typeof shouldShow === 'function' ?
+                    shouldShow(showTitles)
+                :   shouldShow;
+            setShowTitles(shouldShowResolved);
+            localStorage.setItem('showTitles', shouldShowResolved.toString());
         };
 
         const toggleShowExtraChapters = (
-            show: React.SetStateAction<boolean>,
+            shouldShow: React.SetStateAction<boolean>,
         ) => {
-            const doShow =
-                typeof show === 'function' ? show(showExtraChapters) : show;
-            setShowExtraChapters(doShow);
-            globalThis.localStorage.setItem(
+            const shouldShowResolved =
+                typeof shouldShow === 'function' ?
+                    shouldShow(showExtraChapters)
+                :   shouldShow;
+            setShowExtraChapters(shouldShowResolved);
+            localStorage.setItem(
                 'showExtraChapters',
-                doShow.toString(),
+                shouldShowResolved.toString(),
             );
         };
 

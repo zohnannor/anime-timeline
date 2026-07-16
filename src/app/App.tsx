@@ -49,8 +49,8 @@ const App: React.FC = () => {
             document.body.scrollLeft += ev.deltaY;
         };
 
-        globalThis.addEventListener('wheel', handleScroll);
-        return () => globalThis.removeEventListener('wheel', handleScroll);
+        addEventListener('wheel', handleScroll);
+        return () => removeEventListener('wheel', handleScroll);
     }, [
         infoBoxOpen,
         calendarOpen,
@@ -94,8 +94,9 @@ const App: React.FC = () => {
             `${height / maxHeight}px`,
         );
         document.title = `${title} Timeline`;
-        const favicon =
-            document.head.querySelector<HTMLLinkElement>("link[rel*='icon']");
+        const favicon = document.head.querySelector<HTMLLinkElement>(
+            ":scope link[rel*='icon']",
+        );
         if (favicon && typeof icons.favicon === 'string') {
             favicon.href = `./${animeTitle}/${icons.favicon}.webp`;
         }

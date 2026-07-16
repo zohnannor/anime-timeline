@@ -2,16 +2,6 @@ import { decode as varintDecode } from 'varint';
 
 import { throwError } from '@shared/lib/util';
 
-// mutates its state
-// eslint-disable-next-line functional/type-declaration-immutability
-type ProtobufReader = {
-    buf: Uint8Array;
-    pos: number;
-    len: number;
-    u32: () => number;
-    string: () => string;
-};
-
 type Title = Readonly<{
     titleId?: number;
     name?: string;
@@ -35,23 +25,27 @@ const PROXY_URL = 'https://api.allorigins.win/raw?url=';
 const mangaApiUrl = (titleId: number) =>
     `https://jumpg-webapi.tokyo-cdn.com/api/title_detailV3?title_id=${titleId}&clang=eng`;
 
-const createProtobufReader = (buffer: Uint8Array): ProtobufReader => ({
-    buf: buffer,
-    pos: 0,
-    len: buffer.length,
+class ProtobufReader {
+    pos = 0;
+    len: number;
+    constructor(private buffer: Uint8Array) {
+        this.len = buffer.length;
+    }
+
     u32() {
-        const value = varintDecode(this.buf, this.pos);
+        const value = varintDecode(this.buffer, this.pos);
         this.pos += varintDecode.bytes ?? 0;
         return value;
-    },
+    }
+
     string() {
         const length = this.u32();
         const start = this.pos;
         const end = start + length;
         this.pos += length;
-        return String.fromCodePoint(...this.buf.slice(start, end));
-    },
-});
+        return String.fromCodePoint(...this.buffer.slice(start, end));
+    }
+}
 
 type FieldDecoder<T> = (_reader: ProtobufReader) => T[keyof T];
 
@@ -126,22 +120,22 @@ const decodeApiResponse = (
         },
     ]);
 
-const protobufReader = async (): Promise<Date | undefined> => {
+const protobufReader = async (): Promise<Temporal.Instant | undefined> => {
     try {
         const response = await fetch(
             `${PROXY_URL}${encodeURIComponent(mangaApiUrl(100_037))}`,
         );
         const buffer = new Uint8Array(await response.arrayBuffer());
-        const reader = createProtobufReader(buffer);
+        const reader = new ProtobufReader(buffer);
         const result = decodeApiResponse(reader, reader.len);
 
-        const nextTimeStamp =
+        const nextTimestamp =
             result.Ok?.titleDetailView?.nextTimeStamp ??
             throwError('Next chapter timestamp not found in response');
 
         console.debug('protobuf result:', result);
 
-        return new Date(nextTimeStamp * 1000);
+        return Temporal.Instant.fromEpochMilliseconds(nextTimestamp * 1000);
     } catch (err) {
         console.error('Error fetching next chapter date:', err);
         return undefined;

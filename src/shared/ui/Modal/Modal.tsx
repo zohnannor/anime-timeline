@@ -122,17 +122,13 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                 $bgColor={$bgColor}
                 $mobileFullscreen={$mobileFullscreen}
             >
-                {
-                    <Header className='header'>
-                        <Title className='title'>{title}</Title>
-                        <HeaderButtonContainer>
-                            {additionalButtons}
-                            <HeaderButton onClick={onClose}>
-                                &times;
-                            </HeaderButton>
-                        </HeaderButtonContainer>
-                    </Header>
-                }
+                <Header className='header'>
+                    <Title className='title'>{title}</Title>
+                    <HeaderButtonContainer>
+                        {additionalButtons}
+                        <HeaderButton onClick={onClose}>&times;</HeaderButton>
+                    </HeaderButtonContainer>
+                </Header>
                 {children}
             </ModalContainer>
         </>,

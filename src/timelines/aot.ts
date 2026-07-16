@@ -1997,19 +1997,19 @@ export const AOT_TIMELINE: Timeline = {
         socialLinks: [
             {
                 name: 'Anime website',
-                url: 'http://shingeki.tv/',
+                url: 'https://shingeki.tv/',
             },
             {
                 name: 'Manga website',
-                url: 'http://shingeki.net/',
+                url: 'https://shingeki.net/',
             },
             {
                 name: 'Bessatsu Shōnen Magazine',
-                url: 'http://www.shonenmagazine.com/bmaga/index.html',
+                url: 'https://www.shonenmagazine.com/bmaga/index.html',
             },
             {
                 name: "Author's Blog",
-                url: 'http://blog.livedoor.jp/isayamahazime/',
+                url: 'https://blog.livedoor.jp/isayamahazime/',
             },
         ],
     },

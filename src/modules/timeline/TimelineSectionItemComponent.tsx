@@ -228,8 +228,8 @@ export const TimelineSectionItemComponent: React.FC<
     const offset = 'offset' in entity ? entity.offset : undefined;
     const itemTitle = type === 'chapter' ? itemNumber : title;
 
-    const hovered = hoveredItem(itemNumber);
-    const titleVisible = showTitles || hovered;
+    const isHovered = hoveredItem(itemNumber);
+    const isTitleVisible = showTitles || isHovered;
     const textColor = backgroundColor === 'black' ? 'white' : 'black';
 
     const linkImage =
@@ -261,7 +261,7 @@ export const TimelineSectionItemComponent: React.FC<
             data-title={itemTitle}
             $invertBorder={cover === undefined && backgroundColor === 'black'}
             $titleVisible={
-                (cover !== undefined || textColor === 'black') && titleVisible
+                (cover !== undefined || textColor === 'black') && isTitleVisible
             }
             $blankFontSize={blankfontSize}
             $titleFontSize={titleFontSize}
@@ -288,7 +288,7 @@ export const TimelineSectionItemComponent: React.FC<
                 placement='top'
                 animation='grow'
                 content={chapterPreview}
-                visible={!showCrosslines && hovered}
+                visible={!showCrosslines && isHovered}
             >
                 {itemCover}
             </Tooltip>
@@ -300,7 +300,7 @@ export const TimelineSectionItemComponent: React.FC<
             className={`${type}SectionItem`}
             $width={itemWidth}
             $height={height}
-            $crossLinesVisible={hovered}
+            $crossLinesVisible={isHovered}
             {...hoverHandlers(itemNumber)}
             $focusable={focusable}
             tabIndex={focusable ? -1 : undefined}

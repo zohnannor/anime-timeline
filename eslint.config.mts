@@ -1,6 +1,5 @@
 import functional from 'eslint-plugin-functional';
-import importPlugin from 'eslint-plugin-import';
-import react from 'eslint-plugin-react';
+import importPlugin from 'eslint-plugin-import-x';
 import reactDom from 'eslint-plugin-react-dom';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -11,6 +10,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 
 export default defineConfig([
     globalIgnores(['build', 'eslint.config.mts', 'vite.config.ts']),
@@ -18,19 +18,18 @@ export default defineConfig([
     js.configs.all,
     tseslint.configs.strictTypeChecked,
     tseslint.configs.stylisticTypeChecked,
-    react.configs.flat.recommended,
-    react.configs.flat['jsx-runtime'],
     reactDom.configs.strict,
     reactHooks.configs.flat['recommended-latest'],
     reactRefresh.configs.vite,
     reactX.configs['strict-type-checked'],
     unicorn.configs['all'],
+    importPlugin.configs['flat/recommended'],
 
     {
         files: ['**/*.{ts,tsx}'],
         plugins: {
             functional,
-            import: importPlugin,
+            stylistic,
         },
         languageOptions: {
             globals: globals.browser,
@@ -42,14 +41,11 @@ export default defineConfig([
             reportUnusedDisableDirectives: true,
         },
         settings: {
-            'import/internal-regex': '^@',
-            react: {
-                version: 'detect',
-            },
+            'import-x/internal-regex': '^@',
         },
         rules: {
-            'no-undef': 'off', // enfored by typescript
-            'sort-imports': 'off', // import/internal-regex does this better
+            'no-undef': 'off', // enforced by typescript
+            'sort-imports': 'off', // import-x/internal-regex does this better
             'one-var': ['error', 'never'], // invert it: disallow one-var style
             'max-lines-per-function': [
                 'error',
@@ -102,8 +98,6 @@ export default defineConfig([
             'no-warning-comments': 'off',
             'no-continue': 'off', // if-guards are useful
 
-            'react/prop-types': 'off', // enfored by typescript and `React.FC`
-
             // prepending `_` to unused variables is a common pattern
             'no-unused-vars': [
                 'error',
@@ -146,6 +140,16 @@ export default defineConfig([
                 'error',
                 { allowOptionalChaining: true },
             ],
+            '@typescript-eslint/consistent-type-exports': 'off',
+            '@typescript-eslint/consistent-type-imports': 'off',
+            '@typescript-eslint/method-signature-style': 'error',
+            '@typescript-eslint/no-import-type-side-effects': 'off',
+            '@typescript-eslint/no-unnecessary-qualifier': 'error',
+            '@typescript-eslint/no-useless-empty-export': 'error',
+            '@typescript-eslint/prefer-enum-initializers': 'error',
+            '@typescript-eslint/prefer-ts-expect-error': 'error',
+            '@typescript-eslint/strict-boolean-expressions': 'error',
+            '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
             'unicorn/filename-case': [
                 'error',
@@ -154,7 +158,7 @@ export default defineConfig([
                     ignore: ['.ts', '.tsx'],
                 },
             ],
-            'unicorn/prevent-abbreviations': [
+            'unicorn/name-replacements': [
                 'error',
                 {
                     allowList: {
@@ -191,6 +195,12 @@ export default defineConfig([
                 { hexadecimalValue: 'lowercase' },
             ],
             'unicorn/no-keyword-prefix': 'off', // quite useless
+            'unicorn/try-complexity': 'off', // quite useless
+            'unicorn/prefer-await': 'off', // not always possible to use
+            'unicorn/default-export-style': 'off', // requires `function`
+            'unicorn/consistent-arrow-return-style': 'off', // ugly
+            'unicorn/no-barrel-files': 'off', // what is the point
+            'unicorn/single-line-block-comment-style': 'off', // unnecessary
 
             'functional/type-declaration-immutability': [
                 'error',
@@ -213,25 +223,23 @@ export default defineConfig([
                 },
             ],
 
-            // enabling additional rules (feel free to configure or remove)
-
-            'import/no-namespace': 'error',
-            'import/no-mutable-exports': 'error',
-            'import/no-relative-packages': 'error',
-            'import/consistent-type-specifier-style': 'off',
-            'import/no-cycle': 'error',
-            'import/no-named-default': 'error',
-            'import/no-named-as-default-member': 'error',
-            'import/no-anonymous-default-export': 'error',
-            'import/no-commonjs': 'error',
-            'import/no-amd': 'error',
-            'import/no-duplicates': 'error',
-            'import/first': 'error',
-            'import/no-extraneous-dependencies': 'error',
-            'import/no-absolute-path': 'error',
-            'import/no-nodejs-modules': 'error',
-            'import/no-webpack-loader-syntax': 'error',
-            'import/order': [
+            'import-x/no-namespace': 'error',
+            'import-x/no-mutable-exports': 'error',
+            'import-x/no-relative-packages': 'error',
+            'import-x/consistent-type-specifier-style': 'off',
+            'import-x/no-cycle': 'error',
+            'import-x/no-named-default': 'error',
+            'import-x/no-named-as-default-member': 'error',
+            'import-x/no-anonymous-default-export': 'error',
+            'import-x/no-commonjs': 'error',
+            'import-x/no-amd': 'error',
+            'import-x/no-duplicates': 'error',
+            'import-x/first': 'error',
+            'import-x/no-extraneous-dependencies': 'error',
+            'import-x/no-absolute-path': 'error',
+            'import-x/no-nodejs-modules': 'error',
+            'import-x/no-webpack-loader-syntax': 'error',
+            'import-x/order': [
                 'error',
                 {
                     groups: [
@@ -242,79 +250,41 @@ export default defineConfig([
                     alphabetize: { order: 'ignore' },
                 },
             ],
-            'import/newline-after-import': 'off',
-            'import/no-dynamic-require': 'error',
-            'import/unambiguous': 'error',
-            'import/no-unassigned-import': ['error', { allow: ['**/*.css'] }],
-            'import/no-useless-path-segments': 'error',
-            'import/no-import-module-exports': 'error',
-            'import/no-empty-named-blocks': 'error',
+            'import-x/newline-after-import': 'off',
+            'import-x/no-dynamic-require': 'error',
+            'import-x/unambiguous': 'error',
+            'import-x/no-unassigned-import': ['error', { allow: ['**/*.css'] }],
+            'import-x/no-useless-path-segments': 'error',
+            'import-x/no-import-module-exports': 'error',
+            'import-x/no-empty-named-blocks': 'error',
+            'import-x/no-unresolved': 'off',
+            'import-x/no-named-as-default': 'off',
 
-            'react/boolean-prop-naming': 'error',
-            'react/button-has-type': 'error',
-            'react/checked-requires-onchange-or-readonly': 'error',
-            'react/default-props-match-prop-types': 'error',
-            'react/destructuring-assignment': 'error',
-            'react/forbid-dom-props': 'error',
-            'react/forbid-elements': 'error',
-            'react/forbid-foreign-prop-types': 'error',
-            'react/forbid-prop-types': 'error',
-            'react/forward-ref-uses-ref': 'error',
-            'react/function-component-definition': [
-                'error',
-                {
-                    namedComponents: 'arrow-function',
-                    unnamedComponents: 'arrow-function',
-                },
-            ],
-            'react/hook-use-state': 'error',
-            'react/iframe-missing-sandbox': 'error',
-            'react/jsx-handler-names': 'error',
-            'react/jsx-max-depth': ['error', { max: 5 }],
-            'react/jsx-no-bind': [
-                'error',
-                { ignoreDOMComponents: true, allowArrowFunctions: true },
-            ],
-            'react/jsx-no-constructed-context-values': 'error',
-            'react/jsx-no-script-url': 'error',
-            'react/jsx-pascal-case': 'error',
-            'react/jsx-props-no-spread-multi': 'error',
-            'react/jsx-props-no-spreading': [
-                'error',
-                { custom: 'ignore', html: 'enforce' },
-            ],
-            'react/no-adjacent-inline-elements': 'error',
-            'react/no-arrow-function-lifecycle': 'error',
-            'react/no-danger': 'error',
-            'react/no-invalid-html-attribute': 'error',
-            'react/no-multi-comp': ['error', { ignoreStateless: true }],
-            'react/no-namespace': 'error',
-            'react/no-object-type-as-default-prop': 'error',
-            'react/no-this-in-sfc': 'error',
-            'react/no-unstable-nested-components': 'error',
-            'react/no-unused-class-component-methods': 'error',
-            'react/no-unused-prop-types': 'error',
-            'react/prefer-es6-class': 'error',
-            'react/prefer-exact-props': 'error',
-            'react/prefer-stateless-function': 'error',
-            'react/require-default-props': 'error',
-            'react/sort-prop-types': 'error',
-            'react/style-prop-object': 'error',
-            'react/void-dom-elements-no-children': 'error',
-            'react/self-closing-comp': 'error',
-            'react/jsx-boolean-value': ['error', 'never'],
-            'react/jsx-fragments': ['error', 'syntax'],
+            'react-dom/no-missing-button-type': 'error',
+            'react-dom/no-missing-iframe-sandbox': 'error',
+            'react-dom/no-script-url': 'error',
+            'react-dom/no-dangerously-set-innerhtml': 'error',
+            'react-dom/no-void-elements-with-children': 'error',
+            'react-dom/no-string-style-prop': 'error',
 
-            '@typescript-eslint/consistent-type-exports': 'off',
-            '@typescript-eslint/consistent-type-imports': 'off',
-            '@typescript-eslint/method-signature-style': 'error',
-            '@typescript-eslint/no-import-type-side-effects': 'off',
-            '@typescript-eslint/no-unnecessary-qualifier': 'error',
-            '@typescript-eslint/no-useless-empty-export': 'error',
-            '@typescript-eslint/prefer-enum-initializers': 'error',
-            '@typescript-eslint/prefer-ts-expect-error': 'error',
-            '@typescript-eslint/strict-boolean-expressions': 'error',
-            '@typescript-eslint/switch-exhaustiveness-check': 'error',
+            // lost style enforcements from `eslint-plugin-react` due to
+            // `eslint` version bump:
+            // react/function-component-definition
+            // react/destructuring-assignment
+            // react/jsx-handler-names
+            // react/jsx-fragments
+            // TODO: add them back once `eslint-plugin-react` is updated
+
+            'react-x/no-array-index-key': 'error',
+            'react-x/no-unstable-context-value': 'error',
+            'react-x/no-nested-component-definitions': 'error',
+            'react-x/no-forward-ref': 'error',
+            'react-x/use-state': 'error',
+            'react-x/no-class-component': 'error',
+
+            'stylistic/jsx-self-closing-comp': 'error',
+            'stylistic/jsx-pascal-case': 'error',
+            'stylistic/jsx-curly-brace-presence': 'error',
         },
     },
 ]);

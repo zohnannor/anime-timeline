@@ -37,8 +37,8 @@ const episodeCover = (n: number) =>
     : n <= 24 ? `Season2Ep${n - 12}pics`
     : n <= 29 ? `OPMS3Ep${n - 24}`
     : `One-Punch_Man_Episode_${n}`;
-const chapterLink = (title: string, n: number, extra: boolean): string =>
-    !extra ?
+const chapterLink = (title: string, n: number, isExtra: boolean): string =>
+    !isExtra ?
         n <= 118 ? `Chapter ${n}`
         : n <= 126 ? `Chapter ${n - 4} (Online)`
         : n <= 129 ? `Chapter ${n - 3} (Online)`
@@ -64,9 +64,7 @@ export const OPM_TIMELINE: Timeline = {
                 scale: 1.2,
                 titleProcessor: (title, n) =>
                     `${title}\n(Episode ${
-                        n <= 12 ? n
-                        : n <= 12 + 12 ? n - 12
-                        : n - 12 - 12
+                        n <= 12 ? n : (n <= 24 ? n : n - 12) - 12
                     })`,
                 blankfontSize: 42,
                 titleFontSize: 42,

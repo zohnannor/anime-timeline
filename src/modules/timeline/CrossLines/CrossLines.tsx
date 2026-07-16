@@ -60,14 +60,14 @@ export const CrossLines: React.FC<CrossLinesProps> = ({
 }) => {
     const { showCrosslines } = useSettings();
 
-    const crossLinesVisible = showCrosslines && $crossLinesVisible;
+    const areCrossLinesVisible = showCrosslines && $crossLinesVisible;
 
     return (
         <CrossLinesWrapper
             className='crosslines'
-            $crossLinesVisible={crossLinesVisible}
+            $crossLinesVisible={areCrossLinesVisible}
         >
-            {crossLinesVisible && (
+            {areCrossLinesVisible && (
                 <>
                     <CrossLine className='crosslineLeft' $side='left' />
                     <CrossLine className='crosslineRight' $side='right' />

@@ -14,8 +14,6 @@ type UseHover<T> = readonly [Comparator<T>, Handlers<T>];
 const useHover = <T extends string | number>(): UseHover<T> => {
     const [hoveredItem, setHoveredItem] = useState<T>();
 
-    const hovered = (item: T) => hoveredItem === item;
-
     if (isMobileDevice()) {
         const dummy = () => {
             /* empty */
@@ -29,6 +27,8 @@ const useHover = <T extends string | number>(): UseHover<T> => {
         ];
     }
 
+    const isHovered = (item: T) => hoveredItem === item;
+
     const handlers = (item: T) => ({
         onMouseOver: (ev: React.MouseEvent) => {
             setHoveredItem(item);
@@ -37,7 +37,7 @@ const useHover = <T extends string | number>(): UseHover<T> => {
         onMouseOut: () => setHoveredItem(undefined),
     });
 
-    return [hovered, handlers];
+    return [isHovered, handlers];
 };
 
 type UseSimpleHover<T> = readonly [
