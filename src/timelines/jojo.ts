@@ -7010,6 +7010,25 @@ export const JOJO_TIMELINE: Timeline = {
                         pages: 43,
                         cover: undefined,
                     },
+                    {
+                        title: () => 'Usagi, Fraud, and Suspicion, Part 5',
+                        date: 'June 18, 2026',
+                        pages: 43,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Usagi, Fraud, and Suspicion, Part 6',
+                        date: 'July 17, 2026',
+                        pages: 38,
+                        cover: undefined,
+                    },
+                    {
+                        title: () =>
+                            'Underwater to the Island of Hawaii, Part 1',
+                        date: 'August 19, 2026',
+                        pages: 33,
+                        cover: undefined,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,
