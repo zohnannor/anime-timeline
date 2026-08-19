@@ -26,10 +26,10 @@ export default defineConfig({
     base: '/anime-timeline/',
     resolve: {
         alias: {
-            '@app': path.resolve(__dirname, './src/app'),
-            '@modules': path.resolve(__dirname, './src/modules'),
-            '@shared': path.resolve(__dirname, './src/shared'),
-            '@timelines': path.resolve(__dirname, './src/timelines'),
+            '@app': path.resolve(import.meta.dirname, './src/app'),
+            '@modules': path.resolve(import.meta.dirname, './src/modules'),
+            '@shared': path.resolve(import.meta.dirname, './src/shared'),
+            '@timelines': path.resolve(import.meta.dirname, './src/timelines'),
         },
     },
 });

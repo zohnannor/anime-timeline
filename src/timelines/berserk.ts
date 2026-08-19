@@ -2771,6 +2771,19 @@ export const BERSERK_TIMELINE: Timeline = {
                         pages: 25,
                         cover: undefined,
                     },
+                    {
+                        title: () => 'The Dawn of Better Fortune',
+                        date: '26 June 2026',
+                        pages: 22,
+                        cover: undefined,
+                    },
+                    {
+                        title: () =>
+                            'Can you Seize a Wandering Bird in the Clouds?',
+                        date: '10 July 2026',
+                        pages: 23,
+                        cover: undefined,
+                    },
                 ],
             },
         ] as const satisfies Tuple<Volume, VolumesTotal>,

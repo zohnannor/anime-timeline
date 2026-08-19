@@ -1,5 +1,6 @@
 {
     "name": "anime-timeline",
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "optimize": "python -m bin.optimize-images --all",
