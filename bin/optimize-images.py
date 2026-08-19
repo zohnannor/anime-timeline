@@ -122,7 +122,7 @@ SPECIAL_IMAGES: Final[dict[str, set[str]]] = {
         "Denji_tears_through_the_Falling_Devil.png",
         "Denji_and_Miri_impale_each_other.png",
         "Chainsaw_vs_Aging.png",
-        "Pochita_surrounded_by_Yoru's_Devil_Army.png",
+        "Pochita_and_Yoru_trade_blows.png",
         "Chainsaw_Man_TV_Anime_Key_Visual_2.png",
     },
     "berserk": {

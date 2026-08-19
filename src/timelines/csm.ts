@@ -1713,7 +1713,7 @@ export const CSM_TIMELINE: Timeline = {
                     },
                     {
                         title: 'War Devil',
-                        cover: "Pochita_surrounded_by_Yoru's_Devil_Army",
+                        cover: 'Pochita_and_Yoru_trade_blows',
                         offset: { x: 0, y: 0 },
                         chapters: { from: 191 },
                     },
