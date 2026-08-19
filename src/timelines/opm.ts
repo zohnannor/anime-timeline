@@ -23,7 +23,7 @@ const ARC_HEIGHT = VOLUME_HEIGHT * 0.7;
 const SAGA_HEIGHT = 150 + ARC_HEIGHT;
 
 type SeasonsTotal = 5;
-type VolumesTotal = 42;
+type VolumesTotal = 43;
 type VolumesExtra = 6;
 type SagasTotal = 4;
 
@@ -1478,7 +1478,8 @@ export const OPM_TIMELINE: Timeline = {
                 ],
             },
             {
-                cover: undefined,
+                title: 3,
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Scout',
@@ -1797,6 +1798,41 @@ export const OPM_TIMELINE: Timeline = {
                         title: () => 'Guardian',
                         date: 'June 4, 2026',
                         pages: 17,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Contribution',
+                        date: 'June 18, 2026',
+                        pages: 15,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Guardianship',
+                        date: 'July 2, 2026',
+                        pages: 15,
+                        cover: undefined,
+                    },
+                ],
+            },
+            {
+                cover: undefined,
+                chapters: [
+                    {
+                        title: () => 'Part-Time Guy',
+                        date: 'July 16, 2026',
+                        pages: 17,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Immediate Payback',
+                        date: 'July 30, 2026',
+                        pages: 17,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Traces',
+                        date: 'August 13, 2026',
+                        pages: 24,
                         cover: undefined,
                     },
                 ],
