@@ -21,7 +21,7 @@ const VOLUME_HEIGHT = 1579;
 const CHAPTER_HEIGHT = 100;
 const ARC_HEIGHT = VOLUME_HEIGHT * 0.8;
 
-type VolumesTotal = 39;
+type VolumesTotal = 40;
 type VolumesExtra = 1;
 type ArcsTotal = 7;
 type SeasonsTotal = 2;
@@ -2728,7 +2728,8 @@ export const HXH_TIMELINE: Timeline = {
                 ],
             },
             {
-                cover: undefined,
+                title: () => 'Negotiation',
+                cover: volumeCover,
                 chapters: [
                     {
                         title: () => 'Moonlight',
@@ -2787,6 +2788,53 @@ export const HXH_TIMELINE: Timeline = {
                     {
                         title: () => 'Negotiation: Part 4',
                         date: 'December 9th, 2024',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                ],
+            },
+            {
+                cover: undefined,
+                chapters: [
+                    {
+                        title: () => 'Announcement',
+                        date: 'June 29th, 2026',
+                        pages: 20,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Question',
+                        date: 'July 6th, 2026',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Loyalty',
+                        date: 'July 13th, 2026',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Friends',
+                        date: 'July 20th, 2026',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Authenticity',
+                        date: 'July 27th, 2026',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Proclamation',
+                        date: 'August 3rd, 2026',
+                        pages: 19,
+                        cover: undefined,
+                    },
+                    {
+                        title: () => 'Contingency',
+                        date: 'August 10th, 2026',
                         pages: 19,
                         cover: undefined,
                     },
