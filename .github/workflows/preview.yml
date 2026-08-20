@@ -37,7 +37,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
 
             - name: Download build artifact
               if: github.event.action != 'closed'
@@ -89,7 +89,7 @@ jobs:
             matrix:
                 pr: ${{ fromJSON(needs.split-prs.outputs.prs) }}
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
 
             - uses: rossjrw/pr-preview-action@v1
               with:
